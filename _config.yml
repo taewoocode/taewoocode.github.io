@@ -2,7 +2,7 @@
 #  User configuration
 # -----------------------------------------------------------------------------
 
-title:               한걸음 천천히
+title:               taewoo
 
 future: true
 
@@ -20,7 +20,7 @@ tagline:             ""
 # A short description of the page, used in the sidebar and as fallback for the meta description tag.
 # Markdown enabled, but don't use more than one paragraph (enforced by `>`)
 description:         >
-  매일 매일 나아가는 개발자
+  잘 까먹기에 기록합니다.
 
 # This should be the same author as first entry in `_data/authors.yml`
 author:
