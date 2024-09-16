@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="블로그 시작의 계기" />
+<meta property="og:title" content="Spring" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,17 +52,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>블로그 시작의 계기 &middot; 한걸음 천천히</title>
+<title>Spring &middot; 한걸음 천천히</title>
  
 <meta
         name="description"
-        content="시작
+        content="제어의 역전(Inversion of Control)
 
 "
 />
 <meta
         property="og:description"
-        content="시작
+        content="제어의 역전(Inversion of Control)
 
 "
 />
@@ -72,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/life/2024/09/16/daily/" />
-<meta property="og:url" content="http://localhost:4000/life/2024/09/16/daily/" />
+<link rel="canonical" href="http://localhost:4000/framework/2024/09/16/Spring-01/" />
+<meta property="og:url" content="http://localhost:4000/framework/2024/09/16/Spring-01/" />
 
 <link
         rel="alternate"
@@ -82,9 +82,9 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         href="http://localhost:4000/feed.xml"
 />
 
-
-<link rel="prev" href="http://localhost:4000/framework/2024/09/16/Spring-01/" />
  
+<link rel="next" href="http://localhost:4000/life/2024/09/16/daily/" />
+
 
 <link
         rel="apple-touch-icon"
@@ -181,11 +181,11 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-life/2024/09/16/daily" class="post" role="article">
+<article id="post-framework/2024/09/16/Spring-01" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      블로그 시작의 계기
+      Spring
       
     </h1>
 
@@ -201,7 +201,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 
 
 
-in <a href="/category/life/" data-flip="title">Life</a>
+in <a href="/category/framework/" data-flip="title">Framework</a>
 
       
 
@@ -213,7 +213,7 @@ in <a href="/category/life/" data-flip="title">Life</a>
 
 
 
-on <a href="/tag/daily-daily/" data-flip="title">Daily</a>
+on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
 
     </p>
 
@@ -265,17 +265,25 @@ on <a href="/tag/daily-daily/" data-flip="title">Daily</a>
     </style>
 
     <!--<br />-->
-    <h2 id="시작">시작</h2>
+    <h2 id="제어의-역전inversion-of-control">제어의 역전(Inversion of Control)</h2>
 
-<p>블로그를 꾸준히 써오는 편 이었는데 취업을 준비하면서 자주 쓰지는 못했다.</p>
+<p>프로그램의 제어흐름을 직접 제어하는 것이 아니라 외부(스프링)이 관리하는 것을 제어의 역전(loC)라고 한다.</p>
 
-<p>블로그를 이사하는 계기로 자주 써보려고 한다.</p>
+<h2 id="스프링-컨테이너">스프링 컨테이너</h2>
+<h3 id="applicationcontext">ApplicationContext</h3>
 
-<p>꾸준하게 써야겠다.</p>
+<ul>
+  <li>ApplicationContext를 스프링 컨테이너라고 한다.</li>
+  <li>기존에는 개발자가 AppConfig를 사용해서 직접 객체를 생성하고 DI를 했지만, 이제부터는 스프링 컨테이너를 통해서 사용한다.</li>
+  <li>스프링 컨테이너에서는 Configuration이 붙은 AppConfig를 설정 정보로 사용한다. @Bean이라 붙은 메서드를 모두 호출해서 반환된 객체를 스프링 컨테이너로 등록한다. 이렇게 스프링 컨테이너로 등록된 객체를 스프링 빈이라고 한다.</li>
+  <li>예전에는 AppConfig를 통해서 필요한 객체를 직접 조회했지만, 이제는 스프링 컨테이너를 통해서 필요한 스프링 빈을 찾는다. 스프링 빈은 applicationContext.getBean()을 통해서 찾을 수 있다.</li>
+  <li>스프링 빈은 @Bean이 붙은 메서드의 명을 빈의 이름으로 사용하여 컨테이너에 등록한다.</li>
+  <li>스프링 컨테이너에 객체를 스프링 빈으로 등록하고, 찾을 수 있다.</li>
+</ul>
 
-<p>마지막은 내가 최근 좋아하는 글귀를 가져와 봤다.</p>
+<h2 id="reference">Reference</h2>
 
-<h4 id="if-you-dont-risk-anything-you-risk-everything">If you don’t risk anything, you risk everything</h4>
+<p>인프런 김영한님의 스프링 프레임워크 핵심 기술 강좌</p>
 
     <br />
     <br />
@@ -289,12 +297,12 @@ on <a href="/tag/daily-daily/" data-flip="title">Daily</a>
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=블로그 시작의 계기&amp;url=http://localhost:4000/life/2024/09/16/daily/"
+    <a href="http://twitter.com/share?text=Spring&amp;url=http://localhost:4000/framework/2024/09/16/Spring-01/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/life/2024/09/16/daily/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/framework/2024/09/16/Spring-01/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
