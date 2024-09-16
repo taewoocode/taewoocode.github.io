@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 16 Sep 2024 21:06:46 +0900</pubDate>
-    <lastBuildDate>Mon, 16 Sep 2024 21:06:46 +0900</lastBuildDate>
+    <pubDate>Mon, 16 Sep 2024 21:08:31 +0900</pubDate>
+    <lastBuildDate>Mon, 16 Sep 2024 21:08:31 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
@@ -25,8 +25,8 @@
 &lt;h4 id=&quot;if-you-dont-risk-anything-you-risk-everything&quot;&gt;If you don’t risk anything, you risk everything&lt;/h4&gt;
 </description>
         <pubDate>Mon, 16 Sep 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/life/2024/09/16/daily/</link>
-        <guid isPermaLink="true">http://localhost:4000/life/2024/09/16/daily/</guid>
+        <link>http://localhost:4000/life/2024/09/16/daily-01/</link>
+        <guid isPermaLink="true">http://localhost:4000/life/2024/09/16/daily-01/</guid>
         
         <category>daily</category>
         
