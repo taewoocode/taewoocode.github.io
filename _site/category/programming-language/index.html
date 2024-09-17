@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Java Mid 01 -Object-" />
+<meta property="og:title" content="Programming Language" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,18 +52,16 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Java Mid 01 -Object- &middot; taewoo</title>
+<title>Programming Language &middot; taewoo</title>
  
 <meta
         name="description"
-        content="Java Lang package
-
+        content="프로그래밍 언어
 "
 />
 <meta
         property="og:description"
-        content="Java Lang package
-
+        content="프로그래밍 언어
 "
 />
 
@@ -72,8 +70,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/programming-language/2024/09/18/Java-Mid-01/" />
-<meta property="og:url" content="http://localhost:4000/programming-language/2024/09/18/Java-Mid-01/" />
+<link rel="canonical" href="http://localhost:4000/category/programming-language/" />
+<meta property="og:url" content="http://localhost:4000/category/programming-language/" />
 
 <link
         rel="alternate"
@@ -83,10 +81,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/framework/2024/09/17/Spring-02/" />
+<link rel="prev" href="http://localhost:4000/category/opensource/" />
  
-<link rel="next" href="http://localhost:4000/framework/2024/09/18/Spring-03/" />
-
 
 <link
         rel="apple-touch-icon"
@@ -183,266 +179,45 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-programming-language/2024/09/18/Java-Mid-01" class="post" role="article">
+
+
   <header>
-    <h1 class="post-title">
-      
-      Java Mid 01 -Object-
-      
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <span>Programming-language</span>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
+    <h1 class="page-title">Programming Language</h1>
     
-  <div class="hr" style="padding-bottom:0"></div>
+  
+  
+<p class="message">프로그래밍 언어</p>
+
+
 
 
   </header>
+  <hr class="sr-only"/>
+
+
+
+  
+  
+    
+    <h2 id="y2024" class="hr">2024</h2>
+    <ul class="related-posts">
+    
+  
   
 
 
-  
-  <div class="markdown-body">
+<li class="h4">
+  <a href="/language/2024/09/18/Java-Mid-01/" data-flip="title">
+    <span>Java Mid 01 -Object-</span>
+  </a>
+  <small><time datetime="2024-09-18T00:00:00+09:00">
+    18 Sep
+  </time></small>
+</li>
 
-    <!--  -->
-    <style>
-      .myAd1190 {
-        width: 48%;
-        height: 280px;
-      }
-
-      .myAd1290 {
-        width: 48%;
-        height: 280px;
-      }
-
-      @media(max-width: 800px) {
-        .myAd1190 {
-          display: none;
-        }
-
-        .myAd1290 {
-          width: 98%;
-        }
-      }
-
-      .row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        height: 300px;
-      }
-
-      .row-center {
-        display: flex;
-        justify-content: center;
-        height: 258px;
-      }
-    </style>
-
-    <!--<br />-->
-    <h2 id="java-lang-package">Java Lang package</h2>
-
-<p>자바가 기본으로 제공하는 라이브러리(클래스 모음) 중에 가장 기본이 되는 것이 바로 자바 lang이다.</p>
-
-<p>여기서 lang은 Language(언어)의 줄임말이다. 쉽게 이야기해서 자바 언어를 이루는 가장 기본이 되는 클래스들을 보관하는 패키지를 뜻한다.</p>
-
-<h3 id="javalang-대표적인-클래스">java.lang 대표적인 클래스</h3>
-
-<ul>
-  <li>Object : 모든 자바객체의 부모 클래스</li>
-  <li>String : 문자열</li>
-  <li>Integer, Long, Double : 래퍼 타입(감싼타입)
-    <ul>
-      <li>기본형 데이터 타입을 객체로 만든 것</li>
-    </ul>
-  </li>
-  <li>Class : 클래스 메타 정보</li>
-  <li>System : 시스템과 관련된 기본 기능들을 제공</li>
-</ul>
-
-<h3 id="암묵적으로-상속받고-있는-object">암묵적으로 상속받고 있는 Object</h3>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>package lang.object;
-
-//부모가 없으면 묵시적으로 Object 클래스를 상속 받는다.
-public class Parent extends Object {
-    
-    public void parentMethod() {
-        System.out.println( "Parent.parent" );
-    }
-}
-
-</code></pre></div></div>
-
-<h3 id="명시적-상속">명시적 상속</h3>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>package lang.object;
-
-public class Child extends Parent {
-
-    public void childMethod() {
-        System.out.println( "Child.childMethod" );
-    }
-}
-</code></pre></div></div>
-
-<ul>
-  <li>클래스에서 상속 받을 부모 클래스가 없으면 묵시적으로 Object 클래스를 상속 받는다.
-    <ul>
-      <li>쉽게 이야기해서 자바가 extends Object 코드를 넣어준다.</li>
-      <li>따라서 extends Object는 생략하는 것을 권장한다.</li>
-    </ul>
-  </li>
-</ul>
-
-<p><code class="language-plaintext highlighter-rouge">Object</code> 클래스는 자바 클래스 계층 구조의 루트 클래스이며, 다른 모든 클래스는 직간접적으로 <code class="language-plaintext highlighter-rouge">Object</code> 클래스를 상속받는다.</p>
-
-<h2 id="object가-제공하는-기능은-다음과-같다">Object가 제공하는 기능은 다음과 같다</h2>
-
-<ul>
-  <li>객체의 정보를 제공하는 toString()</li>
-  <li>객체의 같음을 비교하는 equals()</li>
-  <li>객체의 클래스 정보를 제공하는 getClass()</li>
-  <li>기타 여러가지 기능</li>
-</ul>
-
-<h2 id="다형성의-기본-구현">다형성의 기본 구현</h2>
-
-<ul>
-  <li>부모는 자식을 담을 수 있다.</li>
-  <li>Object는 모든 클래스의 부모 클래스이다. 따라서 모든 객체를 참조할 수 있다.</li>
-  <li>
-    <p>Object 클래스는 다형성을 지원하는 기본적인 메커니즘을 제공한다.</p>
-  </li>
-  <li>
-    <p>모든 자바 객체는 Object 타입으로 처리될 수 있으며, 이는 다양한 타입의 객체를 통합적으로 처리할 수 있게 해준다. 쉽게 이야기하면 Object는 모든 객체를 다 담을 수 있다. (다형성 특징)</p>
-  </li>
-  <li>타입이 다른 객체들은 어딘가에 보관해야 한다면? 바로 Object에 보관하면 된다.</li>
-</ul>
-
-<h2 id="object-배열">Object 배열</h2>
-
-<ul>
-  <li>Object는 모든 타입의 객체를 다 담을 수 있다.</li>
-  <li>Object[] 만들면 자바의 모든 객체를 다 담을 수 있는 배열을 만든 것이다.</li>
-</ul>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ublic class ObjectPolyExample2 <span class="o">{</span>
-
-    public static void main<span class="o">(</span>String[] args<span class="o">)</span> <span class="o">{</span>
-        Dog dog <span class="o">=</span> new Dog<span class="o">()</span><span class="p">;</span>
-        Car car <span class="o">=</span> new Car<span class="o">()</span><span class="p">;</span>
-        Object object <span class="o">=</span> new Object<span class="o">()</span><span class="p">;</span>
-
-        Object[] objects <span class="o">=</span> <span class="o">{</span>dog, car, object<span class="o">}</span><span class="p">;</span>
-        size<span class="o">(</span>objects<span class="o">)</span><span class="p">;</span>
-
-    <span class="o">}</span>
-
-    private static void size<span class="o">(</span>Object[] objects<span class="o">)</span> <span class="o">{</span>
-        System.out.println<span class="o">(</span> <span class="s2">"전달된 객체의 수는?: "</span> + objects.length <span class="o">)</span><span class="p">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<ul>
-  <li>만약 Object가 없다면?
-    <ul>
-      <li>void action(Object obj)과 같이 모든 객체를 받을 수 있는 메서드를 만들 수 없다.</li>
-      <li>Object[] objects같이 모든 객체를 저장할 수 있는 배열을 만들 수 없다.</li>
-    </ul>
-  </li>
-</ul>
-
-<h2 id="reference">Reference</h2>
-
-<p>인프런 김영한님의 실전 자바 강좌 중급 1편</p>
-
-    <br />
-    <br />
-  </div>
-  
-
-</article>
-
-<!--<hr class="dingbat" />-->
-<!--
-<div class="share">
-  <h2>Share this post</h2>
-  <div class="share-body">
-    <a href="http://twitter.com/share?text=Java Mid 01 -Object-&amp;url=http://localhost:4000/programming-language/2024/09/18/Java-Mid-01/"
-      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-      <span class="icon-twitter">
-      </span>
-    </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/programming-language/2024/09/18/Java-Mid-01/"
-      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-      <span class="icon-facebook">
-      </span>
-    </a>
-  </div>
-</div>
--->
-<br />
-
-
-
-
-<aside class="related" role="complementary">
-  <h2 class="hr">Related Posts</h2>
-
-  <ul class="related-posts">
-    
-      
-      
-      
-        
-          
-          
-    
   </ul>
-</aside>
-  <aside class="comments" role="complementary">
-  <h2>Comments</h2>
-  <hr/>
 
-  <script src="https://utteranc.es/client.js"
-          repo="taewoocode/taewoocode.github.io"
-          issue-term="title"
-          theme="github-light"
-          crossorigin="anonymous"
-          async>
-  </script>
-  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
-</aside>
-
-
-       <footer>
+  <footer>
   <hr/>
   
     <p>© 2022. by taewoo</p>
@@ -661,7 +436,7 @@ public class Child extends Parent {
     <li>
       <input type="checkbox" id="list-item-3"/>
       <div  class="list-wrapper">
-      <a class="sidebar-nav-item" href="/category/programing-language/">Programming Language</a>
+      <a class="sidebar-nav-item active" href="/category/programming-language/">Programming Language</a>
        <label class="folder" for="list-item-3">▾</label>
     </div>
      <ul class="list-body">
