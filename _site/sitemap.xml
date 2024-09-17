@@ -33,4 +33,20 @@
 
     </url>
   
+    <url>
+      <loc>http://localhost:4000/framework/2024/08/12/Spring-02/</loc>
+      
+        <lastmod>2024-08-12T00:00:00+09:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>1.0</priority>
+      
+
+    </url>
+  
 </urlset>
