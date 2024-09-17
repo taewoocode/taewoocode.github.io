@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 18 Sep 2024 00:42:49 +0900</pubDate>
-    <lastBuildDate>Wed, 18 Sep 2024 00:42:49 +0900</lastBuildDate>
+    <pubDate>Wed, 18 Sep 2024 00:45:20 +0900</pubDate>
+    <lastBuildDate>Wed, 18 Sep 2024 00:45:20 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
@@ -62,11 +62,6 @@
 &lt;ul&gt;
   &lt;li&gt;스프링 컨테이너는 싱글톤 패턴의 문제점을 해결하면서, 객체 인스턴스를 싱글톤(1개만 생성)으로 관리한다.&lt;/li&gt;
   &lt;li&gt;지금까지 우리가 학습한 스프링 빈이 바로 싱글톤으로 관리된다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;싱글톤-컨테이너-1&quot;&gt;싱글톤 컨테이너&lt;/h3&gt;
-
-&lt;ul&gt;
   &lt;li&gt;스프링 컨테이너는 싱글톤 패턴을 적용하지 않아도, 객체 인스턴스를 관리한다.&lt;/li&gt;
   &lt;li&gt;스프링 컨테이너는 싱글톤 컨테이너 역할을 한다. 이렇게 싱글톤 객체를 생성하고 관리하는 기능을 싱글톤 레지스트리라고 한다.&lt;/li&gt;
 &lt;/ul&gt;
@@ -87,8 +82,6 @@
     &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://prod-files-secure.s3.us-west-2.amazonaws.com/0bc5a6d8-ce22-49fb-992d-842cafffc5da/bcf764b3-182b-45fa-816f-99d0006d0a50/image.png&quot; alt=&quot;image.png&quot; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;스프링 컨테이너 덕분에 고객의 요청이 올 때 마다 객체를 생성하는 것이 아니라 이미 만들어진 객체를 공유해서 효율적으로 사용할 수 있다.&lt;/li&gt;
