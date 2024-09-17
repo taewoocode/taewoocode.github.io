@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 18 Sep 2024 01:55:01 +0900</pubDate>
-    <lastBuildDate>Wed, 18 Sep 2024 01:55:01 +0900</lastBuildDate>
+    <pubDate>Wed, 18 Sep 2024 02:08:10 +0900</pubDate>
+    <lastBuildDate>Wed, 18 Sep 2024 02:08:10 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
@@ -120,6 +120,135 @@
         
         
         <category>framework</category>
+        
+      </item>
+    
+      <item>
+        <title>Java Mid 01 -Object-</title>
+        <description>&lt;h2 id=&quot;java-lang-package&quot;&gt;Java Lang package&lt;/h2&gt;
+
+&lt;p&gt;자바가 기본으로 제공하는 라이브러리(클래스 모음) 중에 가장 기본이 되는 것이 바로 자바 lang이다.&lt;/p&gt;
+
+&lt;p&gt;여기서 lang은 Language(언어)의 줄임말이다. 쉽게 이야기해서 자바 언어를 이루는 가장 기본이 되는 클래스들을 보관하는 패키지를 뜻한다.&lt;/p&gt;
+
+&lt;h3 id=&quot;javalang-대표적인-클래스&quot;&gt;java.lang 대표적인 클래스&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Object : 모든 자바객체의 부모 클래스&lt;/li&gt;
+  &lt;li&gt;String : 문자열&lt;/li&gt;
+  &lt;li&gt;Integer, Long, Double : 래퍼 타입(감싼타입)
+    &lt;ul&gt;
+      &lt;li&gt;기본형 데이터 타입을 객체로 만든 것&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Class : 클래스 메타 정보&lt;/li&gt;
+  &lt;li&gt;System : 시스템과 관련된 기본 기능들을 제공&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;암묵적으로-상속받고-있는-object&quot;&gt;암묵적으로 상속받고 있는 Object&lt;/h3&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;package lang.object;
+
+//부모가 없으면 묵시적으로 Object 클래스를 상속 받는다.
+public class Parent extends Object {
+    
+    public void parentMethod() {
+        System.out.println( &quot;Parent.parent&quot; );
+    }
+}
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;명시적-상속&quot;&gt;명시적 상속&lt;/h3&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;package lang.object;
+
+public class Child extends Parent {
+
+    public void childMethod() {
+        System.out.println( &quot;Child.childMethod&quot; );
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;클래스에서 상속 받을 부모 클래스가 없으면 묵시적으로 Object 클래스를 상속 받는다.
+    &lt;ul&gt;
+      &lt;li&gt;쉽게 이야기해서 자바가 extends Object 코드를 넣어준다.&lt;/li&gt;
+      &lt;li&gt;따라서 extends Object는 생략하는 것을 권장한다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Object&lt;/code&gt; 클래스는 자바 클래스 계층 구조의 루트 클래스이며, 다른 모든 클래스는 직간접적으로 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Object&lt;/code&gt; 클래스를 상속받는다.&lt;/p&gt;
+
+&lt;h2 id=&quot;object가-제공하는-기능은-다음과-같다&quot;&gt;Object가 제공하는 기능은 다음과 같다&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;객체의 정보를 제공하는 toString()&lt;/li&gt;
+  &lt;li&gt;객체의 같음을 비교하는 equals()&lt;/li&gt;
+  &lt;li&gt;객체의 클래스 정보를 제공하는 getClass()&lt;/li&gt;
+  &lt;li&gt;기타 여러가지 기능&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;다형성의-기본-구현&quot;&gt;다형성의 기본 구현&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;부모는 자식을 담을 수 있다.&lt;/li&gt;
+  &lt;li&gt;Object는 모든 클래스의 부모 클래스이다. 따라서 모든 객체를 참조할 수 있다.&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Object 클래스는 다형성을 지원하는 기본적인 메커니즘을 제공한다.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;모든 자바 객체는 Object 타입으로 처리될 수 있으며, 이는 다양한 타입의 객체를 통합적으로 처리할 수 있게 해준다. 쉽게 이야기하면 Object는 모든 객체를 다 담을 수 있다. (다형성 특징)&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;타입이 다른 객체들은 어딘가에 보관해야 한다면? 바로 Object에 보관하면 된다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;object-배열&quot;&gt;Object 배열&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Object는 모든 타입의 객체를 다 담을 수 있다.&lt;/li&gt;
+  &lt;li&gt;Object[] 만들면 자바의 모든 객체를 다 담을 수 있는 배열을 만든 것이다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ublic class ObjectPolyExample2 &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    public static void main&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;String[] args&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        Dog dog &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; new Dog&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        Car car &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; new Car&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        Object object &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; new Object&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+        Object[] objects &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;dog, car, object&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        size&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;objects&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    private static void size&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;Object[] objects&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        System.out.println&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;전달된 객체의 수는?: &quot;&lt;/span&gt; + objects.length &lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;만약 Object가 없다면?
+    &lt;ul&gt;
+      &lt;li&gt;void action(Object obj)과 같이 모든 객체를 받을 수 있는 메서드를 만들 수 없다.&lt;/li&gt;
+      &lt;li&gt;Object[] objects같이 모든 객체를 저장할 수 있는 배열을 만들 수 없다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;인프런 김영한님의 실전 자바 강좌 중급 1편&lt;/p&gt;
+</description>
+        <pubDate>Wed, 18 Sep 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/programming-language/2024/09/18/Java-Mid-01/</link>
+        <guid isPermaLink="true">http://localhost:4000/programming-language/2024/09/18/Java-Mid-01/</guid>
+        
+        <category>java</category>
+        
+        
+        <category>Programming-language</category>
         
       </item>
     
