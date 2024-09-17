@@ -284,21 +284,21 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
     </ul>
   </li>
   <li>Class : 클래스 메타 정보</li>
-  <li>System : 시스템과 관련된 기본 기능들을 제공</li>
+  <li>System : 시스템과 관련된 기본 기능들을 제공
+```java
+package lang.object.tostring;</li>
 </ul>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">lang.object.tostring</span><span class="o">;</span>
+<p>public class ToStringMain1 {
+    public static void main(String[] args) {
+        Object object = new Object();
+        String string = object.toString();</p>
 
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ToStringMain1</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">Object</span> <span class="n">object</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Object</span><span class="o">();</span>
-        <span class="nc">String</span> <span class="n">string</span> <span class="o">=</span> <span class="n">object</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    //toString() 반환값 출력
+    System.out.println(string);
 
-        <span class="c1">//toString() 반환값 출력</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">string</span><span class="o">);</span>
-
-        <span class="c1">//object 직접 출력</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">object</span><span class="o">);</span>
+    //object 직접 출력
+    System.out.println(object); ```
 </code></pre></div></div>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">lang.object.tostring</span><span class="o">;</span>
