@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Home" />
+<meta property="og:title" content="Java Mid 09 -Nested Class-" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,16 +52,18 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>taewoo &middot;</title>
+<title>Java Mid 09 -Nested Class- &middot; taewoo</title>
  
 <meta
         name="description"
-        content="How,Why에 집중하며 살아가기
+        content="중첩 클래스, 내부 클래스란?
+
 "
 />
 <meta
         property="og:description"
-        content="How,Why에 집중하며 살아가기
+        content="중첩 클래스, 내부 클래스란?
+
 "
 />
 
@@ -70,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/" />
-<meta property="og:url" content="http://localhost:4000/" />
+<link rel="canonical" href="http://localhost:4000/language/2024/09/18/Java-Mid-09/" />
+<meta property="og:url" content="http://localhost:4000/language/2024/09/18/Java-Mid-09/" />
 
 <link
         rel="alternate"
@@ -80,7 +82,11 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         href="http://localhost:4000/feed.xml"
 />
 
+
+<link rel="prev" href="http://localhost:4000/language/2024/09/18/Java-Mid-08/" />
  
+<link rel="next" href="http://localhost:4000/framework/2024/09/18/Spring-03/" />
+
 
 <link
         rel="apple-touch-icon"
@@ -176,71 +182,13 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
             data-image="/assets/img/dp.jpeg"
     >
       
-  
 
-<article id="post-framework/2024/09/18/Spring-03" class="post mb6" role="article">
+<article id="post-language/2024/09/18/Java-Mid-09" class="post" role="article">
   <header>
     <h1 class="post-title">
-      <a href="/framework/2024/09/18/Spring-03/" data-flip="title">
-      싱글톤 패턴 적용해보기
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
       
-
-
-
-
-
-
-
-
-
-in <a href="/category/framework/" data-flip="title">Framework</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="싱글톤-패턴-만들어-보기">싱글톤 패턴 만들어 보기</h2>
-
-
-  <p class="read-more"><a class="heading" href="/framework/2024/09/18/Spring-03/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-09" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-09/" data-flip="title">
       Java Mid 09 -Nested Class-
-      </a>
+      
     </h1>
 
     <p class="post-date heading">
@@ -280,376 +228,248 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
 
 
   
-  <h2 id="중첩-클래스-내부-클래스란">중첩 클래스, 내부 클래스란?</h2>
+  <div class="markdown-body">
 
+    <!--  -->
+    <style>
+      .myAd1190 {
+        width: 48%;
+        height: 280px;
+      }
 
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-09/" data-flip="title">Continue reading </a>
-  </p>
+      .myAd1290 {
+        width: 48%;
+        height: 280px;
+      }
+
+      @media(max-width: 800px) {
+        .myAd1190 {
+          display: none;
+        }
+
+        .myAd1290 {
+          width: 98%;
+        }
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 300px;
+      }
+
+      .row-center {
+        display: flex;
+        justify-content: center;
+        height: 258px;
+      }
+    </style>
+
+    <!--<br />-->
+    <h2 id="중첩-클래스-내부-클래스란">중첩 클래스, 내부 클래스란?</h2>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span><span class="o">(...)</span> <span class="o">{</span>
+	<span class="c1">//...</span>
+		<span class="k">for</span><span class="o">(...){</span>
+			<span class="c1">//...</span>
+		<span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>다음과 같이 클래스 안에 클래스를 중첩해서 정의하는데, 이것을 중첩 클래스(Nested Class)라고 한다.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Outer</span><span class="o">{</span>
+	<span class="o">...</span>
+	<span class="c1">//nested Class</span>
+		<span class="kd">class</span> <span class="nc">Nested</span><span class="o">{</span>
+			<span class="o">...</span>
+			<span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h2 id="static키워드를-통해-분류된다">Static키워드를 통해 분류된다.</h2>
+<p><img width="550" alt="image" src="https://github.com/user-attachments/assets/198fb39a-a18d-4107-bdc3-ca226558b692" /></p>
+
+<h2 id="중첩과-내부의-차이">중첩과 내부의 차이</h2>
+
+<ul>
+  <li>중첩 : 어떤 것이 내부에 위치하거나 포함되는 구조적인 관계
+    <ul>
+      <li>나의 안에 있지만 내 것이 아니다.
+        <ul>
+          <li>큰 나무 상자안에 다른 작은 나무 상자가 있다고 생각하면 쉽다..</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>내부 : 나의 내부에 있는 나를 구성하는 요소
+    <ul>
+      <li>나의 심장은 나의 구성요소이다.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">nested.inner.ex2</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Car</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">model</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">chargeLevel</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Engine</span> <span class="n">engine</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">Car</span><span class="o">(</span><span class="nc">String</span> <span class="n">model</span><span class="o">,</span> <span class="kt">int</span> <span class="n">chargeLevel</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">chargeLevel</span> <span class="o">=</span> <span class="n">chargeLevel</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">engine</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Engine</span><span class="o">();</span> <span class="c1">//내 정보를 넘겨서 instance를 생성</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">start</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">engine</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="n">model</span> <span class="o">+</span> <span class="s">"시작 완료"</span> <span class="o">);</span>
+    <span class="o">}</span>
+    <span class="kd">private</span> <span class="kd">class</span> <span class="nc">Engine</span> <span class="o">{</span>
+
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">start</span><span class="o">()</span> <span class="o">{</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"충전 레벨을 확인:"</span> <span class="o">+</span> <span class="n">chargeLevel</span> <span class="o">);</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="n">model</span> <span class="o">+</span> <span class="s">"의 엔진을 구동합니다."</span> <span class="o">);</span>
+
+        <span class="o">}</span>
+
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<ul>
+  <li>엔진을 내부 클래스로 만들었다.</li>
+  <li>Engine.start()를 비교해보자
+    <ul>
+      <li>Car의 인스턴스 변수인 chargeLevel에 직접 접근할 수 잇다.</li>
+      <li>Car의 인스턴스 변수인 model에 직접 접근할 수 있다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="중첩-클래스는-언제-사용하는가">중첩 클래스는 언제 사용하는가?</h2>
+
+<ul>
+  <li>중첩 클래스는 특정 클래스가 다른 하나의 클래스 안에서만 사용이 되거나, 둘이 아주 긴밀하게 연결되어 있는 특별한 경우에만 사용해야 한다. 외부 여러곳에서 특정 클래스를 사용한다면 중첩 클래스로 사용하면 안된다.</li>
+  <li>논리적인 그룹화 : 특정 클래스가 다른 하나의 클래스 안에서만 사용되는 경우 해당 클래스 안에 포함되는 것이 논리적으로 더 그룹화가 된다. 패키지를 열었을 때 다른 곳에서 사용될 필요가 없는 중첩 클래스가 외부에 노출되지 않는 장점도 있다.</li>
+  <li>캡슐화 : 중첩 클래스는 바깥 클래스의 private멤버에 접근할 수 있다. 이렇게 해서 둘이 긴밀하게 연결하고 불필요한 public 메서드를 제거할 수 있다.</li>
+</ul>
+
+<h2 id="reference">Reference</h2>
+
+<p>인프런 김영한님의 자바 강좌 + 나의 뇌</p>
+
+    <br />
+    <br />
+  </div>
   
 
 </article>
 
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-08" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-08/" data-flip="title">
-      Java Mid 08 -Enum Type-
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
+<!--<hr class="dingbat" />-->
+<!--
+<div class="share">
+  <h2>Share this post</h2>
+  <div class="share-body">
+    <a href="http://twitter.com/share?text=Java Mid 09 -Nested Class-&amp;url=http://localhost:4000/language/2024/09/18/Java-Mid-09/"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="icon-twitter">
+      </span>
+    </a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/09/18/Java-Mid-09/"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="icon-facebook">
+      </span>
+    </a>
+  </div>
+</div>
+-->
+<br />
 
 
 
 
+<aside class="related" role="complementary">
+  <h2 class="hr">Related Posts</h2>
 
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
+  <ul class="related-posts">
     
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="문자열과-타입-안정성">문자열과 타입 안정성</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-08/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-07" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-07/" data-flip="title">
-      Java Mid 07 -Class class-
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
       
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
       
+      
+        
+          
+          
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/language/2024/09/18/Java-Mid-08/" data-flip="title">
+    <span>Java Mid 08 -Enum Type-</span>
+  </a>
+  <small><time datetime="2024-09-18T00:00:00+09:00">
+    18 Sep 2024
+  </time></small>
+</li>
+
+        
+      
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/language/2024/09/18/Java-Mid-07/" data-flip="title">
+    <span>Java Mid 07 -Class class-</span>
+  </a>
+  <small><time datetime="2024-09-18T00:00:00+09:00">
+    18 Sep 2024
+  </time></small>
+</li>
+
+        
+      
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/language/2024/09/18/Java-Mid-06/" data-flip="title">
+    <span>Java Mid 06 -Wrapper Class-</span>
+  </a>
+  <small><time datetime="2024-09-18T00:00:00+09:00">
+    18 Sep 2024
+  </time></small>
+</li>
 
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
+        
+      
     
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="class-클래스">Class 클래스</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-07/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-06" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-06/" data-flip="title">
-      Java Mid 06 -Wrapper Class-
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="기본형의-한계">기본형의 한계</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-06/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-05" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-05/" data-flip="title">
-      Java Mid 05 -String 최적화-
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="문자열-리터럴-최적화">문자열 리터럴 최적화</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-05/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-04" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-04/" data-flip="title">
-      Java Mid 04 -String 클래스-
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="string-클래스">String 클래스</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-04/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-03" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-03/" data-flip="title">
-      Java Mid 03 -Immutable Object-
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h3 id="불변-객체-immutable-object---도입">불변 객체 (Immutable Object) - 도입</h3>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-03/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-
-<h2 class="sr-only">Pagination</h2>
-<nav class="pagination heading" role="navigation">
-  <ul>
-    <li class="pagination-item older" >
-      
-        <a rel="next" href="/page-2/">Older</a>
-      
-    </li>
-    <li class="pagination-item newer" >
-      
-        <span>Newer</span>
-      
-    </li>
   </ul>
-</nav>
+</aside>
+  <aside class="comments" role="complementary">
+  <h2>Comments</h2>
+  <hr/>
 
-  <footer>
+  <script src="https://utteranc.es/client.js"
+          repo="taewoocode/taewoocode.github.io"
+          issue-term="title"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+</aside>
+
+
+       <footer>
   <hr/>
   
     <p>© 2022. by taewoo</p>
