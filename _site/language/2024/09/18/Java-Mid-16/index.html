@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Java Mid 07 -Class class-" />
+<meta property="og:title" content="Java Mid 15 -Collection LinkedList 구현하기-" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,17 +52,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Java Mid 07 -Class class- &middot; 일벌리는 개발자</title>
+<title>Java Mid 15 -Collection LinkedList 구현하기- &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="Class 클래스
+        content="LinkedList
 
 "
 />
 <meta
         property="og:description"
-        content="Class 클래스
+        content="LinkedList
 
 "
 />
@@ -72,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/language/2024/09/18/Java-Mid-07/" />
-<meta property="og:url" content="http://localhost:4000/language/2024/09/18/Java-Mid-07/" />
+<link rel="canonical" href="http://localhost:4000/language/2024/09/18/Java-Mid-16/" />
+<meta property="og:url" content="http://localhost:4000/language/2024/09/18/Java-Mid-16/" />
 
 <link
         rel="alternate"
@@ -83,9 +83,9 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/language/2024/09/18/Java-Mid-06/" />
+<link rel="prev" href="http://localhost:4000/language/2024/09/18/Java-Mid-15/" />
  
-<link rel="next" href="http://localhost:4000/language/2024/09/18/Java-Mid-08/" />
+<link rel="next" href="http://localhost:4000/framework/2024/09/18/Spring-03/" />
 
 
 <link
@@ -183,11 +183,11 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-language/2024/09/18/Java-Mid-07" class="post" role="article">
+<article id="post-language/2024/09/18/Java-Mid-16" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      Java Mid 07 -Class class-
+      Java Mid 15 -Collection LinkedList 구현하기-
       
     </h1>
 
@@ -267,103 +267,268 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
     </style>
 
     <!--<br />-->
-    <h2 id="class-클래스">Class 클래스</h2>
+    <h2 id="linkedlist">LinkedList</h2>
 
-<p>자바에서 Class 클래스는 클래스의 정보(메타데이터)를 다루는데 사용된다.</p>
+<h3 id="linkedlist의-기본-개념">LinkedList의 기본 개념</h3>
 
-<p>Class 클래스를 통해 개발자는 실행 중인 자바 애플리케이션 내에서 필요한 클래스의 속성과 메소드에 대한 정보를 조회하고 조작한다.</p>
+<ol>
+  <li><strong>노드(Node)</strong>:
+    <ul>
+      <li><strong>데이터</strong>와 <strong>다음 노드에 대한 참조(링크)</strong>를 포함하는 객체다.</li>
+      <li>각 노드는 다음 노드의 주소를 저장하여 <strong>체인처럼 연결</strong>된다.</li>
+    </ul>
+  </li>
+  <li><strong>링크(Link)</strong>:
+    <ul>
+      <li>노드 간의 연결을 나타내며, 하나의 노드가 다른 노드를 가리킨다.</li>
+      <li>*단일 연결 리스트(Singly Linked List)<strong>는 각 노드가 **하나의 참조</strong>만 가지고 다음 노드를 가리킨다.</li>
+      <li>*이중 연결 리스트(Doubly Linked List)<strong>는 각 노드가 **이전 노드</strong>와 <strong>다음 노드</strong>를 모두 가리킬 수 있다.</li>
+    </ul>
+  </li>
+</ol>
 
-<h2 id="class-주요-기능클래스의-메타데이터">Class 주요 기능(클래스의 메타데이터)</h2>
+<h3 id="linkedlist의-주요-특징">LinkedList의 주요 특징</h3>
 
-<ul>
-  <li>타입 정보: 클래스 이름, 슈퍼클래스, 인터페이스, 접근 제한자</li>
-  <li>리플랙션: 메소드, 필드, 생성자 조회</li>
-  <li>동적 로딩과 생성: Class,forName()을 통해 클래스를 동적로딩하며, newInstance() 메서드를 통해 새로운 인스턴스를 생성한다.</li>
-  <li>애노테이션 처리: 클래스에 적용된 애노테이션을 조회하고 처리한다.</li>
-</ul>
+<ol>
+  <li><strong>동적 크기 조정</strong>:
+    <ul>
+      <li>노드 기반으로 되어 있어, 데이터의 개수가 변해도 동적으로 크기가 조정된다.</li>
+    </ul>
+  </li>
+  <li><strong>삽입 및 삭제</strong>:
+    <ul>
+      <li>노드의 연결만 변경하면 되므로, <strong>삽입과 삭제가 빠르다</strong>.</li>
+      <li>특정 위치에 노드를 삽입하거나 삭제할 때 <strong>O(1)</strong>의 시간 복잡도로 수행할 수 있다.</li>
+    </ul>
+  </li>
+  <li><strong>순차 접근</strong>:
+    <ul>
+      <li>특정 위치의 데이터를 찾으려면 <strong>처음부터 순차적으로 탐색</strong>해야 하므로 <strong>O(n)</strong>의 시간 복잡도를 가진다.</li>
+      <li><strong>랜덤 접근</strong>이 불가능하며, 데이터를 검색하려면 처음부터 끝까지 순차적으로 접근해야 한다.</li>
+    </ul>
+  </li>
+  <li><strong>메모리 사용</strong>:
+    <ul>
+      <li>각 노드는 데이터 외에도 참조를 저장하므로, <strong>배열보다 메모리 사용이 비효율적</strong>일 수 있다.</li>
+    </ul>
+  </li>
+</ol>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClassMetaMain</span><span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
-        <span class="c1">//클래스 조회</span>
-        <span class="nc">Class</span> <span class="n">clazz</span> <span class="o">=</span> <span class="nc">String</span><span class="o">.</span><span class="na">class</span><span class="o">;</span> <span class="c1">//클래스에서 조회</span>
-        <span class="c1">// Class clazz1 = new String().getClass(); //인스턴스에서 조회</span>
-        <span class="c1">// Class clazz2 = Class.forName( "Java.lang.String" );//문자열로 조회</span>
+<h2 id="linkedlist-구현하기">LinkedList 구현하기</h2>
 
-        <span class="c1">// 모든 필드 출력</span>
-        <span class="nc">Field</span><span class="o">[]</span> <span class="n">fields</span> <span class="o">=</span> <span class="n">clazz</span><span class="o">.</span><span class="na">getDeclaredFields</span><span class="o">();</span>
-        <span class="k">for</span> <span class="o">(</span><span class="nc">Field</span> <span class="n">field</span> <span class="o">:</span> <span class="n">fields</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"field = "</span> <span class="o">+</span> <span class="n">field</span><span class="o">.</span><span class="na">getType</span><span class="o">()</span> <span class="o">+</span> <span class="s">" "</span> <span class="o">+</span> <span class="n">field</span><span class="o">.</span><span class="na">getName</span><span class="o">()</span> <span class="o">);</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">collection.link</span><span class="o">;</span>
 
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyLinkdeListV1</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="nc">Node</span> <span class="n">first</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">size</span><span class="o">;</span>
+
+    <span class="c1">//기능추가</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="nc">Object</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Node</span> <span class="n">newNode</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Node</span><span class="o">(</span> <span class="n">e</span> <span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">first</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">first</span> <span class="o">=</span> <span class="n">newNode</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="nc">Node</span> <span class="n">lastNode</span> <span class="o">=</span> <span class="n">getLastNode</span><span class="o">();</span>
+            <span class="n">lastNode</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">newNode</span><span class="o">;</span>
         <span class="o">}</span>
-        <span class="c1">//모든 메서드 출력</span>
-        <span class="c1">//extends가 없으면 자동으로 Object를 상속하게 된다.</span>
-
-        <span class="nc">Method</span><span class="o">[]</span> <span class="n">methods</span> <span class="o">=</span> <span class="n">clazz</span><span class="o">.</span><span class="na">getDeclaredMethods</span><span class="o">();</span>
-        <span class="k">for</span> <span class="o">(</span><span class="nc">Method</span> <span class="n">method</span> <span class="o">:</span> <span class="n">methods</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"method = "</span> <span class="o">+</span> <span class="n">method</span> <span class="o">);</span>
-
-        <span class="o">}</span>
-
-        <span class="c1">//인터페이스 정보 출력</span>
-
-        <span class="nc">Class</span><span class="o">[]</span> <span class="n">interfaces</span> <span class="o">=</span> <span class="n">clazz</span><span class="o">.</span><span class="na">getInterfaces</span><span class="o">();</span>
-        <span class="k">for</span> <span class="o">(</span><span class="nc">Class</span> <span class="n">i</span> <span class="o">:</span> <span class="n">interfaces</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Interface: "</span> <span class="o">+</span> <span class="n">i</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
-
-        <span class="o">}</span>
-
-        <span class="c1">//인터페이스 정보 출력</span>
-
+        <span class="n">size</span><span class="o">++;</span>
     <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="nc">Node</span> <span class="nf">getLastNode</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">Node</span> <span class="n">x</span> <span class="o">=</span> <span class="n">first</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">x</span><span class="o">.</span><span class="na">next</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span> <span class="c1">//null이 아닐 때 까지 계속 순회함</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">set</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">,</span> <span class="nc">Object</span> <span class="n">element</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Node</span> <span class="n">x</span> <span class="o">=</span> <span class="n">getNode</span><span class="o">(</span> <span class="n">index</span> <span class="o">);</span>
+        <span class="nc">Object</span> <span class="n">oldValue</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="na">item</span><span class="o">;</span> <span class="c1">//엣날 값 넣어주고</span>
+        <span class="n">x</span><span class="o">.</span><span class="na">item</span> <span class="o">=</span> <span class="n">element</span><span class="o">;</span> <span class="c1">// 새 값 넣어주고</span>
+        <span class="k">return</span> <span class="n">oldValue</span><span class="o">;</span> <span class="c1">// 옛날 값 반환</span>
+    <span class="o">}</span>
+
+    <span class="nc">Object</span> <span class="nf">get</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Node</span> <span class="n">node</span> <span class="o">=</span> <span class="n">getNode</span><span class="o">(</span> <span class="n">index</span> <span class="o">);</span>
+        <span class="k">return</span> <span class="n">node</span><span class="o">.</span><span class="na">item</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="nc">Node</span> <span class="nf">getNode</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Node</span> <span class="n">x</span><span class="o">=</span> <span class="n">first</span><span class="o">;</span>
+        <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">index</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="na">next</span><span class="o">;</span> <span class="c1">//3이면 3번 이동해서 3의 인덱스를 찾는다.</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">indexOf</span><span class="o">(</span><span class="nc">Object</span> <span class="n">o</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">Node</span> <span class="n">x</span> <span class="o">=</span> <span class="n">first</span><span class="o">;</span> <span class="n">x</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">;</span> <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="na">next</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">o</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span> <span class="n">x</span><span class="o">.</span><span class="na">item</span> <span class="o">))</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="n">index</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">index</span><span class="o">++;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">size</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">size</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">"MyLinkdeListV1{"</span> <span class="o">+</span>
+                <span class="s">"first="</span> <span class="o">+</span> <span class="n">first</span> <span class="o">+</span>
+                <span class="s">", size="</span> <span class="o">+</span> <span class="n">size</span> <span class="o">+</span>
+                <span class="sc">'}'</span><span class="o">;</span>
+    <span class="o">}</span>
+
 <span class="o">}</span>
+
 </code></pre></div></div>
 
-<p>클래스라는게 있고, 리플랙션을 이용해 메타정보를 얻을 수 잇다.</p>
+<p>배열리스트는 중간에 데이터를 추가하거나 삭제할 때 데이터를 한칸씩 밀어 넣어야 한다는 단점이 있었지만 리스트는 이 문제를 해결할 수 있다.</p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">lang.system</span><span class="o">;</span>
+<h2 id="제네릭-타입으로-만들기">제네릭 타입으로 만들기</h2>
 
-<span class="kn">import</span> <span class="nn">lang.imutable.address.Solution</span><span class="o">;</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">collection.link</span><span class="o">;</span>
 
-<span class="kn">import</span> <span class="nn">java.util.Arrays</span><span class="o">;</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyLinkdeListV3</span><span class="o">&lt;</span><span class="no">E</span><span class="o">&gt;</span> <span class="o">{</span>
 
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SystemMain</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">Node</span><span class="o">&lt;</span><span class="no">E</span><span class="o">&gt;</span> <span class="n">first</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">size</span><span class="o">;</span>
 
-        <span class="c1">//현재 시간을 밀리초로 가지고 온다.</span>
-        <span class="kt">long</span> <span class="n">currentTimeMillis</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"currentTimeMillis = "</span> <span class="o">+</span> <span class="n">currentTimeMillis</span> <span class="o">);</span>
+    <span class="c1">//기능추가</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="no">E</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Node</span><span class="o">&lt;</span><span class="no">E</span><span class="o">&gt;</span> <span class="n">newNode</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Node</span><span class="o">(</span> <span class="n">e</span> <span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">first</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">first</span> <span class="o">=</span> <span class="n">newNode</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="nc">Node</span> <span class="n">lastNode</span> <span class="o">=</span> <span class="n">getLastNode</span><span class="o">();</span>
+            <span class="n">lastNode</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">newNode</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">size</span><span class="o">++;</span>
+    <span class="o">}</span>
 
-        <span class="c1">//현재 시간을 나노초로 가지고 온다.</span>
-        <span class="kt">long</span> <span class="n">currentNano</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">nanoTime</span><span class="o">();</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"currentNano = "</span> <span class="o">+</span> <span class="n">currentNano</span> <span class="o">);</span>
+    <span class="kd">private</span> <span class="nc">Node</span><span class="o">&lt;</span><span class="no">E</span><span class="o">&gt;</span> <span class="nf">getLastNode</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">Node</span><span class="o">&lt;</span><span class="no">E</span><span class="o">&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="n">first</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">x</span><span class="o">.</span><span class="na">next</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span> <span class="c1">//null이 아닐 때 까지 계속 순회함</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">;</span>
+    <span class="o">}</span>
 
-        <span class="c1">//환경 변수를 읽는다. 자바에 필요한 settings</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"getenv"</span> <span class="o">+</span> <span class="nc">System</span><span class="o">.</span><span class="na">getenv</span><span class="o">()</span> <span class="o">);</span>
+    <span class="c1">//추가코드</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">,</span> <span class="no">E</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Node</span><span class="o">&lt;</span><span class="no">E</span><span class="o">&gt;</span> <span class="n">newNode</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Node</span><span class="o">&lt;&gt;(</span><span class="n">e</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">index</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">newNode</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">first</span><span class="o">;</span> <span class="c1">//기존에 first에다가 next를 넣어준다음</span>
+            <span class="n">first</span> <span class="o">=</span> <span class="n">newNode</span><span class="o">;</span> <span class="c1">//새로운 노드를 first에 넣어준다.</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="nc">Node</span><span class="o">&lt;</span><span class="no">E</span><span class="o">&gt;</span> <span class="n">prev</span> <span class="o">=</span> <span class="n">getNode</span><span class="o">(</span> <span class="n">index</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">);</span>
+            <span class="n">newNode</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">prev</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+            <span class="n">prev</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">newNode</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">size</span><span class="o">++;</span>
+    <span class="o">}</span>
 
-        <span class="c1">//시스템 속성을 읽는다.</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"properties = "</span> <span class="o">+</span> <span class="nc">System</span><span class="o">.</span><span class="na">getProperties</span><span class="o">()</span> <span class="o">);</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"Java version = "</span> <span class="o">+</span> <span class="nc">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span> <span class="s">"java.version"</span> <span class="o">)</span> <span class="o">);</span>
+    <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">set</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">,</span> <span class="no">E</span> <span class="n">element</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Node</span><span class="o">&lt;</span><span class="no">E</span><span class="o">&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="n">getNode</span><span class="o">(</span> <span class="n">index</span> <span class="o">);</span>
+        <span class="no">E</span> <span class="n">oldValue</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="na">item</span><span class="o">;</span> <span class="c1">//엣날 값 넣어주고</span>
+        <span class="n">x</span><span class="o">.</span><span class="na">item</span> <span class="o">=</span> <span class="n">element</span><span class="o">;</span> <span class="c1">// 새 값 넣어주고</span>
+        <span class="k">return</span> <span class="n">oldValue</span><span class="o">;</span> <span class="c1">// 옛날 값 반환</span>
+    <span class="o">}</span>
 
-        <span class="c1">//배열을 고속으로 복사한다.</span>
-        <span class="kt">char</span><span class="o">[]</span> <span class="n">originalArray</span> <span class="o">=</span> <span class="o">{</span><span class="sc">'h'</span><span class="o">,</span> <span class="sc">'e'</span><span class="o">,</span> <span class="sc">'l'</span><span class="o">,</span> <span class="sc">'l'</span><span class="o">,</span> <span class="sc">'o'</span><span class="o">};</span>
-        <span class="kt">char</span><span class="o">[]</span> <span class="n">copiedArray</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="o">[</span><span class="mi">5</span><span class="o">];</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">arraycopy</span><span class="o">(</span> <span class="n">originalArray</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">copiedArray</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">originalArray</span><span class="o">.</span><span class="na">length</span> <span class="o">);</span>
+    <span class="c1">//추가코드</span>
+    <span class="kd">public</span> <span class="no">E</span> <span class="nf">remove</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Node</span><span class="o">&lt;</span><span class="no">E</span><span class="o">&gt;</span> <span class="n">removeNode</span> <span class="o">=</span> <span class="n">getNode</span><span class="o">(</span> <span class="n">index</span> <span class="o">);</span>
+        <span class="no">E</span> <span class="n">removeItem</span> <span class="o">=</span> <span class="n">removeNode</span><span class="o">.</span><span class="na">item</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">index</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">first</span> <span class="o">=</span> <span class="n">removeNode</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="nc">Node</span> <span class="n">prev</span> <span class="o">=</span> <span class="n">getNode</span><span class="o">(</span> <span class="n">index</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">);</span>
+            <span class="n">prev</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">removeNode</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">removeNode</span><span class="o">.</span><span class="na">item</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="n">removeNode</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="n">size</span><span class="o">--;</span>
+        <span class="k">return</span> <span class="n">removeItem</span><span class="o">;</span>
+    <span class="o">}</span>
 
-        <span class="c1">//배열 출력</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"copiedArray"</span> <span class="o">+</span> <span class="n">copiedArray</span> <span class="o">);</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"copiedArray"</span> <span class="o">+</span> <span class="nc">Arrays</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span> <span class="n">copiedArray</span> <span class="o">)</span> <span class="o">);</span>
+    <span class="no">E</span> <span class="nf">get</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Node</span><span class="o">&lt;</span><span class="no">E</span><span class="o">&gt;</span> <span class="n">node</span> <span class="o">=</span> <span class="n">getNode</span><span class="o">(</span> <span class="n">index</span> <span class="o">);</span>
+        <span class="k">return</span> <span class="n">node</span><span class="o">.</span><span class="na">item</span><span class="o">;</span>
+    <span class="o">}</span>
 
-        <span class="c1">//프로그램 종료</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">exit</span><span class="o">(</span> <span class="mi">0</span> <span class="o">);</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"hello"</span> <span class="o">);</span>
+    <span class="kd">private</span> <span class="nc">Node</span><span class="o">&lt;</span><span class="no">E</span><span class="o">&gt;</span> <span class="nf">getNode</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Node</span><span class="o">&lt;</span><span class="no">E</span><span class="o">&gt;</span> <span class="n">x</span><span class="o">=</span> <span class="n">first</span><span class="o">;</span>
+        <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">index</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="na">next</span><span class="o">;</span> <span class="c1">//3이면 3번 이동해서 3의 인덱스를 찾는다.</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">indexOf</span><span class="o">(</span><span class="no">E</span> <span class="n">o</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">Node</span><span class="o">&lt;</span><span class="no">E</span><span class="o">&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="n">first</span><span class="o">;</span> <span class="n">x</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">;</span> <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="na">next</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">o</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span> <span class="n">x</span><span class="o">.</span><span class="na">item</span> <span class="o">))</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="n">index</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">index</span><span class="o">++;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">size</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">size</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">"MyLinkdeListV1{"</span> <span class="o">+</span>
+                <span class="s">"first="</span> <span class="o">+</span> <span class="n">first</span> <span class="o">+</span>
+                <span class="s">", size="</span> <span class="o">+</span> <span class="n">size</span> <span class="o">+</span>
+                <span class="sc">'}'</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="c1">//중첩 클래스 만들기</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Node</span><span class="o">&lt;</span><span class="no">E</span><span class="o">&gt;</span> <span class="o">{</span>
+
+        <span class="no">E</span> <span class="n">item</span><span class="o">;</span>
+        <span class="nc">Node</span> <span class="n">next</span><span class="o">;</span>
+
+        <span class="kd">public</span> <span class="nf">Node</span><span class="o">(</span><span class="no">E</span> <span class="n">item</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">item</span> <span class="o">=</span> <span class="n">item</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="nc">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+            <span class="nc">StringBuilder</span> <span class="n">sb</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StringBuilder</span><span class="o">();</span> <span class="c1">//loop에서 문자를 떠할 땐 stringBuilder가 좋다.</span>
+            <span class="nc">Node</span><span class="o">&lt;</span><span class="no">E</span><span class="o">&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+            <span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span> <span class="s">"["</span> <span class="o">);</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">x</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span> <span class="n">x</span><span class="o">.</span><span class="na">item</span> <span class="o">);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">x</span><span class="o">.</span><span class="na">next</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span> <span class="s">"-&gt;"</span> <span class="o">);</span>
+                <span class="o">}</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span> <span class="s">"]"</span> <span class="o">);</span>
+            <span class="k">return</span> <span class="n">sb</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span> <span class="c1">//command optN</span>
+        <span class="o">}</span>
     <span class="o">}</span>
 <span class="o">}</span>
 
 </code></pre></div></div>
+
+<p>제네릭을 도입후 타입안정성 마저 보장할 수 있다.</p>
 
 <h2 id="reference">Reference</h2>
 
-<p>인프런 김영한님의 자바 강좌</p>
+<p>인프런 김영한님의 자바강좌 + 나의 뇌</p>
 
     <br />
     <br />
@@ -377,12 +542,12 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=Java Mid 07 -Class class-&amp;url=http://localhost:4000/language/2024/09/18/Java-Mid-07/"
+    <a href="http://twitter.com/share?text=Java Mid 15 -Collection LinkedList 구현하기-&amp;url=http://localhost:4000/language/2024/09/18/Java-Mid-16/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/09/18/Java-Mid-07/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/09/18/Java-Mid-16/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -404,21 +569,8 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
       
       
         
-        
           
-
-
-<li class="h4">
-  <a href="/language/2024/09/18/Java-Mid-16/" data-flip="title">
-    <span>Java Mid 15 -Collection LinkedList 구현하기-</span>
-  </a>
-  <small><time datetime="2024-09-18T00:00:00+09:00">
-    18 Sep 2024
-  </time></small>
-</li>
-
-        
-      
+          
         
         
           
@@ -452,6 +604,19 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
         
       
         
+        
+          
+
+
+<li class="h4">
+  <a href="/language/2024/09/18/Java-Mid-13/" data-flip="title">
+    <span>Java Mid 1 -Generic 2-</span>
+  </a>
+  <small><time datetime="2024-09-18T00:00:00+09:00">
+    18 Sep 2024
+  </time></small>
+</li>
+
         
       
     
