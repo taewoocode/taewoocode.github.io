@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Java Mid 04 -String 클래스-" />
+<meta property="og:title" content="Java Mid 13 -Generic 2-" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,17 +52,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Java Mid 04 -String 클래스- &middot; 일벌리는 개발자</title>
+<title>Java Mid 13 -Generic 2- &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="String 클래스
+        content="제네릭 활용예제
 
 "
 />
 <meta
         property="og:description"
-        content="String 클래스
+        content="제네릭 활용예제
 
 "
 />
@@ -72,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/language/2024/09/18/Java-Mid-04/" />
-<meta property="og:url" content="http://localhost:4000/language/2024/09/18/Java-Mid-04/" />
+<link rel="canonical" href="http://localhost:4000/language/2024/09/18/Java-Mid-13/" />
+<meta property="og:url" content="http://localhost:4000/language/2024/09/18/Java-Mid-13/" />
 
 <link
         rel="alternate"
@@ -83,9 +83,9 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/language/2024/09/18/Java-Mid-03/" />
+<link rel="prev" href="http://localhost:4000/language/2024/09/18/Java-Mid-12/" />
  
-<link rel="next" href="http://localhost:4000/language/2024/09/18/Java-Mid-05/" />
+<link rel="next" href="http://localhost:4000/framework/2024/09/18/Spring-03/" />
 
 
 <link
@@ -183,11 +183,11 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-language/2024/09/18/Java-Mid-04" class="post" role="article">
+<article id="post-language/2024/09/18/Java-Mid-13" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      Java Mid 04 -String 클래스-
+      Java Mid 13 -Generic 2-
       
     </h1>
 
@@ -267,75 +267,112 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
     </style>
 
     <!--<br />-->
-    <h2 id="string-클래스">String 클래스</h2>
+    <h2 id="제네릭-활용예제">제네릭 활용예제</h2>
 
-<p><code class="language-plaintext highlighter-rouge">String</code>은 자바에서 객체로 다뤄지며, 클래스이다. <code class="language-plaintext highlighter-rouge">int</code>, <code class="language-plaintext highlighter-rouge">boolean</code> 같은 기본형이 아닌 참조형으로, <code class="language-plaintext highlighter-rouge">String</code> 변수가 실제 문자열 값을 직접 저장하는 것이 아니라, 문자열 객체에 대한 참조를 저장된다.</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">generic.test.ex3</span><span class="o">;</span>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="nc">String</span> <span class="n">str1</span> <span class="o">=</span> <span class="s">"Hello"</span><span class="o">;</span>   <span class="c1">// 기존 방식</span>
-<span class="nc">String</span> <span class="n">str2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">String</span><span class="o">(</span><span class="s">"hello"</span><span class="o">);</span>   <span class="c1">// 객체를 명시적으로 생성하는 방식</span>
-</code></pre></div></div>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AnimalHospitalV2</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="o">{</span>
 
-<p><code class="language-plaintext highlighter-rouge">String str1 = "hello";</code>와 같은 코드는 자바 언어에서 <code class="language-plaintext highlighter-rouge">new String("hello")</code>로 변환되어 처리한다.</p>
+    <span class="c1">//다형성을 통한 중복제거</span>
+    <span class="kd">private</span> <span class="no">T</span> <span class="n">animal</span><span class="o">;</span>
 
-<p>이는 자바가 문자열을 쉽게 다룰 수 있도록 제공하는 편의 기능이며 문자열을 생성할 때, 객체를 직접 생성하지 않더라도 편리하게 사용할 수 있다.</p>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">set</span><span class="o">(</span><span class="no">T</span> <span class="n">animal</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">animal</span> <span class="o">=</span> <span class="n">animal</span><span class="o">;</span>
+    <span class="o">}</span>
 
-<h3 id="string-의-내부-구조">String 의 내부 구조</h3>
+    <span class="c1">//T의 타입을 정의하는 시점에는 알 수가 없다. Object기능만 사용한다. -&gt; Object는 모든 객체의 부모</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">checkup</span><span class="o">()</span> <span class="o">{</span>
 
-<p>문자열 데이터는 내부적으로 <code class="language-plaintext highlighter-rouge">char[]</code> 배열에 저장되었으나, <strong>자바 9</strong>부터는 메모리 효율성을 높이기 위해 <code class="language-plaintext highlighter-rouge">char[]</code> 대신 <code class="language-plaintext highlighter-rouge">byte[]</code>를 사용하게 된다. 자바에서 <code class="language-plaintext highlighter-rouge">char</code> 타입은 2바이트를 지원하지만, 영어와 숫자 같은 단순한 문자는 1바이트로 표현이 가능하다. 자바 9 이후, 문자열은 <strong>Latin-1 인코딩</strong>의 경우 1바이트를 사용하고, 그 외의 문자들은 <strong>UTF-16 인코딩</strong>으로 2바이트를 사용하여 메모리를 절약할 수 있게 변경된다.</p>
+        <span class="n">animal</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+        <span class="n">animal</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span> <span class="kc">null</span> <span class="o">);</span>
 
-<h3 id="string-의-주요-메서드">String 의 주요 메서드</h3>
+        <span class="cm">/*System.out.println( "동물이름 : " + animal.getName() );
+        System.out.println( "동물크기 : " + animal.getSize() );
+        animal.sound()*/</span><span class="o">;</span>
 
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">length()</code>: 문자열의 길이를 반환한다</li>
-  <li><code class="language-plaintext highlighter-rouge">charAt(int index)</code>: 특정 인덱스에 위치한 문자를 반환한다.</li>
-  <li><code class="language-plaintext highlighter-rouge">substring(int beginIndex, int endIndex)</code>: 부분 문자열을 반환한다.</li>
-  <li><code class="language-plaintext highlighter-rouge">indexOf(String str)</code>: 특정 문자열이 처음 나타나는 인덱스를 반환한다.</li>
-  <li><code class="language-plaintext highlighter-rouge">toLowerCase()</code>, <code class="language-plaintext highlighter-rouge">toUpperCase()</code>: 문자열을 각각 소문자 또는 대문자로 변환한다.</li>
-  <li><code class="language-plaintext highlighter-rouge">trim()</code>: 문자열의 양쪽 끝에 있는 공백을 제거한다.</li>
-  <li><code class="language-plaintext highlighter-rouge">concat(String str)</code>: 문자열을 이어 붙인다.</li>
-</ul>
+    <span class="o">}</span>
 
-<h3 id="문자열-더하기">문자열 더하기</h3>
-
-<p>문자열을 더할 때 <code class="language-plaintext highlighter-rouge">String</code>의 <code class="language-plaintext highlighter-rouge">concat()</code> 메서드를 사용할 수 있다. 그러나 자바는 편의상 <code class="language-plaintext highlighter-rouge">+</code> 연산자를 통해 문자열을 이어 붙이는 기능도 제공한다. 이는 문자열이 자주 사용되기 때문에 자바에서 특별히 지원하는 문법이다.</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">StringConcatMain</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">String</span> <span class="n">a</span> <span class="o">=</span> <span class="s">"hello"</span><span class="o">;</span>
-        <span class="nc">String</span> <span class="n">b</span> <span class="o">=</span> <span class="s">" java"</span><span class="o">;</span>
-
-        <span class="c1">// concat() 메서드를 사용하여 문자열을 결합</span>
-        <span class="nc">String</span> <span class="n">result1</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="na">concat</span><span class="o">(</span><span class="n">b</span><span class="o">);</span>
-        <span class="c1">// + 연산자를 사용하여 문자열을 결합</span>
-        <span class="nc">String</span> <span class="n">result2</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="o">;</span>
-
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">result1</span><span class="o">);</span>  <span class="c1">// 출력: hello java</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">result2</span><span class="o">);</span>  <span class="c1">// 출력: hello java</span>
+    <span class="kd">public</span> <span class="no">T</span> <span class="nf">bigger</span><span class="o">(</span><span class="no">T</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+<span class="cm">/*
+        return animal.getSize() &gt; target.getSize() ? animal : target;
+*/</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">}</span>
 
 </code></pre></div></div>
 
-<p>이처럼 <code class="language-plaintext highlighter-rouge">concat()</code> 메서드와 <code class="language-plaintext highlighter-rouge">+</code> 연산자는 모두 문자열을 이어 붙이지만, <code class="language-plaintext highlighter-rouge">+</code>는 자바에서 특별하게 제공하는 기능이다.</p>
+<T> 를 사용해서 제네릭 타입을 선언했다.
 
-<h2 id="string또한-불변객체이다">String또한 불변객체이다.</h2>
+제네릭 타입을 선언하면 자바 컴파일러 입장에서 T에 어떤 값이 들어올지 예측할 수 없다. 우리는 Animal 타입의 자식이 들어오기를 기대했지만, 여기 코드 어디에도 Animal에 대한 정보가 없다. (T타입 즉 제네릭으로 정의했기 때문에). T에는 타입 인자로 Integer가 들어올 수도 있고, Dog가 들어올 수도 있다.
 
-<p><code class="language-plaintext highlighter-rouge">String</code>은 불변 객체(immutable object)이다. 한 번 생성된 <code class="language-plaintext highlighter-rouge">String</code> 객체의 값은 변경할 수 없다. 예를 들어, 문자열에 대해 어떤 연산을 수행할 때, 기존 문자열이 수정되는 것이 아니라 새로운 <code class="language-plaintext highlighter-rouge">String</code> 객체가 생성된다.</p>
+물론 Object가 들어올 수도 있다.
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">StringImmutableExample</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">String</span> <span class="n">str</span> <span class="o">=</span> <span class="s">"hello"</span><span class="o">;</span>
-        <span class="n">str</span> <span class="o">=</span> <span class="n">str</span><span class="o">.</span><span class="na">concat</span><span class="o">(</span><span class="s">" world"</span><span class="o">);</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">str</span><span class="o">);</span>  <span class="c1">// 출력: hello world</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+```jsx
+package generic.test.ex3;
 
-</code></pre></div></div>
+import generic.animal.Cat;
+import generic.animal.Dog;
 
-<h2 id="reference">Reference</h2>
+public class AnimalHostpitalMainV2 {
+    public static void main(String[] args) {
+        AnimalHospitalV2<Dog> dogHospital = new AnimalHospitalV2&lt;&gt;();
+        AnimalHospitalV2<Cat> catHospital = new AnimalHospitalV2&lt;&gt;();
+        AnimalHospitalV2<Integer> integerHospital = new AnimalHospitalV2&lt;&gt;();
+        AnimalHospitalV2<object> ObjectHospital = new AnimalHospitalV2&lt;&gt;();
+        
+    }
+}
 
-<p>인프런 김영한님의 실전 자바 강좌</p>
+```
+
+이 코드에서의 문제는?
+
+- 제네릭에서 타입 매개변수를 사용하면 어떠한 타입이든 들어올 수 있다.
+- 따라서 타입 매개변수를 어떤 타입이든 수용할 수 있는 Object로 가정하고, Object의 기능만 사용할 수 있다.
+    - 발생한 문제들을 생각해보면 매개변수를 Animal로 제한하지 않았기 때문이다. 타입 인자가 모두 animal과 그 자식만 들어올 수 있게 제한한다면 어떨까?
+
+## 타입 매개변수 제한
+
+타입 매개변수를 특정 타입으로 제한할 수 있다.
+
+```java
+package generic.test.ex3;
+
+import generic.animal.Animal;
+
+//T에 들어올 수 있는 것은 Animal 혹은 그 자식들만 들어올 수 있다.-&gt; T는 animal의 자식들을 쓸 수 있다.
+public class AnimalHospitalV3<T extends="" Animal=""> {
+
+    private T animal;
+
+    public void set(T animal) {
+        this.animal = animal;
+    }
+
+    public void checkup() {
+        System.out.println( "동물이름 : " + animal.getName() );
+        System.out.println( "동물크기 : " + animal.getSize() );
+        animal.sound();
+    }
+
+    public T bigger(T target) {
+        return animal.getSize() &gt; target.getSize() ? animal : target;
+    }
+}
+
+```
+
+- 핵심은 <T extends="" Animal="">이다.
+- 타입 매개변수 T를 animal과 그 자식만 받을 수 있도록 제한을 두는 것이다.
+- 즉 T의 상한이 Animal이 되는 것이다.
+
+이렇게 되면 자바 컴파일러는 T에 입력할 수 있는 값의 범위를 예측할 수 있다.
+
+## Reference
+
+인프런 김영한님의 자바강좌 + 나의 뇌
+</T></T></object></Integer></Cat></Dog></T>
 
     <br />
     <br />
@@ -349,12 +386,12 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=Java Mid 04 -String 클래스-&amp;url=http://localhost:4000/language/2024/09/18/Java-Mid-04/"
+    <a href="http://twitter.com/share?text=Java Mid 13 -Generic 2-&amp;url=http://localhost:4000/language/2024/09/18/Java-Mid-13/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/09/18/Java-Mid-04/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/09/18/Java-Mid-13/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -376,21 +413,8 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
       
       
         
-        
           
-
-
-<li class="h4">
-  <a href="/language/2024/09/18/Java-Mid-13/" data-flip="title">
-    <span>Java Mid 13 -Generic 2-</span>
-  </a>
-  <small><time datetime="2024-09-18T00:00:00+09:00">
-    18 Sep 2024
-  </time></small>
-</li>
-
-        
-      
+          
         
         
           
@@ -424,6 +448,19 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
         
       
         
+        
+          
+
+
+<li class="h4">
+  <a href="/language/2024/09/18/Java-Mid-10/" data-flip="title">
+    <span>Java Mid 10 -Exception 1-</span>
+  </a>
+  <small><time datetime="2024-09-18T00:00:00+09:00">
+    18 Sep 2024
+  </time></small>
+</li>
+
         
       
     

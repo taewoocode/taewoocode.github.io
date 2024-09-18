@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 19 Sep 2024 02:32:35 +0900</pubDate>
-    <lastBuildDate>Thu, 19 Sep 2024 02:32:35 +0900</lastBuildDate>
+    <pubDate>Thu, 19 Sep 2024 02:35:24 +0900</pubDate>
+    <lastBuildDate>Thu, 19 Sep 2024 02:35:24 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
@@ -120,6 +120,126 @@
         
         
         <category>framework</category>
+        
+      </item>
+    
+      <item>
+        <title>Java Mid 13 -Generic 2-</title>
+        <description>&lt;h2 id=&quot;제네릭-활용예제&quot;&gt;제네릭 활용예제&lt;/h2&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;generic.test.ex3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AnimalHospitalV2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;//다형성을 통한 중복제거&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;animal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;animal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;animal&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;animal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;//T의 타입을 정의하는 시점에는 알 수가 없다. Object기능만 사용한다. -&amp;gt; Object는 모든 객체의 부모&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;checkup&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+        &lt;span class=&quot;n&quot;&gt;animal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;animal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;equals&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+        &lt;span class=&quot;cm&quot;&gt;/*System.out.println( &quot;동물이름 : &quot; + animal.getName() );
+        System.out.println( &quot;동물크기 : &quot; + animal.getSize() );
+        animal.sound()*/&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;bigger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;/*
+        return animal.getSize() &amp;gt; target.getSize() ? animal : target;
+*/&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;T&gt; 를 사용해서 제네릭 타입을 선언했다.
+
+제네릭 타입을 선언하면 자바 컴파일러 입장에서 T에 어떤 값이 들어올지 예측할 수 없다. 우리는 Animal 타입의 자식이 들어오기를 기대했지만, 여기 코드 어디에도 Animal에 대한 정보가 없다. (T타입 즉 제네릭으로 정의했기 때문에). T에는 타입 인자로 Integer가 들어올 수도 있고, Dog가 들어올 수도 있다.
+
+물론 Object가 들어올 수도 있다.
+
+```jsx
+package generic.test.ex3;
+
+import generic.animal.Cat;
+import generic.animal.Dog;
+
+public class AnimalHostpitalMainV2 {
+    public static void main(String[] args) {
+        AnimalHospitalV2&lt;Dog&gt; dogHospital = new AnimalHospitalV2&amp;lt;&amp;gt;();
+        AnimalHospitalV2&lt;Cat&gt; catHospital = new AnimalHospitalV2&amp;lt;&amp;gt;();
+        AnimalHospitalV2&lt;Integer&gt; integerHospital = new AnimalHospitalV2&amp;lt;&amp;gt;();
+        AnimalHospitalV2&lt;object&gt; ObjectHospital = new AnimalHospitalV2&amp;lt;&amp;gt;();
+        
+    }
+}
+
+```
+
+이 코드에서의 문제는?
+
+- 제네릭에서 타입 매개변수를 사용하면 어떠한 타입이든 들어올 수 있다.
+- 따라서 타입 매개변수를 어떤 타입이든 수용할 수 있는 Object로 가정하고, Object의 기능만 사용할 수 있다.
+    - 발생한 문제들을 생각해보면 매개변수를 Animal로 제한하지 않았기 때문이다. 타입 인자가 모두 animal과 그 자식만 들어올 수 있게 제한한다면 어떨까?
+
+## 타입 매개변수 제한
+
+타입 매개변수를 특정 타입으로 제한할 수 있다.
+
+```java
+package generic.test.ex3;
+
+import generic.animal.Animal;
+
+//T에 들어올 수 있는 것은 Animal 혹은 그 자식들만 들어올 수 있다.-&amp;gt; T는 animal의 자식들을 쓸 수 있다.
+public class AnimalHospitalV3&lt;T extends=&quot;&quot; Animal=&quot;&quot;&gt; {
+
+    private T animal;
+
+    public void set(T animal) {
+        this.animal = animal;
+    }
+
+    public void checkup() {
+        System.out.println( &quot;동물이름 : &quot; + animal.getName() );
+        System.out.println( &quot;동물크기 : &quot; + animal.getSize() );
+        animal.sound();
+    }
+
+    public T bigger(T target) {
+        return animal.getSize() &amp;gt; target.getSize() ? animal : target;
+    }
+}
+
+```
+
+- 핵심은 &lt;T extends=&quot;&quot; Animal=&quot;&quot;&gt;이다.
+- 타입 매개변수 T를 animal과 그 자식만 받을 수 있도록 제한을 두는 것이다.
+- 즉 T의 상한이 Animal이 되는 것이다.
+
+이렇게 되면 자바 컴파일러는 T에 입력할 수 있는 값의 범위를 예측할 수 있다.
+
+## Reference
+
+인프런 김영한님의 자바강좌 + 나의 뇌
+&lt;/T&gt;&lt;/T&gt;&lt;/object&gt;&lt;/Integer&gt;&lt;/Cat&gt;&lt;/Dog&gt;&lt;/T&gt;
+</description>
+        <pubDate>Wed, 18 Sep 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/language/2024/09/18/Java-Mid-13/</link>
+        <guid isPermaLink="true">http://localhost:4000/language/2024/09/18/Java-Mid-13/</guid>
+        
+        <category>java</category>
+        
+        
+        <category>language</category>
         
       </item>
     
