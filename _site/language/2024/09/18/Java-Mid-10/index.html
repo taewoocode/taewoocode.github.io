@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Java Mid 02 -Primitive Type, Reference Type-" />
+<meta property="og:title" content="Java Mid 10 -Exception 1-" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,17 +52,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Java Mid 02 -Primitive Type, Reference Type- &middot; taewoo</title>
+<title>Java Mid 10 -Exception 1- &middot; taewoo</title>
  
 <meta
         name="description"
-        content="기본형과 참조형
+        content="예외 처리가 필요한 이유
 
 "
 />
 <meta
         property="og:description"
-        content="기본형과 참조형
+        content="예외 처리가 필요한 이유
 
 "
 />
@@ -72,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/language/2024/09/18/Java-Mid-02/" />
-<meta property="og:url" content="http://localhost:4000/language/2024/09/18/Java-Mid-02/" />
+<link rel="canonical" href="http://localhost:4000/language/2024/09/18/Java-Mid-10/" />
+<meta property="og:url" content="http://localhost:4000/language/2024/09/18/Java-Mid-10/" />
 
 <link
         rel="alternate"
@@ -83,9 +83,9 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/language/2024/09/18/Java-Mid-01/" />
+<link rel="prev" href="http://localhost:4000/language/2024/09/18/Java-Mid-09/" />
  
-<link rel="next" href="http://localhost:4000/language/2024/09/18/Java-Mid-03/" />
+<link rel="next" href="http://localhost:4000/framework/2024/09/18/Spring-03/" />
 
 
 <link
@@ -183,11 +183,11 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-language/2024/09/18/Java-Mid-02" class="post" role="article">
+<article id="post-language/2024/09/18/Java-Mid-10" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      Java Mid 02 -Primitive Type, Reference Type-
+      Java Mid 10 -Exception 1-
       
     </h1>
 
@@ -267,83 +267,82 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
     </style>
 
     <!--<br />-->
-    <h2 id="기본형과-참조형">기본형과 참조형</h2>
+    <h2 id="예외-처리가-필요한-이유">예외 처리가 필요한 이유</h2>
 
-<p>자바의 데이터 타입은 크게 기본형(Primitive Type)과 참조형(Reference Type)으로 나눌 수 있다. 이 두 가지 타입은 메모리 할당 방식과 데이터 저장 방식에서 큰 차이가 있다.</p>
+<p>프로그램 실행 중에 발생할 수 있는 예상치 못한 상황, 즉 예외(Exception)을 처리하기 위해서 나온 메커니즘이 예외처리이다. 프로그램의 안정성과 신뢰성을 높이는 아주 중요한 역할을 한다.</p>
 
-<h3 id="기본형-primitive-type">기본형 (Primitive Type)</h3>
+<h3 id="자바-예외-키워드">자바 예외 키워드</h3>
 
-<p>기본형 데이터 타입은 값 자체를 저장하며, 각 변수는 고유한 값을 가진다. 따라서 하나의 값을 여러 변수에서 절대로 공유하지 않는다. 기본형 데이터 타입에는 다음과 같은 종류가 있다.</p>
-
-<ul>
-  <li><strong>정수형 (Integer Types)</strong>: <code class="language-plaintext highlighter-rouge">byte</code>, <code class="language-plaintext highlighter-rouge">short</code>, <code class="language-plaintext highlighter-rouge">int</code>, <code class="language-plaintext highlighter-rouge">long</code></li>
-  <li><strong>실수형 (Floating Point Types)</strong>: <code class="language-plaintext highlighter-rouge">float</code>, <code class="language-plaintext highlighter-rouge">double</code></li>
-  <li><strong>문자형 (Character Type)</strong>: <code class="language-plaintext highlighter-rouge">char</code></li>
-  <li><strong>논리형 (Boolean Type)</strong>: <code class="language-plaintext highlighter-rouge">boolean</code></li>
-</ul>
-
-<p>예시코드</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">java코드</span> <span class="n">복사</span>
-<span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">5</span><span class="o">;</span>
-<span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="o">;</span>  <span class="c1">// b는 a의 값을 복사. 이후 a와 b는 서로 독립적인 변수가 된다.</span>
-<span class="n">a</span> <span class="o">=</span> <span class="mi">10</span><span class="o">;</span>     <span class="c1">// a의 값을 변경해도 b의 값은 영향을 받지 않는다.</span>
-
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">try</span><span class="o">,</span> <span class="k">catch</span><span class="o">,</span> <span class="k">finally</span><span class="o">,</span> <span class="k">throw</span><span class="o">,</span> <span class="kd">throws</span>
 </code></pre></div></div>
-
-<h3 id="참조형-reference-type">참조형 (Reference Type)</h3>
-
-<p>참조형 데이터 타입은 실제 데이터 값이 아닌 데이터가 저장된 메모리 주소(참조값)를 저장한다. 따라서 하나의 객체를 여러 변수에서 공유할 수 있다. 참조형 데이터 타입에는 다음과 같은 종류가 있다. → 참조값을 전달한다.</p>
-
+<p><img width="702" alt="image" src="https://github.com/user-attachments/assets/d86c5a4a-2159-4521-9680-6601c02f1d8b" /></p>
 <ul>
-  <li><strong>클래스 (Classes)</strong></li>
-  <li><strong>인터페이스 (Interfaces)</strong></li>
-  <li><strong>배열 (Arrays)</strong></li>
-  <li><strong>열거형 (Enums)</strong></li>
-</ul>
-
-<p>예시코드</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">java코드</span> <span class="n">복사</span>
-<span class="kd">class</span> <span class="nc">MyObject</span> <span class="o">{</span>
-    <span class="kt">int</span> <span class="n">value</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="nc">MyObject</span> <span class="n">obj1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">MyObject</span><span class="o">();</span>
-<span class="n">obj1</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="mi">5</span><span class="o">;</span>
-
-<span class="nc">MyObject</span> <span class="n">obj2</span> <span class="o">=</span> <span class="n">obj1</span><span class="o">;</span>  <span class="c1">// obj1과 obj2는 같은 객체를 참조한다.</span>
-<span class="n">obj1</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="mi">10</span><span class="o">;</span>       <span class="c1">// obj1을 통해 객체의 값을 변경하면 obj2에서도 변경된 값을 볼 수 있습니다.</span>
-<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">obj2</span><span class="o">.</span><span class="na">value</span><span class="o">);</span>  <span class="c1">// 출력: 10</span>
-
-<span class="c1">// obj에 참조값 x001이 저장이 되었디고 한다면 obj1의 참조값을 obj2에도 저장하기 때문에 결국에는 같은 메모리 주소값을 참조하게 되는 매커니즘이다.</span>
-</code></pre></div></div>
-
-<h2 id="사이드-이펙트">사이드 이펙트</h2>
-
-<ul>
-  <li>프로그래밍에서 어떤 계산이 주된 작업 외에 추가적인 부수효과를 일으키는 것을 말한다.</li>
-  <li>공유 참조를 예시로 생각할 수 있는데 위에 코드처럼 obj1을 변경했는데 obj2까지 의도치 않게 변경됨을 말한다.
+  <li>Object: 자바에서 기본형을 제외한 모든 것은 객체이다. 예외도 객체
     <ul>
-      <li>프로젝트나 코드가 복잡해지면 디버깅이 어려워지고 코드의 안정성이 저하된다.</li>
+      <li>모든 객체의 어머니 아버지는 Object이므로 예외도 Objcet가 최상위 부모이다.</li>
+    </ul>
+  </li>
+  <li>Thorable: 최상위 예외이다. 하위에 Excepiton과 Error가 존재한다.</li>
+  <li>Error: 메모리 부족 및 심각한 시스템 오류와 같이 애플리케이션이 복구가 불가능한 시스템이다. 이 예외는 잡기가 힘들다.</li>
+  <li>Exception: 체크 예외: 컴파일러가 체크하는 체크예외이다.</li>
+  <li>RuntimeException: 언체크 예외, 런타임 예외, 컴파일러가 체크하지 않는 예외이다.
+    <ul>
+      <li>RuntimeException` 과 그 자식 예외는 모두 언체크 예외이다.</li>
     </ul>
   </li>
 </ul>
 
-<h2 id="사이드-이펙트-해결-방안">사이드 이펙트 해결 방안</h2>
+<h2 id="체크-예외-vs-언체크-예외런타임-예외">체크 예외 vs 언체크 예외(런타임 예외)</h2>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">MyObject</span> <span class="n">obj1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">MyObject</span><span class="o">();</span> <span class="c1">//x001</span>
-<span class="nc">MyObject</span> <span class="n">obj2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">MyObject</span><span class="o">();</span> <span class="c1">//x002</span>
+<p>체크 예외는 발생한 예외를 개발자가 명시적으로 처리해야 한다. 그렇지 않으면 컴파일 오류가 발생한다. 언체크 예외는 개발자가 발생한 예외를 명시적으로 처리하지 않아도 된다.</p>
+
+<h3 id="체크-예외-checked-exception">체크 예외 (Checked Exception)</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">java</span>
+<span class="n">코드</span> <span class="n">복사</span>
+<span class="kn">import</span> <span class="nn">java.io.*</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CheckedExceptionExample</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="c1">// 체크 예외: FileNotFoundException</span>
+            <span class="nc">FileReader</span> <span class="n">file</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">FileReader</span><span class="o">(</span><span class="s">"nonexistentfile.txt"</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">FileNotFoundException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"파일을 찾을 수 없습니다: "</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<h3 id="언체크-예외-unchecked-exception">언체크 예외 (Unchecked Exception)</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">java</span>
+<span class="n">코드</span> <span class="n">복사</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">UncheckedExceptionExample</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// 언체크 예외: ArithmeticException</span>
+        <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">/</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"결과: "</span> <span class="o">+</span> <span class="n">result</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
 </code></pre></div></div>
 
 <ul>
-  <li>해결방안은 아주 단순하다. 처음부터 서로 다른 인스턴스를 참조하면 된다.</li>
-  <li>처음부터 서로 다른 인스턴스를 참조하기 때문에 ob2를 변경해도 obj1에 영향을 주지 않는다.</li>
+  <li><strong>체크 예외</strong>는 <code class="language-plaintext highlighter-rouge">FileNotFoundException</code>처럼 반드시 <code class="language-plaintext highlighter-rouge">try-catch</code>로 처리하거나 메서드 선언부에 <code class="language-plaintext highlighter-rouge">throws</code>로 명시해야 컴파일 오류가 발생하지 않는다.</li>
+  <li><strong>언체크 예외</strong>는 <code class="language-plaintext highlighter-rouge">ArithmeticException</code>처럼 처리하지 않아도 컴파일이 가능하지만, 실행 시 예외가 발생한다.</li>
 </ul>
 
-<h2 id="reference">Reference</h2>
+<h2 id="예외-기본-규칙">예외 기본 규칙</h2>
 
-<p>인프런 김영한님의 실전 자바 강좌</p>
+<p>예외는 폭탄 돌리기랑 비슷하다. 잡아서 처리하거나 처리하지 못한다면 밖으로 던져야 한다. (여기서의 밖은 호출한 곳을 말한다.)</p>
+
+<p>예외를 잡으면 지정된 예외뿐만이 아닌 그 예외의 모든 자식들이 가진 예외도 잡을 수 있다. 예를 들어서 Exception을 catch로 잡으면 그 하위 예외들도 모두 잡을 수 있다. 또는 thorws로 던진다면 그 하위 예외들 또한 모두 잡을 수 있다.</p>
+
+<h2 id="referrence">Referrence</h2>
+
+<p>인프런 김영한님의 자바 강의 + 나의 눈과 나의 뇌</p>
 
     <br />
     <br />
@@ -357,12 +356,12 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=Java Mid 02 -Primitive Type, Reference Type-&amp;url=http://localhost:4000/language/2024/09/18/Java-Mid-02/"
+    <a href="http://twitter.com/share?text=Java Mid 10 -Exception 1-&amp;url=http://localhost:4000/language/2024/09/18/Java-Mid-10/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/09/18/Java-Mid-02/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/09/18/Java-Mid-10/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -384,21 +383,8 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
       
       
         
-        
           
-
-
-<li class="h4">
-  <a href="/language/2024/09/18/Java-Mid-10/" data-flip="title">
-    <span>Java Mid 10 -Exception 1-</span>
-  </a>
-  <small><time datetime="2024-09-18T00:00:00+09:00">
-    18 Sep 2024
-  </time></small>
-</li>
-
-        
-      
+          
         
         
           
@@ -432,6 +418,19 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
         
       
         
+        
+          
+
+
+<li class="h4">
+  <a href="/language/2024/09/18/Java-Mid-07/" data-flip="title">
+    <span>Java Mid 07 -Class class-</span>
+  </a>
+  <small><time datetime="2024-09-18T00:00:00+09:00">
+    18 Sep 2024
+  </time></small>
+</li>
+
         
       
     
