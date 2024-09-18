@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 18 Sep 2024 21:07:33 +0900</pubDate>
-    <lastBuildDate>Wed, 18 Sep 2024 21:07:33 +0900</lastBuildDate>
+    <pubDate>Wed, 18 Sep 2024 22:00:15 +0900</pubDate>
+    <lastBuildDate>Wed, 18 Sep 2024 22:00:15 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
@@ -147,7 +147,7 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h2 id=&quot;static키워드를-통해-분류된다&quot;&gt;Static키워드를 통해 분류된다.&lt;/h2&gt;
-&lt;p&gt;&lt;img width=&quot;550&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/198fb39a-a18d-4107-bdc3-ca226558b692&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img width=&quot;615&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/9ec56932-3e7f-4775-958f-ced2e9b3d989&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;중첩과-내부의-차이&quot;&gt;중첩과 내부의 차이&lt;/h2&gt;
 
