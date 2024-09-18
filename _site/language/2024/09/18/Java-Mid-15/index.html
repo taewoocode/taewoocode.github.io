@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Programming Language" />
+<meta property="og:title" content="Java Mid 15 -Collection ArrayList 구현하기-" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,16 +52,18 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Programming Language &middot; 일벌리는 개발자</title>
+<title>Java Mid 15 -Collection ArrayList 구현하기- &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="프로그래밍 언어
+        content="배열 리스트
+
 "
 />
 <meta
         property="og:description"
-        content="프로그래밍 언어
+        content="배열 리스트
+
 "
 />
 
@@ -70,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/category/programming-language/" />
-<meta property="og:url" content="http://localhost:4000/category/programming-language/" />
+<link rel="canonical" href="http://localhost:4000/language/2024/09/18/Java-Mid-15/" />
+<meta property="og:url" content="http://localhost:4000/language/2024/09/18/Java-Mid-15/" />
 
 <link
         rel="alternate"
@@ -81,8 +83,10 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/category/opensource/" />
+<link rel="prev" href="http://localhost:4000/language/2024/09/18/Java-Mid-14/" />
  
+<link rel="next" href="http://localhost:4000/framework/2024/09/18/Spring-03/" />
+
 
 <link
         rel="apple-touch-icon"
@@ -179,47 +183,358 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-
-
+<article id="post-language/2024/09/18/Java-Mid-15" class="post" role="article">
   <header>
-    <h1 class="page-title">Programming Language</h1>
+    <h1 class="post-title">
+      
+      Java Mid 15 -Collection ArrayList 구현하기-
+      
+    </h1>
+
+    <p class="post-date heading">
+      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
+      
+
+
+
+
+
+
+
+
+
+in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
+
+      
+
+
+
+
+
+
+
+
+
+on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
+
+    </p>
+
     
-  
-  
-<p class="message">프로그래밍 언어</p>
-
-
+  <div class="hr" style="padding-bottom:0"></div>
 
 
   </header>
-  <hr class="sr-only"/>
-
+  
 
 
   
+  <div class="markdown-body">
+
+    <!--  -->
+    <style>
+      .myAd1190 {
+        width: 48%;
+        height: 280px;
+      }
+
+      .myAd1290 {
+        width: 48%;
+        height: 280px;
+      }
+
+      @media(max-width: 800px) {
+        .myAd1190 {
+          display: none;
+        }
+
+        .myAd1290 {
+          width: 98%;
+        }
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 300px;
+      }
+
+      .row-center {
+        display: flex;
+        justify-content: center;
+        height: 258px;
+      }
+    </style>
+
+    <!--<br />-->
+    <h2 id="배열-리스트">배열 리스트</h2>
+
+<p>이 문장은 <strong>배열의 불편함</strong>을 설명하고, <strong>동적으로 데이터를 추가</strong>할 수 있는 자료구조인 <strong>리스트</strong>의 개념을 소개하는 내용이다. 자세히 설명하면 다음과 같다.</p>
+
+<h3 id="1-배열의-불편함">1. <strong>배열의 불편함</strong></h3>
+
+<ul>
+  <li>배열은 크기가 고정되어 있기 때문에 <strong>데이터를 추가</strong>하려면 공간을 미리 확보해야 한다.</li>
+  <li><strong>중간이나 앞부분</strong>에 데이터를 삽입하려면 기존 데이터를 <strong>뒤로 밀어야</strong> 하는데, 이 과정이 비효율적이다.
+    <ul>
+      <li>예를 들어, 배열의 중간에 데이터를 추가하려면 해당 위치 이후의 모든 원소를 <strong>한 칸씩 뒤로 이동</strong>시켜야 한다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="arraylist-와-리스트의-관계">ArrayList 와 리스트의 관계</h3>
+
+<ul>
+  <li><em><code class="language-plaintext highlighter-rouge">ArrayList</code></em>는 자바의 <strong><code class="language-plaintext highlighter-rouge">List</code> 인터페이스</strong>를 구현한 클래스이다.
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">List</code> 인터페이스는 <strong>리스트</strong>라는 개념을 정의하며, <strong>순서가 있는 데이터의 집합</strong>을 나타낸다.</li>
+      <li>자바의 <strong><code class="language-plaintext highlighter-rouge">List</code></strong> 인터페이스를 구현하는 구현체로는 <code class="language-plaintext highlighter-rouge">ArrayList</code> 외에도 <code class="language-plaintext highlighter-rouge">LinkedList</code> 등이 있다.</li>
+    </ul>
+  </li>
+  <li><em><code class="language-plaintext highlighter-rouge">ArrayList</code></em>는 <strong>배열 기반</strong>으로 데이터를 저장하며, 내부적으로 배열을 사용하여 동적으로 크기를 조정한다.
+    <ul>
+      <li>배열 기반이지만, <strong>리스트</strong> 인터페이스를 구현하므로, <strong>리스트의 다양한 메소드</strong>를 지원한다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="arraylist-직접-만들어보기">ArrayList 직접 만들어보기</h2>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">collection.array</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.util.Arrays</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyArrayListV2</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">DEFAULT_CAPACITY</span> <span class="o">=</span> <span class="mi">5</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="nc">Object</span><span class="o">[]</span> <span class="n">elementData</span><span class="o">;</span> <span class="c1">//모든 타입을 다 담을 수 있는 ObjectType</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">MyArrayListV2</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">elementData</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Object</span><span class="o">[</span><span class="no">DEFAULT_CAPACITY</span><span class="o">];</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nf">MyArrayListV2</span><span class="o">(</span><span class="kt">int</span> <span class="n">initialCapacity</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">elementData</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Object</span><span class="o">[</span><span class="n">initialCapacity</span><span class="o">];</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">size</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">size</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="nc">Object</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">size</span> <span class="o">==</span> <span class="n">elementData</span><span class="o">.</span><span class="na">length</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">grow</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="n">elementData</span><span class="o">[</span><span class="n">size</span><span class="o">]</span> <span class="o">=</span> <span class="n">e</span><span class="o">;</span>
+        <span class="n">size</span><span class="o">++;</span> <span class="c1">// 1 -&gt; 2 -&gt; 3 ..... 배열에 순서대로 값을 넣는다.</span>
+    <span class="o">}</span>
+
+    <span class="c1">//코드추가 기존배열보다 커지면 큰 배열로 교체</span>
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">grow</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">oldCapacity</span> <span class="o">=</span> <span class="n">elementData</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">newCapacity</span> <span class="o">=</span> <span class="n">elementData</span><span class="o">.</span><span class="na">length</span> <span class="o">*</span> <span class="mi">2</span><span class="o">;</span>
+
+        <span class="c1">//배열을 새로 만들고 기존 배열을 새로운 배열에 복사한다.</span>
+        <span class="cm">/*Object[] newArr = new Object[newCapacity];
+        for (int i = 0; i &lt; elementData.length; i++) {
+            newArr[i] = elementData[i];
+        }*/</span>
+
+        <span class="c1">//기존의 배열을 새로운 배열로 교체</span>
+        <span class="n">elementData</span> <span class="o">=</span> <span class="nc">Arrays</span><span class="o">.</span><span class="na">copyOf</span><span class="o">(</span> <span class="n">elementData</span><span class="o">,</span> <span class="n">newCapacity</span> <span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">get</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">elementData</span><span class="o">[</span><span class="n">index</span><span class="o">];</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">set</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">,</span> <span class="nc">Object</span> <span class="n">element</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Object</span> <span class="n">oldValue</span> <span class="o">=</span> <span class="n">get</span><span class="o">(</span> <span class="n">index</span> <span class="o">);</span>
+        <span class="n">elementData</span><span class="o">[</span><span class="n">index</span><span class="o">]</span> <span class="o">=</span> <span class="n">element</span><span class="o">;</span>
+        <span class="k">return</span> <span class="n">oldValue</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">indexOf</span><span class="o">(</span><span class="nc">Object</span> <span class="n">o</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">o</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span> <span class="n">elementData</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">))</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="n">i</span> <span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">//[1, 2, 3, null, null] size = 3;</span>
+        <span class="c1">//[1,2,3] size = 3;</span>
+        <span class="k">return</span> <span class="nc">Arrays</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span> <span class="nc">Arrays</span><span class="o">.</span><span class="na">copyOf</span><span class="o">(</span> <span class="n">elementData</span><span class="o">,</span> <span class="n">size</span> <span class="o">)</span> <span class="o">)</span> <span class="o">+</span> <span class="s">"size = "</span> <span class="o">+</span> <span class="n">size</span> <span class="o">+</span>
+                <span class="s">", capacaity= "</span> <span class="o">+</span> <span class="n">elementData</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<h2 id="직접-구현하는-generic-기반-arraylist">직접 구현하는 Generic 기반 ArrayList</h2>
+
+<p>Object로 모든 타입을 다 결과를 받게되면 타입 안전성이 떨어지는 문제점이 발생한다.</p>
+
+<p>제네릭을 도입하면 타입안전성을 보장한다.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">collection.array</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.util.Arrays</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyArrayListV4</span><span class="o">&lt;</span><span class="no">E</span><span class="o">&gt;</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">DEFAULT_CAPACITY</span> <span class="o">=</span> <span class="mi">5</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="nc">Object</span><span class="o">[]</span> <span class="n">elementData</span><span class="o">;</span> <span class="c1">//모든 타입을 다 담을 수 있는 ObjectType</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">MyArrayListV4</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">elementData</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Object</span><span class="o">[</span><span class="no">DEFAULT_CAPACITY</span><span class="o">];</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nf">MyArrayListV4</span><span class="o">(</span><span class="kt">int</span> <span class="n">initialCapacity</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">elementData</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Object</span><span class="o">[</span><span class="n">initialCapacity</span><span class="o">];</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">size</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">size</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="no">E</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">size</span> <span class="o">==</span> <span class="n">elementData</span><span class="o">.</span><span class="na">length</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">grow</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="n">elementData</span><span class="o">[</span><span class="n">size</span><span class="o">]</span> <span class="o">=</span> <span class="n">e</span><span class="o">;</span>
+        <span class="n">size</span><span class="o">++;</span> <span class="c1">// 1 -&gt; 2 -&gt; 3 ..... 배열에 순서대로 값을 넣는다.</span>
+    <span class="o">}</span>
+
+    <span class="c1">//코드추가 기존배열보다 커지면 큰 배열로 교체</span>
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">grow</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">oldCapacity</span> <span class="o">=</span> <span class="n">elementData</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">newCapacity</span> <span class="o">=</span> <span class="n">elementData</span><span class="o">.</span><span class="na">length</span> <span class="o">*</span> <span class="mi">2</span><span class="o">;</span>
+
+        <span class="c1">//배열을 새로 만들고 기존 배열을 새로운 배열에 복사한다.</span>
+        <span class="cm">/*Object[] newArr = new Object[newCapacity];
+        for (int i = 0; i &lt; elementData.length; i++) {
+            newArr[i] = elementData[i];
+        }*/</span>
+
+        <span class="c1">//기존의 배열을 새로운 배열로 교체</span>
+        <span class="n">elementData</span> <span class="o">=</span> <span class="nc">Arrays</span><span class="o">.</span><span class="na">copyOf</span><span class="o">(</span> <span class="n">elementData</span><span class="o">,</span> <span class="n">newCapacity</span> <span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@SuppressWarnings</span><span class="o">(</span><span class="s">"unchecked"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="no">E</span> <span class="nf">get</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">(</span><span class="no">E</span><span class="o">)</span> <span class="n">elementData</span><span class="o">[</span><span class="n">index</span><span class="o">];</span> <span class="c1">//casting</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="no">E</span> <span class="nf">set</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">,</span> <span class="no">E</span> <span class="n">element</span><span class="o">)</span> <span class="o">{</span>
+        <span class="no">E</span> <span class="n">oldValue</span> <span class="o">=</span> <span class="n">get</span><span class="o">(</span> <span class="n">index</span> <span class="o">);</span>
+        <span class="n">elementData</span><span class="o">[</span><span class="n">index</span><span class="o">]</span> <span class="o">=</span> <span class="n">element</span><span class="o">;</span>
+        <span class="k">return</span> <span class="n">oldValue</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">indexOf</span><span class="o">(</span><span class="no">E</span> <span class="n">o</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">o</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span> <span class="n">elementData</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">))</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="n">i</span> <span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">,</span> <span class="no">E</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">size</span> <span class="o">==</span> <span class="n">elementData</span><span class="o">.</span><span class="na">length</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">grow</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="n">shiftRightFrom</span><span class="o">(</span> <span class="n">index</span> <span class="o">);</span>
+        <span class="n">elementData</span><span class="o">[</span><span class="n">index</span><span class="o">]</span> <span class="o">=</span> <span class="n">e</span><span class="o">;</span>
+        <span class="n">size</span><span class="o">++;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">shiftRightFrom</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">size</span><span class="o">;</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">index</span><span class="o">;</span> <span class="n">i</span><span class="o">--)</span> <span class="o">{</span>
+            <span class="n">elementData</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">elementData</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="no">E</span> <span class="nf">remove</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">)</span> <span class="o">{</span>
+        <span class="no">E</span> <span class="n">oldValue</span> <span class="o">=</span> <span class="n">get</span><span class="o">(</span> <span class="n">index</span> <span class="o">);</span>
+        <span class="n">shiftLeftFrom</span><span class="o">(</span> <span class="n">index</span> <span class="o">);</span>
+
+        <span class="n">size</span><span class="o">--;</span>
+        <span class="n">elementData</span><span class="o">[</span><span class="n">size</span><span class="o">]</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="k">return</span> <span class="n">oldValue</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">shiftLeftFrom</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">index</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">elementData</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">elementData</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">//[1, 2, 3, null, null] size = 3;</span>
+        <span class="c1">//[1,2,3] size = 3;</span>
+        <span class="k">return</span> <span class="nc">Arrays</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span> <span class="nc">Arrays</span><span class="o">.</span><span class="na">copyOf</span><span class="o">(</span> <span class="n">elementData</span><span class="o">,</span> <span class="n">size</span> <span class="o">)</span> <span class="o">)</span> <span class="o">+</span> <span class="s">"size = "</span> <span class="o">+</span> <span class="n">size</span> <span class="o">+</span>
+                <span class="s">", capacaity= "</span> <span class="o">+</span> <span class="n">elementData</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<h2 id="reference">Reference</h2>
+
+<p>인프런 김영한님의 자바강좌 + 나의 뇌</p>
+
+    <br />
+    <br />
+  </div>
   
+
+</article>
+
+<!--<hr class="dingbat" />-->
+<!--
+<div class="share">
+  <h2>Share this post</h2>
+  <div class="share-body">
+    <a href="http://twitter.com/share?text=Java Mid 15 -Collection ArrayList 구현하기-&amp;url=http://localhost:4000/language/2024/09/18/Java-Mid-15/"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="icon-twitter">
+      </span>
+    </a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/09/18/Java-Mid-15/"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="icon-facebook">
+      </span>
+    </a>
+  </div>
+</div>
+-->
+<br />
+
+
+
+
+<aside class="related" role="complementary">
+  <h2 class="hr">Related Posts</h2>
+
+  <ul class="related-posts">
     
-    <h2 id="y2024" class="hr">2024</h2>
-    <ul class="related-posts">
-    
-  
-  
-
-
-<li class="h4">
-  <a href="/language/2024/09/18/Java-Mid-15/" data-flip="title">
-    <span>Java Mid 15 -Collection ArrayList 구현하기-</span>
-  </a>
-  <small><time datetime="2024-09-18T00:00:00+09:00">
-    18 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
+      
+      
+      
+        
+          
+          
+        
+        
+          
 
 
 <li class="h4">
@@ -227,15 +542,15 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     <span>Java Mid 14 -Collection Array-</span>
   </a>
   <small><time datetime="2024-09-18T00:00:00+09:00">
-    18 Sep
+    18 Sep 2024
   </time></small>
 </li>
 
-  
-
-  
-  
-  
+        
+      
+        
+        
+          
 
 
 <li class="h4">
@@ -243,15 +558,15 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     <span>Java Mid 1 -Generic 2-</span>
   </a>
   <small><time datetime="2024-09-18T00:00:00+09:00">
-    18 Sep
+    18 Sep 2024
   </time></small>
 </li>
 
-  
-
-  
-  
-  
+        
+      
+        
+        
+          
 
 
 <li class="h4">
@@ -259,189 +574,31 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     <span>Java Mid 12 -Generic 1-</span>
   </a>
   <small><time datetime="2024-09-18T00:00:00+09:00">
-    18 Sep
+    18 Sep 2024
   </time></small>
 </li>
 
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/language/2024/09/18/Java-Mid-11/" data-flip="title">
-    <span>Java Mid 11 -Exception 2-</span>
-  </a>
-  <small><time datetime="2024-09-18T00:00:00+09:00">
-    18 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/language/2024/09/18/Java-Mid-10/" data-flip="title">
-    <span>Java Mid 10 -Exception 1-</span>
-  </a>
-  <small><time datetime="2024-09-18T00:00:00+09:00">
-    18 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/language/2024/09/18/Java-Mid-09/" data-flip="title">
-    <span>Java Mid 09 -Nested Class-</span>
-  </a>
-  <small><time datetime="2024-09-18T00:00:00+09:00">
-    18 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/language/2024/09/18/Java-Mid-08/" data-flip="title">
-    <span>Java Mid 08 -Enum Type-</span>
-  </a>
-  <small><time datetime="2024-09-18T00:00:00+09:00">
-    18 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/language/2024/09/18/Java-Mid-07/" data-flip="title">
-    <span>Java Mid 07 -Class class-</span>
-  </a>
-  <small><time datetime="2024-09-18T00:00:00+09:00">
-    18 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/language/2024/09/18/Java-Mid-06/" data-flip="title">
-    <span>Java Mid 06 -Wrapper Class-</span>
-  </a>
-  <small><time datetime="2024-09-18T00:00:00+09:00">
-    18 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/language/2024/09/18/Java-Mid-05/" data-flip="title">
-    <span>Java Mid 05 -String 최적화-</span>
-  </a>
-  <small><time datetime="2024-09-18T00:00:00+09:00">
-    18 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/language/2024/09/18/Java-Mid-04/" data-flip="title">
-    <span>Java Mid 04 -String 클래스-</span>
-  </a>
-  <small><time datetime="2024-09-18T00:00:00+09:00">
-    18 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/language/2024/09/18/Java-Mid-03/" data-flip="title">
-    <span>Java Mid 03 -Immutable Object-</span>
-  </a>
-  <small><time datetime="2024-09-18T00:00:00+09:00">
-    18 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/language/2024/09/18/Java-Mid-02/" data-flip="title">
-    <span>Java Mid 02 -Primitive Type, Reference Type-</span>
-  </a>
-  <small><time datetime="2024-09-18T00:00:00+09:00">
-    18 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/language/2024/09/18/Java-Mid-01/" data-flip="title">
-    <span>Java Mid 01 -Object-</span>
-  </a>
-  <small><time datetime="2024-09-18T00:00:00+09:00">
-    18 Sep
-  </time></small>
-</li>
-
+        
+      
+    
   </ul>
+</aside>
+  <aside class="comments" role="complementary">
+  <h2>Comments</h2>
+  <hr/>
 
-  <footer>
+  <script src="https://utteranc.es/client.js"
+          repo="taewoocode/taewoocode.github.io"
+          issue-term="title"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+</aside>
+
+
+       <footer>
   <hr/>
   
     <p>© 2022. by taewoo</p>
@@ -660,7 +817,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     <li>
       <input type="checkbox" id="list-item-3"/>
       <div  class="list-wrapper">
-      <a class="sidebar-nav-item active" href="/category/programming-language/">Programming Language</a>
+      <a class="sidebar-nav-item" href="/category/programming-language/">Programming Language</a>
        <label class="folder" for="list-item-3">▾</label>
     </div>
      <ul class="list-body">
