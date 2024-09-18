@@ -299,80 +299,83 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
         <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">}</span>
+</code></pre></div></div>
+
+<p>T 를 사용해서 제네릭 타입을 선언했다.</p>
+
+<p>제네릭 타입을 선언하면 자바 컴파일러 입장에서 T에 어떤 값이 들어올지 예측할 수 없다. 우리는 Animal 타입의 자식이 들어오기를 기대했지만, 여기 코드 어디에도 Animal에 대한 정보가 없다. (T타입 즉 제네릭으로 정의했기 때문에). T에는 타입 인자로 Integer가 들어올 수도 있고, Dog가 들어올 수도 있다.</p>
+
+<p>물론 Object가 들어올 수도 있다.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">generic.test.ex3</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">generic.animal.Cat</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">generic.animal.Dog</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AnimalHostpitalMainV2</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">AnimalHospitalV2</span><span class="o">&lt;</span><span class="nc">Dog</span><span class="o">&gt;</span> <span class="n">dogHospital</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">AnimalHospitalV2</span><span class="o">&lt;&gt;();</span>
+        <span class="nc">AnimalHospitalV2</span><span class="o">&lt;</span><span class="nc">Cat</span><span class="o">&gt;</span> <span class="n">catHospital</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">AnimalHospitalV2</span><span class="o">&lt;&gt;();</span>
+        <span class="nc">AnimalHospitalV2</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">integerHospital</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">AnimalHospitalV2</span><span class="o">&lt;&gt;();</span>
+        <span class="nc">AnimalHospitalV2</span><span class="o">&lt;</span><span class="nc">Object</span><span class="o">&gt;</span> <span class="nc">ObjectHospital</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">AnimalHospitalV2</span><span class="o">&lt;&gt;();</span>
+        
+    <span class="o">}</span>
+<span class="o">}</span>
 
 </code></pre></div></div>
 
-<T> 를 사용해서 제네릭 타입을 선언했다.
+<p>이 코드에서의 문제는?</p>
 
-제네릭 타입을 선언하면 자바 컴파일러 입장에서 T에 어떤 값이 들어올지 예측할 수 없다. 우리는 Animal 타입의 자식이 들어오기를 기대했지만, 여기 코드 어디에도 Animal에 대한 정보가 없다. (T타입 즉 제네릭으로 정의했기 때문에). T에는 타입 인자로 Integer가 들어올 수도 있고, Dog가 들어올 수도 있다.
+<ul>
+  <li>제네릭에서 타입 매개변수를 사용하면 어떠한 타입이든 들어올 수 있다.</li>
+  <li>따라서 타입 매개변수를 어떤 타입이든 수용할 수 있는 Object로 가정하고, Object의 기능만 사용할 수 있다.
+    <ul>
+      <li>발생한 문제들을 생각해보면 매개변수를 Animal로 제한하지 않았기 때문이다. 타입 인자가 모두 animal과 그 자식만 들어올 수 있게 제한한다면 어떨까?</li>
+    </ul>
+  </li>
+</ul>
 
-물론 Object가 들어올 수도 있다.
+<h2 id="타입-매개변수-제한">타입 매개변수 제한</h2>
 
-```jsx
-package generic.test.ex3;
+<p>타입 매개변수를 특정 타입으로 제한할 수 있다.</p>
 
-import generic.animal.Cat;
-import generic.animal.Dog;
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">generic.test.ex3</span><span class="o">;</span>
 
-public class AnimalHostpitalMainV2 {
-    public static void main(String[] args) {
-        AnimalHospitalV2<Dog> dogHospital = new AnimalHospitalV2&lt;&gt;();
-        AnimalHospitalV2<Cat> catHospital = new AnimalHospitalV2&lt;&gt;();
-        AnimalHospitalV2<Integer> integerHospital = new AnimalHospitalV2&lt;&gt;();
-        AnimalHospitalV2<object> ObjectHospital = new AnimalHospitalV2&lt;&gt;();
-        
-    }
-}
+<span class="kn">import</span> <span class="nn">generic.animal.Animal</span><span class="o">;</span>
 
-```
+<span class="c1">//T에 들어올 수 있는 것은 Animal 혹은 그 자식들만 들어올 수 있다.-&gt; T는 animal의 자식들을 쓸 수 있다.</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AnimalHospitalV3</span><span class="o">&lt;</span><span class="no">T</span> <span class="kd">extends</span> <span class="nc">Animal</span><span class="o">&gt;</span> <span class="o">{</span>
 
-이 코드에서의 문제는?
+    <span class="kd">private</span> <span class="no">T</span> <span class="n">animal</span><span class="o">;</span>
 
-- 제네릭에서 타입 매개변수를 사용하면 어떠한 타입이든 들어올 수 있다.
-- 따라서 타입 매개변수를 어떤 타입이든 수용할 수 있는 Object로 가정하고, Object의 기능만 사용할 수 있다.
-    - 발생한 문제들을 생각해보면 매개변수를 Animal로 제한하지 않았기 때문이다. 타입 인자가 모두 animal과 그 자식만 들어올 수 있게 제한한다면 어떨까?
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">set</span><span class="o">(</span><span class="no">T</span> <span class="n">animal</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">animal</span> <span class="o">=</span> <span class="n">animal</span><span class="o">;</span>
+    <span class="o">}</span>
 
-## 타입 매개변수 제한
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">checkup</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"동물이름 : "</span> <span class="o">+</span> <span class="n">animal</span><span class="o">.</span><span class="na">getName</span><span class="o">()</span> <span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"동물크기 : "</span> <span class="o">+</span> <span class="n">animal</span><span class="o">.</span><span class="na">getSize</span><span class="o">()</span> <span class="o">);</span>
+        <span class="n">animal</span><span class="o">.</span><span class="na">sound</span><span class="o">();</span>
+    <span class="o">}</span>
 
-타입 매개변수를 특정 타입으로 제한할 수 있다.
+    <span class="kd">public</span> <span class="no">T</span> <span class="nf">bigger</span><span class="o">(</span><span class="no">T</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">animal</span><span class="o">.</span><span class="na">getSize</span><span class="o">()</span> <span class="o">&gt;</span> <span class="n">target</span><span class="o">.</span><span class="na">getSize</span><span class="o">()</span> <span class="o">?</span> <span class="n">animal</span> <span class="o">:</span> <span class="n">target</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 
-```java
-package generic.test.ex3;
+</code></pre></div></div>
 
-import generic.animal.Animal;
+<ul>
+  <li>핵심은 <T extends="" Animal="">이다.</T></li>
+  <li>타입 매개변수 T를 animal과 그 자식만 받을 수 있도록 제한을 두는 것이다.</li>
+  <li>즉 T의 상한이 Animal이 되는 것이다.</li>
+</ul>
 
-//T에 들어올 수 있는 것은 Animal 혹은 그 자식들만 들어올 수 있다.-&gt; T는 animal의 자식들을 쓸 수 있다.
-public class AnimalHospitalV3<T extends="" Animal=""> {
+<p>이렇게 되면 자바 컴파일러는 T에 입력할 수 있는 값의 범위를 예측할 수 있다.</p>
 
-    private T animal;
+<h2 id="reference">Reference</h2>
 
-    public void set(T animal) {
-        this.animal = animal;
-    }
-
-    public void checkup() {
-        System.out.println( "동물이름 : " + animal.getName() );
-        System.out.println( "동물크기 : " + animal.getSize() );
-        animal.sound();
-    }
-
-    public T bigger(T target) {
-        return animal.getSize() &gt; target.getSize() ? animal : target;
-    }
-}
-
-```
-
-- 핵심은 <T extends="" Animal="">이다.
-- 타입 매개변수 T를 animal과 그 자식만 받을 수 있도록 제한을 두는 것이다.
-- 즉 T의 상한이 Animal이 되는 것이다.
-
-이렇게 되면 자바 컴파일러는 T에 입력할 수 있는 값의 범위를 예측할 수 있다.
-
-## Reference
-
-인프런 김영한님의 자바강좌 + 나의 뇌
-</T></T></object></Integer></Cat></Dog></T>
+<p>인프런 김영한님의 자바강좌 + 나의 뇌</p>
 
     <br />
     <br />
