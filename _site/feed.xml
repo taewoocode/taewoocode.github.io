@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 19 Sep 2024 03:08:23 +0900</pubDate>
-    <lastBuildDate>Thu, 19 Sep 2024 03:08:23 +0900</lastBuildDate>
+    <pubDate>Thu, 19 Sep 2024 03:10:54 +0900</pubDate>
+    <lastBuildDate>Thu, 19 Sep 2024 03:10:54 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
@@ -124,7 +124,7 @@
       </item>
     
       <item>
-        <title>Java Mid 15 -Collection LinkedList 구현하기-</title>
+        <title>Java Mid 16 -Collection LinkedList 구현하기-</title>
         <description>&lt;h2 id=&quot;linkedlist&quot;&gt;LinkedList&lt;/h2&gt;
 
 &lt;h3 id=&quot;linkedlist의-기본-개념&quot;&gt;LinkedList의 기본 개념&lt;/h3&gt;
@@ -760,7 +760,7 @@
       </item>
     
       <item>
-        <title>Java Mid 1 -Generic 2-</title>
+        <title>Java Mid 13 -Generic 2-</title>
         <description>&lt;h2 id=&quot;제네릭-활용예제&quot;&gt;제네릭 활용예제&lt;/h2&gt;
 
 &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;generic.test.ex3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
