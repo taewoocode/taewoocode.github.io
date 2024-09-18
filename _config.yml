@@ -20,7 +20,7 @@ tagline:             ""
 # A short description of the page, used in the sidebar and as fallback for the meta description tag.
 # Markdown enabled, but don't use more than one paragraph (enforced by `>`)
 description:         >
-  잘 까먹기에 기록합니다.
+  How,Why에 집중하며 살아가기
 
 # This should be the same author as first entry in `_data/authors.yml`
 author:
