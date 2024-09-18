@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Java" />
+<meta property="og:title" content="Java Mid 17 -Collection List 추상화하기-" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,16 +52,18 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Java &middot; 일벌리는 개발자</title>
+<title>Java Mid 17 -Collection List 추상화하기- &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="
+        content="순서가 있고, 중복을 허용하는 것이 리스트. MyArrayList, MyLinkedList는 내부 구현만 다를 뿐 같은 기능을 제공하는 리스트이다. 물론 내부 구현이 다르기 때문에 상황에 따라서 성능은 달라진다. 핵심은 사용자 입장에서 보면 같은 기능을 제공한다. 이 둘의 공통 기능을 뽑아서 추상화를 해보면 다형성을 활용한 다양한 이점을 얻는다.
+
 "
 />
 <meta
         property="og:description"
-        content="
+        content="순서가 있고, 중복을 허용하는 것이 리스트. MyArrayList, MyLinkedList는 내부 구현만 다를 뿐 같은 기능을 제공하는 리스트이다. 물론 내부 구현이 다르기 때문에 상황에 따라서 성능은 달라진다. 핵심은 사용자 입장에서 보면 같은 기능을 제공한다. 이 둘의 공통 기능을 뽑아서 추상화를 해보면 다형성을 활용한 다양한 이점을 얻는다.
+
 "
 />
 
@@ -70,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/tag/programming-language-java/" />
-<meta property="og:url" content="http://localhost:4000/tag/programming-language-java/" />
+<link rel="canonical" href="http://localhost:4000/language/2024/09/18/Java-Mid-17/" />
+<meta property="og:url" content="http://localhost:4000/language/2024/09/18/Java-Mid-17/" />
 
 <link
         rel="alternate"
@@ -81,9 +83,9 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/tag/opensource-opensource/" />
+<link rel="prev" href="http://localhost:4000/language/2024/09/18/Java-Mid-16/" />
  
-<link rel="next" href="http://localhost:4000/tag/programming-language-kotlin/" />
+<link rel="next" href="http://localhost:4000/framework/2024/09/18/Spring-03/" />
 
 
 <link
@@ -181,15 +183,12 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-17" class="post mb6" role="article">
+<article id="post-language/2024/09/18/Java-Mid-17" class="post" role="article">
   <header>
     <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-17/" data-flip="title">
+      
       Java Mid 17 -Collection List 추상화하기-
-      </a>
+      
     </h1>
 
     <p class="post-date heading">
@@ -229,947 +228,257 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
 
 
   
-  <p>순서가 있고, 중복을 허용하는 것이 리스트. MyArrayList, MyLinkedList는 내부 구현만 다를 뿐 같은 기능을 제공하는 리스트이다. 물론 내부 구현이 다르기 때문에 상황에 따라서 성능은 달라진다. 핵심은 사용자 입장에서 보면 같은 기능을 제공한다. 이 둘의 공통 기능을 뽑아서 추상화를 해보면 다형성을 활용한 다양한 이점을 얻는다.</p>
+  <div class="markdown-body">
 
+    <!--  -->
+    <style>
+      .myAd1190 {
+        width: 48%;
+        height: 280px;
+      }
 
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-17/" data-flip="title">Continue reading </a>
-  </p>
+      .myAd1290 {
+        width: 48%;
+        height: 280px;
+      }
+
+      @media(max-width: 800px) {
+        .myAd1190 {
+          display: none;
+        }
+
+        .myAd1290 {
+          width: 98%;
+        }
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 300px;
+      }
+
+      .row-center {
+        display: flex;
+        justify-content: center;
+        height: 258px;
+      }
+    </style>
+
+    <!--<br />-->
+    <p>순서가 있고, 중복을 허용하는 것이 리스트. MyArrayList, MyLinkedList는 내부 구현만 다를 뿐 같은 기능을 제공하는 리스트이다. 물론 내부 구현이 다르기 때문에 상황에 따라서 성능은 달라진다. 핵심은 사용자 입장에서 보면 같은 기능을 제공한다. 이 둘의 공통 기능을 뽑아서 추상화를 해보면 다형성을 활용한 다양한 이점을 얻는다.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">collection.list</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">MyList</span><span class="o">&lt;</span><span class="no">E</span><span class="o">&gt;</span> <span class="o">{</span>
+
+    <span class="c1">//list가 제공하는 기능</span>
+
+    <span class="kt">int</span> <span class="nf">size</span><span class="o">();</span>
+
+    <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="no">E</span> <span class="n">e</span><span class="o">);</span>
+
+    <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">,</span> <span class="no">E</span> <span class="n">e</span><span class="o">);</span>
+
+    <span class="no">E</span> <span class="nf">get</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">);</span>
+
+    <span class="no">E</span> <span class="nf">set</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">,</span> <span class="no">E</span> <span class="n">element</span><span class="o">);</span>
+
+    <span class="no">E</span> <span class="nf">remove</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">);</span>
+
+    <span class="kt">int</span> <span class="nf">indexOf</span><span class="o">(</span><span class="no">E</span> <span class="n">o</span><span class="o">);</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<p>데이터를 앞에서 추가하거나 삭제하는 일이 많다면 MyArrayList 보다는 MyLinkedList를 사용하는 것이 훨씬 효율적이다.
+구체적인 클래스에 의존하게 되면 의존을 하는 코드를 다 수정해야 하는 문제점이 있다.
+그래서 구체적인 클래스에 의존하기 보다는 추상적인 클래스인 인터페이스에 의존하는 것이 더 바람직하다.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">collection.list</span><span class="o">;</span>
+
+<span class="c1">//클라이언트 코드</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BatchProcessor</span> <span class="o">{</span>
+
+    <span class="c1">//의존성 주입</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">MyList</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">;</span>
+
+    <span class="c1">//생성자 주입</span>
+    <span class="kd">public</span> <span class="nf">BatchProcessor</span><span class="o">(</span><span class="nc">MyList</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">list</span> <span class="o">=</span> <span class="n">list</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">logic</span><span class="o">(</span><span class="kt">int</span> <span class="n">size</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">long</span> <span class="n">startTime</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span> <span class="mi">0</span><span class="o">,</span> <span class="n">i</span> <span class="o">);</span>
+        <span class="o">}</span>
+        <span class="kt">long</span> <span class="n">endTime</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"크기: "</span> <span class="o">+</span> <span class="n">size</span> <span class="o">+</span> <span class="s">"계산 시간"</span> <span class="o">+</span> <span class="o">(</span><span class="n">endTime</span> <span class="o">-</span> <span class="n">startTime</span><span class="o">)</span> <span class="o">+</span> <span class="s">"ms"</span> <span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<ul>
+  <li>어떤 MyList list의 구현체를 선택할 지는 실행 시점에 생성자를 통해서 결정된다.</li>
+  <li>생성자를 통해서 MyList의 구현체가 전달된다.
+    <ul>
+      <li>MyArrayList의 인스턴스가 들어올 수도 있고, MyLinkedList의 인스턴스가 들어올 수도 있다.</li>
+    </ul>
+  </li>
+  <li>이것은 BatchProcessor의 외부에서 의존관계가 결정 되어서 BatchProcessor 인스턴스에 들어오는 것이다.</li>
+  <li>마치 의존관계가 외부에서 주입되는 것 같다고 해서 이것을 의존관계 주입이라고 한다.(Dependency Injection)</li>
+</ul>
+
+<h2 id="성능테스트">성능테스트</h2>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">collection.list</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BatchProcessorMain</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">MyArrayList</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">MyArrayList</span><span class="o">&lt;&gt;();</span>
+
+        <span class="nc">BatchProcessor</span> <span class="n">processor</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">BatchProcessor</span><span class="o">(</span> <span class="n">list</span> <span class="o">);</span>
+        <span class="n">processor</span><span class="o">.</span><span class="na">logic</span><span class="o">(</span> <span class="mi">50_000</span> <span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<p><img width="524" alt="image" src="https://github.com/user-attachments/assets/2b82bfd5-eef0-4d3d-b129-809c10c209bf" /></p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">collection.list</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BatchProcessorMain</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">MyList</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">MyLinkdeList</span><span class="o">&lt;&gt;();</span>
+        
+        <span class="nc">BatchProcessor</span> <span class="n">processor</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">BatchProcessor</span><span class="o">(</span> <span class="n">list</span> <span class="o">);</span>
+        <span class="n">processor</span><span class="o">.</span><span class="na">logic</span><span class="o">(</span> <span class="mi">50_000</span> <span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<p><img width="478" alt="image" src="https://github.com/user-attachments/assets/02bd8db2-ec7a-4dfb-80d4-c1e749eb5335" /></p>
+
+<p>런타임시 ArrayList, LinkedList를 사용할지 결정한다. 
+성능테스트 결과는 LinkedList가 훨씬 더 빠르다는 결과를 확인할 수 있다.</p>
+
+<h2 id="reference">Reference</h2>
+
+<p>인프런 김영한님의 자바강좌 + 나의 뇌</p>
+
+    <br />
+    <br />
+  </div>
   
 
 </article>
 
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-16" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-16/" data-flip="title">
-      Java Mid 16 -Collection LinkedList 구현하기-
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
+<!--<hr class="dingbat" />-->
+<!--
+<div class="share">
+  <h2>Share this post</h2>
+  <div class="share-body">
+    <a href="http://twitter.com/share?text=Java Mid 17 -Collection List 추상화하기-&amp;url=http://localhost:4000/language/2024/09/18/Java-Mid-17/"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="icon-twitter">
+      </span>
+    </a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/09/18/Java-Mid-17/"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="icon-facebook">
+      </span>
+    </a>
+  </div>
+</div>
+-->
+<br />
 
 
 
 
+<aside class="related" role="complementary">
+  <h2 class="hr">Related Posts</h2>
 
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
+  <ul class="related-posts">
     
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="linkedlist">LinkedList</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-16/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-15" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-15/" data-flip="title">
-      Java Mid 15 -Collection ArrayList 구현하기-
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
       
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
       
+      
+        
+          
+          
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/language/2024/09/18/Java-Mid-16/" data-flip="title">
+    <span>Java Mid 16 -Collection LinkedList 구현하기-</span>
+  </a>
+  <small><time datetime="2024-09-18T00:00:00+09:00">
+    18 Sep 2024
+  </time></small>
+</li>
+
+        
+      
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/language/2024/09/18/Java-Mid-15/" data-flip="title">
+    <span>Java Mid 15 -Collection ArrayList 구현하기-</span>
+  </a>
+  <small><time datetime="2024-09-18T00:00:00+09:00">
+    18 Sep 2024
+  </time></small>
+</li>
+
+        
+      
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/language/2024/09/18/Java-Mid-14/" data-flip="title">
+    <span>Java Mid 14 -Collection Array-</span>
+  </a>
+  <small><time datetime="2024-09-18T00:00:00+09:00">
+    18 Sep 2024
+  </time></small>
+</li>
 
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
+        
+      
     
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="배열의-불편함">배열의 불편함</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-15/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-14" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-14/" data-flip="title">
-      Java Mid 14 -Collection Array-
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="배열array-개념-정리">배열(Array) 개념 정리</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-14/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-13" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-13/" data-flip="title">
-      Java Mid 13 -Generic 2-
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="제네릭-활용예제">제네릭 활용예제</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-13/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-12" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-12/" data-flip="title">
-      Java Mid 12 -Generic 1-
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="제네릭이란">제네릭이란</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-12/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-11" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-11/" data-flip="title">
-      Java Mid 11 -Exception 2-
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="예외처리를-더-세밀하게-하자">예외처리를 더 세밀하게 하자</h2>
-<p><img width="698" alt="image" src="https://github.com/user-attachments/assets/d8cb3884-ce71-4552-b5d6-dc4891c9bd3f" /></p>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-11/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-10" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-10/" data-flip="title">
-      Java Mid 10 -Exception 1-
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="예외-처리가-필요한-이유">예외 처리가 필요한 이유</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-10/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-09" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-09/" data-flip="title">
-      Java Mid 09 -Nested Class-
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="중첩-클래스-내부-클래스란">중첩 클래스, 내부 클래스란?</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-09/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-08" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-08/" data-flip="title">
-      Java Mid 08 -Enum Type-
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="문자열과-타입-안정성">문자열과 타입 안정성</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-08/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-07" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-07/" data-flip="title">
-      Java Mid 07 -Class class-
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="class-클래스">Class 클래스</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-07/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-06" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-06/" data-flip="title">
-      Java Mid 06 -Wrapper Class-
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="기본형의-한계">기본형의 한계</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-06/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-05" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-05/" data-flip="title">
-      Java Mid 05 -String 최적화-
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="문자열-리터럴-최적화">문자열 리터럴 최적화</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-05/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-04" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-04/" data-flip="title">
-      Java Mid 04 -String 클래스-
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="string-클래스">String 클래스</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-04/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-03" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-03/" data-flip="title">
-      Java Mid 03 -Immutable Object-
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h3 id="불변-객체-immutable-object---도입">불변 객체 (Immutable Object) - 도입</h3>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-03/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-02" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-02/" data-flip="title">
-      Java Mid 02 -Primitive Type, Reference Type-
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="기본형과-참조형">기본형과 참조형</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-02/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-01" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-01/" data-flip="title">
-      Java Mid 01 -Object-
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="java-lang-package">Java Lang package</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-01/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-
-<h2 class="sr-only">Pagination</h2>
-<nav class="pagination heading" role="navigation">
-  <ul>
-    <li class="pagination-item older" >
-      
-        <span>Older</span>
-      
-    </li>
-    <li class="pagination-item newer" >
-      
-        <span>Newer</span>
-      
-    </li>
   </ul>
-</nav>
+</aside>
+  <aside class="comments" role="complementary">
+  <h2>Comments</h2>
+  <hr/>
 
-  <footer>
+  <script src="https://utteranc.es/client.js"
+          repo="taewoocode/taewoocode.github.io"
+          issue-term="title"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+</aside>
+
+
+       <footer>
   <hr/>
   
     <p>© 2022. by taewoo</p>
@@ -1395,7 +704,7 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
        
            
              <li>
-               <a class="sidebar-nav-subitem active" href="/tag/programming-language-java/">Java</a>
+               <a class="sidebar-nav-subitem" href="/tag/programming-language-java/">Java</a>
              </li>
            
          
