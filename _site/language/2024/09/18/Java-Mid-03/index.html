@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Java" />
+<meta property="og:title" content="Java Mid 03 -Immutable Object-" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,16 +52,18 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Java &middot; taewoo</title>
+<title>Java Mid 03 -Immutable Object- &middot; taewoo</title>
  
 <meta
         name="description"
-        content="
+        content="불변 객체 (Immutable Object) - 도입
+
 "
 />
 <meta
         property="og:description"
-        content="
+        content="불변 객체 (Immutable Object) - 도입
+
 "
 />
 
@@ -70,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/tag/programming-language-java/" />
-<meta property="og:url" content="http://localhost:4000/tag/programming-language-java/" />
+<link rel="canonical" href="http://localhost:4000/language/2024/09/18/Java-Mid-03/" />
+<meta property="og:url" content="http://localhost:4000/language/2024/09/18/Java-Mid-03/" />
 
 <link
         rel="alternate"
@@ -81,9 +83,9 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/tag/opensource-opensource/" />
+<link rel="prev" href="http://localhost:4000/language/2024/09/18/Java-Mid-02/" />
  
-<link rel="next" href="http://localhost:4000/tag/programming-language-kotlin/" />
+<link rel="next" href="http://localhost:4000/framework/2024/09/18/Spring-03/" />
 
 
 <link
@@ -181,15 +183,12 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-03" class="post mb6" role="article">
+<article id="post-language/2024/09/18/Java-Mid-03" class="post" role="article">
   <header>
     <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-03/" data-flip="title">
+      
       Java Mid 03 -Immutable Object-
-      </a>
+      
     </h1>
 
     <p class="post-date heading">
@@ -229,148 +228,258 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
 
 
   
-  <h3 id="불변-객체-immutable-object---도입">불변 객체 (Immutable Object) - 도입</h3>
+  <div class="markdown-body">
 
+    <!--  -->
+    <style>
+      .myAd1190 {
+        width: 48%;
+        height: 280px;
+      }
 
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-03/" data-flip="title">Continue reading </a>
-  </p>
+      .myAd1290 {
+        width: 48%;
+        height: 280px;
+      }
+
+      @media(max-width: 800px) {
+        .myAd1190 {
+          display: none;
+        }
+
+        .myAd1290 {
+          width: 98%;
+        }
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 300px;
+      }
+
+      .row-center {
+        display: flex;
+        justify-content: center;
+        height: 258px;
+      }
+    </style>
+
+    <!--<br />-->
+    <h3 id="불변-객체-immutable-object---도입">불변 객체 (Immutable Object) - 도입</h3>
+
+<ul>
+  <li>앞에서 논의한 문제는 공유된 객체의 값이 변경됨으로 인해 발생했다.</li>
+  <li>자바에서 참조형 변수는 하나의 객체를 공유할 수 있지만, 이 자체는 문제가 아니다. <strong>문제의 직접적인 원인은 공유된 객체의 값이 변경되었기 때문이다.</strong></li>
+</ul>
+
+<h3 id="문제-상황-예시">문제 상황 예시</h3>
+
+<ul>
+  <li>초기에는 <code class="language-plaintext highlighter-rouge">a</code>와 <code class="language-plaintext highlighter-rouge">b</code>가 같은 <code class="language-plaintext highlighter-rouge">"서울"</code> 주소를 사용해야 한다. 이후 <code class="language-plaintext highlighter-rouge">b</code>의 주소를 <code class="language-plaintext highlighter-rouge">"부산"</code>으로 변경해야 한다.</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">java코드</span> <span class="n">복사</span>
+<span class="nc">Address</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Address</span><span class="o">(</span><span class="s">"서울"</span><span class="o">);</span>
+<span class="nc">Address</span> <span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="o">;</span>
+
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">b = a</code>처럼 동일한 <code class="language-plaintext highlighter-rouge">"서울"</code> 주소 인스턴스를 <code class="language-plaintext highlighter-rouge">a</code>와 <code class="language-plaintext highlighter-rouge">b</code>가 함께 사용하는 것이 메모리와 성능 면에서 더 효율적이다.</li>
+  <li>인스턴스를 하나만 생성하므로 메모리가 절약되고 생성 시간이 줄어들어 성능이 향상된다.</li>
+</ul>
+
+<p>이처럼 <code class="language-plaintext highlighter-rouge">Address b = a</code>와 같이 공유 참조를 사용하는 것이 오히려 더 효율적입니다. <strong>진짜 문제는 이후에 <code class="language-plaintext highlighter-rouge">b</code>가 공유 참조하는 인스턴스의 값을 변경하기 때문에 발생한다.</strong></p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">b</span><span class="o">.</span><span class="na">setValue</span><span class="o">(</span><span class="s">"부산"</span><span class="o">);</span> <span class="c1">// b의 값을 부산으로 변경</span>
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"a = "</span> <span class="o">+</span> <span class="n">a</span><span class="o">);</span> <span class="c1">// 사이드 이펙트 발생</span>
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"b = "</span> <span class="o">+</span> <span class="n">b</span><span class="o">);</span>
+
+</code></pre></div></div>
+
+<h3 id="불변-객체의-이점">불변 객체의 이점</h3>
+
+<p>불변 객체는 생성된 후 내부 상태가 변하지 않는 객체를 말한다.</p>
+
+<ul>
+  <li><strong>안전한 공유</strong>: 불변 객체는 여러 쓰레드에서 안전하게 공유될 수 있다.</li>
+  <li>내부 상태가 변경되지 않기 때문에 동기화가 필요 없다.</li>
+  <li><strong>사이드 이펙트 방지</strong>: 불변 객체는 내부 상태가 변경되지 않기 때문에 예상치 못한 변경으로 인한 사이드 이펙트를 방지할 수 있다.</li>
+</ul>
+
+<h3 id="불변-객체의-구현">불변 객체의 구현</h3>
+
+<p><code class="language-plaintext highlighter-rouge">Address</code> 클래스를 불변 객체로 만들기</p>
+
+<ul>
+  <li>모든 필드를 <code class="language-plaintext highlighter-rouge">final</code>로 선언한다.</li>
+  <li>필드는 생성자를 통해 초기화한다.</li>
+  <li>값을 변경할 수 있는 메서드를 제거한다. setValue() 같은</li>
+</ul>
+
+<p>예시코드</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">java코드</span> <span class="n">복사</span>
+<span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">Address</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">String</span> <span class="n">value</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">Address</span><span class="o">(</span><span class="nc">String</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getValue</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">value</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>이제 <code class="language-plaintext highlighter-rouge">Address</code> 객체는 불변이므로, 내부 상태가 변경되지 않는다. 따라서 <code class="language-plaintext highlighter-rouge">a</code>와 <code class="language-plaintext highlighter-rouge">b</code>가 같은 인스턴스를 공유하더라도 안전하게 사용할 수 있다.</li>
+</ul>
+
+<p>예시코드</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="nc">Address</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Address</span><span class="o">(</span><span class="s">"서울"</span><span class="o">);</span>
+<span class="nc">Address</span> <span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="o">;</span>
+
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"a = "</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="na">getValue</span><span class="o">());</span> <span class="c1">// 출력: 서울</span>
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"b = "</span> <span class="o">+</span> <span class="n">b</span><span class="o">.</span><span class="na">getValue</span><span class="o">());</span> <span class="c1">// 출력: 서울</span>
+
+<span class="c1">// 새로운 객체를 생성하여 변경된 값을 반영</span>
+<span class="n">b</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Address</span><span class="o">(</span><span class="s">"부산"</span><span class="o">);</span>
+
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"a = "</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="na">getValue</span><span class="o">());</span> <span class="c1">// 출력: 서울</span>
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"b = "</span> <span class="o">+</span> <span class="n">b</span><span class="o">.</span><span class="na">getValue</span><span class="o">());</span> <span class="c1">// 출력: 부산</span>
+
+</code></pre></div></div>
+
+<ul>
+  <li>이제 <code class="language-plaintext highlighter-rouge">b</code>를 <code class="language-plaintext highlighter-rouge">"부산"</code>으로 변경할 때 새로운 <code class="language-plaintext highlighter-rouge">Address</code> 객체를 생성하므로, 기존 <code class="language-plaintext highlighter-rouge">a</code>와 공유된 인스턴스는 변경되지 않는다. 따라서 사이드 이펙트가 발생하지 않는다.</li>
+</ul>
+
+<h2 id="그래도-불변객체에서-값을-변경해야-한다면">그래도 불변객체에서 값을 변경해야 한다면?</h2>
+
+<ul>
+  <li>값을 변경해야 하는 메서드를 구현해야 한다고 하면 이미 불변객체라는 개념에서 벗어난다.</li>
+  <li>그래도 변경해야 한다면 ?</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ImmutableObj</span> <span class="o">{</span>
+
+     <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">value</span><span class="o">;</span>
+     
+     <span class="kd">public</span> <span class="nf">ImmutableObj</span><span class="o">(</span><span class="kt">int</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+         <span class="k">this</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
+         
+<span class="o">}</span>    <span class="c1">//값은 변경하되 새로운 인스턴스(객체)를 반환한다.</span>
+     <span class="c1">//변경된 데이터는 새로운 객체에 담아서 반환.</span>
+     <span class="kd">public</span> <span class="nc">ImmutableObj</span> <span class="nf">add</span><span class="o">(</span><span class="kt">int</span> <span class="n">addValue</span><span class="o">)</span> <span class="o">{</span>
+         <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="n">value</span> <span class="o">+</span> <span class="n">addValue</span><span class="o">;</span>
+         <span class="k">return</span> <span class="k">new</span> <span class="nf">ImmutableObj</span><span class="o">(</span><span class="n">result</span><span class="o">);</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+<p>새로운 인스턴스에 값을 담으면 된다.</p>
+
+<h2 id="reference">Reference</h2>
+
+<p>인프런 김영한님의 실전 자바 강좌</p>
+
+    <br />
+    <br />
+  </div>
   
 
 </article>
 
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-02" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-02/" data-flip="title">
-      Java Mid 02 -Primitive Type, Reference Type-
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
+<!--<hr class="dingbat" />-->
+<!--
+<div class="share">
+  <h2>Share this post</h2>
+  <div class="share-body">
+    <a href="http://twitter.com/share?text=Java Mid 03 -Immutable Object-&amp;url=http://localhost:4000/language/2024/09/18/Java-Mid-03/"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="icon-twitter">
+      </span>
+    </a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/09/18/Java-Mid-03/"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="icon-facebook">
+      </span>
+    </a>
+  </div>
+</div>
+-->
+<br />
 
 
 
 
+<aside class="related" role="complementary">
+  <h2 class="hr">Related Posts</h2>
 
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
+  <ul class="related-posts">
     
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="기본형과-참조형">기본형과 참조형</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-02/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-01" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-01/" data-flip="title">
-      Java Mid 01 -Object-
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
       
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
       
+      
+        
+          
+          
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/language/2024/09/18/Java-Mid-02/" data-flip="title">
+    <span>Java Mid 02 -Primitive Type, Reference Type-</span>
+  </a>
+  <small><time datetime="2024-09-18T00:00:00+09:00">
+    18 Sep 2024
+  </time></small>
+</li>
+
+        
+      
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/language/2024/09/18/Java-Mid-01/" data-flip="title">
+    <span>Java Mid 01 -Object-</span>
+  </a>
+  <small><time datetime="2024-09-18T00:00:00+09:00">
+    18 Sep 2024
+  </time></small>
+</li>
 
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
+        
+      
     
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="java-lang-package">Java Lang package</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-01/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-
-<h2 class="sr-only">Pagination</h2>
-<nav class="pagination heading" role="navigation">
-  <ul>
-    <li class="pagination-item older" >
-      
-        <span>Older</span>
-      
-    </li>
-    <li class="pagination-item newer" >
-      
-        <span>Newer</span>
-      
-    </li>
   </ul>
-</nav>
+</aside>
+  <aside class="comments" role="complementary">
+  <h2>Comments</h2>
+  <hr/>
 
-  <footer>
+  <script src="https://utteranc.es/client.js"
+          repo="taewoocode/taewoocode.github.io"
+          issue-term="title"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+</aside>
+
+
+       <footer>
   <hr/>
   
     <p>© 2022. by taewoo</p>
@@ -596,7 +705,7 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
        
            
              <li>
-               <a class="sidebar-nav-subitem active" href="/tag/programming-language-java/">Java</a>
+               <a class="sidebar-nav-subitem" href="/tag/programming-language-java/">Java</a>
              </li>
            
          
