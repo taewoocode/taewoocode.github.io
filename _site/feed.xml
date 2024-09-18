@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 19 Sep 2024 02:54:35 +0900</pubDate>
-    <lastBuildDate>Thu, 19 Sep 2024 02:54:35 +0900</lastBuildDate>
+    <pubDate>Thu, 19 Sep 2024 02:56:42 +0900</pubDate>
+    <lastBuildDate>Thu, 19 Sep 2024 02:56:42 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
@@ -140,7 +140,7 @@
   &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&quot;arraylist-와-리스트의-관계&quot;&gt;ArrayList 와 리스트의 관계&lt;/h3&gt;
+&lt;h2 id=&quot;arraylist-와-리스트의-관계&quot;&gt;ArrayList 와 리스트의 관계&lt;/h2&gt;
 
 &lt;ul&gt;
   &lt;li&gt;&lt;em&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ArrayList&lt;/code&gt;&lt;/em&gt;는 자바의 &lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;List&lt;/code&gt; 인터페이스&lt;/strong&gt;를 구현한 클래스이다.
