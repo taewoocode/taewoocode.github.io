@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Programming Language" />
+<meta property="og:title" content="Java Mid 14 -Collection Array-" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,16 +52,18 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Programming Language &middot; 일벌리는 개발자</title>
+<title>Java Mid 14 -Collection Array- &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="프로그래밍 언어
+        content="배열(Array) 개념 정리
+
 "
 />
 <meta
         property="og:description"
-        content="프로그래밍 언어
+        content="배열(Array) 개념 정리
+
 "
 />
 
@@ -70,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/category/programming-language/" />
-<meta property="og:url" content="http://localhost:4000/category/programming-language/" />
+<link rel="canonical" href="http://localhost:4000/language/2024/09/18/Java-Mid-14/" />
+<meta property="og:url" content="http://localhost:4000/language/2024/09/18/Java-Mid-14/" />
 
 <link
         rel="alternate"
@@ -81,8 +83,10 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/category/opensource/" />
+<link rel="prev" href="http://localhost:4000/language/2024/09/18/Java-Mid-13/" />
  
+<link rel="next" href="http://localhost:4000/framework/2024/09/18/Spring-03/" />
+
 
 <link
         rel="apple-touch-icon"
@@ -179,47 +183,253 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-
-
+<article id="post-language/2024/09/18/Java-Mid-14" class="post" role="article">
   <header>
-    <h1 class="page-title">Programming Language</h1>
+    <h1 class="post-title">
+      
+      Java Mid 14 -Collection Array-
+      
+    </h1>
+
+    <p class="post-date heading">
+      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
+      
+
+
+
+
+
+
+
+
+
+in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
+
+      
+
+
+
+
+
+
+
+
+
+on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
+
+    </p>
+
     
-  
-  
-<p class="message">프로그래밍 언어</p>
-
-
+  <div class="hr" style="padding-bottom:0"></div>
 
 
   </header>
-  <hr class="sr-only"/>
-
+  
 
 
   
-  
+  <div class="markdown-body">
+
+    <!--  -->
+    <style>
+      .myAd1190 {
+        width: 48%;
+        height: 280px;
+      }
+
+      .myAd1290 {
+        width: 48%;
+        height: 280px;
+      }
+
+      @media(max-width: 800px) {
+        .myAd1190 {
+          display: none;
+        }
+
+        .myAd1290 {
+          width: 98%;
+        }
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 300px;
+      }
+
+      .row-center {
+        display: flex;
+        justify-content: center;
+        height: 258px;
+      }
+    </style>
+
+    <!--<br />-->
+    <h2 id="배열array-개념-정리">배열(Array) 개념 정리</h2>
+
+<ul>
+  <li>배열은 메모리에 연속적으로 저장되며, <strong>인덱스</strong>를 사용해 빠르게 데이터를 찾을 수 있다.</li>
+  <li>인덱스를 사용하면 <strong>단 한 번의 연산</strong>으로 자료의 위치를 계산해 접근할 수 있다.</li>
+</ul>
+
+<h3 id="배열의-인덱스-접근-원리">배열의 인덱스 접근 원리</h3>
+
+<ul>
+  <li>배열에서 <code class="language-plaintext highlighter-rouge">arr[2]</code>에 위치한 데이터를 찾는 경우를 가정하자:
+    <ul>
+      <li>배열은 메모리상에 순차적으로 저장되어 있다.</li>
+      <li><code class="language-plaintext highlighter-rouge">int</code> 타입의 데이터는 4바이트를 차지한다.</li>
+      <li>배열의 시작 주소 + 자료 크기(4바이트) × 인덱스(2)를 통해 메모리에서 해당 데이터의 위치를 계산할 수 있다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p>즉, 배열에 있는 데이터가 아무리 많아도 <strong>단일 연산</strong>으로 데이터에 접근할 수 있다. 이런 방식의 데이터를 찾는 작업을 <strong>검색</strong>이라고 한다.</p>
+
+<h3 id="배열에서-데이터-추가-시-문제점">배열에서 데이터 추가 시 문제점</h3>
+
+<p>배열에 데이터를 추가하려면 기존 데이터를 이동해야 한다. 데이터가 추가되는 위치에 따라 성능에 차이가 발생한다.</p>
+
+<ol>
+  <li><strong>중간에 추가</strong>: 기존 데이터를 오른쪽으로 한 칸씩 밀어야 하므로 많은 연산이 필요하다.</li>
+  <li><strong>처음에 추가</strong>: 배열의 모든 데이터를 오른쪽으로 이동해야 하므로 성능이 가장 저하된다.</li>
+  <li><strong>끝에 추가</strong>: 새로운 공간에 데이터를 바로 넣을 수 있어 성능이 가장 좋다.</li>
+</ol>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">collection.array</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.util.Arrays</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ArrayMain2</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">arr</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="mi">5</span><span class="o">];</span>
+        <span class="n">arr</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="n">arr</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="mi">2</span><span class="o">;</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="nc">Arrays</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span> <span class="n">arr</span> <span class="o">)</span> <span class="o">);</span>
+
+        <span class="c1">//배열의 첫번째 위치에 추가</span>
+        <span class="c1">//기존 배열을 한 칸씩 뒤로 밀고 첫번 째 위치에 추가</span>
+        <span class="kt">int</span> <span class="n">newValue</span> <span class="o">=</span> <span class="mi">3</span><span class="o">;</span>
+
+        <span class="n">addFirst</span><span class="o">(</span><span class="n">arr</span><span class="o">,</span> <span class="n">newValue</span><span class="o">);</span> <span class="c1">//배열에다가 new Value를 넣는 메서드</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="nc">Arrays</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span> <span class="n">arr</span> <span class="o">)</span> <span class="o">);</span>
+
+        <span class="c1">//index 위치에 추가</span>
+        <span class="c1">//기본 배열의 데이터를 한 칸씩 밀고 배열의 index 위치에 추가</span>
+        <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">2</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">value</span> <span class="o">=</span> <span class="mi">4</span><span class="o">;</span>
+        <span class="n">addAtIndex</span><span class="o">(</span><span class="n">arr</span><span class="o">,</span> <span class="n">index</span><span class="o">,</span> <span class="n">value</span> <span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="nc">Arrays</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span> <span class="n">arr</span> <span class="o">)</span> <span class="o">);</span>
+
+        <span class="n">addLastIndex</span><span class="o">(</span> <span class="n">arr</span><span class="o">,</span> <span class="mi">5</span> <span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="nc">Arrays</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">arr</span><span class="o">)</span> <span class="o">);</span>
+
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">addLastIndex</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">arr</span><span class="o">,</span> <span class="kt">int</span> <span class="n">newValue</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">arr</span><span class="o">[</span><span class="n">arr</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">newValue</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">addAtIndex</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">arr</span><span class="o">,</span> <span class="kt">int</span> <span class="n">index</span><span class="o">,</span> <span class="kt">int</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">index</span><span class="o">;</span> <span class="n">i</span><span class="o">--)</span> <span class="o">{</span>
+            <span class="n">arr</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">arr</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="o">}</span>
+        <span class="n">arr</span><span class="o">[</span><span class="n">index</span><span class="o">]</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span> <span class="c1">//인덱스에 위치에 value 삽입</span>
+    <span class="o">}</span>
     
-    <h2 id="y2024" class="hr">2024</h2>
-    <ul class="related-posts">
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">addFirst</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">arr</span><span class="o">,</span> <span class="kt">int</span> <span class="n">newValue</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">--)</span> <span class="o">{</span> <span class="c1">//배열의 크기가 5 거기서 -1을 뺴줘야 index가 되기 때문이다.</span>
+            <span class="n">arr</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">arr</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">];</span> <span class="c1">//왼쪽에 있는 값 오른쪽에 대입</span>
+        <span class="o">}</span>
+        <span class="n">arr</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">newValue</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<h3 id="배열의-시간-복잡도">배열의 시간 복잡도</h3>
+
+<ol>
+  <li><strong>조회 (Access)</strong>
+    <ul>
+      <li><strong>시간 복잡도: O(1)</strong>배열은 인덱스를 통해 특정 위치의 데이터를 바로 접근하므로, 데이터의 개수에 상관없이 <strong>상수 시간</strong>에 조회가 가능하다.</li>
+    </ul>
+  </li>
+  <li><strong>탐색 (Search)</strong>
+    <ul>
+      <li><strong>시간 복잡도: O(n)</strong>배열 내에서 특정 값을 찾으려면 데이터를 하나씩 비교해야 한다. 따라서 배열의 크기가 커질수록 탐색에 소요되는 시간이 선형적으로 증가한다.</li>
+    </ul>
+  </li>
+  <li><strong>삽입 (Insert)</strong>
+    <ul>
+      <li><strong>시간 복잡도: O(n)</strong>배열에 데이터를 추가하려면, 추가할 위치에 따라 데이터를 이동시켜야 한다. 특히 중간이나 앞부분에 데이터를 추가할 경우, 나머지 데이터를 모두 오른쪽으로 이동시켜야 하므로 <strong>최악의 경우 배열 크기만큼 이동</strong>이 필요하다.</li>
+      <li>끝에 추가하는 경우에는 이동이 없으므로 시간 복잡도는 <strong>O(1)</strong>이다.</li>
+    </ul>
+  </li>
+  <li><strong>삭제 (Delete)</strong>
+    <ul>
+      <li><strong>시간 복잡도: O(n)</strong>데이터를 삭제한 후에도 남은 데이터를 채우기 위해 배열의 다른 요소들을 이동해야 하므로, <strong>최악의 경우 배열 크기만큼 이동</strong>이 필요하다.</li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="배열의-한계">배열의 한계</h2>
+<p>배열의 한계는 배열의 크기가 지정되어 있어서 동적인 움직임에 한계가 있다는 점이다.
+예를들어 1000명을 모집하기로 했는데 10000명이 온다면 9000명이 이벤트에 참여하지 못한다.
+그럼 100만개의 배열을 만들면 되는게 아닐까? → 사용하지 않는 배열은 메모리의 낭비가 된다.
+배열의 길이가 정적으로 정해지는 것이 배열의 단점이 된다.
+그래서 동적인 배열이라는 것이 존재한다.</p>
+
+<h2 id="reference">Reference</h2>
+
+<p>인프런 김영한님의 자바강좌 + 나의 뇌</p>
+
+    <br />
+    <br />
+  </div>
+  
+
+</article>
+
+<!--<hr class="dingbat" />-->
+<!--
+<div class="share">
+  <h2>Share this post</h2>
+  <div class="share-body">
+    <a href="http://twitter.com/share?text=Java Mid 14 -Collection Array-&amp;url=http://localhost:4000/language/2024/09/18/Java-Mid-14/"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="icon-twitter">
+      </span>
+    </a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/09/18/Java-Mid-14/"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="icon-facebook">
+      </span>
+    </a>
+  </div>
+</div>
+-->
+<br />
+
+
+
+
+<aside class="related" role="complementary">
+  <h2 class="hr">Related Posts</h2>
+
+  <ul class="related-posts">
     
-  
-  
-
-
-<li class="h4">
-  <a href="/language/2024/09/18/Java-Mid-14/" data-flip="title">
-    <span>Java Mid 14 -Collection Array-</span>
-  </a>
-  <small><time datetime="2024-09-18T00:00:00+09:00">
-    18 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
+      
+      
+      
+        
+          
+          
+        
+        
+          
 
 
 <li class="h4">
@@ -227,15 +437,15 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     <span>Java Mid 13 -Generic 2-</span>
   </a>
   <small><time datetime="2024-09-18T00:00:00+09:00">
-    18 Sep
+    18 Sep 2024
   </time></small>
 </li>
 
-  
-
-  
-  
-  
+        
+      
+        
+        
+          
 
 
 <li class="h4">
@@ -243,15 +453,15 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     <span>Java Mid 12 -Generic 1-</span>
   </a>
   <small><time datetime="2024-09-18T00:00:00+09:00">
-    18 Sep
+    18 Sep 2024
   </time></small>
 </li>
 
-  
-
-  
-  
-  
+        
+      
+        
+        
+          
 
 
 <li class="h4">
@@ -259,173 +469,31 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     <span>Java Mid 11 -Exception 2-</span>
   </a>
   <small><time datetime="2024-09-18T00:00:00+09:00">
-    18 Sep
+    18 Sep 2024
   </time></small>
 </li>
 
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/language/2024/09/18/Java-Mid-10/" data-flip="title">
-    <span>Java Mid 10 -Exception 1-</span>
-  </a>
-  <small><time datetime="2024-09-18T00:00:00+09:00">
-    18 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/language/2024/09/18/Java-Mid-09/" data-flip="title">
-    <span>Java Mid 09 -Nested Class-</span>
-  </a>
-  <small><time datetime="2024-09-18T00:00:00+09:00">
-    18 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/language/2024/09/18/Java-Mid-08/" data-flip="title">
-    <span>Java Mid 08 -Enum Type-</span>
-  </a>
-  <small><time datetime="2024-09-18T00:00:00+09:00">
-    18 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/language/2024/09/18/Java-Mid-07/" data-flip="title">
-    <span>Java Mid 07 -Class class-</span>
-  </a>
-  <small><time datetime="2024-09-18T00:00:00+09:00">
-    18 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/language/2024/09/18/Java-Mid-06/" data-flip="title">
-    <span>Java Mid 06 -Wrapper Class-</span>
-  </a>
-  <small><time datetime="2024-09-18T00:00:00+09:00">
-    18 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/language/2024/09/18/Java-Mid-05/" data-flip="title">
-    <span>Java Mid 05 -String 최적화-</span>
-  </a>
-  <small><time datetime="2024-09-18T00:00:00+09:00">
-    18 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/language/2024/09/18/Java-Mid-04/" data-flip="title">
-    <span>Java Mid 04 -String 클래스-</span>
-  </a>
-  <small><time datetime="2024-09-18T00:00:00+09:00">
-    18 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/language/2024/09/18/Java-Mid-03/" data-flip="title">
-    <span>Java Mid 03 -Immutable Object-</span>
-  </a>
-  <small><time datetime="2024-09-18T00:00:00+09:00">
-    18 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/language/2024/09/18/Java-Mid-02/" data-flip="title">
-    <span>Java Mid 02 -Primitive Type, Reference Type-</span>
-  </a>
-  <small><time datetime="2024-09-18T00:00:00+09:00">
-    18 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/language/2024/09/18/Java-Mid-01/" data-flip="title">
-    <span>Java Mid 01 -Object-</span>
-  </a>
-  <small><time datetime="2024-09-18T00:00:00+09:00">
-    18 Sep
-  </time></small>
-</li>
-
+        
+      
+    
   </ul>
+</aside>
+  <aside class="comments" role="complementary">
+  <h2>Comments</h2>
+  <hr/>
 
-  <footer>
+  <script src="https://utteranc.es/client.js"
+          repo="taewoocode/taewoocode.github.io"
+          issue-term="title"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+</aside>
+
+
+       <footer>
   <hr/>
   
     <p>© 2022. by taewoo</p>
@@ -644,7 +712,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     <li>
       <input type="checkbox" id="list-item-3"/>
       <div  class="list-wrapper">
-      <a class="sidebar-nav-item active" href="/category/programming-language/">Programming Language</a>
+      <a class="sidebar-nav-item" href="/category/programming-language/">Programming Language</a>
        <label class="folder" for="list-item-3">▾</label>
     </div>
      <ul class="list-body">
