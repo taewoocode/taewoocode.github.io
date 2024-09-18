@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Java Mid 04 -String 클래스-" />
+<meta property="og:title" content="Java Mid 04 -String 최적화-" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,17 +52,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Java Mid 04 -String 클래스- &middot; taewoo</title>
+<title>Java Mid 04 -String 최적화- &middot; taewoo</title>
  
 <meta
         name="description"
-        content="String 클래스
+        content="문자열 리터럴 최적화
 
 "
 />
 <meta
         property="og:description"
-        content="String 클래스
+        content="문자열 리터럴 최적화
 
 "
 />
@@ -72,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/language/2024/09/18/Java-Mid-04/" />
-<meta property="og:url" content="http://localhost:4000/language/2024/09/18/Java-Mid-04/" />
+<link rel="canonical" href="http://localhost:4000/language/2024/09/18/Java-Mid-05/" />
+<meta property="og:url" content="http://localhost:4000/language/2024/09/18/Java-Mid-05/" />
 
 <link
         rel="alternate"
@@ -83,9 +83,9 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/language/2024/09/18/Java-Mid-03/" />
+<link rel="prev" href="http://localhost:4000/language/2024/09/18/Java-Mid-04/" />
  
-<link rel="next" href="http://localhost:4000/language/2024/09/18/Java-Mid-05/" />
+<link rel="next" href="http://localhost:4000/framework/2024/09/18/Spring-03/" />
 
 
 <link
@@ -183,11 +183,11 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-language/2024/09/18/Java-Mid-04" class="post" role="article">
+<article id="post-language/2024/09/18/Java-Mid-05" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      Java Mid 04 -String 클래스-
+      Java Mid 04 -String 최적화-
       
     </h1>
 
@@ -267,75 +267,161 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
     </style>
 
     <!--<br />-->
-    <h2 id="string-클래스">String 클래스</h2>
+    <h2 id="문자열-리터럴-최적화">문자열 리터럴 최적화</h2>
 
-<p><code class="language-plaintext highlighter-rouge">String</code>은 자바에서 객체로 다뤄지며, 클래스이다. <code class="language-plaintext highlighter-rouge">int</code>, <code class="language-plaintext highlighter-rouge">boolean</code> 같은 기본형이 아닌 참조형으로, <code class="language-plaintext highlighter-rouge">String</code> 변수가 실제 문자열 값을 직접 저장하는 것이 아니라, 문자열 객체에 대한 참조를 저장된다.</p>
+<h3 id="컴파일-전">컴파일 전</h3>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="nc">String</span> <span class="n">str1</span> <span class="o">=</span> <span class="s">"Hello"</span><span class="o">;</span>   <span class="c1">// 기존 방식</span>
-<span class="nc">String</span> <span class="n">str2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">String</span><span class="o">(</span><span class="s">"hello"</span><span class="o">);</span>   <span class="c1">// 객체를 명시적으로 생성하는 방식</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">String</span> <span class="n">helloWorld</span> <span class="o">=</span> <span class="s">"Hello, World!"</span><span class="o">;</span>
 </code></pre></div></div>
 
-<p><code class="language-plaintext highlighter-rouge">String str1 = "hello";</code>와 같은 코드는 자바 언어에서 <code class="language-plaintext highlighter-rouge">new String("hello")</code>로 변환되어 처리한다.</p>
+<p>런타임에 별도의 문자열을 결합하지 않기 때문에 성능은 향상된다.</p>
 
-<p>이는 자바가 문자열을 쉽게 다룰 수 있도록 제공하는 편의 기능이며 문자열을 생성할 때, 객체를 직접 생성하지 않더라도 편리하게 사용할 수 있다.</p>
+<h3 id="string-변수-최적화">String 변수 최적화</h3>
 
-<h3 id="string-의-내부-구조">String 의 내부 구조</h3>
+<p>문자열의 경우에는 그 안에 어떤 값이 들어있는지 컴파일 시점에는 알 수가 없어서 단순하게 합칠 수 있다.</p>
 
-<p>문자열 데이터는 내부적으로 <code class="language-plaintext highlighter-rouge">char[]</code> 배열에 저장되었으나, <strong>자바 9</strong>부터는 메모리 효율성을 높이기 위해 <code class="language-plaintext highlighter-rouge">char[]</code> 대신 <code class="language-plaintext highlighter-rouge">byte[]</code>를 사용하게 된다. 자바에서 <code class="language-plaintext highlighter-rouge">char</code> 타입은 2바이트를 지원하지만, 영어와 숫자 같은 단순한 문자는 1바이트로 표현이 가능하다. 자바 9 이후, 문자열은 <strong>Latin-1 인코딩</strong>의 경우 1바이트를 사용하고, 그 외의 문자들은 <strong>UTF-16 인코딩</strong>으로 2바이트를 사용하여 메모리를 절약할 수 있게 변경된다.</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">String</span> <span class="n">result</span> <span class="o">=</span> <span class="n">str1</span> <span class="o">+</span> <span class="n">str2</span><span class="o">;</span>
 
-<h3 id="string-의-주요-메서드">String 의 주요 메서드</h3>
+<span class="c1">//최적화</span>
+<span class="nc">String</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StringBuilder</span><span class="o">().</span><span class="na">append</span><span class="o">(</span><span class="n">str1_</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">str2</span><span class="o">).</span><span class="na">toString</span><span class="o">();</span>
+</code></pre></div></div>
 
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">length()</code>: 문자열의 길이를 반환한다</li>
-  <li><code class="language-plaintext highlighter-rouge">charAt(int index)</code>: 특정 인덱스에 위치한 문자를 반환한다.</li>
-  <li><code class="language-plaintext highlighter-rouge">substring(int beginIndex, int endIndex)</code>: 부분 문자열을 반환한다.</li>
-  <li><code class="language-plaintext highlighter-rouge">indexOf(String str)</code>: 특정 문자열이 처음 나타나는 인덱스를 반환한다.</li>
-  <li><code class="language-plaintext highlighter-rouge">toLowerCase()</code>, <code class="language-plaintext highlighter-rouge">toUpperCase()</code>: 문자열을 각각 소문자 또는 대문자로 변환한다.</li>
-  <li><code class="language-plaintext highlighter-rouge">trim()</code>: 문자열의 양쪽 끝에 있는 공백을 제거한다.</li>
-  <li><code class="language-plaintext highlighter-rouge">concat(String str)</code>: 문자열을 이어 붙인다.</li>
-</ul>
+<h2 id="string-최적화가-어려운-경우">String 최적화가 어려운 경우</h2>
 
-<h3 id="문자열-더하기">문자열 더하기</h3>
+<p>문자열을 루프안에서 문자열을 더하는 경우에는 최적화가 이루어지지 않는다.</p>
 
-<p>문자열을 더할 때 <code class="language-plaintext highlighter-rouge">String</code>의 <code class="language-plaintext highlighter-rouge">concat()</code> 메서드를 사용할 수 있다. 그러나 자바는 편의상 <code class="language-plaintext highlighter-rouge">+</code> 연산자를 통해 문자열을 이어 붙이는 기능도 제공한다. 이는 문자열이 자주 사용되기 때문에 자바에서 특별히 지원하는 문법이다.</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">StringConcatMain</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">LoopStringMain</span> <span class="o">{</span>
     <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">String</span> <span class="n">a</span> <span class="o">=</span> <span class="s">"hello"</span><span class="o">;</span>
-        <span class="nc">String</span> <span class="n">b</span> <span class="o">=</span> <span class="s">" java"</span><span class="o">;</span>
 
-        <span class="c1">// concat() 메서드를 사용하여 문자열을 결합</span>
-        <span class="nc">String</span> <span class="n">result1</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="na">concat</span><span class="o">(</span><span class="n">b</span><span class="o">);</span>
-        <span class="c1">// + 연산자를 사용하여 문자열을 결합</span>
-        <span class="nc">String</span> <span class="n">result2</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="o">;</span>
+        <span class="cm">/*
+        startTime ~ endTime 사이의 시간을 구한다.
 
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">result1</span><span class="o">);</span>  <span class="c1">// 출력: hello java</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">result2</span><span class="o">);</span>  <span class="c1">// 출력: hello java</span>
+         */</span>
+        <span class="kt">long</span> <span class="n">startTime</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span> <span class="c1">//system에서 현재 밀리세컨드 시간을 얻는다.</span>
+        <span class="nc">String</span> <span class="n">result</span> <span class="o">=</span> <span class="s">""</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">100000</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="s">"Hello java"</span><span class="o">;</span>
+
+        <span class="o">}</span>
+
+        <span class="kt">long</span> <span class="n">endTime</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
+
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"result = "</span> <span class="o">+</span> <span class="n">result</span> <span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"time = "</span> <span class="o">+</span> <span class="o">(</span><span class="n">endTime</span> <span class="o">-</span> <span class="n">startTime</span><span class="o">)</span> <span class="o">+</span> <span class="s">"ms"</span> <span class="o">);</span> <span class="c1">//ms 1/1000초 2.3초</span>
+
     <span class="o">}</span>
 <span class="o">}</span>
-
 </code></pre></div></div>
+<p><img width="691" alt="스크린샷 2024-09-18 오후 8 13 16" src="https://github.com/user-attachments/assets/d21a91df-405c-4ea9-8197-112331600e38" /></p>
 
-<p>이처럼 <code class="language-plaintext highlighter-rouge">concat()</code> 메서드와 <code class="language-plaintext highlighter-rouge">+</code> 연산자는 모두 문자열을 이어 붙이지만, <code class="language-plaintext highlighter-rouge">+</code>는 자바에서 특별하게 제공하는 기능이다.</p>
+<p>런타임에 연결한 문자열의 개수와 내용이 결정되기 때문에, 컴파일러는 실행직전에 어떤 상황이 벌어질줄 모른다.</p>
 
-<h2 id="string또한-불변객체이다">String또한 불변객체이다.</h2>
+<p>10만번의 String객체가 생겼을 것이다. (메모리 낭비가 심해진다.)</p>
 
-<p><code class="language-plaintext highlighter-rouge">String</code>은 불변 객체(immutable object)이다. 한 번 생성된 <code class="language-plaintext highlighter-rouge">String</code> 객체의 값은 변경할 수 없다. 예를 들어, 문자열에 대해 어떤 연산을 수행할 때, 기존 문자열이 수정되는 것이 아니라 새로운 <code class="language-plaintext highlighter-rouge">String</code> 객체가 생성된다.</p>
+<h2 id="stringbuilder로-최적화">StringBuilder로 최적화</h2>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">StringImmutableExample</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">LoopStringBuilderMain</span> <span class="o">{</span>
     <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">String</span> <span class="n">str</span> <span class="o">=</span> <span class="s">"hello"</span><span class="o">;</span>
-        <span class="n">str</span> <span class="o">=</span> <span class="n">str</span><span class="o">.</span><span class="na">concat</span><span class="o">(</span><span class="s">" world"</span><span class="o">);</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">str</span><span class="o">);</span>  <span class="c1">// 출력: hello world</span>
+
+        <span class="cm">/*
+        startTime ~ endTime 사이의 시간을 구한다.
+
+         */</span>
+        <span class="kt">long</span> <span class="n">startTime</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span> <span class="c1">//system에서 현재 밀리세컨드 시간을 얻는다.</span>
+        <span class="nc">StringBuilder</span> <span class="n">sb</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StringBuilder</span><span class="o">();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">100000</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span> <span class="s">"Hello java"</span> <span class="o">);</span>
+
+        <span class="o">}</span>
+        <span class="kt">long</span> <span class="n">endTime</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
+
+        <span class="nc">String</span> <span class="n">result</span> <span class="o">=</span> <span class="n">sb</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"result = "</span> <span class="o">+</span> <span class="n">result</span> <span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"time = "</span> <span class="o">+</span> <span class="o">(</span><span class="n">endTime</span> <span class="o">-</span> <span class="n">startTime</span><span class="o">)</span> <span class="o">+</span> <span class="s">"ms"</span> <span class="o">);</span> <span class="c1">//ms 1/1000초 2.3초</span>
+
     <span class="o">}</span>
 <span class="o">}</span>
-
 </code></pre></div></div>
+<p><img width="610" alt="image" src="https://github.com/user-attachments/assets/dddc8223-643b-45cb-94dc-8fa4c83e629e" /></p>
+
+<p>성능차이가 7,800배 차이가 나는 것을 확인할 수 있다.</p>
+
+<h2 id="그러면-builder를-언제써야할까">그러면 Builder를 언제써야할까?</h2>
+
+<p>반복문의 횟수가 너무 많을때 ex) 10만번 정도 돌거나, 문자가 크게 누적될 때 사용하게 된다.</p>
+
+<h2 id="메서드-체이닝">메서드 체이닝</h2>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MethodChainingMain3</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">ValueAdder</span> <span class="n">adder</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ValueAdder</span><span class="o">();</span>
+        <span class="c1">//x001.add(1) -&gt; this 반환 -&gt; x001.add(2) -&gt; this 반환 -&gt; x001.add(3) -&gt; this 반환</span>
+        <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="n">adder</span><span class="o">.</span><span class="na">add</span><span class="o">(</span> <span class="mi">1</span> <span class="o">).</span><span class="na">add</span><span class="o">(</span> <span class="mi">2</span> <span class="o">).</span><span class="na">add</span><span class="o">(</span> <span class="mi">3</span> <span class="o">).</span><span class="na">getValue</span><span class="o">();</span> <span class="c1">//add호출 -&gt; this 반환</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"result = "</span> <span class="o">+</span> <span class="n">result</span> <span class="o">);</span>
+        
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p><strong>메서드 체이닝 기법은 코드를 간결하고 읽기 쉽게 만들어 준다.</strong></p>
+
+<p>메서드 호출의 결과로 자기 자신의 참조값을 반환하면, 반환된 참조값을 사용해서 메서드 호출을 계속 이어나갈 수 있다. 코드를 보면 메서드 체이닝 방식은 메서드가 끝나는 시점에 바로 .을 찍어서 변수명을 생략할 수 있다.</p>
+
+<p>메서드 체이닝이 가능한 이유는 자기 자신의 참조값을 반환하기 때문이다. 접근연산자를 찍어서 바로 자기 자신의 메서드를 호출할 수 있다.</p>
+
+<p>이 코드를 chaining으로 바꿔보자</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">StringBuilderMain1_2</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="nc">StringBuilder</span> <span class="n">sb</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StringBuilder</span><span class="o">();</span>
+        <span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span> <span class="s">"A"</span> <span class="o">);</span>
+        <span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span> <span class="s">"B"</span> <span class="o">);</span>
+        <span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span> <span class="s">"C"</span> <span class="o">);</span>
+        <span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span> <span class="s">"D"</span> <span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"sb = "</span> <span class="o">+</span> <span class="n">sb</span> <span class="o">);</span>
+
+        <span class="n">sb</span><span class="o">.</span><span class="na">insert</span><span class="o">(</span> <span class="mi">4</span><span class="o">,</span> <span class="s">"Java"</span> <span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"sb = "</span> <span class="o">+</span> <span class="n">sb</span> <span class="o">);</span>
+
+        <span class="n">sb</span><span class="o">.</span><span class="na">delete</span><span class="o">(</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">8</span> <span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"sb = "</span> <span class="o">+</span> <span class="n">sb</span> <span class="o">);</span>
+
+        <span class="nc">StringBuilder</span> <span class="n">reverse</span> <span class="o">=</span> <span class="n">sb</span><span class="o">.</span><span class="na">reverse</span><span class="o">();</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"reverse = "</span> <span class="o">+</span> <span class="n">reverse</span> <span class="o">);</span>
+
+        <span class="c1">//StringBuilder -&gt; String</span>
+        <span class="nc">String</span> <span class="n">string</span> <span class="o">=</span> <span class="n">sb</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">string</span><span class="o">);</span>
+
+        
+
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">StringBuilderMain1_2</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="nc">StringBuilder</span> <span class="n">sb</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StringBuilder</span><span class="o">();</span>
+        <span class="nc">String</span> <span class="n">string1</span> <span class="o">=</span> <span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span> <span class="s">"A"</span> <span class="o">).</span><span class="na">append</span><span class="o">(</span> <span class="s">"B"</span> <span class="o">).</span><span class="na">append</span><span class="o">(</span> <span class="s">"C"</span> <span class="o">).</span><span class="na">append</span><span class="o">(</span> <span class="s">"D"</span> <span class="o">)</span>
+                <span class="o">.</span><span class="na">insert</span><span class="o">(</span> <span class="mi">4</span><span class="o">,</span> <span class="s">"Java"</span> <span class="o">)</span>
+                <span class="o">.</span><span class="na">delete</span><span class="o">(</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">8</span> <span class="o">)</span>
+                <span class="o">.</span><span class="na">reverse</span><span class="o">()</span>
+                <span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"string1 = "</span> <span class="o">+</span> <span class="n">string1</span> <span class="o">);</span>
+    <span class="o">}</span>
+	<span class="o">}</span>
+</code></pre></div></div>
+
+<p>참고로 자바의 라이브러리와 오픈 소스들은 메서드 체이닝 방식을 종종 사용한다고 한다.(나중에 찾아봐야 겠다.)</p>
 
 <h2 id="reference">Reference</h2>
 
-<p>인프런 김영한님의 실전 자바 강좌</p>
+<p>인프런 김영한님의 실전 자바 강좌 + 나의 뇌</p>
 
     <br />
     <br />
@@ -349,12 +435,12 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=Java Mid 04 -String 클래스-&amp;url=http://localhost:4000/language/2024/09/18/Java-Mid-04/"
+    <a href="http://twitter.com/share?text=Java Mid 04 -String 최적화-&amp;url=http://localhost:4000/language/2024/09/18/Java-Mid-05/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/09/18/Java-Mid-04/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/09/18/Java-Mid-05/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -376,13 +462,16 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
       
       
         
+          
+          
+        
         
           
 
 
 <li class="h4">
-  <a href="/language/2024/09/18/Java-Mid-05/" data-flip="title">
-    <span>Java Mid 04 -String 최적화-</span>
+  <a href="/language/2024/09/18/Java-Mid-04/" data-flip="title">
+    <span>Java Mid 04 -String 클래스-</span>
   </a>
   <small><time datetime="2024-09-18T00:00:00+09:00">
     18 Sep 2024
@@ -391,9 +480,6 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
 
         
       
-        
-          
-          
         
         
           
