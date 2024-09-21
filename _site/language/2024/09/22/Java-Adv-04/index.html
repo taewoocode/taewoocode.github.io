@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Java Mid 01 -Object-" />
+<meta property="og:title" content="Java Adv -Thread 4-" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,17 +52,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Java Mid 01 -Object- &middot; 일벌리는 개발자</title>
+<title>Java Adv -Thread 4- &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="Java Lang package
+        content="Join
 
 "
 />
 <meta
         property="og:description"
-        content="Java Lang package
+        content="Join
 
 "
 />
@@ -72,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/language/2024/09/18/Java-Mid-01/" />
-<meta property="og:url" content="http://localhost:4000/language/2024/09/18/Java-Mid-01/" />
+<link rel="canonical" href="http://localhost:4000/language/2024/09/22/Java-Adv-04/" />
+<meta property="og:url" content="http://localhost:4000/language/2024/09/22/Java-Adv-04/" />
 
 <link
         rel="alternate"
@@ -83,10 +83,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/framework/2024/09/17/Spring-02/" />
+<link rel="prev" href="http://localhost:4000/language/2024/09/22/Java-Adv-03/" />
  
-<link rel="next" href="http://localhost:4000/language/2024/09/18/Java-Mid-02/" />
-
 
 <link
         rel="apple-touch-icon"
@@ -183,16 +181,16 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-language/2024/09/18/Java-Mid-01" class="post" role="article">
+<article id="post-language/2024/09/22/Java-Adv-04" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      Java Mid 01 -Object-
+      Java Adv -Thread 4-
       
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
+      <time datetime="2024-09-22T00:00:00+09:00">22 Sep 2024</time>
       
 
 
@@ -267,142 +265,184 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
     </style>
 
     <!--<br />-->
-    <h2 id="java-lang-package">Java Lang package</h2>
-
-<p>자바가 기본으로 제공하는 라이브러리(클래스 모음) 중에 가장 기본이 되는 것이 바로 자바 lang이다.</p>
-
-<p>여기서 lang은 Language(언어)의 줄임말이다. 쉽게 이야기해서 자바 언어를 이루는 가장 기본이 되는 클래스들을 보관하는 패키지를 뜻한다.</p>
-
-<h3 id="javalang-대표적인-클래스">java.lang 대표적인 클래스</h3>
+    <h2 id="join">Join</h2>
 
 <ul>
-  <li>Object : 모든 자바객체의 부모 클래스</li>
-  <li>String : 문자열</li>
-  <li>Integer, Long, Double : 래퍼 타입(감싼타입)
-    <ul>
-      <li>기본형 데이터 타입을 객체로 만든 것</li>
-    </ul>
-  </li>
-  <li>Class : 클래스 메타 정보</li>
-  <li>System : 시스템과 관련된 기본 기능들을 제공</li>
+  <li>앞서 Thread.sleep() 메서드를 통해 TIMED_WAITING 상태를 알아보았다. 이번에는 Join()메서드를 통해 WAITNG(대기 상태)가 무엇인지 왜 필요한지 알아보자</li>
 </ul>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">lang.object.tostring</span><span class="o">;</span>
-
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ToStringMain2</span> <span class="o">{</span>
-
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">Car</span> <span class="n">car</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Car</span><span class="o">(</span> <span class="s">"Model Y"</span> <span class="o">);</span>
-        <span class="nc">Dog</span> <span class="n">dog1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Dog</span><span class="o">(</span> <span class="s">"멍멍이1"</span><span class="o">,</span> <span class="mi">2</span> <span class="o">);</span>
-        <span class="nc">Dog</span> <span class="n">dog2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Dog</span><span class="o">(</span> <span class="s">"멍멍이1"</span><span class="o">,</span> <span class="mi">2</span> <span class="o">);</span>
-
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"1. 단순 toString 호출"</span><span class="o">);</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">car</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">dog1</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">dog2</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
-
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"2. println 내부에서 toString 호"</span><span class="o">);</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">car</span><span class="o">);</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">dog1</span><span class="o">);</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">dog2</span><span class="o">);</span>
-
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"3. object다형성 활용"</span><span class="o">);</span>
-        <span class="nc">ObjectPrinter</span><span class="o">.</span><span class="na">print</span><span class="o">(</span> <span class="n">car</span> <span class="o">);</span>
-        <span class="nc">ObjectPrinter</span><span class="o">.</span><span class="na">print</span><span class="o">(</span> <span class="n">dog1</span> <span class="o">);</span>
-        <span class="nc">ObjectPrinter</span><span class="o">.</span><span class="na">print</span><span class="o">(</span> <span class="n">dog2</span> <span class="o">);</span>
-
-        <span class="nc">String</span> <span class="n">refValue</span> <span class="o">=</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">toHexString</span><span class="o">(</span> <span class="nc">System</span><span class="o">.</span><span class="na">identityHashCode</span><span class="o">(</span> <span class="n">dog1</span> <span class="o">)</span> <span class="o">);</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"refValue = "</span> <span class="o">+</span> <span class="n">refValue</span> <span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">lang.object.tostring</span><span class="o">;</span>
-
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ToStringMain1</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">Object</span> <span class="n">object</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Object</span><span class="o">();</span>
-        <span class="nc">String</span> <span class="n">string</span> <span class="o">=</span> <span class="n">object</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
-
-        <span class="c1">//toString() 반환값 출력</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="n">string</span> <span class="o">);</span>
-
-        <span class="c1">//object 직접 출력</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="n">object</span> <span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
+<h3 id="waiting대기-상태">waiting(대기 상태)</h3>
 
 <ul>
-  <li>클래스에서 상속 받을 부모 클래스가 없으면 묵시적으로 Object 클래스를 상속 받는다.
+  <li>스레드가 다른 스레드의 특정 작업이  완료되기를 무기한 기다리는 상태이다.
     <ul>
-      <li>쉽게 이야기해서 자바가 extends Object 코드를 넣어준다.</li>
-      <li>따라서 extends Object는 생략하는 것을 권장한다.</li>
+      <li>TIMED_WAITING은 특정시간만 기다리는 상태이다.</li>
     </ul>
   </li>
 </ul>
 
-<p><code class="language-plaintext highlighter-rouge">Object</code> 클래스는 자바 클래스 계층 구조의 루트 클래스이며, 다른 모든 클래스는 직간접적으로 <code class="language-plaintext highlighter-rouge">Object</code> 클래스를 상속받는다.</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">thread.control.join</span><span class="o">;</span>
 
-<h2 id="object가-제공하는-기능은-다음과-같다">Object가 제공하는 기능은 다음과 같다</h2>
+<span class="kn">import</span> <span class="nn">static</span> <span class="n">util</span><span class="o">.</span><span class="na">MyLogger</span><span class="o">.</span><span class="na">log</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">static</span> <span class="n">util</span><span class="o">.</span><span class="na">ThreadUtils</span><span class="o">.</span><span class="na">sleep</span><span class="o">;</span>
 
-<ul>
-  <li>객체의 정보를 제공하는 toString()</li>
-  <li>객체의 같음을 비교하는 equals()</li>
-  <li>객체의 클래스 정보를 제공하는 getClass()</li>
-  <li>기타 여러가지 기능</li>
-</ul>
-
-<h2 id="다형성의-기본-구현">다형성의 기본 구현</h2>
-
-<ul>
-  <li>부모는 자식을 담을 수 있다.</li>
-  <li>Object는 모든 클래스의 부모 클래스이다. 따라서 모든 객체를 참조할 수 있다.</li>
-  <li>
-    <p>Object 클래스는 다형성을 지원하는 기본적인 메커니즘을 제공한다.</p>
-  </li>
-  <li>
-    <p>모든 자바 객체는 Object 타입으로 처리될 수 있으며, 이는 다양한 타입의 객체를 통합적으로 처리할 수 있게 해준다. 쉽게 이야기하면 Object는 모든 객체를 다 담을 수 있다. (다형성 특징)</p>
-  </li>
-  <li>타입이 다른 객체들은 어딘가에 보관해야 한다면? 바로 Object에 보관하면 된다.</li>
-</ul>
-
-<h2 id="object-배열">Object 배열</h2>
-
-<ul>
-  <li>Object는 모든 타입의 객체를 다 담을 수 있다.</li>
-  <li>Object[] 만들면 자바의 모든 객체를 다 담을 수 있는 배열을 만든 것이다.</li>
-</ul>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ublic</span> <span class="kd">class</span> <span class="nc">ObjectPolyExample2</span> <span class="o">{</span>
-
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">JoinMainV0</span> <span class="o">{</span>
     <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">Dog</span> <span class="n">dog</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Dog</span><span class="o">();</span>
-        <span class="nc">Car</span> <span class="n">car</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Car</span><span class="o">();</span>
-        <span class="nc">Object</span> <span class="n">object</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Object</span><span class="o">();</span>
-
-        <span class="nc">Object</span><span class="o">[]</span> <span class="n">objects</span> <span class="o">=</span> <span class="o">{</span><span class="n">dog</span><span class="o">,</span> <span class="n">car</span><span class="o">,</span> <span class="n">object</span><span class="o">};</span>
-        <span class="n">size</span><span class="o">(</span><span class="n">objects</span><span class="o">);</span>
-
+        <span class="n">log</span><span class="o">(</span> <span class="s">"Start"</span> <span class="o">);</span>
+        <span class="nc">Thread</span> <span class="n">thread1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">(</span> <span class="k">new</span> <span class="nc">Job</span><span class="o">(),</span> <span class="s">"Thread- 1"</span> <span class="o">);</span>
+        <span class="nc">Thread</span> <span class="n">thread2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">(</span> <span class="k">new</span> <span class="nc">Job</span><span class="o">(),</span> <span class="s">"Thread- 2"</span> <span class="o">);</span>
+        <span class="n">thread1</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+        <span class="n">thread2</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+        <span class="n">log</span><span class="o">(</span> <span class="s">"End"</span> <span class="o">);</span>
     <span class="o">}</span>
 
-    <span class="kd">private</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">size</span><span class="o">(</span><span class="nc">Object</span><span class="o">[]</span> <span class="n">objects</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"전달된 객체의 수는?: "</span> <span class="o">+</span> <span class="n">objects</span><span class="o">.</span><span class="na">length</span> <span class="o">);</span>
+    <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Job</span> <span class="kd">implements</span> <span class="nc">Runnable</span><span class="o">{</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+            <span class="n">log</span><span class="o">(</span> <span class="s">"작업 시작"</span> <span class="o">);</span>
+            <span class="n">sleep</span><span class="o">(</span> <span class="mi">2000</span> <span class="o">);</span> <span class="c1">//2초간 대기</span>
+            <span class="n">log</span><span class="o">(</span> <span class="s">"작업 완료"</span> <span class="o">);</span>
+        <span class="o">}</span>
     <span class="o">}</span>
 <span class="o">}</span>
+
 </code></pre></div></div>
 
 <ul>
-  <li>만약 Object가 없다면?
-    <ul>
-      <li>void action(Object obj)과 같이 모든 객체를 받을 수 있는 메서드를 만들 수 없다.</li>
-      <li>Object[] objects같이 모든 객체를 저장할 수 있는 배열을 만들 수 없다.</li>
-    </ul>
-  </li>
+  <li>참고 : 스레드의 실행 순서는 보장되지 않는다. 실행 결과는 다를 수 있다.</li>
 </ul>
+
+<h2 id="join이-필요한-상황">Join이 필요한 상황</h2>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">thread.control.join</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">static</span> <span class="n">util</span><span class="o">.</span><span class="na">MyLogger</span><span class="o">.</span><span class="na">log</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">static</span> <span class="n">util</span><span class="o">.</span><span class="na">ThreadUtils</span><span class="o">.</span><span class="na">sleep</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">JoinMainV1</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">log</span><span class="o">(</span> <span class="s">"Start"</span> <span class="o">);</span>
+        <span class="nc">SumTask</span> <span class="n">task1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SumTask</span><span class="o">(</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">50</span> <span class="o">);</span>
+        <span class="nc">SumTask</span> <span class="n">task2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SumTask</span><span class="o">(</span> <span class="mi">51</span><span class="o">,</span> <span class="mi">100</span> <span class="o">);</span>
+        <span class="nc">Thread</span> <span class="n">thread1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">(</span> <span class="n">task1</span><span class="o">,</span> <span class="s">"thread1"</span> <span class="o">);</span>
+        <span class="nc">Thread</span> <span class="n">thread2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">(</span> <span class="n">task2</span><span class="o">,</span> <span class="s">"thread2"</span> <span class="o">);</span>
+
+        <span class="n">thread1</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+        <span class="n">thread2</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+
+        <span class="n">log</span><span class="o">(</span> <span class="s">"task1.result = "</span> <span class="o">+</span> <span class="n">task1</span><span class="o">.</span><span class="na">result</span> <span class="o">);</span>
+        <span class="n">log</span><span class="o">(</span> <span class="s">"task2.result = "</span> <span class="o">+</span> <span class="n">task2</span><span class="o">.</span><span class="na">result</span> <span class="o">);</span>
+        
+        <span class="kt">int</span> <span class="n">sumAll</span> <span class="o">=</span> <span class="n">task1</span><span class="o">.</span><span class="na">result</span> <span class="o">+</span> <span class="n">task2</span><span class="o">.</span><span class="na">result</span><span class="o">;</span>
+        <span class="n">log</span><span class="o">(</span> <span class="s">"task1 + task2 = "</span> <span class="o">+</span> <span class="n">sumAll</span> <span class="o">);</span>
+        <span class="n">log</span><span class="o">(</span> <span class="s">"End"</span> <span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">static</span> <span class="kd">class</span> <span class="nc">SumTask</span> <span class="kd">implements</span> <span class="nc">Runnable</span> <span class="o">{</span>
+
+        <span class="kt">int</span> <span class="n">startValue</span><span class="o">;</span> <span class="c1">//0</span>
+        <span class="kt">int</span> <span class="n">endValue</span><span class="o">;</span> <span class="c1">//0</span>
+        <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+        <span class="kd">public</span> <span class="nf">SumTask</span><span class="o">(</span><span class="kt">int</span> <span class="n">startValue</span><span class="o">,</span> <span class="kt">int</span> <span class="n">endValue</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">startValue</span> <span class="o">=</span> <span class="n">startValue</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">endValue</span> <span class="o">=</span> <span class="n">endValue</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+            <span class="n">log</span><span class="o">(</span> <span class="s">"작업 시작"</span> <span class="o">);</span>
+            <span class="n">sleep</span><span class="o">(</span> <span class="mi">2000</span> <span class="o">);</span>
+            <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">startValue</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">endValue</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="n">sum</span> <span class="o">+=</span> <span class="n">i</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">sum</span><span class="o">;</span>
+            <span class="n">log</span><span class="o">(</span> <span class="s">"작업 완료 + result = "</span> <span class="o">+</span> <span class="n">result</span> <span class="o">);</span>
+
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+<p><img width="631" alt="image" src="https://github.com/user-attachments/assets/3fd2a6c1-e2a5-4428-8572-d210db92382a" /></p>
+<ul>
+  <li>0이 나온 이유는 main이 Thread1, Thread2에게 작업을 지시했지만 2초라는 sleep시간 동안 main이 이미 값을 조회하고 main을 종료시킨다. 그래서 계산값이 반환되기전에 결과값이 나와버린다.</li>
+  <li>여기서 핵심은 main 스레드가 thread1, thread2의 계산이 끝날 때 까지 기다려야 한다는 점이다. 그럼 어떻게 해야 main 스레드가 기다릴 수 있을까?</li>
+</ul>
+
+<h2 id="join-join">Join-join</h2>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">thread.control.join</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">static</span> <span class="n">util</span><span class="o">.</span><span class="na">MyLogger</span><span class="o">.</span><span class="na">log</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">static</span> <span class="n">util</span><span class="o">.</span><span class="na">ThreadUtils</span><span class="o">.</span><span class="na">sleep</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">JoinMainV3</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">InterruptedException</span> <span class="o">{</span>
+        <span class="n">log</span><span class="o">(</span> <span class="s">"Start"</span> <span class="o">);</span>
+        <span class="nc">SumTask</span> <span class="n">task1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SumTask</span><span class="o">(</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">50</span> <span class="o">);</span>
+        <span class="nc">SumTask</span> <span class="n">task2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SumTask</span><span class="o">(</span> <span class="mi">51</span><span class="o">,</span> <span class="mi">100</span> <span class="o">);</span>
+        <span class="nc">Thread</span> <span class="n">thread1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">(</span> <span class="n">task1</span><span class="o">,</span> <span class="s">"thread1"</span> <span class="o">);</span>
+        <span class="nc">Thread</span> <span class="n">thread2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">(</span> <span class="n">task2</span><span class="o">,</span> <span class="s">"thread2"</span> <span class="o">);</span>
+
+        <span class="n">thread1</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+        <span class="n">thread2</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+
+        <span class="c1">//스레드가 종료될 때 까지 대기</span>
+        <span class="c1">//thread1, thread2의 작업이 종료되면 main thread의 작업이 종료된다.</span>
+        <span class="n">log</span><span class="o">(</span> <span class="s">"join() - main 스레드가 thread1, therad2 종료까지 대기"</span> <span class="o">);</span>
+        <span class="n">thread1</span><span class="o">.</span><span class="na">join</span><span class="o">();</span>
+        <span class="n">thread2</span><span class="o">.</span><span class="na">join</span><span class="o">();</span>
+
+        <span class="n">log</span><span class="o">(</span> <span class="s">"task1.result = "</span> <span class="o">+</span> <span class="n">task1</span><span class="o">.</span><span class="na">result</span> <span class="o">);</span>
+        <span class="n">log</span><span class="o">(</span> <span class="s">"task2.result = "</span> <span class="o">+</span> <span class="n">task2</span><span class="o">.</span><span class="na">result</span> <span class="o">);</span>
+
+        <span class="kt">int</span> <span class="n">sumAll</span> <span class="o">=</span> <span class="n">task1</span><span class="o">.</span><span class="na">result</span> <span class="o">+</span> <span class="n">task2</span><span class="o">.</span><span class="na">result</span><span class="o">;</span>
+        <span class="n">log</span><span class="o">(</span> <span class="s">"task1 + task2 = "</span> <span class="o">+</span> <span class="n">sumAll</span> <span class="o">);</span>
+        <span class="n">log</span><span class="o">(</span> <span class="s">"End"</span> <span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">static</span> <span class="kd">class</span> <span class="nc">SumTask</span> <span class="kd">implements</span> <span class="nc">Runnable</span> <span class="o">{</span>
+
+        <span class="kt">int</span> <span class="n">startValue</span><span class="o">;</span> <span class="c1">//0</span>
+        <span class="kt">int</span> <span class="n">endValue</span><span class="o">;</span> <span class="c1">//0</span>
+        <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+        <span class="kd">public</span> <span class="nf">SumTask</span><span class="o">(</span><span class="kt">int</span> <span class="n">startValue</span><span class="o">,</span> <span class="kt">int</span> <span class="n">endValue</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">startValue</span> <span class="o">=</span> <span class="n">startValue</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">endValue</span> <span class="o">=</span> <span class="n">endValue</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+            <span class="n">log</span><span class="o">(</span> <span class="s">"작업 시작"</span> <span class="o">);</span>
+            <span class="n">sleep</span><span class="o">(</span> <span class="mi">2000</span> <span class="o">);</span>
+            <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">startValue</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">endValue</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="n">sum</span> <span class="o">+=</span> <span class="n">i</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">sum</span><span class="o">;</span>
+            <span class="n">log</span><span class="o">(</span> <span class="s">"작업 완료 + result = "</span> <span class="o">+</span> <span class="n">result</span> <span class="o">);</span>
+
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p><img width="658" alt="image" src="https://github.com/user-attachments/assets/fadc029c-1acb-4162-b777-1d7f9d275ad2" />
+실행 결과를 보면 정확하게 5050 이 계산된 것을 확인할 수 있다.</p>
+
+<p><img width="606" alt="image" src="https://github.com/user-attachments/assets/cb632b23-17cc-429d-8960-32604841715e" />
+예를 들어서 <code class="language-plaintext highlighter-rouge">thread-1</code> 이 아직 종료되지 않았다면 <code class="language-plaintext highlighter-rouge">main</code> 스레드는 <code class="language-plaintext highlighter-rouge">thread1.join()</code> 코드 안에서 더는 진행하지않고 멈추어 기다린다. 
+이후에 <code class="language-plaintext highlighter-rouge">thread-1</code> 이 종료되면 <code class="language-plaintext highlighter-rouge">main</code> 스레드는 <code class="language-plaintext highlighter-rouge">RUNNABLE</code> 상태가 되고 다음 코드로 이동한다.
+이때 <code class="language-plaintext highlighter-rouge">thread-2</code> 이 아직 종료되지 않았다면 <code class="language-plaintext highlighter-rouge">main</code> 스레드는 <code class="language-plaintext highlighter-rouge">thread2.join()</code> 코드 안에서 진행하지 않고 멈추어 기다린다. 
+이후에 <code class="language-plaintext highlighter-rouge">thread-2</code> 이 종료되면 <code class="language-plaintext highlighter-rouge">main</code> 스레드는 <code class="language-plaintext highlighter-rouge">RUNNABLE</code> 상태가 되고 다음 코드로 이동한다. 이 경우 <code class="language-plaintext highlighter-rouge">thread-1</code> 이 종료되는 시점에 <code class="language-plaintext highlighter-rouge">thread-2</code> 도 거의 같이 종료되기 때문에 <code class="language-plaintext highlighter-rouge">thread2.join()</code> 은 대기하지 않고 바로 빠져나온다.</p>
 
 <h2 id="reference">Reference</h2>
 
-<p>인프런 김영한님의 실전 자바 강좌 중급 1편</p>
+<p>인프런 김영한님의 자바강좌 + 나의 뇌</p>
 
     <br />
     <br />
@@ -416,12 +456,12 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=Java Mid 01 -Object-&amp;url=http://localhost:4000/language/2024/09/18/Java-Mid-01/"
+    <a href="http://twitter.com/share?text=Java Adv -Thread 4-&amp;url=http://localhost:4000/language/2024/09/22/Java-Adv-04/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/09/18/Java-Mid-01/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/09/22/Java-Adv-04/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -443,21 +483,8 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
       
       
         
-        
           
-
-
-<li class="h4">
-  <a href="/language/2024/09/22/Java-Adv-04/" data-flip="title">
-    <span>Java Adv -Thread 4-</span>
-  </a>
-  <small><time datetime="2024-09-22T00:00:00+09:00">
-    22 Sep 2024
-  </time></small>
-</li>
-
-        
-      
+          
         
         
           
@@ -491,6 +518,19 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
         
       
         
+        
+          
+
+
+<li class="h4">
+  <a href="/language/2024/09/21/Java-Adv-01/" data-flip="title">
+    <span>Java Adv -Thread 1-</span>
+  </a>
+  <small><time datetime="2024-09-21T00:00:00+09:00">
+    21 Sep 2024
+  </time></small>
+</li>
+
         
       
     
