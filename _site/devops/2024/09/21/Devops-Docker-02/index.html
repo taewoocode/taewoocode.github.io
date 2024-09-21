@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Java Adv 01 -Thread 1-" />
+<meta property="og:title" content="DockerFile로 Spring Image 만들기" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,17 +52,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Java Adv 01 -Thread 1- &middot; 일벌리는 개발자</title>
+<title>DockerFile로 Spring Image 만들기 &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="자바의 메모리 구조
+        content="도커파일 정의
 
 "
 />
 <meta
         property="og:description"
-        content="자바의 메모리 구조
+        content="도커파일 정의
 
 "
 />
@@ -72,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/language/2024/09/21/Java-Adv-01/" />
-<meta property="og:url" content="http://localhost:4000/language/2024/09/21/Java-Adv-01/" />
+<link rel="canonical" href="http://localhost:4000/devops/2024/09/21/Devops-Docker-02/" />
+<meta property="og:url" content="http://localhost:4000/devops/2024/09/21/Devops-Docker-02/" />
 
 <link
         rel="alternate"
@@ -83,8 +83,10 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/devops/2024/09/21/Devops-Docker-02/" />
+<link rel="prev" href="http://localhost:4000/devops/2024/09/21/Devops-Docker-01/" />
  
+<link rel="next" href="http://localhost:4000/language/2024/09/21/Java-Adv-01/" />
+
 
 <link
         rel="apple-touch-icon"
@@ -181,11 +183,11 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-language/2024/09/21/Java-Adv-01" class="post" role="article">
+<article id="post-devops/2024/09/21/Devops-Docker-02" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      Java Adv 01 -Thread 1-
+      DockerFile로 Spring Image 만들기
       
     </h1>
 
@@ -201,7 +203,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 
 
 
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
+in <a href="/category/devops/" data-flip="title">Devops</a>
 
       
 
@@ -213,7 +215,7 @@ in <a href="/category/programming-language/" data-flip="title">Programming Langu
 
 
 
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
+on <a href="/tag/devops-docker/" data-flip="title">Docker</a>
 
     </p>
 
@@ -265,90 +267,106 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
     </style>
 
     <!--<br />-->
-    <h2 id="자바의-메모리-구조">자바의 메모리 구조</h2>
+    <h2 id="도커파일-정의">도커파일 정의</h2>
+
+<p>DockerFile</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Use an appropriate base image for Java</span>
+FROM openjdk:17-jdk-slim
+
+<span class="c"># Set the working directory in the container</span>
+WORKDIR /app
+
+<span class="c"># Copy the JAR file from the local machine to the container</span>
+COPY build/libs/APIServer-0.0.1-SNAPSHOT.jar app.jar
+
+<span class="c"># Set environment variables</span>
+ENV <span class="nv">SPRING_DATASOURCE_URL</span><span class="o">=</span>jdbc:mysql://host.docker.internal:3306/user?serverTimezone<span class="o">=</span>Asia/Seoul
+ENV <span class="nv">SPRING_DATASOURCE_USERNAME</span><span class="o">=</span>root
+ENV <span class="nv">SPRING_DATASOURCE_PASSWORD</span><span class="o">=</span> 
+ENV <span class="nv">SPRING_JPA_HIBERNATE_DDL_AUTO</span><span class="o">=</span>create
+ENV <span class="nv">SPRING_DATASOURCE_DRIVER_CLASS_NAME</span><span class="o">=</span>com.mysql.cj.jdbc.Driver
+ENV <span class="nv">SPRING_JPA_PROPERTIES_HIBERNATE_SHOW_SQL</span><span class="o">=</span><span class="nb">true
+</span>ENV <span class="nv">SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL</span><span class="o">=</span><span class="nb">true
+</span>ENV <span class="nv">SPRING_JPA_DATABASE_PLATFORM</span><span class="o">=</span>org.hibernate.dialect.MySQLDialect
+
+<span class="c"># Expose port 8080 to the outside world</span>
+EXPOSE 8080
+
+<span class="c"># Run the JAR file</span>
+ENTRYPOINT <span class="o">[</span><span class="s2">"java"</span>, <span class="s2">"-jar"</span>, <span class="s2">"app.jar"</span><span class="o">]</span>
+</code></pre></div></div>
 
 <ul>
-  <li>메서드 영역 : 메서드 영역은 프로그램을 실행하는데 필요한 공통 데이터들을 관리한다. → 이 영역은 프로그램의 모든 영역에서 굥유한다
-    <ul>
-      <li>클래스 정보 : 클래스의 실행 코드(바이트 코드), 필드, 메서드 생성자 코드든 모든 실행 코드가 존재한다.</li>
-      <li>static 영역 : static 변수들을 보관한다.</li>
-      <li>런타임 상수 : 프로그램을 실행하는데 필요한 공통 리터럴 상수를 보관한다.</li>
-    </ul>
-  </li>
-  <li>스택 영역 : 자바 실행 시, 하나의 실행 스택이 형성된다. 각 스택 프레임은 지역 변수, 중간 연산 결과, 메서드 호출 정보 등을 포함한다.
-    <ul>
-      <li>스택 프레임 : 스택 영역에 쌓이는 네모 박스가 하나의 스택 프레임이다. 메서드를 호출할 때 마다 하나의 스택 프레임이 쌓이고, 메서드가 종료되면 스택 프레임이 제거된다.</li>
-    </ul>
-  </li>
-  <li>힙 영역 : 객체(인스턴스) 와 배열이 생성되는 곳 가비지 컬렉션이 이루어지는 주요 영역이며 더 이상 참조되지 않는 객체는 GC에 의해서 제거된다.</li>
+  <li>도커 컨테이너를 외부로 배포하기 위한 이미지 만들기 수행</li>
+  <li>도커 이미지를 만들기 전에 수행해야 할 것이 있는데</li>
 </ul>
 
-<p>참고 : 스택 영역은 더 정확히는 각 스레드별로 하나의 실행 스택이 생성되고 따라서 스레드 수 만큼 스택이 생성된다. 지금은 스레드를 1개만 사용하므로 스택도 하나이다. 이후 스레드를 추가할 것인데 그러면 스택도 스레드 수 만큼 증가한다.</p>
+<p><img width="533" alt="image" src="https://github.com/user-attachments/assets/729d64d9-0379-48ce-8625-1b730fc7bd10" /></p>
 
-<p>스레드를 만들 때에는 Thread클래스를 상속받는 방법과 Runnable 인터페이스를 구현하는 방법이 있다.</p>
+<h2 id="mysql-server-시작">MYSQL SERVER 시작</h2>
+<p><img width="425" alt="image" src="https://github.com/user-attachments/assets/ed2e6dc9-8ddb-4bec-9af8-b7a87915bce0" /></p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">thread.start</span><span class="o">;</span>
+<ul>
+  <li>그리고 데이터베이스에 의존성을 위해서 서버를 꼭 시작해줘야 한다.</li>
+  <li>안그러면 서버에 대한 의존성에 예외가 발생해서 서버가 정상작동 하지 않는다.</li>
+  <li>그리고 나서 localhost:8079로 접속하면 배포된 컨테이너에 접속할 수 있다.</li>
+</ul>
 
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloThread</span> <span class="kd">extends</span> <span class="nc">Thread</span> <span class="o">{</span>
+<p>docker ps -a</p>
 
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="nc">Thread</span><span class="o">.</span><span class="na">currentThread</span><span class="o">().</span><span class="na">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">"run()"</span> <span class="o">);</span> <span class="c1">//현재 스레드를 출력</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">*[</span><span class="n">main</span><span class="o">][~/</span><span class="nc">Desktop</span><span class="o">/</span><span class="nc">Study</span><span class="o">/</span><span class="nc">APIServer</span><span class="o">]</span><span class="err">$</span> <span class="n">docker</span> <span class="n">ps</span> <span class="o">-</span><span class="n">a</span>
+<span class="no">CONTAINER</span> <span class="no">ID</span>   <span class="no">IMAGE</span>                                 <span class="no">COMMAND</span>                  <span class="no">CREATED</span>              <span class="no">STATUS</span>                          <span class="no">PORTS</span>                                                                                                                                  <span class="no">NAMES</span>
+<span class="mi">69</span><span class="n">e8b11fc3f1</span>   <span class="n">taewoocode</span><span class="o">/</span><span class="nl">apiserver:</span><span class="n">latest</span>           <span class="s">"java -jar app.jar"</span>      <span class="nc">About</span> <span class="n">a</span> <span class="n">minute</span> <span class="n">ago</span>   <span class="nf">Exited</span> <span class="o">(</span><span class="mi">1</span><span class="o">)</span> <span class="nc">About</span> <span class="n">a</span> <span class="n">minute</span> <span class="n">ago</span>                                                                                                                                          <span class="n">thirsty_sammet</span>
+<span class="mi">4</span><span class="n">a9633ffa1a4</span>   <span class="n">gcr</span><span class="o">.</span><span class="na">io</span><span class="o">/</span><span class="n">k8s</span><span class="o">-</span><span class="n">minikube</span><span class="o">/</span><span class="nl">kicbase:</span><span class="n">v0</span><span class="o">.</span><span class="mf">0.42</span>   <span class="s">"/usr/local/bin/entr…"</span>   <span class="mi">22</span> <span class="n">hours</span> <span class="n">ago</span>         <span class="nc">Up</span> <span class="mi">22</span> <span class="n">hours</span>                     <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="o">:</span><span class="mi">50114</span><span class="o">-&gt;</span><span class="mi">22</span><span class="o">/</span><span class="n">tcp</span><span class="o">,</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="o">:</span><span class="mi">50115</span><span class="o">-&gt;</span><span class="mi">2376</span><span class="o">/</span><span class="n">tcp</span><span class="o">,</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="o">:</span><span class="mi">50117</span><span class="o">-&gt;</span><span class="mi">5000</span><span class="o">/</span><span class="n">tcp</span><span class="o">,</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="o">:</span><span class="mi">50118</span><span class="o">-&gt;</span><span class="mi">8443</span><span class="o">/</span><span class="n">tcp</span><span class="o">,</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="o">:</span><span class="mi">50116</span><span class="o">-&gt;</span><span class="mi">32443</span><span class="o">/</span><span class="n">tcp</span>   <span class="n">minikube</span>
 
-    <span class="o">}</span>
-<span class="o">}</span>
+</code></pre></div></div>
 
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloThreadMain</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="nc">Thread</span><span class="o">.</span><span class="na">currentThread</span><span class="o">().</span><span class="na">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">": main() start"</span> <span class="o">);</span>
+<p>docker run -p 8079:8080 taewoocode/apiserver:latest</p>
 
-        <span class="nc">HelloThread</span> <span class="n">helloThread</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HelloThread</span><span class="o">();</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="nc">Thread</span><span class="o">.</span><span class="na">currentThread</span><span class="o">().</span><span class="na">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">"start 호출 전"</span> <span class="o">);</span>
-        <span class="n">helloThread</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="nc">Thread</span><span class="o">.</span><span class="na">currentThread</span><span class="o">().</span><span class="na">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">"start 호출 후"</span> <span class="o">);</span>
-
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="nc">Thread</span><span class="o">.</span><span class="na">currentThread</span><span class="o">().</span><span class="na">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">": main() end"</span> <span class="o">);</span>
-
-    <span class="o">}</span>
-<span class="o">}</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="mi">2024</span><span class="o">-</span><span class="mo">07</span><span class="o">-</span><span class="mi">21</span><span class="nl">T07:</span><span class="mi">50</span><span class="o">:</span><span class="mf">18.383</span><span class="no">Z</span>  <span class="no">INFO</span> <span class="mi">1</span> <span class="o">---</span> <span class="o">[</span><span class="n">nio</span><span class="o">-</span><span class="mi">8080</span><span class="o">-</span><span class="n">exec</span><span class="o">-</span><span class="mi">1</span><span class="o">]</span> <span class="n">o</span><span class="o">.</span><span class="na">a</span><span class="o">.</span><span class="na">c</span><span class="o">.</span><span class="na">c</span><span class="o">.</span><span class="na">C</span><span class="o">.[</span><span class="nc">Tomcat</span><span class="o">].[</span><span class="n">localhost</span><span class="o">].[/]</span>       <span class="o">:</span> <span class="nc">Initializing</span> <span class="nc">Spring</span> <span class="nc">DispatcherServlet</span> <span class="err">'</span><span class="n">dispatcherServlet</span><span class="err">'</span>
+<span class="mi">2024</span><span class="o">-</span><span class="mo">07</span><span class="o">-</span><span class="mi">21</span><span class="nl">T07:</span><span class="mi">50</span><span class="o">:</span><span class="mf">18.384</span><span class="no">Z</span>  <span class="no">INFO</span> <span class="mi">1</span> <span class="o">---</span> <span class="o">[</span><span class="n">nio</span><span class="o">-</span><span class="mi">8080</span><span class="o">-</span><span class="n">exec</span><span class="o">-</span><span class="mi">1</span><span class="o">]</span> <span class="n">o</span><span class="o">.</span><span class="na">s</span><span class="o">.</span><span class="na">web</span><span class="o">.</span><span class="na">servlet</span><span class="o">.</span><span class="na">DispatcherServlet</span>        <span class="o">:</span> <span class="nc">Initializing</span> <span class="nc">Servlet</span> <span class="err">'</span><span class="n">dispatcherServlet</span><span class="err">'</span>
+<span class="mi">2024</span><span class="o">-</span><span class="mo">07</span><span class="o">-</span><span class="mi">21</span><span class="nl">T07:</span><span class="mi">50</span><span class="o">:</span><span class="mf">18.387</span><span class="no">Z</span>  <span class="no">INFO</span> <span class="mi">1</span> <span class="o">---</span> <span class="o">[</span><span class="n">nio</span><span class="o">-</span><span class="mi">8080</span><span class="o">-</span><span class="n">exec</span><span class="o">-</span><span class="mi">1</span><span class="o">]</span> <span class="n">o</span><span class="o">.</span><span class="na">s</span><span class="o">.</span><span class="na">web</span><span class="o">.</span><span class="na">servlet</span><span class="o">.</span><span class="na">DispatcherServlet</span>        <span class="o">:</span> <span class="nc">Completed</span> <span class="n">initialization</span> <span class="n">in</span> <span class="mi">3</span> <span class="n">ms</span>
+<span class="o">^</span><span class="no">C2024</span><span class="o">-</span><span class="mo">07</span><span class="o">-</span><span class="mi">21</span><span class="nl">T07:</span><span class="mi">50</span><span class="o">:</span><span class="mf">48.674</span><span class="no">Z</span>  <span class="no">INFO</span> <span class="mi">1</span> <span class="o">---</span> <span class="o">[</span><span class="n">ionShutdownHook</span><span class="o">]</span> <span class="n">j</span><span class="o">.</span><span class="na">LocalContainerEntityManagerFactoryBean</span> <span class="o">:</span> <span class="nc">Closing</span> <span class="no">JPA</span> <span class="nc">EntityManagerFactory</span> <span class="k">for</span> <span class="n">persistence</span> <span class="n">unit</span> <span class="err">'</span><span class="k">default</span><span class="err">'</span>
+<span class="mi">2024</span><span class="o">-</span><span class="mo">07</span><span class="o">-</span><span class="mi">21</span><span class="nl">T07:</span><span class="mi">50</span><span class="o">:</span><span class="mf">48.724</span><span class="no">Z</span>  <span class="no">INFO</span> <span class="mi">1</span> <span class="o">---</span> <span class="o">[</span><span class="n">ionShutdownHook</span><span class="o">]</span> <span class="n">com</span><span class="o">.</span><span class="na">zaxxer</span><span class="o">.</span><span class="na">hikari</span><span class="o">.</span><span class="na">HikariDataSource</span>       <span class="o">:</span> <span class="nc">HikariPool</span><span class="o">-</span><span class="mi">1</span> <span class="o">-</span> <span class="nc">Shutdown</span> <span class="n">initiated</span><span class="o">...</span>
+<span class="mi">2024</span><span class="o">-</span><span class="mo">07</span><span class="o">-</span><span class="mi">21</span><span class="nl">T07:</span><span class="mi">50</span><span class="o">:</span><span class="mf">48.742</span><span class="no">Z</span>  <span class="no">INFO</span> <span class="mi">1</span> <span class="o">---</span> <span class="o">[</span><span class="n">ionShutdownHook</span><span class="o">]</span> <span class="n">com</span><span class="o">.</span><span class="na">zaxxer</span><span class="o">.</span><span class="na">hikari</span><span class="o">.</span><span class="na">HikariDataSource</span>       <span class="o">:</span> <span class="nc">HikariPool</span><span class="o">-</span><span class="mi">1</span> <span class="o">-</span> <span class="nc">Shutdown</span> <span class="n">completed</span><span class="o">.</span>
 
 </code></pre></div></div>
 
 <ul>
-  <li>start() 메서드는 스레드가 실행하는 아주 특별한 메서드이다.
-    <ul>
-      <li>start를 호출하면 HelloThread 스레드가 run() 메서드를 실행한다.</li>
-    </ul>
-  </li>
-  <li>run 메서드가 아니라 반드시 start method를 실행해야 한다. 그래야 별도의 스레드에서 run코드가 실행이 된다.</li>
+  <li>컨테이너로 배포 성공</li>
 </ul>
 
-<h2 id="스레드-생성-전">스레드 생성 전</h2>
+<h3 id="도커허브에-올리기">도커허브에 올리기</h3>
 
-<p>main() 메서드는 main()이라는 이름의 스레드가 실행하는 것을 확인할 수 있다.</p>
+<p>도커허브에 올릴 이미지 만들기</p>
 
-<p>프로세스가 작동하려면 스레드가 최소한 하나는 있어야 한다. 그래야 코드를 실행할 수 있다. 자바는 실행 시점에 main()이라는 이름의 스레드를 만들고 프로그램의 시작점인 main() 메서드를 실행한다.</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">docker</span> <span class="n">build</span> <span class="o">-</span><span class="n">t</span> <span class="n">taewoocode</span><span class="o">/</span><span class="nl">apiserver:</span><span class="mf">1.0</span> <span class="o">.</span>
+</code></pre></div></div>
 
-<h2 id="스레드-생성-후">스레드 생성 후</h2>
+<p>도커허브에 올릴 이미지 버전 태그하기</p>
 
-<p>helloThread 객체를 생성한 후 start()메서드를 호출하면 자바는 스레드를 위한 별도의 스택 공간을 할당한다.</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">docker</span> <span class="n">tag</span> <span class="n">taewoocode</span><span class="o">/</span><span class="nl">apiserver:</span><span class="n">latest</span> <span class="n">taewoocode</span><span class="o">/</span><span class="nl">apiserver:</span><span class="mf">1.0</span>
 
-<p>스레드 객체를 생성한 후 반드시 start()를 해줘야 스택 공간을 할당 받고 스레드가 동작한다.</p>
+</code></pre></div></div>
 
-<p>스레드에 이름을 부여하지 않는다면 Thread-0, Thread-1과 같은 임시의 이름을 부여받는다.</p>
+<h2 id="생성된-이미지-도커허브에-푸시하기">생성된 이미지 도커허브에 푸시하기</h2>
 
-<h2 id="스레드-간-실행-순서는-보장하지-않는다"><strong>스레드 간 실행 순서는 보장하지 않는다.</strong></h2>
-<p><img width="618" alt="image" src="https://github.com/user-attachments/assets/b57fdfc5-a771-4e28-93b0-9ff9cce7ee19" /></p>
+<p><img width="686" alt="image" src="https://github.com/user-attachments/assets/5467eedd-0258-4379-aa0b-43913315f1e6" /></p>
 
-<p>호출 전하고 호출 후가 바로 나온 이유는 새로운 스레드에게 일을 지시만 한 다음에 코드를 빠져 나오기 때문이다.
-스레드는 동시에 실행이 되기 때문에 스레드 간에 실행 순서는 얼마든지 달라질 수 있다. 따라서 스레드 간의 실행 순서는 얼마든지 달라질 수 있다.
-CPU 코어가 2개여서 물리적으로 정말 동시에 실행이 될수도 있고, 하나의 CPU에 시간을 나누어 실행될 수도 있다.
-그리고 한 스레드가 얼마나 오랜기간 실행되는지도 보장하지 않는다. 한 스레드가 먼저 다 수행한 다음에 다른 스레드가 수행될 수도 있고, 둘이 완전히 번갈아 가면서 수행되는 경우도 있다.
-스레드는 순서와 실행 기간을 모두 보장하지 않는다. 이것이 바로 멀티스레드이다.</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">docker</span> <span class="n">push</span> <span class="n">taewoocode</span><span class="o">/</span><span class="nl">apiserver:</span><span class="mf">1.0</span>
+
+</code></pre></div></div>
+
+<p><img width="705" alt="image" src="https://github.com/user-attachments/assets/f8514e62-9549-40a2-9f02-90e667a79c81" /></p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nl">https:</span><span class="c1">//hub.docker.com/repository/docker/taewoocode/apiserver/general</span>
+</code></pre></div></div>
 
 <h2 id="reference">Reference</h2>
 
-<p>인프런 김영한님의 자바강좌 + 나의 뇌</p>
+<p><a href="https://velog.io/@18k7102dy/Docker-Spring-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EB%A5%BC-Docker%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%B4%EC%84%9C-%EB%B0%B0%ED%8F%AC%ED%95%B4%EB%B4%85%EC%8B%9C%EB%8B%A4">https://velog.io/@18k7102dy/Docker-Spring-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EB%A5%BC-Docker%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%B4%EC%84%9C-%EB%B0%B0%ED%8F%AC%ED%95%B4%EB%B4%85%EC%8B%9C%EB%8B%A4</a></p>
+
 
     <br />
     <br />
@@ -362,12 +380,12 @@ CPU 코어가 2개여서 물리적으로 정말 동시에 실행이 될수도 �
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=Java Adv 01 -Thread 1-&amp;url=http://localhost:4000/language/2024/09/21/Java-Adv-01/"
+    <a href="http://twitter.com/share?text=DockerFile로 Spring Image 만들기&amp;url=http://localhost:4000/devops/2024/09/21/Devops-Docker-02/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/09/21/Java-Adv-01/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/devops/2024/09/21/Devops-Docker-02/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -397,11 +415,11 @@ CPU 코어가 2개여서 물리적으로 정말 동시에 실행이 될수도 �
 
 
 <li class="h4">
-  <a href="/language/2024/09/18/Java-Mid-18/" data-flip="title">
-    <span>Java Mid 18 -전략패턴과 다양한 의존관계-</span>
+  <a href="/devops/2024/09/21/Devops-Docker-01/" data-flip="title">
+    <span>Docker swarm을 이용한 사이드 프로젝트</span>
   </a>
-  <small><time datetime="2024-09-18T00:00:00+09:00">
-    18 Sep 2024
+  <small><time datetime="2024-09-21T00:00:00+09:00">
+    21 Sep 2024
   </time></small>
 </li>
 
@@ -413,27 +431,11 @@ CPU 코어가 2개여서 물리적으로 정말 동시에 실행이 될수도 �
 
 
 <li class="h4">
-  <a href="/language/2024/09/18/Java-Mid-17/" data-flip="title">
-    <span>Java Mid 17 -Collection List 추상화하기-</span>
+  <a href="/devops/2024/09/17/Infra-01/" data-flip="title">
+    <span>꼭 CPU를 지표로 스케일링해야 할까?</span>
   </a>
-  <small><time datetime="2024-09-18T00:00:00+09:00">
-    18 Sep 2024
-  </time></small>
-</li>
-
-        
-      
-        
-        
-          
-
-
-<li class="h4">
-  <a href="/language/2024/09/18/Java-Mid-16/" data-flip="title">
-    <span>Java Mid 16 -Collection LinkedList 구현하기-</span>
-  </a>
-  <small><time datetime="2024-09-18T00:00:00+09:00">
-    18 Sep 2024
+  <small><time datetime="2024-09-17T00:00:00+09:00">
+    17 Sep 2024
   </time></small>
 </li>
 
