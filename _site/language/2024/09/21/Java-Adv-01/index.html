@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Java Mid 10 -Exception 1-" />
+<meta property="og:title" content="Java Adv 01 -Thread 1-" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,17 +52,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Java Mid 10 -Exception 1- &middot; 일벌리는 개발자</title>
+<title>Java Adv 01 -Thread 1- &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="예외 처리가 필요한 이유
+        content="자바의 메모리 구조
 
 "
 />
 <meta
         property="og:description"
-        content="예외 처리가 필요한 이유
+        content="자바의 메모리 구조
 
 "
 />
@@ -72,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/language/2024/09/18/Java-Mid-10/" />
-<meta property="og:url" content="http://localhost:4000/language/2024/09/18/Java-Mid-10/" />
+<link rel="canonical" href="http://localhost:4000/language/2024/09/21/Java-Adv-01/" />
+<meta property="og:url" content="http://localhost:4000/language/2024/09/21/Java-Adv-01/" />
 
 <link
         rel="alternate"
@@ -83,10 +83,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/language/2024/09/18/Java-Mid-09/" />
+<link rel="prev" href="http://localhost:4000/framework/2024/09/18/Spring-03/" />
  
-<link rel="next" href="http://localhost:4000/language/2024/09/18/Java-Mid-11/" />
-
 
 <link
         rel="apple-touch-icon"
@@ -183,16 +181,16 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-language/2024/09/18/Java-Mid-10" class="post" role="article">
+<article id="post-language/2024/09/21/Java-Adv-01" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      Java Mid 10 -Exception 1-
+      Java Adv 01 -Thread 1-
       
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
+      <time datetime="2024-09-21T00:00:00+09:00">21 Sep 2024</time>
       
 
 
@@ -267,133 +265,90 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
     </style>
 
     <!--<br />-->
-    <h2 id="예외-처리가-필요한-이유">예외 처리가 필요한 이유</h2>
+    <h2 id="자바의-메모리-구조">자바의 메모리 구조</h2>
 
-<p>프로그램 실행 중에 발생할 수 있는 예상치 못한 상황, 즉 예외(Exception)을 처리하기 위해서 나온 메커니즘이 예외처리이다. 프로그램의 안정성과 신뢰성을 높이는 아주 중요한 역할을 한다.</p>
-
-<h3 id="자바-예외-키워드">자바 예외 키워드</h3>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">try</span><span class="o">,</span> <span class="k">catch</span><span class="o">,</span> <span class="k">finally</span><span class="o">,</span> <span class="k">throw</span><span class="o">,</span> <span class="kd">throws</span>
-</code></pre></div></div>
-<p><img width="702" alt="image" src="https://github.com/user-attachments/assets/d86c5a4a-2159-4521-9680-6601c02f1d8b" /></p>
 <ul>
-  <li>Object: 자바에서 기본형을 제외한 모든 것은 객체이다. 예외도 객체
+  <li>메서드 영역 : 메서드 영역은 프로그램을 실행하는데 필요한 공통 데이터들을 관리한다. → 이 영역은 프로그램의 모든 영역에서 굥유한다
     <ul>
-      <li>모든 객체의 어머니 아버지는 Object이므로 예외도 Objcet가 최상위 부모이다.</li>
+      <li>클래스 정보 : 클래스의 실행 코드(바이트 코드), 필드, 메서드 생성자 코드든 모든 실행 코드가 존재한다.</li>
+      <li>static 영역 : static 변수들을 보관한다.</li>
+      <li>런타임 상수 : 프로그램을 실행하는데 필요한 공통 리터럴 상수를 보관한다.</li>
     </ul>
   </li>
-  <li>Thorable: 최상위 예외이다. 하위에 Excepiton과 Error가 존재한다.</li>
-  <li>Error: 메모리 부족 및 심각한 시스템 오류와 같이 애플리케이션이 복구가 불가능한 시스템이다. 이 예외는 잡기가 힘들다.</li>
-  <li>Exception: 체크 예외: 컴파일러가 체크하는 체크예외이다.</li>
-  <li>RuntimeException: 언체크 예외, 런타임 예외, 컴파일러가 체크하지 않는 예외이다.
+  <li>스택 영역 : 자바 실행 시, 하나의 실행 스택이 형성된다. 각 스택 프레임은 지역 변수, 중간 연산 결과, 메서드 호출 정보 등을 포함한다.
     <ul>
-      <li>RuntimeException` 과 그 자식 예외는 모두 언체크 예외이다.</li>
+      <li>스택 프레임 : 스택 영역에 쌓이는 네모 박스가 하나의 스택 프레임이다. 메서드를 호출할 때 마다 하나의 스택 프레임이 쌓이고, 메서드가 종료되면 스택 프레임이 제거된다.</li>
     </ul>
   </li>
+  <li>힙 영역 : 객체(인스턴스) 와 배열이 생성되는 곳 가비지 컬렉션이 이루어지는 주요 영역이며 더 이상 참조되지 않는 객체는 GC에 의해서 제거된다.</li>
 </ul>
 
-<h2 id="체크-예외-vs-언체크-예외런타임-예외">체크 예외 vs 언체크 예외(런타임 예외)</h2>
+<p>참고 : 스택 영역은 더 정확히는 각 스레드별로 하나의 실행 스택이 생성되고 따라서 스레드 수 만큼 스택이 생성된다. 지금은 스레드를 1개만 사용하므로 스택도 하나이다. 이후 스레드를 추가할 것인데 그러면 스택도 스레드 수 만큼 증가한다.</p>
 
-<p>체크 예외는 발생한 예외를 개발자가 명시적으로 처리해야 한다. 그렇지 않으면 컴파일 오류가 발생한다. 언체크 예외는 개발자가 발생한 예외를 명시적으로 처리하지 않아도 된다.</p>
+<p>스레드를 만들 때에는 Thread클래스를 상속받는 방법과 Runnable 인터페이스를 구현하는 방법이 있다.</p>
 
-<h3 id="체크-예외-checked-exception">체크 예외 (Checked Exception)</h3>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">thread.start</span><span class="o">;</span>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.io.*</span><span class="o">;</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloThread</span> <span class="kd">extends</span> <span class="nc">Thread</span> <span class="o">{</span>
 
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CheckedExceptionExample</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">try</span> <span class="o">{</span>
-            <span class="c1">// 체크 예외: FileNotFoundException</span>
-            <span class="nc">FileReader</span> <span class="n">file</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">FileReader</span><span class="o">(</span><span class="s">"nonexistentfile.txt"</span><span class="o">);</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">FileNotFoundException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"파일을 찾을 수 없습니다: "</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
-        <span class="o">}</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="nc">Thread</span><span class="o">.</span><span class="na">currentThread</span><span class="o">().</span><span class="na">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">"run()"</span> <span class="o">);</span> <span class="c1">//현재 스레드를 출력</span>
+
     <span class="o">}</span>
 <span class="o">}</span>
 
-</code></pre></div></div>
-
-<h3 id="언체크-예외-unchecked-exception">언체크 예외 (Unchecked Exception)</h3>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">UncheckedExceptionExample</span> <span class="o">{</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloThreadMain</span> <span class="o">{</span>
     <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="c1">// 언체크 예외: ArithmeticException</span>
-        <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">/</span> <span class="mi">0</span><span class="o">;</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"결과: "</span> <span class="o">+</span> <span class="n">result</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="nc">Thread</span><span class="o">.</span><span class="na">currentThread</span><span class="o">().</span><span class="na">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">": main() start"</span> <span class="o">);</span>
 
-</code></pre></div></div>
+        <span class="nc">HelloThread</span> <span class="n">helloThread</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HelloThread</span><span class="o">();</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="nc">Thread</span><span class="o">.</span><span class="na">currentThread</span><span class="o">().</span><span class="na">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">"start 호출 전"</span> <span class="o">);</span>
+        <span class="n">helloThread</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="nc">Thread</span><span class="o">.</span><span class="na">currentThread</span><span class="o">().</span><span class="na">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">"start 호출 후"</span> <span class="o">);</span>
 
-<ul>
-  <li><strong>체크 예외</strong>는 <code class="language-plaintext highlighter-rouge">FileNotFoundException</code>처럼 반드시 <code class="language-plaintext highlighter-rouge">try-catch</code>로 처리하거나 메서드 선언부에 <code class="language-plaintext highlighter-rouge">throws</code>로 명시해야 컴파일 오류가 발생하지 않는다.</li>
-  <li><strong>언체크 예외</strong>는 <code class="language-plaintext highlighter-rouge">ArithmeticException</code>처럼 처리하지 않아도 컴파일이 가능하지만, 실행 시 예외가 발생한다.</li>
-</ul>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="nc">Thread</span><span class="o">.</span><span class="na">currentThread</span><span class="o">().</span><span class="na">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">": main() end"</span> <span class="o">);</span>
 
-<h2 id="예외-기본-규칙">예외 기본 규칙</h2>
-
-<p>예외는 폭탄 돌리기랑 비슷하다. 잡아서 처리하거나 처리하지 못한다면 밖으로 던져야 한다. (여기서의 밖은 호출한 곳을 말한다.)</p>
-
-<p>예외를 잡으면 지정된 예외뿐만이 아닌 그 예외의 모든 자식들이 가진 예외도 잡을 수 있다. 예를 들어서 Exception을 catch로 잡으면 그 하위 예외들도 모두 잡을 수 있다. 또는 thorws로 던진다면 그 하위 예외들 또한 모두 잡을 수 있다.</p>
-
-<h2 id="thorw와-thorws의-차이까다로웠음">thorw와 thorws의 차이(까다로웠음)</h2>
-
-<h3 id="thorw">thorw</h3>
-
-<ul>
-  <li>프로그래머가 의도적으로 예외를 던질 때 사용</li>
-</ul>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ThrowExample</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="c1">// 직접 예외를 발생시킴</span>
-        <span class="k">throw</span> <span class="k">new</span> <span class="nf">NullPointerException</span><span class="o">(</span><span class="s">"예외가 발생했습니다!"</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<h3 id="thorws">thorws</h3>
-
-<ul>
-  <li>메서드가 체크 예외를 발생시킬 수 있음을 선언할 때 사용한다(예외 가능성이 있음).</li>
-</ul>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="kn">import</span> <span class="nn">java.io.*</span><span class="o">;</span>
-
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ThrowsExample</span> <span class="o">{</span>
-    <span class="c1">// 메서드가 FileNotFoundException을 던질 수 있음을 선언</span>
-    <span class="c1">// 예외가 발생할 수 있는 가능성을 적어둠</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">readFile</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">FileNotFoundException</span> <span class="o">{</span>
-        <span class="nc">FileReader</span> <span class="n">file</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">FileReader</span><span class="o">(</span><span class="s">"nonexistentfile.txt"</span><span class="o">);</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">try</span> <span class="o">{</span>
-            <span class="n">readFile</span><span class="o">();</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">FileNotFoundException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"파일을 찾을 수 없습니다: "</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
-        <span class="o">}</span>
     <span class="o">}</span>
 <span class="o">}</span>
 
 </code></pre></div></div>
 
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">throw</code>는 <strong>직접 예외를 발생</strong>시키는 데 사용된다.</li>
-  <li><code class="language-plaintext highlighter-rouge">throws</code>는 <strong>메서드에서 예외가 발생할 수 있음을 선언</strong>하는 데 사용된다.</li>
+  <li>start() 메서드는 스레드가 실행하는 아주 특별한 메서드이다.
+    <ul>
+      <li>start를 호출하면 HelloThread 스레드가 run() 메서드를 실행한다.</li>
+    </ul>
+  </li>
+  <li>run 메서드가 아니라 반드시 start method를 실행해야 한다. 그래야 별도의 스레드에서 run코드가 실행이 된다.</li>
 </ul>
 
-<h3 id="쉽게-설명하자면">쉽게 설명하자면</h3>
+<h2 id="스레드-생성-전">스레드 생성 전</h2>
 
-<ul>
-  <li><em><code class="language-plaintext highlighter-rouge">throw</code></em>는 <strong>예외를 던지는</strong> 동작 자체를 의미해. 즉, 코드에서 “이 예외를 발생시켜라”라고 명령하는 것</li>
-  <li><em><code class="language-plaintext highlighter-rouge">throws</code></em>는 <strong>이 메서드에서 이런 예외가 발생할 수 있다</strong>고 미리 <strong>알려준다.</strong> 예외를 던질 수도 있으니까 호출한 쪽에서 준비하라는 뜻이다.</li>
-</ul>
+<p>main() 메서드는 main()이라는 이름의 스레드가 실행하는 것을 확인할 수 있다.</p>
 
-<h2 id="referrence">Referrence</h2>
+<p>프로세스가 작동하려면 스레드가 최소한 하나는 있어야 한다. 그래야 코드를 실행할 수 있다. 자바는 실행 시점에 main()이라는 이름의 스레드를 만들고 프로그램의 시작점인 main() 메서드를 실행한다.</p>
 
-<p>인프런 김영한님의 자바 강의 + 나의 눈과 나의 뇌</p>
+<h2 id="스레드-생성-후">스레드 생성 후</h2>
+
+<p>helloThread 객체를 생성한 후 start()메서드를 호출하면 자바는 스레드를 위한 별도의 스택 공간을 할당한다.</p>
+
+<p>스레드 객체를 생성한 후 반드시 start()를 해줘야 스택 공간을 할당 받고 스레드가 동작한다.</p>
+
+<p>스레드에 이름을 부여하지 않는다면 Thread-0, Thread-1과 같은 임시의 이름을 부여받는다.</p>
+
+<h2 id="스레드-간-실행-순서는-보장하지-않는다"><strong>스레드 간 실행 순서는 보장하지 않는다.</strong></h2>
+<p><img width="618" alt="image" src="https://github.com/user-attachments/assets/b57fdfc5-a771-4e28-93b0-9ff9cce7ee19" /></p>
+
+<p>호출 전하고 호출 후가 바로 나온 이유는 새로운 스레드에게 일을 지시만 한 다음에 코드를 빠져 나오기 때문이다.
+스레드는 동시에 실행이 되기 때문에 스레드 간에 실행 순서는 얼마든지 달라질 수 있다. 따라서 스레드 간의 실행 순서는 얼마든지 달라질 수 있다.
+CPU 코어가 2개여서 물리적으로 정말 동시에 실행이 될수도 있고, 하나의 CPU에 시간을 나누어 실행될 수도 있다.
+그리고 한 스레드가 얼마나 오랜기간 실행되는지도 보장하지 않는다. 한 스레드가 먼저 다 수행한 다음에 다른 스레드가 수행될 수도 있고, 둘이 완전히 번갈아 가면서 수행되는 경우도 있다.
+스레드는 순서와 실행 기간을 모두 보장하지 않는다. 이것이 바로 멀티스레드이다.</p>
+
+<h2 id="reference">Reference</h2>
+
+<p>인프런 김영한님의 자바강좌 + 나의 뇌</p>
 
     <br />
     <br />
@@ -407,12 +362,12 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=Java Mid 10 -Exception 1-&amp;url=http://localhost:4000/language/2024/09/18/Java-Mid-10/"
+    <a href="http://twitter.com/share?text=Java Adv 01 -Thread 1-&amp;url=http://localhost:4000/language/2024/09/21/Java-Adv-01/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/09/18/Java-Mid-10/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/09/21/Java-Adv-01/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -434,21 +389,8 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
       
       
         
-        
           
-
-
-<li class="h4">
-  <a href="/language/2024/09/21/Java-Adv-01/" data-flip="title">
-    <span>Java Adv 01 -Thread 1-</span>
-  </a>
-  <small><time datetime="2024-09-21T00:00:00+09:00">
-    21 Sep 2024
-  </time></small>
-</li>
-
-        
-      
+          
         
         
           
@@ -482,6 +424,19 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
         
       
         
+        
+          
+
+
+<li class="h4">
+  <a href="/language/2024/09/18/Java-Mid-16/" data-flip="title">
+    <span>Java Mid 16 -Collection LinkedList 구현하기-</span>
+  </a>
+  <small><time datetime="2024-09-18T00:00:00+09:00">
+    18 Sep 2024
+  </time></small>
+</li>
+
         
       
     
