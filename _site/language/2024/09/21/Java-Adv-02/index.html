@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Java Mid 03 -Immutable Object-" />
+<meta property="og:title" content="Java Adv 01 -Thread 2g-" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,17 +52,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Java Mid 03 -Immutable Object- &middot; 일벌리는 개발자</title>
+<title>Java Adv 01 -Thread 2g- &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="불변 객체 (Immutable Object) - 도입
+        content="스레드 기본정보
 
 "
 />
 <meta
         property="og:description"
-        content="불변 객체 (Immutable Object) - 도입
+        content="스레드 기본정보
 
 "
 />
@@ -72,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/language/2024/09/18/Java-Mid-03/" />
-<meta property="og:url" content="http://localhost:4000/language/2024/09/18/Java-Mid-03/" />
+<link rel="canonical" href="http://localhost:4000/language/2024/09/21/Java-Adv-02/" />
+<meta property="og:url" content="http://localhost:4000/language/2024/09/21/Java-Adv-02/" />
 
 <link
         rel="alternate"
@@ -83,10 +83,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/language/2024/09/18/Java-Mid-02/" />
+<link rel="prev" href="http://localhost:4000/language/2024/09/21/Java-Adv-01/" />
  
-<link rel="next" href="http://localhost:4000/language/2024/09/18/Java-Mid-04/" />
-
 
 <link
         rel="apple-touch-icon"
@@ -183,16 +181,16 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-language/2024/09/18/Java-Mid-03" class="post" role="article">
+<article id="post-language/2024/09/21/Java-Adv-02" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      Java Mid 03 -Immutable Object-
+      Java Adv 01 -Thread 2g-
       
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
+      <time datetime="2024-09-21T00:00:00+09:00">21 Sep 2024</time>
       
 
 
@@ -267,126 +265,138 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
     </style>
 
     <!--<br />-->
-    <h3 id="불변-객체-immutable-object---도입">불변 객체 (Immutable Object) - 도입</h3>
+    <h2 id="스레드-기본정보">스레드 기본정보</h2>
 
-<ul>
-  <li>앞에서 논의한 문제는 공유된 객체의 값이 변경됨으로 인해 발생했다.</li>
-  <li>자바에서 참조형 변수는 하나의 객체를 공유할 수 있지만, 이 자체는 문제가 아니다. <strong>문제의 직접적인 원인은 공유된 객체의 값이 변경되었기 때문이다.</strong></li>
-</ul>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">thread.control</span><span class="o">;</span>
 
-<h3 id="문제-상황-예시">문제 상황 예시</h3>
+<span class="kn">import</span> <span class="nn">static</span> <span class="n">util</span><span class="o">.</span><span class="na">MyLogger</span><span class="o">.</span><span class="na">log</span><span class="o">;</span>
 
-<ul>
-  <li>초기에는 <code class="language-plaintext highlighter-rouge">a</code>와 <code class="language-plaintext highlighter-rouge">b</code>가 같은 <code class="language-plaintext highlighter-rouge">"서울"</code> 주소를 사용해야 한다. 이후 <code class="language-plaintext highlighter-rouge">b</code>의 주소를 <code class="language-plaintext highlighter-rouge">"부산"</code>으로 변경해야 한다.</li>
-</ul>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ThreadInfoMain</span> <span class="o">{</span>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">java코드</span> <span class="n">복사</span>
-<span class="nc">Address</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Address</span><span class="o">(</span><span class="s">"서울"</span><span class="o">);</span>
-<span class="nc">Address</span> <span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="o">;</span>
-
-</code></pre></div></div>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">b = a</code>처럼 동일한 <code class="language-plaintext highlighter-rouge">"서울"</code> 주소 인스턴스를 <code class="language-plaintext highlighter-rouge">a</code>와 <code class="language-plaintext highlighter-rouge">b</code>가 함께 사용하는 것이 메모리와 성능 면에서 더 효율적이다.</li>
-  <li>인스턴스를 하나만 생성하므로 메모리가 절약되고 생성 시간이 줄어들어 성능이 향상된다.</li>
-</ul>
-
-<p>이처럼 <code class="language-plaintext highlighter-rouge">Address b = a</code>와 같이 공유 참조를 사용하는 것이 오히려 더 효율적입니다. <strong>진짜 문제는 이후에 <code class="language-plaintext highlighter-rouge">b</code>가 공유 참조하는 인스턴스의 값을 변경하기 때문에 발생한다.</strong></p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">b</span><span class="o">.</span><span class="na">setValue</span><span class="o">(</span><span class="s">"부산"</span><span class="o">);</span> <span class="c1">// b의 값을 부산으로 변경</span>
-<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"a = "</span> <span class="o">+</span> <span class="n">a</span><span class="o">);</span> <span class="c1">// 사이드 이펙트 발생</span>
-<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"b = "</span> <span class="o">+</span> <span class="n">b</span><span class="o">);</span>
-
-</code></pre></div></div>
-
-<h3 id="불변-객체의-이점">불변 객체의 이점</h3>
-
-<p>불변 객체는 생성된 후 내부 상태가 변하지 않는 객체를 말한다.</p>
-
-<ul>
-  <li><strong>안전한 공유</strong>: 불변 객체는 여러 쓰레드에서 안전하게 공유될 수 있다.</li>
-  <li>내부 상태가 변경되지 않기 때문에 동기화가 필요 없다.</li>
-  <li><strong>사이드 이펙트 방지</strong>: 불변 객체는 내부 상태가 변경되지 않기 때문에 예상치 못한 변경으로 인한 사이드 이펙트를 방지할 수 있다.</li>
-</ul>
-
-<h3 id="불변-객체의-구현">불변 객체의 구현</h3>
-
-<p><code class="language-plaintext highlighter-rouge">Address</code> 클래스를 불변 객체로 만들기</p>
-
-<ul>
-  <li>모든 필드를 <code class="language-plaintext highlighter-rouge">final</code>로 선언한다.</li>
-  <li>필드는 생성자를 통해 초기화한다.</li>
-  <li>값을 변경할 수 있는 메서드를 제거한다. setValue() 같은</li>
-</ul>
-
-<p>예시코드</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">java코드</span> <span class="n">복사</span>
-<span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">Address</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">String</span> <span class="n">value</span><span class="o">;</span>
-
-    <span class="kd">public</span> <span class="nf">Address</span><span class="o">(</span><span class="nc">String</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getValue</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">value</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">//mainThread</span>
+        <span class="nc">Thread</span> <span class="n">mainThread</span> <span class="o">=</span> <span class="nc">Thread</span><span class="o">.</span><span class="na">currentThread</span><span class="o">();</span>
+        <span class="n">log</span><span class="o">(</span> <span class="s">"mainThread() = "</span> <span class="o">+</span> <span class="n">mainThread</span> <span class="o">);</span>
+        <span class="n">log</span><span class="o">(</span> <span class="s">"mainThread.thread() = "</span> <span class="o">+</span> <span class="n">mainThread</span><span class="o">.</span><span class="na">threadId</span><span class="o">()</span> <span class="o">);</span>
+        <span class="n">log</span><span class="o">(</span> <span class="s">"mainThread.getName() = "</span> <span class="o">+</span> <span class="n">mainThread</span><span class="o">.</span><span class="na">getName</span><span class="o">()</span> <span class="o">);</span>
+        <span class="n">log</span><span class="o">(</span> <span class="s">"mainThread.getPriority() = "</span> <span class="o">+</span> <span class="n">mainThread</span><span class="o">.</span><span class="na">getPriority</span><span class="o">()</span> <span class="o">);</span>
+        <span class="n">log</span><span class="o">(</span> <span class="s">"mainThread.getThreadGroup() = "</span> <span class="o">+</span> <span class="n">mainThread</span><span class="o">.</span><span class="na">getThreadGroup</span><span class="o">()</span> <span class="o">);</span>
+        <span class="n">log</span><span class="o">(</span> <span class="s">"mainThread.getState() = "</span> <span class="o">+</span> <span class="n">mainThread</span><span class="o">.</span><span class="na">getState</span><span class="o">()</span> <span class="o">);</span>
+        
+        <span class="nc">Thread</span> <span class="n">myThread</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">(</span> <span class="k">new</span> <span class="nc">HelloRunnable</span><span class="o">()</span> <span class="o">);</span>
+        <span class="n">log</span><span class="o">(</span> <span class="s">"myThread() = "</span> <span class="o">+</span> <span class="n">myThread</span> <span class="o">);</span>
+        <span class="n">log</span><span class="o">(</span> <span class="s">"myThread.thread() = "</span> <span class="o">+</span> <span class="n">myThread</span><span class="o">.</span><span class="na">threadId</span><span class="o">()</span> <span class="o">);</span>
+        <span class="n">log</span><span class="o">(</span> <span class="s">"myThread.getName() = "</span> <span class="o">+</span> <span class="n">myThread</span><span class="o">.</span><span class="na">getName</span><span class="o">()</span> <span class="o">);</span>
+        <span class="n">log</span><span class="o">(</span> <span class="s">"myThread.getPriority() = "</span> <span class="o">+</span> <span class="n">myThread</span><span class="o">.</span><span class="na">getPriority</span><span class="o">()</span> <span class="o">);</span> <span class="c1">//기본값이 5</span>
+        <span class="n">log</span><span class="o">(</span> <span class="s">"myThread.getThreadGroup() = "</span> <span class="o">+</span> <span class="n">myThread</span><span class="o">.</span><span class="na">getThreadGroup</span><span class="o">()</span> <span class="o">);</span>
+        <span class="n">log</span><span class="o">(</span> <span class="s">"myThread.getState() = "</span> <span class="o">+</span> <span class="n">myThread</span><span class="o">.</span><span class="na">getState</span><span class="o">()</span> <span class="o">);</span> <span class="c1">//NEW</span>
+		
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre></div></div>
-
-<ul>
-  <li>이제 <code class="language-plaintext highlighter-rouge">Address</code> 객체는 불변이므로, 내부 상태가 변경되지 않는다. 따라서 <code class="language-plaintext highlighter-rouge">a</code>와 <code class="language-plaintext highlighter-rouge">b</code>가 같은 인스턴스를 공유하더라도 안전하게 사용할 수 있다.</li>
-</ul>
-
-<p>예시코드</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="nc">Address</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Address</span><span class="o">(</span><span class="s">"서울"</span><span class="o">);</span>
-<span class="nc">Address</span> <span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="o">;</span>
-
-<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"a = "</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="na">getValue</span><span class="o">());</span> <span class="c1">// 출력: 서울</span>
-<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"b = "</span> <span class="o">+</span> <span class="n">b</span><span class="o">.</span><span class="na">getValue</span><span class="o">());</span> <span class="c1">// 출력: 서울</span>
-
-<span class="c1">// 새로운 객체를 생성하여 변경된 값을 반영</span>
-<span class="n">b</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Address</span><span class="o">(</span><span class="s">"부산"</span><span class="o">);</span>
-
-<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"a = "</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="na">getValue</span><span class="o">());</span> <span class="c1">// 출력: 서울</span>
-<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"b = "</span> <span class="o">+</span> <span class="n">b</span><span class="o">.</span><span class="na">getValue</span><span class="o">());</span> <span class="c1">// 출력: 부산</span>
 
 </code></pre></div></div>
 
-<ul>
-  <li>이제 <code class="language-plaintext highlighter-rouge">b</code>를 <code class="language-plaintext highlighter-rouge">"부산"</code>으로 변경할 때 새로운 <code class="language-plaintext highlighter-rouge">Address</code> 객체를 생성하므로, 기존 <code class="language-plaintext highlighter-rouge">a</code>와 공유된 인스턴스는 변경되지 않는다. 따라서 사이드 이펙트가 발생하지 않는다.</li>
-</ul>
+<p><img width="653" alt="image" src="https://github.com/user-attachments/assets/d8b4693f-1b4f-4945-aeaf-81665977d2ce" /></p>
 
-<h2 id="그래도-불변객체에서-값을-변경해야-한다면">그래도 불변객체에서 값을 변경해야 한다면?</h2>
+<h3 id="스레드-생성">스레드 생성</h3>
 
-<ul>
-  <li>값을 변경해야 하는 메서드를 구현해야 한다고 하면 이미 불변객체라는 개념에서 벗어난다.</li>
-  <li>그래도 변경해야 한다면 ?</li>
-</ul>
+<p>스레드를 생성할 때는 실행할 Runnable 인터페이스의 구현체와, 스레드의 이름을 전달할 수 있다.</p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ImmutableObj</span> <span class="o">{</span>
-
-     <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">value</span><span class="o">;</span>
-     
-     <span class="kd">public</span> <span class="nf">ImmutableObj</span><span class="o">(</span><span class="kt">int</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
-         <span class="k">this</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
-         
-<span class="o">}</span>    <span class="c1">//값은 변경하되 새로운 인스턴스(객체)를 반환한다.</span>
-     <span class="c1">//변경된 데이터는 새로운 객체에 담아서 반환.</span>
-     <span class="kd">public</span> <span class="nc">ImmutableObj</span> <span class="nf">add</span><span class="o">(</span><span class="kt">int</span> <span class="n">addValue</span><span class="o">)</span> <span class="o">{</span>
-         <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="n">value</span> <span class="o">+</span> <span class="n">addValue</span><span class="o">;</span>
-         <span class="k">return</span> <span class="k">new</span> <span class="nf">ImmutableObj</span><span class="o">(</span><span class="n">result</span><span class="o">);</span>
-<span class="o">}</span>
-
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Thread</span> <span class="n">myThread</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">(</span><span class="k">new</span> <span class="nc">HelloRunnable</span><span class="o">(),</span> <span class="s">"myThread"</span><span class="o">);</span>
 </code></pre></div></div>
-<p>새로운 인스턴스에 값을 담으면 된다.</p>
+
+<ul>
+  <li>Runnable 인터페이스 : 실행할 작업을 포함하는 인터페이스이다.
+    <ul>
+      <li>HelloRunnable 클래스는 Runnable 인터페이스를 구현한 클래스이다.</li>
+    </ul>
+  </li>
+  <li>Thread() 스레드 아이디는 중복이 허용되지 않는다. 유일한 식별자 이기 때문이다. 이 ID는 JVM내에서 각 스레드에 대해서 유일하다. ID는 스레드가 생성될 때 할당되며, 직접 지정할 수는 없다.</li>
+  <li>getName() 스레드 이름을 반환하는 메서드이다. “myThread”라는 이름을 지정하면 이 값이 반한된다. 스레드 ID는 중복을 허용하지 않지만, 이름은 중복을 허용한다.</li>
+  <li>스레드 우선순위 : 우선순위를 반환하는 메서드이다 → CPU스케줄링에서 먼저처리해야 할 부분들에 대해서 우선순위를 지정할 수 있다. → 우선순위는 가장 낮음 1과 가장 높음 10으로 설정되는데 지정해주지 않으면 기본 값인 5가 지정된다. → 1과 10의 사이인 5가 기본값으로 설정되는듯 하다.
+    <ul>
+      <li>우선순위는 스레드 스케줄러가 어떤 스레드를 우선 실행할지 결정하는 데 사용한다. 하지만 실제 실행 순서는 JVM구현과 운영체제에 따라서 달라질 수 있다.</li>
+    </ul>
+  </li>
+  <li>스레드 그룹 → 스레드는 그룹으로 소속된다. 기본적으로 모든 스레드는 부모 스레드와 동일한 그룹으로 설정된다.
+    <ul>
+      <li>부모 스레드 : 새로운 스레드를 생성하는 스레드를 의미한다. 예를들어 myThread는 mainThread에 의해서 생성되었으므로 mainThread가 부모스레드이며, myThread도 mainThread에 소속하게 된다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="스레드의-상태">스레드의 상태</h2>
+
+<ul>
+  <li>NEW</li>
+  <li>Runnable : 실행 중이거나 실행될 준비가 된 상태</li>
+  <li>일시 중지 상태
+    <ul>
+      <li>Blocked</li>
+      <li>Waiting</li>
+      <li>Timed Waiting</li>
+    </ul>
+  </li>
+  <li>Terminated(종료상태)</li>
+</ul>
+
+<h3 id="new새로운-상태">new(새로운 상태)</h3>
+
+<ul>
+  <li>스레드가 생성되고 아직 시작되지 않은 상태</li>
+  <li>이 상태에서는 Thread객체가 생성되지만 start()메서드는 호출되지 않은 상태이다.</li>
+</ul>
+
+<h3 id="runnable실행-가능-상태">Runnable(실행 가능 상태)</h3>
+
+<ul>
+  <li>스레드가 실행될 준비가 된 상태 이 상태에서는 스레드는 실제로 CPU에서 실행될 수 있다.</li>
+  <li>start()메서드가 호출되면 스레드는 이 상태로 들어간다.</li>
+  <li>Runnable상태에 있는 모든 스레드가 동시에 실행되는 것은 아니다. 운영체제의 각 스레드에 CPU 시간을 할당하여 실행하기 때문에 스레드는 스케줄러의 실행 대기열에 포함되어 있다가 차례로 CPU에서 실행된다.</li>
+  <li>스케줄러의 실행 대기열에 있든, CPU에서 실제 실행이 되고 있든 모두 <code class="language-plaintext highlighter-rouge">Runnable</code> 상태이다.
+    <ul>
+      <li>보통 실행 상태라고 부른다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="blocked차단-상태">Blocked(차단 상태)</h3>
+
+<ul>
+  <li>스레드가 다른 스레드에 의해 동기화 락을 얻기 위해 기다리는 상태이다.</li>
+  <li>synchronized 블록에 진입하기 위해 락을 얻어야 하는 경우 이 상태에 들어간다.</li>
+  <li>다른 스레드가 lock을 가지고 있으면 다시 lock이 돌아올 때 까지 기다려야 한다.</li>
+</ul>
+
+<h3 id="waiting대기-상태">Waiting(대기 상태)</h3>
+
+<ul>
+  <li>스레드가 다른 스레드의 특정 작업이 완료되그를 무기한 기다리는 상태이다.</li>
+  <li>wain(), join() 메서드가 호출될 때 이상태가 된다.</li>
+  <li>스레드는 다른 스레드가 notify(), or notifyAll() 메서드를 호출하거나, join()이 완료될 때까지 기다린다.</li>
+</ul>
+
+<h3 id="timed-waiting시간-제한-대기-상태">Timed Waiting(시간 제한 대기 상태)</h3>
+
+<ul>
+  <li>스레드가 특정 시간 동안 다른 스레드의 작업이 완료되기를 기다리는 상태이다.</li>
+  <li>sleep(long millis), wait()long timeout), join(long milis) 메서드가 호출될 때 이상태가 된다.</li>
+  <li>주어진 시간이 경과하거나, 다른 스레드가 해당 스레드를 깨우면 이 상태에서 벗어난다.</li>
+  <li>Thread.sleep(1000)</li>
+</ul>
+
+<h3 id="terminated종료-상태">Terminated(종료 상태)</h3>
+
+<ul>
+  <li>스레드가 실행이 완료된 상태이다.</li>
+  <li>스레드가 정상적으로 종료되거나, 예외가 발생하여 종료된 경우 이 상태로 돌아간다.</li>
+  <li>스레드는 한 번 종료되면 다시 시작할 수 없다.</li>
+  <li>Sleep을 하면 체크예외가 터진다.</li>
+</ul>
 
 <h2 id="reference">Reference</h2>
 
-<p>인프런 김영한님의 실전 자바 강좌</p>
+<p>인프런 김영한님의 자바강좌 + 나의 뇌</p>
 
     <br />
     <br />
@@ -400,12 +410,12 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=Java Mid 03 -Immutable Object-&amp;url=http://localhost:4000/language/2024/09/18/Java-Mid-03/"
+    <a href="http://twitter.com/share?text=Java Adv 01 -Thread 2g-&amp;url=http://localhost:4000/language/2024/09/21/Java-Adv-02/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/09/18/Java-Mid-03/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/09/21/Java-Adv-02/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -427,21 +437,8 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
       
       
         
-        
           
-
-
-<li class="h4">
-  <a href="/language/2024/09/21/Java-Adv-02/" data-flip="title">
-    <span>Java Adv 01 -Thread 2g-</span>
-  </a>
-  <small><time datetime="2024-09-21T00:00:00+09:00">
-    21 Sep 2024
-  </time></small>
-</li>
-
-        
-      
+          
         
         
           
@@ -475,6 +472,19 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
         
       
         
+        
+          
+
+
+<li class="h4">
+  <a href="/language/2024/09/18/Java-Mid-17/" data-flip="title">
+    <span>Java Mid 17 -Collection List 추상화하기-</span>
+  </a>
+  <small><time datetime="2024-09-18T00:00:00+09:00">
+    18 Sep 2024
+  </time></small>
+</li>
+
         
       
     

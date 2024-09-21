@@ -6,9 +6,155 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 21 Sep 2024 18:48:52 +0900</pubDate>
-    <lastBuildDate>Sat, 21 Sep 2024 18:48:52 +0900</lastBuildDate>
+    <pubDate>Sun, 22 Sep 2024 06:27:07 +0900</pubDate>
+    <lastBuildDate>Sun, 22 Sep 2024 06:27:07 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
+    
+      <item>
+        <title>Java Adv 01 -Thread 2g-</title>
+        <description>&lt;h2 id=&quot;스레드-기본정보&quot;&gt;스레드 기본정보&lt;/h2&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;thread.control&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;util&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;MyLogger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ThreadInfoMain&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//mainThread&lt;/span&gt;
+        &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mainThread&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;currentThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;mainThread() = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mainThread&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;mainThread.thread() = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mainThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;threadId&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;mainThread.getName() = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mainThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;mainThread.getPriority() = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mainThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getPriority&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;mainThread.getThreadGroup() = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mainThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getThreadGroup&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;mainThread.getState() = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mainThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        
+        &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;myThread&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;HelloRunnable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;myThread() = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;myThread&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;myThread.thread() = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;myThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;threadId&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;myThread.getName() = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;myThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;myThread.getPriority() = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;myThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getPriority&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//기본값이 5&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;myThread.getThreadGroup() = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;myThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getThreadGroup&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;myThread.getState() = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;myThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//NEW&lt;/span&gt;
+		
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img width=&quot;653&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/d8b4693f-1b4f-4945-aeaf-81665977d2ce&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;스레드-생성&quot;&gt;스레드 생성&lt;/h3&gt;
+
+&lt;p&gt;스레드를 생성할 때는 실행할 Runnable 인터페이스의 구현체와, 스레드의 이름을 전달할 수 있다.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;myThread&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;HelloRunnable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;myThread&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Runnable 인터페이스 : 실행할 작업을 포함하는 인터페이스이다.
+    &lt;ul&gt;
+      &lt;li&gt;HelloRunnable 클래스는 Runnable 인터페이스를 구현한 클래스이다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Thread() 스레드 아이디는 중복이 허용되지 않는다. 유일한 식별자 이기 때문이다. 이 ID는 JVM내에서 각 스레드에 대해서 유일하다. ID는 스레드가 생성될 때 할당되며, 직접 지정할 수는 없다.&lt;/li&gt;
+  &lt;li&gt;getName() 스레드 이름을 반환하는 메서드이다. “myThread”라는 이름을 지정하면 이 값이 반한된다. 스레드 ID는 중복을 허용하지 않지만, 이름은 중복을 허용한다.&lt;/li&gt;
+  &lt;li&gt;스레드 우선순위 : 우선순위를 반환하는 메서드이다 → CPU스케줄링에서 먼저처리해야 할 부분들에 대해서 우선순위를 지정할 수 있다. → 우선순위는 가장 낮음 1과 가장 높음 10으로 설정되는데 지정해주지 않으면 기본 값인 5가 지정된다. → 1과 10의 사이인 5가 기본값으로 설정되는듯 하다.
+    &lt;ul&gt;
+      &lt;li&gt;우선순위는 스레드 스케줄러가 어떤 스레드를 우선 실행할지 결정하는 데 사용한다. 하지만 실제 실행 순서는 JVM구현과 운영체제에 따라서 달라질 수 있다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;스레드 그룹 → 스레드는 그룹으로 소속된다. 기본적으로 모든 스레드는 부모 스레드와 동일한 그룹으로 설정된다.
+    &lt;ul&gt;
+      &lt;li&gt;부모 스레드 : 새로운 스레드를 생성하는 스레드를 의미한다. 예를들어 myThread는 mainThread에 의해서 생성되었으므로 mainThread가 부모스레드이며, myThread도 mainThread에 소속하게 된다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;스레드의-상태&quot;&gt;스레드의 상태&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;NEW&lt;/li&gt;
+  &lt;li&gt;Runnable : 실행 중이거나 실행될 준비가 된 상태&lt;/li&gt;
+  &lt;li&gt;일시 중지 상태
+    &lt;ul&gt;
+      &lt;li&gt;Blocked&lt;/li&gt;
+      &lt;li&gt;Waiting&lt;/li&gt;
+      &lt;li&gt;Timed Waiting&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Terminated(종료상태)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;new새로운-상태&quot;&gt;new(새로운 상태)&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;스레드가 생성되고 아직 시작되지 않은 상태&lt;/li&gt;
+  &lt;li&gt;이 상태에서는 Thread객체가 생성되지만 start()메서드는 호출되지 않은 상태이다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;runnable실행-가능-상태&quot;&gt;Runnable(실행 가능 상태)&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;스레드가 실행될 준비가 된 상태 이 상태에서는 스레드는 실제로 CPU에서 실행될 수 있다.&lt;/li&gt;
+  &lt;li&gt;start()메서드가 호출되면 스레드는 이 상태로 들어간다.&lt;/li&gt;
+  &lt;li&gt;Runnable상태에 있는 모든 스레드가 동시에 실행되는 것은 아니다. 운영체제의 각 스레드에 CPU 시간을 할당하여 실행하기 때문에 스레드는 스케줄러의 실행 대기열에 포함되어 있다가 차례로 CPU에서 실행된다.&lt;/li&gt;
+  &lt;li&gt;스케줄러의 실행 대기열에 있든, CPU에서 실제 실행이 되고 있든 모두 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Runnable&lt;/code&gt; 상태이다.
+    &lt;ul&gt;
+      &lt;li&gt;보통 실행 상태라고 부른다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;blocked차단-상태&quot;&gt;Blocked(차단 상태)&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;스레드가 다른 스레드에 의해 동기화 락을 얻기 위해 기다리는 상태이다.&lt;/li&gt;
+  &lt;li&gt;synchronized 블록에 진입하기 위해 락을 얻어야 하는 경우 이 상태에 들어간다.&lt;/li&gt;
+  &lt;li&gt;다른 스레드가 lock을 가지고 있으면 다시 lock이 돌아올 때 까지 기다려야 한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;waiting대기-상태&quot;&gt;Waiting(대기 상태)&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;스레드가 다른 스레드의 특정 작업이 완료되그를 무기한 기다리는 상태이다.&lt;/li&gt;
+  &lt;li&gt;wain(), join() 메서드가 호출될 때 이상태가 된다.&lt;/li&gt;
+  &lt;li&gt;스레드는 다른 스레드가 notify(), or notifyAll() 메서드를 호출하거나, join()이 완료될 때까지 기다린다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;timed-waiting시간-제한-대기-상태&quot;&gt;Timed Waiting(시간 제한 대기 상태)&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;스레드가 특정 시간 동안 다른 스레드의 작업이 완료되기를 기다리는 상태이다.&lt;/li&gt;
+  &lt;li&gt;sleep(long millis), wait()long timeout), join(long milis) 메서드가 호출될 때 이상태가 된다.&lt;/li&gt;
+  &lt;li&gt;주어진 시간이 경과하거나, 다른 스레드가 해당 스레드를 깨우면 이 상태에서 벗어난다.&lt;/li&gt;
+  &lt;li&gt;Thread.sleep(1000)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;terminated종료-상태&quot;&gt;Terminated(종료 상태)&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;스레드가 실행이 완료된 상태이다.&lt;/li&gt;
+  &lt;li&gt;스레드가 정상적으로 종료되거나, 예외가 발생하여 종료된 경우 이 상태로 돌아간다.&lt;/li&gt;
+  &lt;li&gt;스레드는 한 번 종료되면 다시 시작할 수 없다.&lt;/li&gt;
+  &lt;li&gt;Sleep을 하면 체크예외가 터진다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;인프런 김영한님의 자바강좌 + 나의 뇌&lt;/p&gt;
+</description>
+        <pubDate>Sat, 21 Sep 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/language/2024/09/21/Java-Adv-02/</link>
+        <guid isPermaLink="true">http://localhost:4000/language/2024/09/21/Java-Adv-02/</guid>
+        
+        <category>java</category>
+        
+        
+        <category>language</category>
+        
+      </item>
     
       <item>
         <title>Java Adv 01 -Thread 1-</title>
@@ -741,14 +887,14 @@ s에서 분리한 문자열을 빼고 남은 부분에 대해서 이 과정을 �
 
 &lt;h3 id=&quot;예시&quot;&gt;예시&lt;/h3&gt;
 
-&lt;p&gt;친구가 줄넘기 시합을 할 때 &lt;strong&gt;너&lt;/strong&gt;랑 &lt;strong&gt;친구&lt;/strong&gt;가 똑같이 줄넘기를 몇 번 했는지 세는 거랑 비슷해.&lt;/p&gt;
+&lt;p&gt;친구가 줄넘기 시합을 할 때 &lt;strong&gt;너&lt;/strong&gt;랑 &lt;strong&gt;친구&lt;/strong&gt;가 똑같이 줄넘기를 몇 번 했는지 세는 거랑 비슷하다.&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;너랑 친구가 &lt;strong&gt;같은 횟수&lt;/strong&gt;로 줄넘기를 했으면 “끝!” 하고 시합이 종료되잖아? 그러면 한 판이 끝난 거야.&lt;/li&gt;
-  &lt;li&gt;그 다음에 또 새로운 시합을 시작하는 거지.&lt;/li&gt;
+  &lt;li&gt;나랑 친구가 &lt;strong&gt;같은 횟수&lt;/strong&gt;로 줄넘기를 했으면 “끝!” 하고 시합이 종료되면 그러면 한 판이 끝난 것.&lt;/li&gt;
+  &lt;li&gt;그 다음에 또 새로운 시합을 시작하는 것.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;이 과정은 계속 반복돼. 만약 마지막까지 줄넘기를 하다가 “같은 횟수”가 안 맞으면, 그때까지 한 번 더 나누고 끝내는 로직이다.&lt;/p&gt;
+&lt;p&gt;만약 마지막까지 줄넘기를 하다가 “같은 횟수”가 안 맞으면, 그때까지 한 번 더 나누고 끝내는 로직이다.&lt;/p&gt;
 
 &lt;h3 id=&quot;코드-설명&quot;&gt;코드 설명&lt;/h3&gt;
 
@@ -756,10 +902,10 @@ s에서 분리한 문자열을 빼고 남은 부분에 대해서 이 과정을 �
 
 &lt;ol&gt;
   &lt;li&gt;&lt;strong&gt;x&lt;/strong&gt;라는 첫 번째 글자를 정해.&lt;/li&gt;
-  &lt;li&gt;x와 같은 글자 개수(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cnt&lt;/code&gt;)랑 x와 다른 글자 개수(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;otherCnt&lt;/code&gt;)를 각각 세.&lt;/li&gt;
-  &lt;li&gt;두 개수가 같아지면, 한 덩어리로 나누고 그 순간 덩어리 개수(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;answer&lt;/code&gt;)를 하나 늘려.&lt;/li&gt;
-  &lt;li&gt;새로운 덩어리에서 또 첫 글자 &lt;strong&gt;x&lt;/strong&gt;를 정하고, 다시 똑같이 해.&lt;/li&gt;
-  &lt;li&gt;마지막에 남은 글자가 있으면 그것도 하나의 덩어리로 추가.&lt;/li&gt;
+  &lt;li&gt;x와 같은 글자 개수(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cnt&lt;/code&gt;)랑 x와 다른 글자 개수(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;otherCnt&lt;/code&gt;)를 각각 카운팅&lt;/li&gt;
+  &lt;li&gt;두 개수가 같아지면, 한 덩어리로 나누고 그 순간 덩어리 개수(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;answer&lt;/code&gt;)를 하나 늘린다.&lt;/li&gt;
+  &lt;li&gt;새로운 덩어리에서 또 첫 글자 &lt;strong&gt;x&lt;/strong&gt;를 정하고, 다시 똑같이&lt;/li&gt;
+  &lt;li&gt;마지막에 남은 글자가 있으면 그것도 하나의 덩어리로 추가&lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;p&gt;그래서 최종적으로 몇 개의 덩어리로 나눴는지를 구한다.&lt;/p&gt;
