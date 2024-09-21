@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 22 Sep 2024 06:59:04 +0900</pubDate>
-    <lastBuildDate>Sun, 22 Sep 2024 06:59:04 +0900</lastBuildDate>
+    <pubDate>Sun, 22 Sep 2024 07:19:29 +0900</pubDate>
+    <lastBuildDate>Sun, 22 Sep 2024 07:19:29 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
@@ -185,7 +185,8 @@
 예를 들어서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;thread-1&lt;/code&gt; 이 아직 종료되지 않았다면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;main&lt;/code&gt; 스레드는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;thread1.join()&lt;/code&gt; 코드 안에서 더는 진행하지않고 멈추어 기다린다. 
 이후에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;thread-1&lt;/code&gt; 이 종료되면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;main&lt;/code&gt; 스레드는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUNNABLE&lt;/code&gt; 상태가 되고 다음 코드로 이동한다.
 이때 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;thread-2&lt;/code&gt; 이 아직 종료되지 않았다면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;main&lt;/code&gt; 스레드는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;thread2.join()&lt;/code&gt; 코드 안에서 진행하지 않고 멈추어 기다린다. 
-이후에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;thread-2&lt;/code&gt; 이 종료되면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;main&lt;/code&gt; 스레드는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUNNABLE&lt;/code&gt; 상태가 되고 다음 코드로 이동한다. 이 경우 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;thread-1&lt;/code&gt; 이 종료되는 시점에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;thread-2&lt;/code&gt; 도 거의 같이 종료되기 때문에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;thread2.join()&lt;/code&gt; 은 대기하지 않고 바로 빠져나온다.&lt;/p&gt;
+이후에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;thread-2&lt;/code&gt; 이 종료되면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;main&lt;/code&gt; 스레드는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUNNABLE&lt;/code&gt; 상태가 되고 다음 코드로 이동한다. 이 경우 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;thread-1&lt;/code&gt; 이 종료되는 시점에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;thread-2&lt;/code&gt; 도 거의 같이 종료되기 때문에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;thread2.join()&lt;/code&gt; 은 대기하지 않고 바로 빠져나온다.
+이렇듯 특정 스레드가 완료될 때 까지 기다려야 하는 상황이라면 join() 을 사용하면 된다.&lt;/p&gt;
 
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
 

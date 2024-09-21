@@ -438,7 +438,8 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
 예를 들어서 <code class="language-plaintext highlighter-rouge">thread-1</code> 이 아직 종료되지 않았다면 <code class="language-plaintext highlighter-rouge">main</code> 스레드는 <code class="language-plaintext highlighter-rouge">thread1.join()</code> 코드 안에서 더는 진행하지않고 멈추어 기다린다. 
 이후에 <code class="language-plaintext highlighter-rouge">thread-1</code> 이 종료되면 <code class="language-plaintext highlighter-rouge">main</code> 스레드는 <code class="language-plaintext highlighter-rouge">RUNNABLE</code> 상태가 되고 다음 코드로 이동한다.
 이때 <code class="language-plaintext highlighter-rouge">thread-2</code> 이 아직 종료되지 않았다면 <code class="language-plaintext highlighter-rouge">main</code> 스레드는 <code class="language-plaintext highlighter-rouge">thread2.join()</code> 코드 안에서 진행하지 않고 멈추어 기다린다. 
-이후에 <code class="language-plaintext highlighter-rouge">thread-2</code> 이 종료되면 <code class="language-plaintext highlighter-rouge">main</code> 스레드는 <code class="language-plaintext highlighter-rouge">RUNNABLE</code> 상태가 되고 다음 코드로 이동한다. 이 경우 <code class="language-plaintext highlighter-rouge">thread-1</code> 이 종료되는 시점에 <code class="language-plaintext highlighter-rouge">thread-2</code> 도 거의 같이 종료되기 때문에 <code class="language-plaintext highlighter-rouge">thread2.join()</code> 은 대기하지 않고 바로 빠져나온다.</p>
+이후에 <code class="language-plaintext highlighter-rouge">thread-2</code> 이 종료되면 <code class="language-plaintext highlighter-rouge">main</code> 스레드는 <code class="language-plaintext highlighter-rouge">RUNNABLE</code> 상태가 되고 다음 코드로 이동한다. 이 경우 <code class="language-plaintext highlighter-rouge">thread-1</code> 이 종료되는 시점에 <code class="language-plaintext highlighter-rouge">thread-2</code> 도 거의 같이 종료되기 때문에 <code class="language-plaintext highlighter-rouge">thread2.join()</code> 은 대기하지 않고 바로 빠져나온다.
+이렇듯 특정 스레드가 완료될 때 까지 기다려야 하는 상황이라면 join() 을 사용하면 된다.</p>
 
 <h2 id="reference">Reference</h2>
 
