@@ -6,9 +6,72 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 22 Sep 2024 07:19:29 +0900</pubDate>
-    <lastBuildDate>Sun, 22 Sep 2024 07:19:29 +0900</lastBuildDate>
+    <pubDate>Sun, 22 Sep 2024 07:30:48 +0900</pubDate>
+    <lastBuildDate>Sun, 22 Sep 2024 07:30:48 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
+    
+      <item>
+        <title>쉽게 배우는 쿠버네티스 -01-</title>
+        <description>&lt;h2 id=&quot;학습의-계기&quot;&gt;학습의 계기&lt;/h2&gt;
+
+&lt;p&gt;카카오 클라우드 부트캠프에서 k8s를 다뤘지만 실습을 따라가는 것만으로는 내용이 전반적으로 깊고 어려워서 추가적인 공부의 필요성을 느끼게 되었다.&lt;/p&gt;
+
+&lt;p&gt;Devops쪽은 사실 어느정도 깊이로 공부를 해둬야하는건지 애매했었는데 이번 기회를 통해 어느정도 깊이있는 학습을 할 수 있지 않을까 기대하고 있다.&lt;/p&gt;
+
+&lt;p&gt;공부는 아래의 주소인 쿠버네티스의 강사 조훈님의 강의를 통해서 공부를 시작하게 되었다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.inflearn.com/course/%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4-%EC%89%BD%EA%B2%8C%EC%8B%9C%EC%9E%91/dashboard&quot;&gt;https://www.inflearn.com/course/%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4-%EC%89%BD%EA%B2%8C%EC%8B%9C%EC%9E%91/dashboard&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;쿠버네티스의-역할-그리고-무엇을-하는지&quot;&gt;쿠버네티스의 역할, 그리고 무엇을 하는지?&lt;/h2&gt;
+
+&lt;h3 id=&quot;1-오케스트레이션&quot;&gt;1) 오케스트레이션&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;오늘날의 개발에서 애플리케이션은 더 이상 하나의 통일체가 아니라, 특정 &lt;strong&gt;애플리케이션&lt;/strong&gt;이 설계된 대로 기능하도록 함께 작동해야 하는 &lt;strong&gt;수십 또는 수백 개의 느슨하게 결합된 컨테이너로 구성&lt;/strong&gt;된다.&lt;/li&gt;
+  &lt;li&gt;하지만 수백 개의 컨테이너를 끊임없이 배포하고 관리하는 일은 굉장한 리소스를 요구로 한다. 이러한 어려움을 해결하기 위해 오케스트레이션이 등장했다. &lt;strong&gt;오케스트레이션이란 컨테이너화된 애플리케이션의 자동화 및 최적화&lt;/strong&gt;를 뜻하며, 컨테이너 오케스트레이션이란 용어로 쓰인다.&lt;/li&gt;
+  &lt;li&gt;즉 정리하자면, 컨테이너 오케스트레이션의 목적은 &lt;strong&gt;여러 컨테이너의 배포 프로세스를 최적화&lt;/strong&gt; 하는데 있으며, 이것은 컨테이너와 호스트의 수가 증가함에 따라 점점 더 가치가 있게 된다는 것이다.&lt;/li&gt;
+  &lt;li&gt;대표적인 Docker기반 컨테이너 오케스트레이션 툴로는 Docker Swarm, Kubernetes, Apache Mesos가 있으며, 우리가 알아보고 사용하고자 하는 것은 Kubernetes이다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;2-쿠버네티스&quot;&gt;2) 쿠버네티스&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Kubernetes는 컨테이너화된 애플리케이션의 배포, 확장 및 관리를 자동화하는 오픈 소스 시스템, 즉 컨테이너 오케스트레이션 도구이다.&lt;/li&gt;
+  &lt;li&gt;Kubernetes를 사용하면 컨테이너화된 애플리케이션을 배포 및 확장하는 데 수반되는 수동 프로세스의 많은 부분을 자동화 할 수 있다.&lt;/li&gt;
+  &lt;li&gt;즉, 여러 Linux 호스트들을 클러스터링 할 수 있으며 이러한 클러스터를 쉽고 효율적으로 관리할 수 있다. 또한 Kubernetes는 On-premise, Private Cloud, Public Cloud 등 다양한 환경에서 적용이 가능하다.&lt;/li&gt;
+  &lt;li&gt;쿠버네티스로 인하여 각각의 컨테이너를 직접 하나씩 관리하지 않아도 된다. 개발자는 여러 컨테이너에 걸친 애플리케이션의 배치도를 작성하는데, 여기에는 각 컨테이너가 네트워킹과 스토리지를 사용하는 방식 등의 세부 정보가 담겨 있다. 쿠버네티스는 런타임에서 나머지 부분을 처리한다. 또한 기밀이나 앱 환경 구성 같은 성가신 세부 관리도 맡는다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;그래서-쿠버네티스를-왜-쓰는데-&quot;&gt;그래서 쿠버네티스를 왜 쓰는데 ?&lt;/h2&gt;
+
+&lt;p&gt;이유는 몇 년 전만 해도 대부분의 소프트웨어 애플리케이션은 하나의 프로세스 또는 몇 개의 서버에 분산된 프로세스로 실행되었다.&lt;/p&gt;
+
+&lt;p&gt;이런 레거시 시스템은 릴리즈 주기가 느리고 비교적 업데이트가 자주 되지 않는다. 급변하는 현대 비즈니스의 요구사항을 충족시키려면 자주, 그리고 니즈에 맞춰서 빠르게 구성 요소를 변경할 수 있어야 한다.&lt;/p&gt;
+
+&lt;p&gt;그래서 마이크로서비스 개념이 등장했으며 이는 시스템을 독립적으로 실행되는 더 작은 구성 요소로 세분화 할 수 있다.&lt;/p&gt;
+
+&lt;p&gt;하지만 점차 배포 가능한 구성 요소의 수가 많아지고 데이터 센터의 규모가 커지면서 전체 시스템을 원활하게 구성, 관리할 수 있는 자동화가 필요해졌는데, 이것이 바로 쿠버네티스가 등장한 이유다.&lt;/p&gt;
+
+&lt;p&gt;쿠버네티스는 하드웨어 인프라를 추상화하고 데이터 센터 전체를 하나의 거대한 컴퓨팅 리소스로 제공한다.&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.redhat.com/ko/topics/containers/what-is-kubernetes&quot;&gt;https://www.redhat.com/ko/topics/containers/what-is-kubernetes&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://cloud.google.com/kubernetes-engine?hl=ko&quot;&gt;https://cloud.google.com/kubernetes-engine?hl=ko&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&amp;lt;&lt;a href=&quot;https://www.openmaru.io/%ea%b5%ac%ea%b8%80%ea%b3%bc-%ec%bf%a0%eb%b2%84%eb%84%a4%ed%8b%b0%ec%8a%a4/&quot;&gt;https://www.openmaru.io/구글과-쿠버네티스/&lt;/a&gt;&amp;gt;&lt;/p&gt;
+</description>
+        <pubDate>Sun, 22 Sep 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/devops/2024/09/22/Kubernetes-basic-01/</link>
+        <guid isPermaLink="true">http://localhost:4000/devops/2024/09/22/Kubernetes-basic-01/</guid>
+        
+        <category>k8s</category>
+        
+        
+        <category>devops</category>
+        
+      </item>
     
       <item>
         <title>Java Adv -Thread 4-</title>
@@ -4080,39 +4143,6 @@ cpu,memory와 같은 기본적인 지표, 그리고 RDM지표
         
         
         <category>life</category>
-        
-      </item>
-    
-      <item>
-        <title>제어의 역전(Inversion of Control)과 ApplicationContext</title>
-        <description>&lt;h2 id=&quot;제어의-역전inversion-of-control&quot;&gt;제어의 역전(Inversion of Control)&lt;/h2&gt;
-
-&lt;p&gt;프로그램의 제어흐름을 직접 제어하는 것이 아니라 외부(스프링)이 관리하는 것을 제어의 역전(loC)라고 한다.&lt;/p&gt;
-
-&lt;h2 id=&quot;스프링-컨테이너&quot;&gt;스프링 컨테이너&lt;/h2&gt;
-&lt;h3 id=&quot;applicationcontext&quot;&gt;ApplicationContext&lt;/h3&gt;
-&lt;p&gt;&lt;img width=&quot;700&quot; alt=&quot;스크린샷 2024-09-16 오후 9 06 08&quot; src=&quot;https://github.com/user-attachments/assets/76d1d251-e001-48b7-b0fc-8472a2380792&quot; /&gt;&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;ApplicationContext를 스프링 컨테이너라고 한다.&lt;/li&gt;
-  &lt;li&gt;기존에는 개발자가 AppConfig를 사용해서 직접 객체를 생성하고 DI를 했지만, 이제부터는 스프링 컨테이너를 통해서 사용한다.&lt;/li&gt;
-  &lt;li&gt;스프링 컨테이너에서는 Configuration이 붙은 객체를 설정 정보로 사용한다. @Bean이라 붙은 메서드를 모두 호출해서 반환된 객체를 스프링 컨테이너로 등록한다. 이렇게 스프링 컨테이너로 등록된 객체를 스프링 빈이라고 한다.&lt;/li&gt;
-  &lt;li&gt;예전에는 AppConfig를 통해서 필요한 객체를 직접 조회했지만, 이제는 스프링 컨테이너를 통해서 필요한 스프링 빈을 찾는다. 스프링 빈은 applicationContext.getBean()을 통해서 찾을 수 있다.&lt;/li&gt;
-  &lt;li&gt;스프링 빈은 @Bean이 붙은 메서드의 명을 빈의 이름으로 사용하여 컨테이너에 등록한다.&lt;/li&gt;
-  &lt;li&gt;스프링 컨테이너에 객체를 스프링 빈으로 등록하고, 찾을 수 있다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;인프런 김영한님의 스프링 프레임워크 핵심 기술 강좌&lt;/p&gt;
-</description>
-        <pubDate>Mon, 16 Sep 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/framework/2024/09/16/Spring-01/</link>
-        <guid isPermaLink="true">http://localhost:4000/framework/2024/09/16/Spring-01/</guid>
-        
-        <category>spring</category>
-        
-        
-        <category>framework</category>
         
       </item>
     

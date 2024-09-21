@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Java Adv -Thread 4-" />
+<meta property="og:title" content="쉽게 배우는 쿠버네티스 -01-" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,17 +52,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Java Adv -Thread 4- &middot; 일벌리는 개발자</title>
+<title>쉽게 배우는 쿠버네티스 -01- &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="Join
+        content="학습의 계기
 
 "
 />
 <meta
         property="og:description"
-        content="Join
+        content="학습의 계기
 
 "
 />
@@ -72,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/language/2024/09/22/Java-Adv-04/" />
-<meta property="og:url" content="http://localhost:4000/language/2024/09/22/Java-Adv-04/" />
+<link rel="canonical" href="http://localhost:4000/devops/2024/09/22/Kubernetes-basic-01/" />
+<meta property="og:url" content="http://localhost:4000/devops/2024/09/22/Kubernetes-basic-01/" />
 
 <link
         rel="alternate"
@@ -83,10 +83,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/language/2024/09/22/Java-Adv-03/" />
+<link rel="prev" href="http://localhost:4000/language/2024/09/22/Java-Adv-04/" />
  
-<link rel="next" href="http://localhost:4000/devops/2024/09/22/Kubernetes-basic-01/" />
-
 
 <link
         rel="apple-touch-icon"
@@ -183,11 +181,11 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-language/2024/09/22/Java-Adv-04" class="post" role="article">
+<article id="post-devops/2024/09/22/Kubernetes-basic-01" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      Java Adv -Thread 4-
+      쉽게 배우는 쿠버네티스 -01-
       
     </h1>
 
@@ -203,7 +201,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 
 
 
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
+in <a href="/category/devops/" data-flip="title">Devops</a>
 
       
 
@@ -215,7 +213,7 @@ in <a href="/category/programming-language/" data-flip="title">Programming Langu
 
 
 
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
+on <a href="/tag/devops-k8s/" data-flip="title">Kubernetes</a>
 
     </p>
 
@@ -267,185 +265,55 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
     </style>
 
     <!--<br />-->
-    <h2 id="join">Join</h2>
+    <h2 id="학습의-계기">학습의 계기</h2>
+
+<p>카카오 클라우드 부트캠프에서 k8s를 다뤘지만 실습을 따라가는 것만으로는 내용이 전반적으로 깊고 어려워서 추가적인 공부의 필요성을 느끼게 되었다.</p>
+
+<p>Devops쪽은 사실 어느정도 깊이로 공부를 해둬야하는건지 애매했었는데 이번 기회를 통해 어느정도 깊이있는 학습을 할 수 있지 않을까 기대하고 있다.</p>
+
+<p>공부는 아래의 주소인 쿠버네티스의 강사 조훈님의 강의를 통해서 공부를 시작하게 되었다.</p>
+
+<p><a href="https://www.inflearn.com/course/%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4-%EC%89%BD%EA%B2%8C%EC%8B%9C%EC%9E%91/dashboard">https://www.inflearn.com/course/%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4-%EC%89%BD%EA%B2%8C%EC%8B%9C%EC%9E%91/dashboard</a></p>
+
+<h2 id="쿠버네티스의-역할-그리고-무엇을-하는지">쿠버네티스의 역할, 그리고 무엇을 하는지?</h2>
+
+<h3 id="1-오케스트레이션">1) 오케스트레이션</h3>
 
 <ul>
-  <li>앞서 Thread.sleep() 메서드를 통해 TIMED_WAITING 상태를 알아보았다. 이번에는 Join()메서드를 통해 WAITNG(대기 상태)가 무엇인지 왜 필요한지 알아보자</li>
+  <li>오늘날의 개발에서 애플리케이션은 더 이상 하나의 통일체가 아니라, 특정 <strong>애플리케이션</strong>이 설계된 대로 기능하도록 함께 작동해야 하는 <strong>수십 또는 수백 개의 느슨하게 결합된 컨테이너로 구성</strong>된다.</li>
+  <li>하지만 수백 개의 컨테이너를 끊임없이 배포하고 관리하는 일은 굉장한 리소스를 요구로 한다. 이러한 어려움을 해결하기 위해 오케스트레이션이 등장했다. <strong>오케스트레이션이란 컨테이너화된 애플리케이션의 자동화 및 최적화</strong>를 뜻하며, 컨테이너 오케스트레이션이란 용어로 쓰인다.</li>
+  <li>즉 정리하자면, 컨테이너 오케스트레이션의 목적은 <strong>여러 컨테이너의 배포 프로세스를 최적화</strong> 하는데 있으며, 이것은 컨테이너와 호스트의 수가 증가함에 따라 점점 더 가치가 있게 된다는 것이다.</li>
+  <li>대표적인 Docker기반 컨테이너 오케스트레이션 툴로는 Docker Swarm, Kubernetes, Apache Mesos가 있으며, 우리가 알아보고 사용하고자 하는 것은 Kubernetes이다.</li>
 </ul>
 
-<h3 id="waiting대기-상태">waiting(대기 상태)</h3>
+<h3 id="2-쿠버네티스">2) 쿠버네티스</h3>
 
 <ul>
-  <li>스레드가 다른 스레드의 특정 작업이  완료되기를 무기한 기다리는 상태이다.
-    <ul>
-      <li>TIMED_WAITING은 특정시간만 기다리는 상태이다.</li>
-    </ul>
-  </li>
+  <li>Kubernetes는 컨테이너화된 애플리케이션의 배포, 확장 및 관리를 자동화하는 오픈 소스 시스템, 즉 컨테이너 오케스트레이션 도구이다.</li>
+  <li>Kubernetes를 사용하면 컨테이너화된 애플리케이션을 배포 및 확장하는 데 수반되는 수동 프로세스의 많은 부분을 자동화 할 수 있다.</li>
+  <li>즉, 여러 Linux 호스트들을 클러스터링 할 수 있으며 이러한 클러스터를 쉽고 효율적으로 관리할 수 있다. 또한 Kubernetes는 On-premise, Private Cloud, Public Cloud 등 다양한 환경에서 적용이 가능하다.</li>
+  <li>쿠버네티스로 인하여 각각의 컨테이너를 직접 하나씩 관리하지 않아도 된다. 개발자는 여러 컨테이너에 걸친 애플리케이션의 배치도를 작성하는데, 여기에는 각 컨테이너가 네트워킹과 스토리지를 사용하는 방식 등의 세부 정보가 담겨 있다. 쿠버네티스는 런타임에서 나머지 부분을 처리한다. 또한 기밀이나 앱 환경 구성 같은 성가신 세부 관리도 맡는다.</li>
 </ul>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">thread.control.join</span><span class="o">;</span>
+<h2 id="그래서-쿠버네티스를-왜-쓰는데-">그래서 쿠버네티스를 왜 쓰는데 ?</h2>
 
-<span class="kn">import</span> <span class="nn">static</span> <span class="n">util</span><span class="o">.</span><span class="na">MyLogger</span><span class="o">.</span><span class="na">log</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">static</span> <span class="n">util</span><span class="o">.</span><span class="na">ThreadUtils</span><span class="o">.</span><span class="na">sleep</span><span class="o">;</span>
+<p>이유는 몇 년 전만 해도 대부분의 소프트웨어 애플리케이션은 하나의 프로세스 또는 몇 개의 서버에 분산된 프로세스로 실행되었다.</p>
 
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">JoinMainV0</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">log</span><span class="o">(</span> <span class="s">"Start"</span> <span class="o">);</span>
-        <span class="nc">Thread</span> <span class="n">thread1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">(</span> <span class="k">new</span> <span class="nc">Job</span><span class="o">(),</span> <span class="s">"Thread- 1"</span> <span class="o">);</span>
-        <span class="nc">Thread</span> <span class="n">thread2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">(</span> <span class="k">new</span> <span class="nc">Job</span><span class="o">(),</span> <span class="s">"Thread- 2"</span> <span class="o">);</span>
-        <span class="n">thread1</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
-        <span class="n">thread2</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
-        <span class="n">log</span><span class="o">(</span> <span class="s">"End"</span> <span class="o">);</span>
-    <span class="o">}</span>
+<p>이런 레거시 시스템은 릴리즈 주기가 느리고 비교적 업데이트가 자주 되지 않는다. 급변하는 현대 비즈니스의 요구사항을 충족시키려면 자주, 그리고 니즈에 맞춰서 빠르게 구성 요소를 변경할 수 있어야 한다.</p>
 
-    <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Job</span> <span class="kd">implements</span> <span class="nc">Runnable</span><span class="o">{</span>
-        <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
-            <span class="n">log</span><span class="o">(</span> <span class="s">"작업 시작"</span> <span class="o">);</span>
-            <span class="n">sleep</span><span class="o">(</span> <span class="mi">2000</span> <span class="o">);</span> <span class="c1">//2초간 대기</span>
-            <span class="n">log</span><span class="o">(</span> <span class="s">"작업 완료"</span> <span class="o">);</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+<p>그래서 마이크로서비스 개념이 등장했으며 이는 시스템을 독립적으로 실행되는 더 작은 구성 요소로 세분화 할 수 있다.</p>
 
-</code></pre></div></div>
+<p>하지만 점차 배포 가능한 구성 요소의 수가 많아지고 데이터 센터의 규모가 커지면서 전체 시스템을 원활하게 구성, 관리할 수 있는 자동화가 필요해졌는데, 이것이 바로 쿠버네티스가 등장한 이유다.</p>
 
-<ul>
-  <li>참고 : 스레드의 실행 순서는 보장되지 않는다. 실행 결과는 다를 수 있다.</li>
-</ul>
-
-<h2 id="join이-필요한-상황">Join이 필요한 상황</h2>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">thread.control.join</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">static</span> <span class="n">util</span><span class="o">.</span><span class="na">MyLogger</span><span class="o">.</span><span class="na">log</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">static</span> <span class="n">util</span><span class="o">.</span><span class="na">ThreadUtils</span><span class="o">.</span><span class="na">sleep</span><span class="o">;</span>
-
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">JoinMainV1</span> <span class="o">{</span>
-
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">log</span><span class="o">(</span> <span class="s">"Start"</span> <span class="o">);</span>
-        <span class="nc">SumTask</span> <span class="n">task1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SumTask</span><span class="o">(</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">50</span> <span class="o">);</span>
-        <span class="nc">SumTask</span> <span class="n">task2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SumTask</span><span class="o">(</span> <span class="mi">51</span><span class="o">,</span> <span class="mi">100</span> <span class="o">);</span>
-        <span class="nc">Thread</span> <span class="n">thread1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">(</span> <span class="n">task1</span><span class="o">,</span> <span class="s">"thread1"</span> <span class="o">);</span>
-        <span class="nc">Thread</span> <span class="n">thread2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">(</span> <span class="n">task2</span><span class="o">,</span> <span class="s">"thread2"</span> <span class="o">);</span>
-
-        <span class="n">thread1</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
-        <span class="n">thread2</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
-
-        <span class="n">log</span><span class="o">(</span> <span class="s">"task1.result = "</span> <span class="o">+</span> <span class="n">task1</span><span class="o">.</span><span class="na">result</span> <span class="o">);</span>
-        <span class="n">log</span><span class="o">(</span> <span class="s">"task2.result = "</span> <span class="o">+</span> <span class="n">task2</span><span class="o">.</span><span class="na">result</span> <span class="o">);</span>
-        
-        <span class="kt">int</span> <span class="n">sumAll</span> <span class="o">=</span> <span class="n">task1</span><span class="o">.</span><span class="na">result</span> <span class="o">+</span> <span class="n">task2</span><span class="o">.</span><span class="na">result</span><span class="o">;</span>
-        <span class="n">log</span><span class="o">(</span> <span class="s">"task1 + task2 = "</span> <span class="o">+</span> <span class="n">sumAll</span> <span class="o">);</span>
-        <span class="n">log</span><span class="o">(</span> <span class="s">"End"</span> <span class="o">);</span>
-    <span class="o">}</span>
-
-    <span class="kd">static</span> <span class="kd">class</span> <span class="nc">SumTask</span> <span class="kd">implements</span> <span class="nc">Runnable</span> <span class="o">{</span>
-
-        <span class="kt">int</span> <span class="n">startValue</span><span class="o">;</span> <span class="c1">//0</span>
-        <span class="kt">int</span> <span class="n">endValue</span><span class="o">;</span> <span class="c1">//0</span>
-        <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-
-        <span class="kd">public</span> <span class="nf">SumTask</span><span class="o">(</span><span class="kt">int</span> <span class="n">startValue</span><span class="o">,</span> <span class="kt">int</span> <span class="n">endValue</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="na">startValue</span> <span class="o">=</span> <span class="n">startValue</span><span class="o">;</span>
-            <span class="k">this</span><span class="o">.</span><span class="na">endValue</span> <span class="o">=</span> <span class="n">endValue</span><span class="o">;</span>
-        <span class="o">}</span>
-
-        <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
-            <span class="n">log</span><span class="o">(</span> <span class="s">"작업 시작"</span> <span class="o">);</span>
-            <span class="n">sleep</span><span class="o">(</span> <span class="mi">2000</span> <span class="o">);</span>
-            <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">startValue</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">endValue</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-                <span class="n">sum</span> <span class="o">+=</span> <span class="n">i</span><span class="o">;</span>
-            <span class="o">}</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="n">sum</span><span class="o">;</span>
-            <span class="n">log</span><span class="o">(</span> <span class="s">"작업 완료 + result = "</span> <span class="o">+</span> <span class="n">result</span> <span class="o">);</span>
-
-        <span class="o">}</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-
-</code></pre></div></div>
-<p><img width="631" alt="image" src="https://github.com/user-attachments/assets/3fd2a6c1-e2a5-4428-8572-d210db92382a" /></p>
-<ul>
-  <li>0이 나온 이유는 main이 Thread1, Thread2에게 작업을 지시했지만 2초라는 sleep시간 동안 main이 이미 값을 조회하고 main을 종료시킨다. 그래서 계산값이 반환되기전에 결과값이 나와버린다.</li>
-  <li>여기서 핵심은 main 스레드가 thread1, thread2의 계산이 끝날 때 까지 기다려야 한다는 점이다. 그럼 어떻게 해야 main 스레드가 기다릴 수 있을까?</li>
-</ul>
-
-<h2 id="join-join">Join-join</h2>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">thread.control.join</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">static</span> <span class="n">util</span><span class="o">.</span><span class="na">MyLogger</span><span class="o">.</span><span class="na">log</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">static</span> <span class="n">util</span><span class="o">.</span><span class="na">ThreadUtils</span><span class="o">.</span><span class="na">sleep</span><span class="o">;</span>
-
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">JoinMainV3</span> <span class="o">{</span>
-
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">InterruptedException</span> <span class="o">{</span>
-        <span class="n">log</span><span class="o">(</span> <span class="s">"Start"</span> <span class="o">);</span>
-        <span class="nc">SumTask</span> <span class="n">task1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SumTask</span><span class="o">(</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">50</span> <span class="o">);</span>
-        <span class="nc">SumTask</span> <span class="n">task2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SumTask</span><span class="o">(</span> <span class="mi">51</span><span class="o">,</span> <span class="mi">100</span> <span class="o">);</span>
-        <span class="nc">Thread</span> <span class="n">thread1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">(</span> <span class="n">task1</span><span class="o">,</span> <span class="s">"thread1"</span> <span class="o">);</span>
-        <span class="nc">Thread</span> <span class="n">thread2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">(</span> <span class="n">task2</span><span class="o">,</span> <span class="s">"thread2"</span> <span class="o">);</span>
-
-        <span class="n">thread1</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
-        <span class="n">thread2</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
-
-        <span class="c1">//스레드가 종료될 때 까지 대기</span>
-        <span class="c1">//thread1, thread2의 작업이 종료되면 main thread의 작업이 종료된다.</span>
-        <span class="n">log</span><span class="o">(</span> <span class="s">"join() - main 스레드가 thread1, therad2 종료까지 대기"</span> <span class="o">);</span>
-        <span class="n">thread1</span><span class="o">.</span><span class="na">join</span><span class="o">();</span>
-        <span class="n">thread2</span><span class="o">.</span><span class="na">join</span><span class="o">();</span>
-
-        <span class="n">log</span><span class="o">(</span> <span class="s">"task1.result = "</span> <span class="o">+</span> <span class="n">task1</span><span class="o">.</span><span class="na">result</span> <span class="o">);</span>
-        <span class="n">log</span><span class="o">(</span> <span class="s">"task2.result = "</span> <span class="o">+</span> <span class="n">task2</span><span class="o">.</span><span class="na">result</span> <span class="o">);</span>
-
-        <span class="kt">int</span> <span class="n">sumAll</span> <span class="o">=</span> <span class="n">task1</span><span class="o">.</span><span class="na">result</span> <span class="o">+</span> <span class="n">task2</span><span class="o">.</span><span class="na">result</span><span class="o">;</span>
-        <span class="n">log</span><span class="o">(</span> <span class="s">"task1 + task2 = "</span> <span class="o">+</span> <span class="n">sumAll</span> <span class="o">);</span>
-        <span class="n">log</span><span class="o">(</span> <span class="s">"End"</span> <span class="o">);</span>
-    <span class="o">}</span>
-
-    <span class="kd">static</span> <span class="kd">class</span> <span class="nc">SumTask</span> <span class="kd">implements</span> <span class="nc">Runnable</span> <span class="o">{</span>
-
-        <span class="kt">int</span> <span class="n">startValue</span><span class="o">;</span> <span class="c1">//0</span>
-        <span class="kt">int</span> <span class="n">endValue</span><span class="o">;</span> <span class="c1">//0</span>
-        <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-
-        <span class="kd">public</span> <span class="nf">SumTask</span><span class="o">(</span><span class="kt">int</span> <span class="n">startValue</span><span class="o">,</span> <span class="kt">int</span> <span class="n">endValue</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="na">startValue</span> <span class="o">=</span> <span class="n">startValue</span><span class="o">;</span>
-            <span class="k">this</span><span class="o">.</span><span class="na">endValue</span> <span class="o">=</span> <span class="n">endValue</span><span class="o">;</span>
-        <span class="o">}</span>
-
-        <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
-            <span class="n">log</span><span class="o">(</span> <span class="s">"작업 시작"</span> <span class="o">);</span>
-            <span class="n">sleep</span><span class="o">(</span> <span class="mi">2000</span> <span class="o">);</span>
-            <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">startValue</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">endValue</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-                <span class="n">sum</span> <span class="o">+=</span> <span class="n">i</span><span class="o">;</span>
-            <span class="o">}</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="n">sum</span><span class="o">;</span>
-            <span class="n">log</span><span class="o">(</span> <span class="s">"작업 완료 + result = "</span> <span class="o">+</span> <span class="n">result</span> <span class="o">);</span>
-
-        <span class="o">}</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-<p><img width="658" alt="image" src="https://github.com/user-attachments/assets/fadc029c-1acb-4162-b777-1d7f9d275ad2" />
-실행 결과를 보면 정확하게 5050 이 계산된 것을 확인할 수 있다.</p>
-
-<p><img width="606" alt="image" src="https://github.com/user-attachments/assets/cb632b23-17cc-429d-8960-32604841715e" />
-예를 들어서 <code class="language-plaintext highlighter-rouge">thread-1</code> 이 아직 종료되지 않았다면 <code class="language-plaintext highlighter-rouge">main</code> 스레드는 <code class="language-plaintext highlighter-rouge">thread1.join()</code> 코드 안에서 더는 진행하지않고 멈추어 기다린다. 
-이후에 <code class="language-plaintext highlighter-rouge">thread-1</code> 이 종료되면 <code class="language-plaintext highlighter-rouge">main</code> 스레드는 <code class="language-plaintext highlighter-rouge">RUNNABLE</code> 상태가 되고 다음 코드로 이동한다.
-이때 <code class="language-plaintext highlighter-rouge">thread-2</code> 이 아직 종료되지 않았다면 <code class="language-plaintext highlighter-rouge">main</code> 스레드는 <code class="language-plaintext highlighter-rouge">thread2.join()</code> 코드 안에서 진행하지 않고 멈추어 기다린다. 
-이후에 <code class="language-plaintext highlighter-rouge">thread-2</code> 이 종료되면 <code class="language-plaintext highlighter-rouge">main</code> 스레드는 <code class="language-plaintext highlighter-rouge">RUNNABLE</code> 상태가 되고 다음 코드로 이동한다. 이 경우 <code class="language-plaintext highlighter-rouge">thread-1</code> 이 종료되는 시점에 <code class="language-plaintext highlighter-rouge">thread-2</code> 도 거의 같이 종료되기 때문에 <code class="language-plaintext highlighter-rouge">thread2.join()</code> 은 대기하지 않고 바로 빠져나온다.
-이렇듯 특정 스레드가 완료될 때 까지 기다려야 하는 상황이라면 join() 을 사용하면 된다.</p>
+<p>쿠버네티스는 하드웨어 인프라를 추상화하고 데이터 센터 전체를 하나의 거대한 컴퓨팅 리소스로 제공한다.</p>
 
 <h2 id="reference">Reference</h2>
 
-<p>인프런 김영한님의 자바강좌 + 나의 뇌</p>
+<p><a href="https://www.redhat.com/ko/topics/containers/what-is-kubernetes">https://www.redhat.com/ko/topics/containers/what-is-kubernetes</a></p>
+
+<p><a href="https://cloud.google.com/kubernetes-engine?hl=ko">https://cloud.google.com/kubernetes-engine?hl=ko</a></p>
+
+<p>&lt;<a href="https://www.openmaru.io/%ea%b5%ac%ea%b8%80%ea%b3%bc-%ec%bf%a0%eb%b2%84%eb%84%a4%ed%8b%b0%ec%8a%a4/">https://www.openmaru.io/구글과-쿠버네티스/</a>&gt;</p>
 
     <br />
     <br />
@@ -459,12 +327,12 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=Java Adv -Thread 4-&amp;url=http://localhost:4000/language/2024/09/22/Java-Adv-04/"
+    <a href="http://twitter.com/share?text=쉽게 배우는 쿠버네티스 -01-&amp;url=http://localhost:4000/devops/2024/09/22/Kubernetes-basic-01/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/09/22/Java-Adv-04/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/devops/2024/09/22/Kubernetes-basic-01/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -494,24 +362,8 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
 
 
 <li class="h4">
-  <a href="/language/2024/09/22/Java-Adv-03/" data-flip="title">
-    <span>Java Adv -Thread 3-</span>
-  </a>
-  <small><time datetime="2024-09-22T00:00:00+09:00">
-    22 Sep 2024
-  </time></small>
-</li>
-
-        
-      
-        
-        
-          
-
-
-<li class="h4">
-  <a href="/language/2024/09/21/Java-Adv-02/" data-flip="title">
-    <span>Java Adv -Thread 2-</span>
+  <a href="/devops/2024/09/21/Devops-Docker-02/" data-flip="title">
+    <span>DockerFile로 Spring Image 만들기</span>
   </a>
   <small><time datetime="2024-09-21T00:00:00+09:00">
     21 Sep 2024
@@ -526,11 +378,27 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
 
 
 <li class="h4">
-  <a href="/language/2024/09/21/Java-Adv-01/" data-flip="title">
-    <span>Java Adv -Thread 1-</span>
+  <a href="/devops/2024/09/21/Devops-Docker-01/" data-flip="title">
+    <span>Docker swarm을 이용한 사이드 프로젝트</span>
   </a>
   <small><time datetime="2024-09-21T00:00:00+09:00">
     21 Sep 2024
+  </time></small>
+</li>
+
+        
+      
+        
+        
+          
+
+
+<li class="h4">
+  <a href="/devops/2024/09/17/Infra-01/" data-flip="title">
+    <span>꼭 CPU를 지표로 스케일링해야 할까?</span>
+  </a>
+  <small><time datetime="2024-09-17T00:00:00+09:00">
+    17 Sep 2024
   </time></small>
 </li>
 
