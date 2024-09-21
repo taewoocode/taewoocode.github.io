@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 21 Sep 2024 18:39:09 +0900</pubDate>
-    <lastBuildDate>Sat, 21 Sep 2024 18:39:09 +0900</lastBuildDate>
+    <pubDate>Sat, 21 Sep 2024 18:47:56 +0900</pubDate>
+    <lastBuildDate>Sat, 21 Sep 2024 18:47:56 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
@@ -677,6 +677,116 @@ on: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;push]
         
         
         <category>devops</category>
+        
+      </item>
+    
+      <item>
+        <title>프로그래머스 문자열 분리</title>
+        <description>&lt;h2 id=&quot;문제링크&quot;&gt;문제링크&lt;/h2&gt;
+
+&lt;p&gt;https://school.programmers.co.kr/learn/courses/30/lessons/140108&lt;/p&gt;
+
+&lt;h2 id=&quot;문제설명&quot;&gt;문제설명&lt;/h2&gt;
+
+&lt;p&gt;문자열 s가 입력되었을 때 다음 규칙을 따라서 이 문자열을 여러 문자열로 분해하려고 합니다.&lt;/p&gt;
+
+&lt;p&gt;먼저 첫 글자를 읽습니다. 이 글자를 x라고 합시다.&lt;/p&gt;
+
+&lt;p&gt;이제 이 문자열을 왼쪽에서 오른쪽으로 읽어나가면서, x와 x가 아닌 다른 글자들이 나온 횟수를 각각 셉니다. 처음으로 두 횟수가 같아지는 순간 멈추고, 지금까지 읽은 문자열을 분리합니다.&lt;/p&gt;
+
+&lt;p&gt;s에서 분리한 문자열을 빼고 남은 부분에 대해서 이 과정을 반복합니다. 남은 부분이 없다면 종료합니다.&lt;/p&gt;
+
+&lt;p&gt;만약 두 횟수가 다른 상태에서 더 이상 읽을 글자가 없다면, 역시 지금까지 읽은 문자열을 분리하고, 종료합니다.&lt;/p&gt;
+
+&lt;p&gt;문자열 s가 매개변수로 주어질 때, 위 과정과 같이 문자열들로 분해하고, 분해한 문자열의 개수를 return 하는 함수 solution을 완성하세요.&lt;/p&gt;
+
+&lt;h2 id=&quot;코드&quot;&gt;코드&lt;/h2&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;include&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bits&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stdc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;h&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;namespace&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;solution&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;answer&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cnt&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;auto&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;otherCnt&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++){&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//첫번째 글자랑 다음나온 글자가 다르다면?&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]){&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;cnt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;otherCnt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cnt&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;otherCnt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;answer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()){&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;cnt&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;otherCnt&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cnt&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;otherCnt&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;answer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;answer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;문제-접근&quot;&gt;문제 접근&lt;/h3&gt;
+
+&lt;p&gt;먼저, 문자열을 하나씩 읽어가면서 첫 번째 글자를 기억해. 그걸 &lt;strong&gt;x&lt;/strong&gt;라고 정했다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;이제 &lt;strong&gt;x&lt;/strong&gt;랑 똑같은 글자가 몇 개 나오는지 세고, &lt;strong&gt;x&lt;/strong&gt;랑 다른 글자도 몇 개 나오는지 세어본다.&lt;/li&gt;
+  &lt;li&gt;두 글자의 개수가 &lt;strong&gt;딱 같아지면&lt;/strong&gt; 우리는 여기서 “끝!”이라고 하고, 그 부분까지를 하나의 덩어리로 나누는 거야.&lt;/li&gt;
+  &lt;li&gt;그 후, 나머지 글자들에 대해서도 같은 과정을 반복한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;예시&quot;&gt;예시&lt;/h3&gt;
+
+&lt;p&gt;친구가 줄넘기 시합을 할 때 &lt;strong&gt;너&lt;/strong&gt;랑 &lt;strong&gt;친구&lt;/strong&gt;가 똑같이 줄넘기를 몇 번 했는지 세는 거랑 비슷해.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;너랑 친구가 &lt;strong&gt;같은 횟수&lt;/strong&gt;로 줄넘기를 했으면 “끝!” 하고 시합이 종료되잖아? 그러면 한 판이 끝난 거야.&lt;/li&gt;
+  &lt;li&gt;그 다음에 또 새로운 시합을 시작하는 거지.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;이 과정은 계속 반복돼. 만약 마지막까지 줄넘기를 하다가 “같은 횟수”가 안 맞으면, 그때까지 한 번 더 나누고 끝내는 로직이다.&lt;/p&gt;
+
+&lt;h3 id=&quot;코드-설명&quot;&gt;코드 설명&lt;/h3&gt;
+
+&lt;p&gt;이걸 코드로 옮기면 다음과 같아:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;x&lt;/strong&gt;라는 첫 번째 글자를 정해.&lt;/li&gt;
+  &lt;li&gt;x와 같은 글자 개수(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cnt&lt;/code&gt;)랑 x와 다른 글자 개수(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;otherCnt&lt;/code&gt;)를 각각 세.&lt;/li&gt;
+  &lt;li&gt;두 개수가 같아지면, 한 덩어리로 나누고 그 순간 덩어리 개수(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;answer&lt;/code&gt;)를 하나 늘려.&lt;/li&gt;
+  &lt;li&gt;새로운 덩어리에서 또 첫 글자 &lt;strong&gt;x&lt;/strong&gt;를 정하고, 다시 똑같이 해.&lt;/li&gt;
+  &lt;li&gt;마지막에 남은 글자가 있으면 그것도 하나의 덩어리로 추가.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;그래서 최종적으로 몇 개의 덩어리로 나눴는지를 구한다.&lt;/p&gt;
+
+&lt;h3 id=&quot;문제-해결을-쉽게-접근해보면&quot;&gt;문제 해결을 쉽게 접근해보면&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;첫 글자&lt;/strong&gt;를 기준으로, 그 글자가 몇 번 나오는지(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cnt&lt;/code&gt;)랑, 그 글자랑 &lt;strong&gt;다른 글자가 몇 번 나오는지&lt;/strong&gt;(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;otherCnt&lt;/code&gt;)를 카운트 한다.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;두 개수가 같아지면&lt;/strong&gt; 그 순간까지 읽은 부분을 하나의 &lt;strong&gt;구간&lt;/strong&gt;이라고 생각하고, 이 구간을 처리했으니까 이제 다시 남은 문자열로 같은 작업을 반복한다.&lt;/li&gt;
+  &lt;li&gt;계속해서 이 과정을 반복하면서 &lt;strong&gt;문자열을 나눈 횟수&lt;/strong&gt;를 센다.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+</description>
+        <pubDate>Sat, 21 Sep 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/cs/2024/09/21/Algorithm-01/</link>
+        <guid isPermaLink="true">http://localhost:4000/cs/2024/09/21/Algorithm-01/</guid>
+        
+        <category>Algorithm</category>
+        
+        
+        <category>cs</category>
         
       </item>
     
