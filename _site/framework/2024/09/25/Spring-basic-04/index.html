@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Java Mid 06 - Wrapper Class" />
+<meta property="og:title" content="Spring Basic 04 - Autowired 는 타입으로 조회를 한다" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,17 +52,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Java Mid 06 - Wrapper Class &middot; 일벌리는 개발자</title>
+<title>Spring Basic 04 - Autowired 는 타입으로 조회를 한다 &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="기본형의 한계
+        content="@Autowired 는 타입으로 조회를 한다.
 
 "
 />
 <meta
         property="og:description"
-        content="기본형의 한계
+        content="@Autowired 는 타입으로 조회를 한다.
 
 "
 />
@@ -72,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/language/2024/09/18/Java-Mid-06/" />
-<meta property="og:url" content="http://localhost:4000/language/2024/09/18/Java-Mid-06/" />
+<link rel="canonical" href="http://localhost:4000/framework/2024/09/25/Spring-basic-04/" />
+<meta property="og:url" content="http://localhost:4000/framework/2024/09/25/Spring-basic-04/" />
 
 <link
         rel="alternate"
@@ -83,10 +83,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/language/2024/09/18/Java-Mid-05/" />
+<link rel="prev" href="http://localhost:4000/framework/2024/09/24/Spring-basic-03/" />
  
-<link rel="next" href="http://localhost:4000/language/2024/09/18/Java-Mid-07/" />
-
 
 <link
         rel="apple-touch-icon"
@@ -183,16 +181,16 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-language/2024/09/18/Java-Mid-06" class="post" role="article">
+<article id="post-framework/2024/09/25/Spring-basic-04" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      Java Mid 06 - Wrapper Class
+      Spring Basic 04 - Autowired 는 타입으로 조회를 한다
       
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
+      <time datetime="2024-09-25T00:00:00+09:00">25 Sep 2024</time>
       
 
 
@@ -203,7 +201,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 
 
 
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
+in <a href="/category/framework/" data-flip="title">Framework</a>
 
       
 
@@ -215,7 +213,7 @@ in <a href="/category/programming-language/" data-flip="title">Programming Langu
 
 
 
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
+on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
 
     </p>
 
@@ -267,243 +265,81 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
     </style>
 
     <!--<br />-->
-    <h2 id="기본형의-한계">기본형의 한계</h2>
+    <h2 id="autowired-는-타입으로-조회를-한다">@Autowired 는 타입으로 조회를 한다.</h2>
 
-<p>래퍼 클래스를 들어가기 전 우선 자바에 대해 다시 짚고 넘어가자면 자바는 객체지향 언어이다.
-그런데 자바 안에 객체가 아닌 것이 있다. (int, boolen, double)과 같은 Primitive Type들을 말한다.
-기본형은 객체가 아니기 때문에 다음과 같은 한계가 있다.</p>
-
-<ul>
-  <li>객체가 아니다. 기본형은 객체가 아니기 때문에 객체지향의 장점을 살릴 수 없다. 쉽게 생각해보자면 객체는 유용한 메서드를 제공할 수 있는데, 기본형은 객체가 아니기 때문에 메서드를 제공할 수 없다.
-    <ul>
-      <li>객체 참조가 필요한 컬렉션 프레임워크를 사용하기 힘들다. 제네릭도 사용할 수 없다.</li>
-    </ul>
-  </li>
-  <li>null 값을 가질 수 없다. 기본형 데이터 타입은 null을 가질 수 없다. 데이터가 없음 이라는 상태를 나타내야 할 때가 있는데 기본형은 null값을 가질 수 없다.</li>
-</ul>
-
-<h2 id="wrapper클래스를-간단하게-설명하자면">Wrapper클래스를 간단하게 설명하자면</h2>
-
-<p>기본 자료타입(primitive type)을 객체로 다루기 위해서 사용하는 클래스들을 래퍼 클래스(wrapper class)라고 한다.
-Wrapper가 감싸다 라는 뜻이 있는데 기본형을 감싸면 객체가 된다.</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyIntegerMethodMain0</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kt">int</span> <span class="n">value</span> <span class="o">=</span> <span class="mi">10</span><span class="o">;</span>
-        <span class="kt">int</span> <span class="n">i1</span> <span class="o">=</span> <span class="n">comPareTo</span><span class="o">(</span> <span class="n">value</span><span class="o">,</span> <span class="mi">5</span> <span class="o">);</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"i1 = "</span> <span class="o">+</span> <span class="n">i1</span> <span class="o">);</span>
-        <span class="kt">int</span> <span class="n">i2</span> <span class="o">=</span> <span class="n">comPareTo</span><span class="o">(</span> <span class="n">value</span><span class="o">,</span> <span class="mi">10</span> <span class="o">);</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"i2 = "</span> <span class="o">+</span> <span class="n">i2</span> <span class="o">);</span>
-        <span class="kt">int</span> <span class="n">i3</span> <span class="o">=</span> <span class="n">comPareTo</span><span class="o">(</span> <span class="n">value</span><span class="o">,</span> <span class="mi">20</span> <span class="o">);</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"i3 = "</span> <span class="o">+</span> <span class="n">i3</span> <span class="o">);</span>
-
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">int</span> <span class="nf">comPareTo</span><span class="o">(</span><span class="kt">int</span> <span class="n">value</span><span class="o">,</span> <span class="kt">int</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">value</span> <span class="o">&lt;</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
-        <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">value</span> <span class="o">&gt;</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span> <span class="c1">//그게아니라</span>
-            <span class="k">return</span> <span class="mi">1</span><span class="o">;</span>
-        <span class="o">}</span> <span class="k">else</span><span class="o">{</span> <span class="c1">//이것도 아니고 저것도 아니면 ?</span>
-            <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>value와 비교 대상 값을 compareTo()라는 외부 메서드를 사용해서 비교한다.
-자기 자신인 value와 다른값을 연산하는 것이기 때문에 항상 자기 자신의 값인 value가 사용된다. value가 객체라면 value객체 스스로 자기 자신의 값과 다른 값을 비교하는 메서드를 만드는 것이 더 중요하다.</p>
-
-<h2 id="한계-극복-직접-만든-래퍼-클래스">한계 극복 직접 만든 래퍼 클래스</h2>
-
-<p>int를 클래스로 만들자. int를 클래스로 감싸서 만드는 것, 특정 기본형을 감싸서 만드는 클래스를 래퍼클래스라고 한다.</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyInteger</span> <span class="o">{</span>
-
-    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">value</span><span class="o">;</span>
-
-    <span class="kd">public</span> <span class="nf">MyInteger</span><span class="o">(</span><span class="kt">int</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getValue</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">value</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">comPareTo</span><span class="o">(</span><span class="kt">int</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">value</span> <span class="o">&lt;</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
-        <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">value</span> <span class="o">&gt;</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">return</span> <span class="mi">1</span><span class="o">;</span>
-        <span class="o">}</span> <span class="k">else</span><span class="o">{</span> 
-            <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="nc">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span> <span class="n">value</span> <span class="o">);</span> <span class="c1">//숫자를 문자로 반환</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyIntegerMethodMain1</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">MyInteger</span> <span class="n">myInteger</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">MyInteger</span><span class="o">(</span> <span class="mi">10</span> <span class="o">);</span>
-        <span class="kt">int</span> <span class="n">i1</span> <span class="o">=</span> <span class="n">myInteger</span><span class="o">.</span><span class="na">comPareTo</span><span class="o">(</span> <span class="mi">5</span> <span class="o">);</span>
-        <span class="kt">int</span> <span class="n">i2</span> <span class="o">=</span> <span class="n">myInteger</span><span class="o">.</span><span class="na">comPareTo</span><span class="o">(</span> <span class="mi">10</span> <span class="o">);</span>
-        <span class="kt">int</span> <span class="n">i3</span> <span class="o">=</span> <span class="n">myInteger</span><span class="o">.</span><span class="na">comPareTo</span><span class="o">(</span> <span class="mi">20</span> <span class="o">);</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"i1 = "</span> <span class="o">+</span> <span class="n">i1</span> <span class="o">);</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"i2 = "</span> <span class="o">+</span> <span class="n">i2</span> <span class="o">);</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"i3 = "</span> <span class="o">+</span> <span class="n">i3</span> <span class="o">);</span>
-
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<h2 id="래퍼-클래스--기본형의-한계">래퍼 클래스- 기본형의 한계</h2>
-
-<p>기본형과 Null</p>
-<ul>
-  <li>기본형은 항상 값을 가져야 한다. 하지만 때로는 데이터가 ‘없음’이라는 상태가 필요할 수 있다.</li>
-</ul>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyIntegerNullMain0</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kt">int</span><span class="o">[]</span> <span class="n">intArr</span> <span class="o">=</span> <span class="o">{-</span><span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">};</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="n">findValue</span><span class="o">(</span> <span class="n">intArr</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span> <span class="o">)</span> <span class="o">);</span> <span class="c1">//-1 찾으면 -1 반환</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="n">findValue</span><span class="o">(</span> <span class="n">intArr</span><span class="o">,</span> <span class="mi">0</span> <span class="o">)</span> <span class="o">);</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="n">findValue</span><span class="o">(</span> <span class="n">intArr</span><span class="o">,</span> <span class="mi">1</span> <span class="o">)</span> <span class="o">);</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="n">findValue</span><span class="o">(</span> <span class="n">intArr</span><span class="o">,</span> <span class="mi">100</span> <span class="o">)</span> <span class="o">);</span>
-    <span class="o">}</span>
-
-    <span class="kd">private</span> <span class="kd">static</span> <span class="kt">int</span> <span class="nf">findValue</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">intArr</span><span class="o">,</span> <span class="kt">int</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">value</span> <span class="o">:</span> <span class="n">intArr</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">value</span> <span class="o">==</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">return</span> <span class="n">value</span><span class="o">;</span>
-            <span class="o">}</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Autowired</span>
+<span class="kd">private</span> <span class="nc">Discountpolicy</span> <span class="n">discountpolicy</span>
 </code></pre></div></div>
 
 <ul>
-  <li>findValue()는 배열에 찾는 값이 있으면 해당 값을 반환하고, 찾는 값이 없으면 -1을 반환한다.</li>
-  <li>findValue()는 결과로 int를 반환한다. int와 같은 기본형은 항상 값이 있어야 한다. 반환 값을 찾지 못하면 숫자 중에 하나를 반환해야 하는데 보통 -1 또는 0을 사용한다.</li>
-  <li>100을 입력해도 -1을 반환한다.
-    <ul>
-      <li>입력값이 -1일 때를 생각해보면, 배열에 -1 값이 있어서 -1을 반환한 것인지, 아니면  -1값이 없어서 -1을 반환한 것인지 명확하지 않다.</li>
-    </ul>
-  </li>
+  <li>타입으로 조회를 하기 때문에 마치 다음 코드와 유사하게 동작한다.</li>
+  <li>ac.getBean(DiscountPolicy.class)</li>
 </ul>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyIntegerNullMain1</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">MyInteger</span><span class="o">[]</span> <span class="n">intArr</span> <span class="o">=</span> <span class="o">{</span><span class="k">new</span> <span class="nc">MyInteger</span><span class="o">(</span> <span class="o">-</span><span class="mi">1</span> <span class="o">),</span> <span class="k">new</span> <span class="nc">MyInteger</span><span class="o">(</span> <span class="mi">0</span> <span class="o">),</span> <span class="k">new</span> <span class="nc">MyInteger</span><span class="o">(</span> <span class="mi">1</span> <span class="o">)};</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="n">findValue</span><span class="o">(</span> <span class="n">intArr</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span> <span class="o">)</span> <span class="o">);</span> <span class="c1">//-1 찾으면 -1 반환</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="n">findValue</span><span class="o">(</span> <span class="n">intArr</span><span class="o">,</span> <span class="mi">0</span> <span class="o">)</span> <span class="o">);</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="n">findValue</span><span class="o">(</span> <span class="n">intArr</span><span class="o">,</span> <span class="mi">1</span> <span class="o">)</span> <span class="o">);</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="n">findValue</span><span class="o">(</span> <span class="n">intArr</span><span class="o">,</span> <span class="mi">100</span> <span class="o">)</span> <span class="o">);</span>
-    <span class="o">}</span>
+<h2 id="빈이-2개-이상일-때-문제가-발생한다">빈이 2개 이상일 때 문제가 발생한다.</h2>
 
-    <span class="kd">private</span> <span class="kd">static</span> <span class="nc">MyInteger</span> <span class="nf">findValue</span><span class="o">(</span><span class="nc">MyInteger</span><span class="o">[]</span> <span class="n">intArr</span><span class="o">,</span> <span class="kt">int</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">for</span> <span class="o">(</span><span class="nc">MyInteger</span> <span class="n">myInteger</span> <span class="o">:</span> <span class="n">intArr</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">myInteger</span><span class="o">.</span><span class="na">getValue</span><span class="o">()</span> <span class="o">==</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">return</span> <span class="n">myInteger</span><span class="o">;</span>
-            <span class="o">}</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span> <span class="c1">//target이랑 비교후 값이 없다면 Null반환</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-<ul>
-  <li>앞서 만든 MyInteger 래퍼 클래스를 사용했다.</li>
-  <li>실행 결과를 보면 -1을 입력했을 때는 -1을 반환한다.</li>
-  <li>100을 입력했을 때는 값이 없다는 null을 반환한다</li>
-</ul>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">FixDiscountPolicy</span> <span class="nc">DiscountPolicy</span> <span class="o">{}</span>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">WrapperClassMain</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">Integer</span> <span class="n">newInteger</span><span class="o">=</span> <span class="k">new</span> <span class="nc">Integer</span><span class="o">(</span> <span class="mi">10</span> <span class="o">);</span> <span class="c1">//미래에 삭제예정, 대신에 valueOf()를 사용</span>
-        <span class="nc">Integer</span> <span class="n">integerObj</span> <span class="o">=</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span> <span class="mi">10</span> <span class="o">);</span> <span class="c1">//-128 ~ 127 자주 사용하는 숫자 값 재사용, 불변</span>
-        <span class="nc">Long</span> <span class="n">longObj</span> <span class="o">=</span> <span class="nc">Long</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span> <span class="mi">10</span> <span class="o">);</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"newInteger = "</span> <span class="o">+</span> <span class="n">newInteger</span> <span class="o">);</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"integerObj = "</span> <span class="o">+</span> <span class="n">integerObj</span> <span class="o">);</span>
-
-    <span class="o">}</span>
-<span class="o">}</span>
+<span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">RateDiscountPolicy</span> <span class="kd">implements</span> <span class="nc">DiscountPolicy</span> <span class="o">{}</span>
 </code></pre></div></div>
 
-<h2 id="래퍼-클래스-생성---박싱boxing">래퍼 클래스 생성 - 박싱(Boxing)</h2>
+<p>그리고 의존관계를 주입을 해주면</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Autowired</span>
+<span class="kd">private</span> <span class="nc">RateDiscountPolicy</span> <span class="n">discountPolicy</span>
+</code></pre></div></div>
 
 <ul>
-  <li>기본형 10을 넣어서 Intger라는 래퍼클래스를 만드는 것 → 박싱</li>
-  <li>Integer.valueOf()에는 성능 최적화 기능이 있다.</li>
-  <li>-128 ~ 127범위의 Integer 클래스를 미리 생성해준다. 해당 범위의 값을 조회하면 미리 생성된 Integer 객체를 반환한다.
-    <ul>
-      <li>마치 문자열 풀과 비슷하게 자주 사용하는 숫자를 미리 생성해두고 재사용한다.</li>
-      <li>최적화 방식은 미래에 더 나은 방식으로 변경이 될 수 있다.</li>
-    </ul>
-  </li>
+  <li>NoUniqueBeanDefinitionException이 발생한다.</li>
 </ul>
 
-<h2 id="intvalue---언박싱unboxing">intValue() - 언박싱(Unboxing)</h2>
+<h2 id="autowired-매칭정리">Autowired 매칭정리</h2>
 
 <ul>
-  <li>래퍼 클래스에 들어있는 기본형 값을 다시 꺼내는 메서드이다.</li>
-  <li>박스에 들어있는 물건을 꺼내는 것 같다고 해서 언박싱이라 한다.</li>
+  <li>타입 매칭</li>
+  <li>타입 매칭의 결과가 2개 이상일 때 필드 명으로 빈 이름 매칭</li>
 </ul>
 
-<p>결론 : 기본형 → 클래스 ( 박싱 ), 클래스 → 기본형 ( 언박싱 )</p>
+<h2 id="qulifier-사용">Qulifier 사용</h2>
 
-<h2 id="래퍼-클래스와-성능">래퍼 클래스와 성능</h2>
+<ul>
+  <li>@Qulifier는 추가 구분자를 붙여주는 방법이다. 주입시 추가적인 방법을 제공하는 것이지 빈 이름을 변경하는 것은 아니다.</li>
+</ul>
 
-<p>래퍼 클래스는 객체이기 때문에 기본형보다 다양한 기능을 제공한다.</p>
+<h3 id="빈-등록시-qulifier를-붙여준다">빈 등록시 Qulifier를 붙여준다</h3>
 
-<p>그렇다면 더 좋은 래퍼 클래스만 제공하면 되지 기본형을 제공하는 이유는 뭘까?</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="nd">@Component</span>
+ <span class="nd">@Qualifier</span><span class="o">(</span><span class="s">"mainDiscountPolicy"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">RateDiscountPolicy</span> <span class="kd">implements</span> <span class="nc">DiscountPolicy</span> <span class="o">{}</span> <span class="err">```</span>
 
-<p>이유는 성능차이가 있기는 하다. 시기 적절하게 잘 사용해야 한다.</p>
+ <span class="nd">@Component</span>
+ <span class="nd">@Qualifier</span><span class="o">(</span><span class="s">"fixDiscountPolicy"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">FixDiscountPolicy</span> <span class="kd">implements</span> <span class="nc">DiscountPolicy</span> <span class="o">{}</span>
+</code></pre></div></div>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">lang.wrapper</span><span class="o">;</span>
+<h3 id="주입시에-qualifier를-붙여주고-등록한-이름을-적어준다"><strong>주입시에 @Qualifier를 붙여주고 등록한 이름을 적어준다</strong></h3>
 
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">WrapperVsPrimitive</span> <span class="o">{</span>
-
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kt">int</span> <span class="n">iterations</span> <span class="o">=</span> <span class="mi">1_000_000_000</span><span class="o">;</span> <span class="c1">//구분자</span>
-        <span class="kt">long</span> <span class="n">startTime</span><span class="o">,</span> <span class="n">endTime</span><span class="o">;</span>
-
-        <span class="c1">// 기본형 long 사용</span>
-        <span class="kt">long</span> <span class="n">sumPrimitive</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-        <span class="n">startTime</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">iterations</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-            <span class="n">sumPrimitive</span> <span class="o">+=</span> <span class="n">i</span><span class="o">;</span>
-        <span class="o">}</span>
-
-        <span class="n">endTime</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"sumPrimitive = "</span> <span class="o">+</span> <span class="n">sumPrimitive</span> <span class="o">);</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"기본 자료형 long 실행시간: "</span> <span class="o">+</span> <span class="o">(</span><span class="n">endTime</span> <span class="o">-</span> <span class="n">startTime</span><span class="o">)</span> <span class="o">+</span> <span class="s">"ms"</span> <span class="o">);</span>
-
-        <span class="c1">// 래퍼 클래스 Long 사용</span>
-
-        <span class="nc">Long</span> <span class="n">sumWrapper</span> <span class="o">=</span> <span class="mi">0L</span><span class="o">;</span>
-        <span class="n">startTime</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">iterations</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-            <span class="n">sumWrapper</span> <span class="o">+=</span> <span class="n">i</span><span class="o">;</span> <span class="c1">// 오토 박싱 발생</span>
-        <span class="o">}</span>
-
-        <span class="n">endTime</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"sumWrapper = "</span> <span class="o">+</span> <span class="n">sumWrapper</span> <span class="o">);</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"래퍼 클래스 Long 실행시간: "</span> <span class="o">+</span> <span class="o">(</span><span class="n">endTime</span> <span class="o">-</span> <span class="n">startTime</span><span class="o">)</span> <span class="o">+</span> <span class="s">"ms"</span> <span class="o">);</span>
-
-    <span class="o">}</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Autowired</span>
+ <span class="kd">public</span> <span class="nf">OrderServiceImpl</span><span class="o">(</span><span class="nc">MemberRepository</span> <span class="n">memberRepository</span><span class="o">,</span> <span class="nd">@Qualifier</span><span class="o">(</span><span class="s">"mainDiscountPolicy"</span><span class="o">)</span> <span class="nc">DiscountPolicy</span> <span class="n">discountPolicy</span><span class="o">)</span> <span class="o">{</span>
+     <span class="k">this</span><span class="o">.</span><span class="na">memberRepository</span> <span class="o">=</span> <span class="n">memberRepository</span><span class="o">;</span>
+     <span class="k">this</span><span class="o">.</span><span class="na">discountPolicy</span> <span class="o">=</span> <span class="n">discountPolicy</span><span class="o">;</span>
 <span class="o">}</span>
 
 </code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">@Qualifier</code> 로 주입할 때 <code class="language-plaintext highlighter-rouge">@Qualifier("mainDiscountPolicy")</code> 를 못찾으면 어떻게 될까? 그러면 mainDiscountPolicy라는 이름의 스프링 빈을 추가로 찾는다. 하지만 경험상 <code class="language-plaintext highlighter-rouge">@Qualifier</code> 는 <code class="language-plaintext highlighter-rouge">@Qualifier</code> 를 찾 는 용도로만 사용하는게 명확하고 좋다.</p>
+
+<h2 id="primary">Primary</h2>
+
+<ul>
+  <li>@Primary는 우선권을 가지는 방법이다. @Autowired 시에 여러 빈이 매칭이 되면 @Primary가 우선권을 가진다.</li>
+</ul>
 
 <h2 id="reference">Reference</h2>
 
-<p>인프런 김영한님의 실전 자바 강좌 + 나의 뇌</p>
+<p>김영한님의 스프링 강의 정리</p>
 
     <br />
     <br />
@@ -517,12 +353,12 @@ Wrapper가 감싸다 라는 뜻이 있는데 기본형을 감싸면 객체가 �
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=Java Mid 06 - Wrapper Class&amp;url=http://localhost:4000/language/2024/09/18/Java-Mid-06/"
+    <a href="http://twitter.com/share?text=Spring Basic 04 - Autowired 는 타입으로 조회를 한다&amp;url=http://localhost:4000/framework/2024/09/25/Spring-basic-04/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/09/18/Java-Mid-06/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/framework/2024/09/25/Spring-basic-04/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -544,16 +380,19 @@ Wrapper가 감싸다 라는 뜻이 있는데 기본형을 감싸면 객체가 �
       
       
         
+          
+          
+        
         
           
 
 
 <li class="h4">
-  <a href="/language/2024/09/22/Java-Adv-04/" data-flip="title">
-    <span>Java Adv - Thread 4</span>
+  <a href="/framework/2024/09/24/Spring-basic-03/" data-flip="title">
+    <span>Spring Basic 03 - 생성자 주입을 선택하라</span>
   </a>
-  <small><time datetime="2024-09-22T00:00:00+09:00">
-    22 Sep 2024
+  <small><time datetime="2024-09-24T00:00:00+09:00">
+    24 Sep 2024
   </time></small>
 </li>
 
@@ -565,11 +404,11 @@ Wrapper가 감싸다 라는 뜻이 있는데 기본형을 감싸면 객체가 �
 
 
 <li class="h4">
-  <a href="/language/2024/09/22/Java-Adv-03/" data-flip="title">
-    <span>Java Adv - Thread 3</span>
+  <a href="/framework/2024/09/18/Spring-basic-02/" data-flip="title">
+    <span>Spring Basic 02 -싱글톤 패턴 적용해보기-</span>
   </a>
-  <small><time datetime="2024-09-22T00:00:00+09:00">
-    22 Sep 2024
+  <small><time datetime="2024-09-18T00:00:00+09:00">
+    18 Sep 2024
   </time></small>
 </li>
 
@@ -581,17 +420,14 @@ Wrapper가 감싸다 라는 뜻이 있는데 기본형을 감싸면 객체가 �
 
 
 <li class="h4">
-  <a href="/language/2024/09/21/Java-Adv-02/" data-flip="title">
-    <span>Java Adv - Thread 2</span>
+  <a href="/framework/2024/09/17/Spring-02/" data-flip="title">
+    <span>DockerFile로 Spring이미지를 만들어보자</span>
   </a>
-  <small><time datetime="2024-09-21T00:00:00+09:00">
-    21 Sep 2024
+  <small><time datetime="2024-09-17T00:00:00+09:00">
+    17 Sep 2024
   </time></small>
 </li>
 
-        
-      
-        
         
       
     

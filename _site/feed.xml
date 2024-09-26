@@ -6,9 +6,98 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 27 Sep 2024 00:24:59 +0900</pubDate>
-    <lastBuildDate>Fri, 27 Sep 2024 00:24:59 +0900</lastBuildDate>
+    <pubDate>Fri, 27 Sep 2024 00:35:18 +0900</pubDate>
+    <lastBuildDate>Fri, 27 Sep 2024 00:35:18 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
+    
+      <item>
+        <title>Spring Basic 04 - Autowired 는 타입으로 조회를 한다</title>
+        <description>&lt;h2 id=&quot;autowired-는-타입으로-조회를-한다&quot;&gt;@Autowired 는 타입으로 조회를 한다.&lt;/h2&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Autowired&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Discountpolicy&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;discountpolicy&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;타입으로 조회를 하기 때문에 마치 다음 코드와 유사하게 동작한다.&lt;/li&gt;
+  &lt;li&gt;ac.getBean(DiscountPolicy.class)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;빈이-2개-이상일-때-문제가-발생한다&quot;&gt;빈이 2개 이상일 때 문제가 발생한다.&lt;/h2&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;FixDiscountPolicy&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DiscountPolicy&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;
+
+&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;RateDiscountPolicy&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DiscountPolicy&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;그리고 의존관계를 주입을 해주면&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Autowired&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;RateDiscountPolicy&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;discountPolicy&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;NoUniqueBeanDefinitionException이 발생한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;autowired-매칭정리&quot;&gt;Autowired 매칭정리&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;타입 매칭&lt;/li&gt;
+  &lt;li&gt;타입 매칭의 결과가 2개 이상일 때 필드 명으로 빈 이름 매칭&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;qulifier-사용&quot;&gt;Qulifier 사용&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;@Qulifier는 추가 구분자를 붙여주는 방법이다. 주입시 추가적인 방법을 제공하는 것이지 빈 이름을 변경하는 것은 아니다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;빈-등록시-qulifier를-붙여준다&quot;&gt;빈 등록시 Qulifier를 붙여준다&lt;/h3&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; &lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
+ &lt;span class=&quot;nd&quot;&gt;@Qualifier&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;mainDiscountPolicy&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;RateDiscountPolicy&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DiscountPolicy&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;```&lt;/span&gt;
+
+ &lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
+ &lt;span class=&quot;nd&quot;&gt;@Qualifier&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;fixDiscountPolicy&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;FixDiscountPolicy&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DiscountPolicy&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;주입시에-qualifier를-붙여주고-등록한-이름을-적어준다&quot;&gt;&lt;strong&gt;주입시에 @Qualifier를 붙여주고 등록한 이름을 적어준다&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Autowired&lt;/span&gt;
+ &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;OrderServiceImpl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;MemberRepository&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;memberRepository&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nd&quot;&gt;@Qualifier&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;mainDiscountPolicy&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DiscountPolicy&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;discountPolicy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+     &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;memberRepository&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;memberRepository&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+     &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;discountPolicy&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;discountPolicy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@Qualifier&lt;/code&gt; 로 주입할 때 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@Qualifier(&quot;mainDiscountPolicy&quot;)&lt;/code&gt; 를 못찾으면 어떻게 될까? 그러면 mainDiscountPolicy라는 이름의 스프링 빈을 추가로 찾는다. 하지만 경험상 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@Qualifier&lt;/code&gt; 는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@Qualifier&lt;/code&gt; 를 찾 는 용도로만 사용하는게 명확하고 좋다.&lt;/p&gt;
+
+&lt;h2 id=&quot;primary&quot;&gt;Primary&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;@Primary는 우선권을 가지는 방법이다. @Autowired 시에 여러 빈이 매칭이 되면 @Primary가 우선권을 가진다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;김영한님의 스프링 강의 정리&lt;/p&gt;
+</description>
+        <pubDate>Wed, 25 Sep 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/framework/2024/09/25/Spring-basic-04/</link>
+        <guid isPermaLink="true">http://localhost:4000/framework/2024/09/25/Spring-basic-04/</guid>
+        
+        <category>spring</category>
+        
+        
+        <category>framework</category>
+        
+      </item>
     
       <item>
         <title>Spring Basic 03 - 생성자 주입을 선택하라</title>
@@ -164,7 +253,7 @@
       </item>
     
       <item>
-        <title>쉽게 배우는 쿠버네티스 -02-</title>
+        <title>쉽게 배우는 쿠버네티스 - 02</title>
         <description>&lt;h2 id=&quot;k8s-master&quot;&gt;K8s Master&lt;/h2&gt;
 
 &lt;p&gt;전체 클러스터의 관리를 책임지는 컨트롤 플레인으로, 모든 노드와 파드의 상태를 모니터링하고 제어한다. 클러스터에 대한 모든 API 요청을 처리하며, 클러스터의 상태를 일관되게 유지하도록 한다.&lt;/p&gt;
@@ -276,7 +365,7 @@
       </item>
     
       <item>
-        <title>쉽게 배우는 쿠버네티스 -01-</title>
+        <title>쉽게 배우는 쿠버네티스 - 01</title>
         <description>&lt;h2 id=&quot;학습의-계기&quot;&gt;학습의 계기&lt;/h2&gt;
 
 &lt;p&gt;카카오 클라우드 부트캠프에서 k8s를 다뤘지만 실습을 따라가는 것만으로는 내용이 전반적으로 깊고 어려워서 추가적인 공부의 필요성을 느끼게 되었다.&lt;/p&gt;
@@ -339,7 +428,7 @@
       </item>
     
       <item>
-        <title>Java Adv -Thread 4-</title>
+        <title>Java Adv - Thread 4</title>
         <description>&lt;h2 id=&quot;join&quot;&gt;Join&lt;/h2&gt;
 
 &lt;ul&gt;
@@ -532,7 +621,7 @@
       </item>
     
       <item>
-        <title>Java Adv -Thread 3-</title>
+        <title>Java Adv - Thread 3</title>
         <description>&lt;h2 id=&quot;채크-예외-재정의&quot;&gt;채크 예외 재정의&lt;/h2&gt;
 
 &lt;ul&gt;
@@ -629,7 +718,7 @@
       </item>
     
       <item>
-        <title>Java Adv -Thread 2-</title>
+        <title>Java Adv - Thread 2</title>
         <description>&lt;h2 id=&quot;스레드-기본정보&quot;&gt;스레드 기본정보&lt;/h2&gt;
 
 &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;thread.control&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
@@ -775,7 +864,7 @@
       </item>
     
       <item>
-        <title>Java Adv -Thread 1-</title>
+        <title>Java Adv - Thread 1</title>
         <description>&lt;h2 id=&quot;자바의-메모리-구조&quot;&gt;자바의 메모리 구조&lt;/h2&gt;
 
 &lt;ul&gt;
@@ -1665,7 +1754,7 @@ s에서 분리한 문자열을 빼고 남은 부분에 대해서 이 과정을 �
       </item>
     
       <item>
-        <title>Java Mid 18 -전략패턴과 다양한 의존관계-</title>
+        <title>Java Mid 18 - 전략패턴과 다양한 의존관계</title>
         <description>&lt;h2 id=&quot;컴파일-의존관계-vs-런타임-의존관계&quot;&gt;컴파일 의존관계 vs 런타임 의존관계&lt;/h2&gt;
 
 &lt;p&gt;전략패턴을 이해하기 전에 우선 컴파일 의존관계가 뭔지, 런타임 의존관계가 뭔지 알면 좋다.&lt;/p&gt;
@@ -1824,7 +1913,7 @@ s에서 분리한 문자열을 빼고 남은 부분에 대해서 이 과정을 �
       </item>
     
       <item>
-        <title>Java Mid 17 -Collection List 추상화하기-</title>
+        <title>Java Mid 17 - Collection List 추상화하기</title>
         <description>&lt;h2 id=&quot;인터페이스-도입&quot;&gt;인터페이스 도입&lt;/h2&gt;
 
 &lt;p&gt;순서가 있고, 중복을 허용하는 것이 리스트. MyArrayList, MyLinkedList는 내부 구현만 다를 뿐 같은 기능을 제공하는 리스트이다. 물론 내부 구현이 다르기 때문에 상황에 따라서 성능은 달라진다. 핵심은 사용자 입장에서 보면 같은 기능을 제공한다. 이 둘의 공통 기능을 뽑아서 추상화를 해보면 다형성을 활용한 다양한 이점을 얻는다.&lt;/p&gt;
@@ -1943,7 +2032,7 @@ s에서 분리한 문자열을 빼고 남은 부분에 대해서 이 과정을 �
       </item>
     
       <item>
-        <title>Java Mid 16 -Collection LinkedList 구현하기-</title>
+        <title>Java Mid 16 - Collection LinkedList 구현하기</title>
         <description>&lt;h2 id=&quot;linkedlist&quot;&gt;LinkedList&lt;/h2&gt;
 
 &lt;h3 id=&quot;linkedlist의-기본-개념&quot;&gt;LinkedList의 기본 개념&lt;/h3&gt;
@@ -2220,7 +2309,7 @@ s에서 분리한 문자열을 빼고 남은 부분에 대해서 이 과정을 �
       </item>
     
       <item>
-        <title>Java Mid 15 -Collection ArrayList 구현하기-</title>
+        <title>Java Mid 15 - Collection ArrayList 구현하기</title>
         <description>&lt;h2 id=&quot;배열의-불편함&quot;&gt;배열의 불편함&lt;/h2&gt;
 
 &lt;p&gt;배열은 크기가 고정되어 있기 때문에 &lt;strong&gt;데이터를 추가&lt;/strong&gt;하려면 공간을 미리 확보해야 한다.
@@ -2448,7 +2537,7 @@ s에서 분리한 문자열을 빼고 남은 부분에 대해서 이 과정을 �
       </item>
     
       <item>
-        <title>Java Mid 14 -Collection Array-</title>
+        <title>Java Mid 14 - Collection Array</title>
         <description>&lt;h2 id=&quot;배열array-개념-정리&quot;&gt;배열(Array) 개념 정리&lt;/h2&gt;
 
 &lt;ul&gt;
@@ -2580,7 +2669,7 @@ s에서 분리한 문자열을 빼고 남은 부분에 대해서 이 과정을 �
       </item>
     
       <item>
-        <title>Java Mid 13 -Generic 2-</title>
+        <title>Java Mid 13 - Generic 2</title>
         <description>&lt;h2 id=&quot;제네릭-활용예제&quot;&gt;제네릭 활용예제&lt;/h2&gt;
 
 &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;generic.test.ex3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
@@ -2703,7 +2792,7 @@ s에서 분리한 문자열을 빼고 남은 부분에 대해서 이 과정을 �
       </item>
     
       <item>
-        <title>Java Mid 12 -Generic 1-</title>
+        <title>Java Mid 12 - Generic 1</title>
         <description>&lt;h2 id=&quot;제네릭이란&quot;&gt;제네릭이란&lt;/h2&gt;
 
 &lt;p&gt;정적언어(C, C++,Java)을 다뤄봤다면 제네릭(Generic)에 대해 잘 알지는 못하더라도 한 번쯤은 들어봤을 것이다. 특히 자료구조 같이 구조체를 직접 만들어 사용할 때 많이 쓰이기도 하고 매우 유용하기도 하다.&lt;/p&gt;
@@ -2838,7 +2927,7 @@ s에서 분리한 문자열을 빼고 남은 부분에 대해서 이 과정을 �
       </item>
     
       <item>
-        <title>Java Mid 11 -Exception 2-</title>
+        <title>Java Mid 11 - Exception 2</title>
         <description>&lt;h2 id=&quot;예외처리를-더-세밀하게-하자&quot;&gt;예외처리를 더 세밀하게 하자&lt;/h2&gt;
 &lt;p&gt;&lt;img width=&quot;698&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/d8cb3884-ce71-4552-b5d6-dc4891c9bd3f&quot; /&gt;&lt;/p&gt;
 
@@ -2969,7 +3058,7 @@ s에서 분리한 문자열을 빼고 남은 부분에 대해서 이 과정을 �
       </item>
     
       <item>
-        <title>Java Mid 10 -Exception 1-</title>
+        <title>Java Mid 10 - Exception 1</title>
         <description>&lt;h2 id=&quot;예외-처리가-필요한-이유&quot;&gt;예외 처리가 필요한 이유&lt;/h2&gt;
 
 &lt;p&gt;프로그램 실행 중에 발생할 수 있는 예상치 못한 상황, 즉 예외(Exception)을 처리하기 위해서 나온 메커니즘이 예외처리이다. 프로그램의 안정성과 신뢰성을 높이는 아주 중요한 역할을 한다.&lt;/p&gt;
@@ -3110,7 +3199,7 @@ s에서 분리한 문자열을 빼고 남은 부분에 대해서 이 과정을 �
       </item>
     
       <item>
-        <title>Java Mid 09 -Nested Class-</title>
+        <title>Java Mid 09 - Nested Class</title>
         <description>&lt;h2 id=&quot;중첩-클래스-내부-클래스란&quot;&gt;중첩 클래스, 내부 클래스란?&lt;/h2&gt;
 
 &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(...)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
@@ -3218,7 +3307,7 @@ s에서 분리한 문자열을 빼고 남은 부분에 대해서 이 과정을 �
       </item>
     
       <item>
-        <title>Java Mid 08 -Enum Type-</title>
+        <title>Java Mid 08 - Enum Type</title>
         <description>&lt;h2 id=&quot;문자열과-타입-안정성&quot;&gt;문자열과 타입 안정성&lt;/h2&gt;
 
 &lt;p&gt;자바가 제공하는 열거형(Enum Type)을 제대로 이해하려면 먼저 열거형이 생겨난 이유를 알아야 한다.
@@ -3292,7 +3381,7 @@ s에서 분리한 문자열을 빼고 남은 부분에 대해서 이 과정을 �
       </item>
     
       <item>
-        <title>Java Mid 07 -Class class-</title>
+        <title>Java Mid 07 - Class class</title>
         <description>&lt;h2 id=&quot;class-클래스&quot;&gt;Class 클래스&lt;/h2&gt;
 
 &lt;p&gt;자바에서 Class 클래스는 클래스의 정보(메타데이터)를 다루는데 사용된다.&lt;/p&gt;
@@ -3403,7 +3492,7 @@ s에서 분리한 문자열을 빼고 남은 부분에 대해서 이 과정을 �
       </item>
     
       <item>
-        <title>Java Mid 06 -Wrapper Class-</title>
+        <title>Java Mid 06 - Wrapper Class</title>
         <description>&lt;h2 id=&quot;기본형의-한계&quot;&gt;기본형의 한계&lt;/h2&gt;
 
 &lt;p&gt;래퍼 클래스를 들어가기 전 우선 자바에 대해 다시 짚고 넘어가자면 자바는 객체지향 언어이다.
@@ -3654,7 +3743,7 @@ Wrapper가 감싸다 라는 뜻이 있는데 기본형을 감싸면 객체가 �
       </item>
     
       <item>
-        <title>Java Mid 05 -String 최적화-</title>
+        <title>Java Mid 05 - String 최적화</title>
         <description>&lt;h2 id=&quot;문자열-리터럴-최적화&quot;&gt;문자열 리터럴 최적화&lt;/h2&gt;
 
 &lt;h3 id=&quot;컴파일-전&quot;&gt;컴파일 전&lt;/h3&gt;
@@ -3823,7 +3912,7 @@ Wrapper가 감싸다 라는 뜻이 있는데 기본형을 감싸면 객체가 �
       </item>
     
       <item>
-        <title>Java Mid 04 -String 클래스-</title>
+        <title>Java Mid 04 - String 클래스</title>
         <description>&lt;h2 id=&quot;string-클래스&quot;&gt;String 클래스&lt;/h2&gt;
 
 &lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;String&lt;/code&gt;은 자바에서 객체로 다뤄지며, 클래스이다. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;int&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;boolean&lt;/code&gt; 같은 기본형이 아닌 참조형으로, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;String&lt;/code&gt; 변수가 실제 문자열 값을 직접 저장하는 것이 아니라, 문자열 객체에 대한 참조를 저장된다.&lt;/p&gt;
@@ -3906,7 +3995,7 @@ Wrapper가 감싸다 라는 뜻이 있는데 기본형을 감싸면 객체가 �
       </item>
     
       <item>
-        <title>Java Mid 03 -Immutable Object-</title>
+        <title>Java Mid 03 - Immutable Object</title>
         <description>&lt;h3 id=&quot;불변-객체-immutable-object---도입&quot;&gt;불변 객체 (Immutable Object) - 도입&lt;/h3&gt;
 
 &lt;ul&gt;
@@ -4040,7 +4129,7 @@ Wrapper가 감싸다 라는 뜻이 있는데 기본형을 감싸면 객체가 �
       </item>
     
       <item>
-        <title>Java Mid 02 -Primitive Type, Reference Type-</title>
+        <title>Java Mid 02 - Primitive Type, Reference Type</title>
         <description>&lt;h2 id=&quot;기본형과-참조형&quot;&gt;기본형과 참조형&lt;/h2&gt;
 
 &lt;p&gt;자바의 데이터 타입은 크게 기본형(Primitive Type)과 참조형(Reference Type)으로 나눌 수 있다. 이 두 가지 타입은 메모리 할당 방식과 데이터 저장 방식에서 큰 차이가 있다.&lt;/p&gt;
@@ -4122,156 +4211,6 @@ Wrapper가 감싸다 라는 뜻이 있는데 기본형을 감싸면 객체가 �
         <pubDate>Wed, 18 Sep 2024 00:00:00 +0900</pubDate>
         <link>http://localhost:4000/language/2024/09/18/Java-Mid-02/</link>
         <guid isPermaLink="true">http://localhost:4000/language/2024/09/18/Java-Mid-02/</guid>
-        
-        <category>java</category>
-        
-        
-        <category>language</category>
-        
-      </item>
-    
-      <item>
-        <title>Java Mid 01 -Object-</title>
-        <description>&lt;h2 id=&quot;java-lang-package&quot;&gt;Java Lang package&lt;/h2&gt;
-
-&lt;p&gt;자바가 기본으로 제공하는 라이브러리(클래스 모음) 중에 가장 기본이 되는 것이 바로 자바 lang이다.&lt;/p&gt;
-
-&lt;p&gt;여기서 lang은 Language(언어)의 줄임말이다. 쉽게 이야기해서 자바 언어를 이루는 가장 기본이 되는 클래스들을 보관하는 패키지를 뜻한다.&lt;/p&gt;
-
-&lt;h3 id=&quot;javalang-대표적인-클래스&quot;&gt;java.lang 대표적인 클래스&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Object : 모든 자바객체의 부모 클래스&lt;/li&gt;
-  &lt;li&gt;String : 문자열&lt;/li&gt;
-  &lt;li&gt;Integer, Long, Double : 래퍼 타입(감싼타입)
-    &lt;ul&gt;
-      &lt;li&gt;기본형 데이터 타입을 객체로 만든 것&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Class : 클래스 메타 정보&lt;/li&gt;
-  &lt;li&gt;System : 시스템과 관련된 기본 기능들을 제공&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;lang.object.tostring&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ToStringMain2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;Car&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;car&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Car&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Model Y&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;Dog&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dog1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Dog&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;멍멍이1&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;Dog&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dog2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Dog&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;멍멍이1&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;1. 단순 toString 호출&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;car&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dog1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dog2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;2. println 내부에서 toString 호&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;car&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dog1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dog2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;3. object다형성 활용&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;ObjectPrinter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;car&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;ObjectPrinter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dog1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;ObjectPrinter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dog2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-        &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;refValue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toHexString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;identityHashCode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dog1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;refValue = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;refValue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;lang.object.tostring&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ToStringMain1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;object&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-
-        &lt;span class=&quot;c1&quot;&gt;//toString() 반환값 출력&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-        &lt;span class=&quot;c1&quot;&gt;//object 직접 출력&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;object&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;클래스에서 상속 받을 부모 클래스가 없으면 묵시적으로 Object 클래스를 상속 받는다.
-    &lt;ul&gt;
-      &lt;li&gt;쉽게 이야기해서 자바가 extends Object 코드를 넣어준다.&lt;/li&gt;
-      &lt;li&gt;따라서 extends Object는 생략하는 것을 권장한다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Object&lt;/code&gt; 클래스는 자바 클래스 계층 구조의 루트 클래스이며, 다른 모든 클래스는 직간접적으로 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Object&lt;/code&gt; 클래스를 상속받는다.&lt;/p&gt;
-
-&lt;h2 id=&quot;object가-제공하는-기능은-다음과-같다&quot;&gt;Object가 제공하는 기능은 다음과 같다&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;객체의 정보를 제공하는 toString()&lt;/li&gt;
-  &lt;li&gt;객체의 같음을 비교하는 equals()&lt;/li&gt;
-  &lt;li&gt;객체의 클래스 정보를 제공하는 getClass()&lt;/li&gt;
-  &lt;li&gt;기타 여러가지 기능&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;다형성의-기본-구현&quot;&gt;다형성의 기본 구현&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;부모는 자식을 담을 수 있다.&lt;/li&gt;
-  &lt;li&gt;Object는 모든 클래스의 부모 클래스이다. 따라서 모든 객체를 참조할 수 있다.&lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Object 클래스는 다형성을 지원하는 기본적인 메커니즘을 제공한다.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;모든 자바 객체는 Object 타입으로 처리될 수 있으며, 이는 다양한 타입의 객체를 통합적으로 처리할 수 있게 해준다. 쉽게 이야기하면 Object는 모든 객체를 다 담을 수 있다. (다형성 특징)&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;타입이 다른 객체들은 어딘가에 보관해야 한다면? 바로 Object에 보관하면 된다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;object-배열&quot;&gt;Object 배열&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Object는 모든 타입의 객체를 다 담을 수 있다.&lt;/li&gt;
-  &lt;li&gt;Object[] 만들면 자바의 모든 객체를 다 담을 수 있는 배열을 만든 것이다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;ublic&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ObjectPolyExample2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;Dog&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dog&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Dog&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;Car&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;car&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Car&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;object&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-
-        &lt;span class=&quot;nc&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;objects&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dog&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;car&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;};&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;objects&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;objects&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;전달된 객체의 수는?: &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;objects&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;만약 Object가 없다면?
-    &lt;ul&gt;
-      &lt;li&gt;void action(Object obj)과 같이 모든 객체를 받을 수 있는 메서드를 만들 수 없다.&lt;/li&gt;
-      &lt;li&gt;Object[] objects같이 모든 객체를 저장할 수 있는 배열을 만들 수 없다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;인프런 김영한님의 실전 자바 강좌 중급 1편&lt;/p&gt;
-</description>
-        <pubDate>Wed, 18 Sep 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/language/2024/09/18/Java-Mid-01/</link>
-        <guid isPermaLink="true">http://localhost:4000/language/2024/09/18/Java-Mid-01/</guid>
         
         <category>java</category>
         
