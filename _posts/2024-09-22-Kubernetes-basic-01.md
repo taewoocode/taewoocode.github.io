@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 쉽게 배우는 쿠버네티스 -01-
+title: 쉽게 배우는 쿠버네티스 - 01
 subtitle: ''
 categories: devops
 tags: k8s

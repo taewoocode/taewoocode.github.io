@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 제어의 역전(Inversion of Control)과 ApplicationContext
+title: Spring Basic 01 -제어의 역전, ApplicationContext-
 subtitle: ""
 categories: framework
 tags: spring

@@ -6,12 +6,12 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 26 Sep 2024 20:49:41 +0900</pubDate>
-    <lastBuildDate>Thu, 26 Sep 2024 20:49:41 +0900</lastBuildDate>
+    <pubDate>Fri, 27 Sep 2024 00:24:59 +0900</pubDate>
+    <lastBuildDate>Fri, 27 Sep 2024 00:24:59 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
-        <title>생성자 주입을 선택하라</title>
+        <title>Spring Basic 03 - 생성자 주입을 선택하라</title>
         <description>&lt;h2 id=&quot;불변&quot;&gt;불변&lt;/h2&gt;
 
 &lt;ul&gt;
@@ -71,8 +71,8 @@
 &lt;p&gt;김영한님의 스프링 강의 + 나의 뇌&lt;/p&gt;
 </description>
         <pubDate>Tue, 24 Sep 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/framework/2024/09/24/Spring-04/</link>
-        <guid isPermaLink="true">http://localhost:4000/framework/2024/09/24/Spring-04/</guid>
+        <link>http://localhost:4000/framework/2024/09/24/Spring-basic-03/</link>
+        <guid isPermaLink="true">http://localhost:4000/framework/2024/09/24/Spring-basic-03/</guid>
         
         <category>spring</category>
         
@@ -1552,7 +1552,7 @@ s에서 분리한 문자열을 빼고 남은 부분에 대해서 이 과정을 �
       </item>
     
       <item>
-        <title>싱글톤 패턴 적용해보기</title>
+        <title>Spring Basic 02 -싱글톤 패턴 적용해보기-</title>
         <description>&lt;h2 id=&quot;싱글톤-패턴-만들어-보기&quot;&gt;싱글톤 패턴 만들어 보기&lt;/h2&gt;
 
 &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;hello.core.singleton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
@@ -1654,8 +1654,8 @@ s에서 분리한 문자열을 빼고 남은 부분에 대해서 이 과정을 �
 &lt;p&gt;김영한님의 스프링 강의 + 나의 뇌&lt;/p&gt;
 </description>
         <pubDate>Wed, 18 Sep 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/framework/2024/09/18/Spring-03/</link>
-        <guid isPermaLink="true">http://localhost:4000/framework/2024/09/18/Spring-03/</guid>
+        <link>http://localhost:4000/framework/2024/09/18/Spring-basic-02/</link>
+        <guid isPermaLink="true">http://localhost:4000/framework/2024/09/18/Spring-basic-02/</guid>
         
         <category>spring</category>
         

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 싱글톤 패턴 적용해보기
+title: Spring Basic 02 -싱글톤 패턴 적용해보기-
 subtitle: ""
 categories: framework
 tags: spring

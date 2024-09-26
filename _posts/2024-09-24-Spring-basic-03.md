@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 생성자 주입을 선택하라
+title: Spring Basic 03 - 생성자 주입을 선택하라
 subtitle: ""
 categories: framework
 tags: spring
