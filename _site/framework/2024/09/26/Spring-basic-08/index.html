@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Home" />
+<meta property="og:title" content="Spring Basic 07 - Bean Scope 02" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,16 +52,18 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Home &middot; 일벌리는 개발자</title>
+<title>Spring Basic 07 - Bean Scope 02 &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="일을 벌여놔야 주워 담을 수 있습니다.
+        content="싱글톤과 프로토타입 빈
+
 "
 />
 <meta
         property="og:description"
-        content="일을 벌여놔야 주워 담을 수 있습니다.
+        content="싱글톤과 프로토타입 빈
+
 "
 />
 
@@ -70,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/page-4/" />
-<meta property="og:url" content="http://localhost:4000/page-4/" />
+<link rel="canonical" href="http://localhost:4000/framework/2024/09/26/Spring-basic-08/" />
+<meta property="og:url" content="http://localhost:4000/framework/2024/09/26/Spring-basic-08/" />
 
 <link
         rel="alternate"
@@ -80,6 +82,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         href="http://localhost:4000/feed.xml"
 />
 
+
+<link rel="prev" href="http://localhost:4000/framework/2024/09/26/Spring-basic-07/" />
  
 
 <link
@@ -176,18 +180,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
             data-image="/assets/img/dp.jpeg"
     >
       
-  
 
-<article id="post-language/2024/09/18/Java-Mid-12" class="post mb6" role="article">
+<article id="post-framework/2024/09/26/Spring-basic-08" class="post" role="article">
   <header>
     <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-12/" data-flip="title">
-      Java Mid 12 - Generic 1
-      </a>
+      
+      Spring Basic 07 - Bean Scope 02
+      
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
+      <time datetime="2024-09-26T00:00:00+09:00">26 Sep 2024</time>
       
 
 
@@ -198,7 +201,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 
 
 
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
+in <a href="/category/framework/" data-flip="title">Framework</a>
 
       
 
@@ -210,7 +213,7 @@ in <a href="/category/programming-language/" data-flip="title">Programming Langu
 
 
 
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
+on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
 
     </p>
 
@@ -223,434 +226,189 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
 
 
   
-  <h2 id="제네릭이란">제네릭이란</h2>
+  <div class="markdown-body">
 
+    <!--  -->
+    <style>
+      .myAd1190 {
+        width: 48%;
+        height: 280px;
+      }
 
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-12/" data-flip="title">Continue reading </a>
-  </p>
+      .myAd1290 {
+        width: 48%;
+        height: 280px;
+      }
+
+      @media(max-width: 800px) {
+        .myAd1190 {
+          display: none;
+        }
+
+        .myAd1290 {
+          width: 98%;
+        }
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 300px;
+      }
+
+      .row-center {
+        display: flex;
+        justify-content: center;
+        height: 258px;
+      }
+    </style>
+
+    <!--<br />-->
+    <h2 id="싱글톤과-프로토타입-빈">싱글톤과 프로토타입 빈</h2>
+
+<ul>
+  <li>clientBean은 싱글톤이다. → 스프링 컨테이너 생성 시점에 함께 생성되고, 의존관계 주입도 발생한다.</li>
+  <li>clientBean은 의존관계 자동 주입을 사용한다. 주입 시점에 스프링 컨테이너에 프로토타입 빈을 요청한다.</li>
+  <li>스프링 컨테이너는 프로토타입 빈을 생성해서 <code class="language-plaintext highlighter-rouge">clientBean</code>에 반환한다. 프로토타입 빈의 count필드 값은 0이다.</li>
+  <li>clentBean은 프로토타입 빈의 참조값을 보관한다(내부 필드를 말한다.)</li>
+</ul>
+
+<p><img width="699" alt="image" src="https://github.com/user-attachments/assets/d24d7184-c9a4-453e-8ff5-5f69635cf562" />
+<img width="697" alt="image" src="https://github.com/user-attachments/assets/973b6327-48d8-4140-a6cb-db278cae2563" /></p>
+
+<ul>
+  <li>클라이언트가 clientBean을 컨테이너에게 요청해서 반환받는다. 싱글톤이므로 항상 같은 clientBean을 반환받게 된다.</li>
+  <li>클라이언트 A는 <code class="language-plaintext highlighter-rouge">clientBean.logic()</code> 을 호출한다.</li>
+  <li>clientBean<code class="language-plaintext highlighter-rouge">은 prototypeBean의</code>addCount()` 를 호출해서 프로토타입 빈의 count를 증가한다.
+count값이 1이 된다.</li>
+  <li><strong>여기서</strong> <strong>중요한</strong> <strong>점이</strong> <strong>있는데</strong>, clientBean<strong>이</strong> <strong>내부에</strong> <strong>가지고</strong> <strong>있는</strong> <strong>프로토타입</strong> <strong>빈은</strong> <strong>이미</strong> <strong>과거에</strong> <strong>주입이</strong> <strong>끝난</strong> <strong>빈이다</strong>. <strong>주입</strong> <strong>시점에</strong> <strong>스프링</strong> <strong>컨테이너에</strong> <strong>요청해서</strong> <strong>프로토타입</strong> <strong>빈이</strong> <strong>새로</strong> <strong>생성이</strong> <strong>된</strong> <strong>것이지</strong>, <strong>사용</strong> <strong>할</strong> <strong>때마다</strong> <strong>새로</strong> <strong>생성되는</strong> <strong>것이</strong> <strong>아니다</strong>!**</li>
+  <li><code class="language-plaintext highlighter-rouge">clientBean</code> 은 prototypeBean의 <code class="language-plaintext highlighter-rouge">addCount()</code> 를 호출해서 프로토타입 빈의 count를 증가한다. 원
+래 count 값이 1이었으므로 2가 된다.</li>
+</ul>
+
+<h2 id="싱글톤-빈이-프로토타입-빈을-주입받을-경우">싱글톤 빈이 프로토타입 빈을 주입받을 경우</h2>
+<p><img width="697" alt="image" src="https://github.com/user-attachments/assets/ecbf385d-28cf-4c05-b97b-c8a997e5ae6c" />
+<img width="692" alt="image" src="https://github.com/user-attachments/assets/d9bfa24b-7e4e-46e3-93dd-8143103aef0b" /></p>
+
+<ul>
+  <li>Scope에 singleton이라고 명시를 해줬는데 사실 아무것도 쓰지 않은 값이어도 default로 싱글톤이 유지된다.</li>
+  <li>여기서 중요한 점은 싱글톤 빈인 <code class="language-plaintext highlighter-rouge">ClientBean</code>이 <strong>프로토타입 빈을 주입받을 경우</strong>, <code class="language-plaintext highlighter-rouge">ClientBean</code>이 생성될 때만 <code class="language-plaintext highlighter-rouge">PrototypeBean</code>의 인스턴스가 주입된다. 즉, <code class="language-plaintext highlighter-rouge">ClientBean</code>이 생성될 때 주입된 <strong>하나의 프로토타입 빈 인스턴스</strong>를 계속 사용하게 된다. 이후에 <code class="language-plaintext highlighter-rouge">logic()</code> 메서드를 호출할 때마다 새로운 <code class="language-plaintext highlighter-rouge">PrototypeBean</code>이 생성되지 않고, 처음 주입된 동일한 인스턴스를 사용하게 되는 것이다. → 그 이유는 이미 생성시점에 빈을 만들어 두었기 때문이다.</li>
+  <li>사실 프로토타입빈은 요청할 때 마다 계속 다른 인스턴스를 보내주는 개념인데 싱글톤과 같이 사용하게 된다면 싱글톤이 더 우선이 되는 거 같은 개념인 것 같다.</li>
+</ul>
+
+<h2 id="reference">Reference</h2>
+
+<p>김영한님의 스프링 강의 정리</p>
+
+    <br />
+    <br />
+  </div>
   
 
 </article>
 
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-11" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-11/" data-flip="title">
-      Java Mid 11 - Exception 2
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
+<!--<hr class="dingbat" />-->
+<!--
+<div class="share">
+  <h2>Share this post</h2>
+  <div class="share-body">
+    <a href="http://twitter.com/share?text=Spring Basic 07 - Bean Scope 02&amp;url=http://localhost:4000/framework/2024/09/26/Spring-basic-08/"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="icon-twitter">
+      </span>
+    </a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/framework/2024/09/26/Spring-basic-08/"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="icon-facebook">
+      </span>
+    </a>
+  </div>
+</div>
+-->
+<br />
 
 
 
 
+<aside class="related" role="complementary">
+  <h2 class="hr">Related Posts</h2>
 
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
+  <ul class="related-posts">
     
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="예외처리를-더-세밀하게-하자">예외처리를 더 세밀하게 하자</h2>
-<p><img width="698" alt="image" src="https://github.com/user-attachments/assets/d8cb3884-ce71-4552-b5d6-dc4891c9bd3f" /></p>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-11/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-10" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-10/" data-flip="title">
-      Java Mid 10 - Exception 1
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
       
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
       
+      
+        
+          
+          
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/framework/2024/09/26/Spring-basic-07/" data-flip="title">
+    <span>Spring Basic 07 - Bean Scope</span>
+  </a>
+  <small><time datetime="2024-09-26T00:00:00+09:00">
+    26 Sep 2024
+  </time></small>
+</li>
+
+        
+      
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/framework/2024/09/25/Spring-basic-06/" data-flip="title">
+    <span>Spring Basic 06 - 빈 생명주기 콜백</span>
+  </a>
+  <small><time datetime="2024-09-25T00:00:00+09:00">
+    25 Sep 2024
+  </time></small>
+</li>
+
+        
+      
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/framework/2024/09/25/Spring-basic-05/" data-flip="title">
+    <span>Spring Basic 05 - 애노테이션 직접 만들기</span>
+  </a>
+  <small><time datetime="2024-09-25T00:00:00+09:00">
+    25 Sep 2024
+  </time></small>
+</li>
 
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
+        
+      
     
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="예외-처리가-필요한-이유">예외 처리가 필요한 이유</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-10/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-09" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-09/" data-flip="title">
-      Java Mid 09 - Nested Class
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="중첩-클래스-내부-클래스란">중첩 클래스, 내부 클래스란?</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-09/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-08" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-08/" data-flip="title">
-      Java Mid 08 - Enum Type
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="문자열과-타입-안정성">문자열과 타입 안정성</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-08/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-07" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-07/" data-flip="title">
-      Java Mid 07 - Class class
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="class-클래스">Class 클래스</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-07/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-06" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-06/" data-flip="title">
-      Java Mid 06 - Wrapper Class
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="기본형의-한계">기본형의 한계</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-06/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-05" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-05/" data-flip="title">
-      Java Mid 05 - String 최적화
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="문자열-리터럴-최적화">문자열 리터럴 최적화</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-05/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-
-<h2 class="sr-only">Pagination</h2>
-<nav class="pagination heading" role="navigation">
-  <ul>
-    <li class="pagination-item older" >
-      
-        <a rel="next" href="/page-5/">Older</a>
-      
-    </li>
-    <li class="pagination-item newer" >
-      
-        <a rel="prev" href="/page-3/">Newer</a>
-      
-    </li>
   </ul>
-</nav>
+</aside>
+  <aside class="comments" role="complementary">
+  <h2>Comments</h2>
+  <hr/>
 
-  <footer>
+  <script src="https://utteranc.es/client.js"
+          repo="taewoocode/taewoocode.github.io"
+          issue-term="title"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+</aside>
+
+
+       <footer>
   <hr/>
   
     <p>© 2022. by taewoo</p>
