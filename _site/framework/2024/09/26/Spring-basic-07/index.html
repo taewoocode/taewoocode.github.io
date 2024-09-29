@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Spring Basic 01 -제어의 역전, ApplicationContext-" />
+<meta property="og:title" content="Spring Basic 06 - 빈 생명주기 콜백" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,17 +52,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Spring Basic 01 -제어의 역전, ApplicationContext- &middot; 일벌리는 개발자</title>
+<title>Spring Basic 06 - 빈 생명주기 콜백 &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="제어의 역전(Inversion of Control)
+        content="빈 스코프란?
 
 "
 />
 <meta
         property="og:description"
-        content="제어의 역전(Inversion of Control)
+        content="빈 스코프란?
 
 "
 />
@@ -72,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/framework/2024/09/16/Spring-basic-01/" />
-<meta property="og:url" content="http://localhost:4000/framework/2024/09/16/Spring-basic-01/" />
+<link rel="canonical" href="http://localhost:4000/framework/2024/09/26/Spring-basic-07/" />
+<meta property="og:url" content="http://localhost:4000/framework/2024/09/26/Spring-basic-07/" />
 
 <link
         rel="alternate"
@@ -82,9 +82,9 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         href="http://localhost:4000/feed.xml"
 />
 
- 
-<link rel="next" href="http://localhost:4000/life/2024/09/16/daily-01/" />
 
+<link rel="prev" href="http://localhost:4000/framework/2024/09/25/Spring-basic-06/" />
+ 
 
 <link
         rel="apple-touch-icon"
@@ -181,16 +181,16 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-framework/2024/09/16/Spring-basic-01" class="post" role="article">
+<article id="post-framework/2024/09/26/Spring-basic-07" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      Spring Basic 01 -제어의 역전, ApplicationContext-
+      Spring Basic 06 - 빈 생명주기 콜백
       
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-09-16T00:00:00+09:00">16 Sep 2024</time>
+      <time datetime="2024-09-26T00:00:00+09:00">26 Sep 2024</time>
       
 
 
@@ -265,25 +265,81 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
     </style>
 
     <!--<br />-->
-    <h2 id="제어의-역전inversion-of-control">제어의 역전(Inversion of Control)</h2>
+    <h2 id="빈-스코프란"><strong>빈 스코프란</strong>?</h2>
 
-<p>프로그램의 제어흐름을 직접 제어하는 것이 아니라 외부(스프링)이 관리하는 것을 제어의 역전(loC)라고 한다.</p>
+<p>스프링 빈이 스프링 컨테이너의 시작과 함께 생성되어서 스프링 컨테이너가 종료될 때 까지 유지된다.
+스프링 빈은 기본적으로 싱글톤 스코프로 생성되기 때문이다. 스코프는 번역 그대로 빈이 존재할
+수 있는 범위를 뜻한다.</p>
 
-<h2 id="스프링-컨테이너">스프링 컨테이너</h2>
-<h3 id="applicationcontext">ApplicationContext</h3>
-<p><img width="700" alt="스크린샷 2024-09-16 오후 9 06 08" src="https://github.com/user-attachments/assets/76d1d251-e001-48b7-b0fc-8472a2380792" /></p>
+<h2 id="스프링의-다양한-스코프"><strong>스프링의 다양한 스코프</strong></h2>
+
+<p><strong>* 싱글톤</strong>: 기본 스코프, 스프링 컨테이너의 시작과 종료까지 유지되는 가장 넓은 범위의 스코프이다.</p>
+
 <ul>
-  <li>ApplicationContext를 스프링 컨테이너라고 한다.</li>
-  <li>기존에는 개발자가 AppConfig를 사용해서 직접 객체를 생성하고 DI를 했지만, 이제부터는 스프링 컨테이너를 통해서 사용한다.</li>
-  <li>스프링 컨테이너에서는 Configuration이 붙은 객체를 설정 정보로 사용한다. @Bean이라 붙은 메서드를 모두 호출해서 반환된 객체를 스프링 컨테이너로 등록한다. 이렇게 스프링 컨테이너로 등록된 객체를 스프링 빈이라고 한다.</li>
-  <li>예전에는 AppConfig를 통해서 필요한 객체를 직접 조회했지만, 이제는 스프링 컨테이너를 통해서 필요한 스프링 빈을 찾는다. 스프링 빈은 applicationContext.getBean()을 통해서 찾을 수 있다.</li>
-  <li>스프링 빈은 @Bean이 붙은 메서드의 명을 빈의 이름으로 사용하여 컨테이너에 등록한다.</li>
-  <li>스프링 컨테이너에 객체를 스프링 빈으로 등록하고, 찾을 수 있다.</li>
+  <li><strong>프로토타입</strong>: 스프링 컨테이너는 프로토타입 빈의 생성과 의존관계 주입까지만 관여하고 더는 관리하지 않는 매우짧은 범위의 스코프이다.</li>
+  <li><strong>웹 관련 스코프</strong>
+    <ul>
+      <li><strong>request</strong>: 웹 요청이 들어오고 나갈때 까지 유지되는 스코프이다.
+<strong>session</strong>: 웹 세션이 생성되고 종료될 때 까지 유지되는 스코프이다.
+<strong>application</strong>: 웹의 서블릿 컨텍스트와 같은 범위로 유지되는 스코프이다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="프로토타입-스코프">프로토타입 스코프</h2>
+
+<ul>
+  <li>싱글톤 스코프의 빈을 조회하면 스프링 컨테이너는 항상 같은 인스턴스의 스프링 빈을 반환한다. 반면에 프로토타입 스코프를 스프링 컨테이너에 조회하면 스프링 컨테이너는 항상 새로운 인스턴스를 반환한다.</li>
+</ul>
+
+<h3 id="싱글톤-빈-요청">싱글톤 빈 요청</h3>
+
+<ul>
+  <li>싱글톤 스코의 빈을 스프링 컨테이너에 요청한다.</li>
+  <li>스프링 컨테이너는 본인이 관리하는 스프링 빈을 반환한다.</li>
+  <li>이후에 스프링 컨테이너에 같은 요청이 들어와도 같은 객체 인스턴스를 반환한다.</li>
+</ul>
+
+<h3 id="프로토타입-빈-요청">프로토타입 빈 요청</h3>
+
+<ul>
+  <li>프로토타입 스코프의 빈을 스프링 컨테이너에게 요청한다.</li>
+  <li>스프링 컨테이너는 이 시점에 프로토타입 빈을 생성하고, 필요한 의존관계를 주입한다.</li>
+  <li>스프링 컨테이너는 생성한 프로토타입 빈을 클라이언트에게 반환한다.</li>
+  <li>스프링 컨테이너에 같은 요청이 온다면 항상 새로운 프로토타입 빈을 생성해서 반환한다.</li>
+</ul>
+
+<h3 id="핵심은">핵심은?</h3>
+
+<ul>
+  <li>스프링 컨테이너는 프로토타입 빈을 생성하고, 의존관계 주입, 초기화까지만 처리한다. 클라이언트에 빈을 반환하고, 이후 스프링 컨테이너는 생성된 프로토타입 빈을 관리하지 않는다. 프로토타입 빈을 관리할 책임은 프로토타입 빈을 받은 클라이언트에게 있다. 그래서 @PreDestroy 같은 종료 메서드가 호출되지 않는다.</li>
+</ul>
+
+<h2 id="싱글톤-스코프-빈-테스트">싱글톤 스코프 빈 테스트</h2>
+<p><img width="700" alt="image" src="https://github.com/user-attachments/assets/be4fbc8b-3e09-4c9c-b226-afaeba2c901c" />
+<img width="641" alt="image" src="https://github.com/user-attachments/assets/9d5085be-68db-4a79-93f5-f71ea4630c00" /></p>
+
+<h2 id="프로토타입-스코프-빈-테스트">프로토타입 스코프 빈 테스트</h2>
+<p><img width="691" alt="image" src="https://github.com/user-attachments/assets/9841b38e-2f85-4249-b1c1-7fb9c5cc302f" />
+<img width="563" alt="image" src="https://github.com/user-attachments/assets/6fb983f2-f8c4-4346-903a-4bb5d9bf2e83" /></p>
+
+<p>싱글톤 빈은 스프링 컨테이너 생성 시점에 초기화 메서드가 실행 되지만, 프로토타입 스코프의 빈은 스프링 컨테
+이너에서 빈을 조회할 때 생성되고, 초기화 메서드도 실행된다.프로토타입 빈을 2번 조회했으므로 완전히 다른 스프링 빈이 생성되고, 초기화도 2번 실행된 것을 확인할 수 있다.
+싱글톤 빈은 스프링 컨테이너가 관리하기 때문에 스프링 컨테이너가 종료될 때 빈의 종료 메서드가 실행되지만,
+프로토타입 빈은 스프링 컨테이너가 생성과 의존관계 주입 그리고 초기화 까지만 관여하고, 더는 관리하지 않는다. 
+따라서 프로토타입 빈은 스프링 컨테이너가 종료될 때 <code class="language-plaintext highlighter-rouge">@PreDestroy</code> 같은 종료 메서드가 전혀 실행되지 않는다.</p>
+
+<h2 id="프로토타입-빈의-특징-정리"><strong>프로토타입 빈의 특징 정리</strong></h2>
+
+<ul>
+  <li>스프링 컨테이너에 요청할 때 마다 새로 생성된다.</li>
+  <li>스프링 컨테이너는 프로토타입 빈의 생성과 의존관계 주입 그리고 초기화까지만 관여한다.</li>
+  <li>프로토타입 빈을 조회한 클라이언트가 관리해야 한다. → 종료 메서드에 대한 호출도 클라이언트가 직접 해야 한다.</li>
 </ul>
 
 <h2 id="reference">Reference</h2>
 
-<p>인프런 김영한님의 스프링 프레임워크 핵심 기술 강좌</p>
+<p>김영한님의 스프링 강의 정리</p>
 
     <br />
     <br />
@@ -297,12 +353,12 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=Spring Basic 01 -제어의 역전, ApplicationContext-&amp;url=http://localhost:4000/framework/2024/09/16/Spring-basic-01/"
+    <a href="http://twitter.com/share?text=Spring Basic 06 - 빈 생명주기 콜백&amp;url=http://localhost:4000/framework/2024/09/26/Spring-basic-07/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/framework/2024/09/16/Spring-basic-01/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/framework/2024/09/26/Spring-basic-07/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -324,21 +380,8 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
       
       
         
-        
           
-
-
-<li class="h4">
-  <a href="/framework/2024/09/26/Spring-basic-07/" data-flip="title">
-    <span>Spring Basic 06 - 빈 생명주기 콜백</span>
-  </a>
-  <small><time datetime="2024-09-26T00:00:00+09:00">
-    26 Sep 2024
-  </time></small>
-</li>
-
-        
-      
+          
         
         
           
@@ -372,6 +415,19 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
         
       
         
+        
+          
+
+
+<li class="h4">
+  <a href="/framework/2024/09/25/Spring-basic-04/" data-flip="title">
+    <span>Spring Basic 04 - Autowired 는 타입으로 조회를 한다</span>
+  </a>
+  <small><time datetime="2024-09-25T00:00:00+09:00">
+    25 Sep 2024
+  </time></small>
+</li>
+
         
       
     

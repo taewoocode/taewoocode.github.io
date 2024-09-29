@@ -6,9 +6,98 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 27 Sep 2024 04:07:09 +0900</pubDate>
-    <lastBuildDate>Fri, 27 Sep 2024 04:07:09 +0900</lastBuildDate>
+    <pubDate>Sun, 29 Sep 2024 21:51:26 +0900</pubDate>
+    <lastBuildDate>Sun, 29 Sep 2024 21:51:26 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
+    
+      <item>
+        <title>Spring Basic 06 - 빈 생명주기 콜백</title>
+        <description>&lt;h2 id=&quot;빈-스코프란&quot;&gt;&lt;strong&gt;빈 스코프란&lt;/strong&gt;?&lt;/h2&gt;
+
+&lt;p&gt;스프링 빈이 스프링 컨테이너의 시작과 함께 생성되어서 스프링 컨테이너가 종료될 때 까지 유지된다.
+스프링 빈은 기본적으로 싱글톤 스코프로 생성되기 때문이다. 스코프는 번역 그대로 빈이 존재할
+수 있는 범위를 뜻한다.&lt;/p&gt;
+
+&lt;h2 id=&quot;스프링의-다양한-스코프&quot;&gt;&lt;strong&gt;스프링의 다양한 스코프&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;* 싱글톤&lt;/strong&gt;: 기본 스코프, 스프링 컨테이너의 시작과 종료까지 유지되는 가장 넓은 범위의 스코프이다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;프로토타입&lt;/strong&gt;: 스프링 컨테이너는 프로토타입 빈의 생성과 의존관계 주입까지만 관여하고 더는 관리하지 않는 매우짧은 범위의 스코프이다.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;웹 관련 스코프&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;strong&gt;request&lt;/strong&gt;: 웹 요청이 들어오고 나갈때 까지 유지되는 스코프이다.
+&lt;strong&gt;session&lt;/strong&gt;: 웹 세션이 생성되고 종료될 때 까지 유지되는 스코프이다.
+&lt;strong&gt;application&lt;/strong&gt;: 웹의 서블릿 컨텍스트와 같은 범위로 유지되는 스코프이다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;프로토타입-스코프&quot;&gt;프로토타입 스코프&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;싱글톤 스코프의 빈을 조회하면 스프링 컨테이너는 항상 같은 인스턴스의 스프링 빈을 반환한다. 반면에 프로토타입 스코프를 스프링 컨테이너에 조회하면 스프링 컨테이너는 항상 새로운 인스턴스를 반환한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;싱글톤-빈-요청&quot;&gt;싱글톤 빈 요청&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;싱글톤 스코의 빈을 스프링 컨테이너에 요청한다.&lt;/li&gt;
+  &lt;li&gt;스프링 컨테이너는 본인이 관리하는 스프링 빈을 반환한다.&lt;/li&gt;
+  &lt;li&gt;이후에 스프링 컨테이너에 같은 요청이 들어와도 같은 객체 인스턴스를 반환한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;프로토타입-빈-요청&quot;&gt;프로토타입 빈 요청&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;프로토타입 스코프의 빈을 스프링 컨테이너에게 요청한다.&lt;/li&gt;
+  &lt;li&gt;스프링 컨테이너는 이 시점에 프로토타입 빈을 생성하고, 필요한 의존관계를 주입한다.&lt;/li&gt;
+  &lt;li&gt;스프링 컨테이너는 생성한 프로토타입 빈을 클라이언트에게 반환한다.&lt;/li&gt;
+  &lt;li&gt;스프링 컨테이너에 같은 요청이 온다면 항상 새로운 프로토타입 빈을 생성해서 반환한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;핵심은&quot;&gt;핵심은?&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;스프링 컨테이너는 프로토타입 빈을 생성하고, 의존관계 주입, 초기화까지만 처리한다. 클라이언트에 빈을 반환하고, 이후 스프링 컨테이너는 생성된 프로토타입 빈을 관리하지 않는다. 프로토타입 빈을 관리할 책임은 프로토타입 빈을 받은 클라이언트에게 있다. 그래서 @PreDestroy 같은 종료 메서드가 호출되지 않는다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;싱글톤-스코프-빈-테스트&quot;&gt;싱글톤 스코프 빈 테스트&lt;/h2&gt;
+&lt;p&gt;&lt;img width=&quot;700&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/be4fbc8b-3e09-4c9c-b226-afaeba2c901c&quot; /&gt;
+&lt;img width=&quot;641&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/9d5085be-68db-4a79-93f5-f71ea4630c00&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;프로토타입-스코프-빈-테스트&quot;&gt;프로토타입 스코프 빈 테스트&lt;/h2&gt;
+&lt;p&gt;&lt;img width=&quot;691&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/9841b38e-2f85-4249-b1c1-7fb9c5cc302f&quot; /&gt;
+&lt;img width=&quot;563&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/6fb983f2-f8c4-4346-903a-4bb5d9bf2e83&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;싱글톤 빈은 스프링 컨테이너 생성 시점에 초기화 메서드가 실행 되지만, 프로토타입 스코프의 빈은 스프링 컨테
+이너에서 빈을 조회할 때 생성되고, 초기화 메서드도 실행된다.프로토타입 빈을 2번 조회했으므로 완전히 다른 스프링 빈이 생성되고, 초기화도 2번 실행된 것을 확인할 수 있다.
+싱글톤 빈은 스프링 컨테이너가 관리하기 때문에 스프링 컨테이너가 종료될 때 빈의 종료 메서드가 실행되지만,
+프로토타입 빈은 스프링 컨테이너가 생성과 의존관계 주입 그리고 초기화 까지만 관여하고, 더는 관리하지 않는다. 
+따라서 프로토타입 빈은 스프링 컨테이너가 종료될 때 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@PreDestroy&lt;/code&gt; 같은 종료 메서드가 전혀 실행되지 않는다.&lt;/p&gt;
+
+&lt;h2 id=&quot;프로토타입-빈의-특징-정리&quot;&gt;&lt;strong&gt;프로토타입 빈의 특징 정리&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;스프링 컨테이너에 요청할 때 마다 새로 생성된다.&lt;/li&gt;
+  &lt;li&gt;스프링 컨테이너는 프로토타입 빈의 생성과 의존관계 주입 그리고 초기화까지만 관여한다.&lt;/li&gt;
+  &lt;li&gt;프로토타입 빈을 조회한 클라이언트가 관리해야 한다. → 종료 메서드에 대한 호출도 클라이언트가 직접 해야 한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;김영한님의 스프링 강의 정리&lt;/p&gt;
+</description>
+        <pubDate>Thu, 26 Sep 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/framework/2024/09/26/Spring-basic-07/</link>
+        <guid isPermaLink="true">http://localhost:4000/framework/2024/09/26/Spring-basic-07/</guid>
+        
+        <category>spring</category>
+        
+        
+        <category>framework</category>
+        
+      </item>
     
       <item>
         <title>Spring Basic 06 - 빈 생명주기 콜백</title>
@@ -4087,89 +4176,6 @@ Wrapper가 감싸다 라는 뜻이 있는데 기본형을 감싸면 객체가 �
         <pubDate>Wed, 18 Sep 2024 00:00:00 +0900</pubDate>
         <link>http://localhost:4000/language/2024/09/18/Java-Mid-05/</link>
         <guid isPermaLink="true">http://localhost:4000/language/2024/09/18/Java-Mid-05/</guid>
-        
-        <category>java</category>
-        
-        
-        <category>language</category>
-        
-      </item>
-    
-      <item>
-        <title>Java Mid 04 - String 클래스</title>
-        <description>&lt;h2 id=&quot;string-클래스&quot;&gt;String 클래스&lt;/h2&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;String&lt;/code&gt;은 자바에서 객체로 다뤄지며, 클래스이다. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;int&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;boolean&lt;/code&gt; 같은 기본형이 아닌 참조형으로, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;String&lt;/code&gt; 변수가 실제 문자열 값을 직접 저장하는 것이 아니라, 문자열 객체에 대한 참조를 저장된다.&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;str1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Hello&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;// 기존 방식&lt;/span&gt;
-&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;str2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;hello&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;// 객체를 명시적으로 생성하는 방식&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;String str1 = &quot;hello&quot;;&lt;/code&gt;와 같은 코드는 자바 언어에서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;new String(&quot;hello&quot;)&lt;/code&gt;로 변환되어 처리한다.&lt;/p&gt;
-
-&lt;p&gt;이는 자바가 문자열을 쉽게 다룰 수 있도록 제공하는 편의 기능이며 문자열을 생성할 때, 객체를 직접 생성하지 않더라도 편리하게 사용할 수 있다.&lt;/p&gt;
-
-&lt;h3 id=&quot;string-의-내부-구조&quot;&gt;String 의 내부 구조&lt;/h3&gt;
-
-&lt;p&gt;문자열 데이터는 내부적으로 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;char[]&lt;/code&gt; 배열에 저장되었으나, &lt;strong&gt;자바 9&lt;/strong&gt;부터는 메모리 효율성을 높이기 위해 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;char[]&lt;/code&gt; 대신 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;byte[]&lt;/code&gt;를 사용하게 된다. 자바에서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;char&lt;/code&gt; 타입은 2바이트를 지원하지만, 영어와 숫자 같은 단순한 문자는 1바이트로 표현이 가능하다. 자바 9 이후, 문자열은 &lt;strong&gt;Latin-1 인코딩&lt;/strong&gt;의 경우 1바이트를 사용하고, 그 외의 문자들은 &lt;strong&gt;UTF-16 인코딩&lt;/strong&gt;으로 2바이트를 사용하여 메모리를 절약할 수 있게 변경된다.&lt;/p&gt;
-
-&lt;h3 id=&quot;string-의-주요-메서드&quot;&gt;String 의 주요 메서드&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;length()&lt;/code&gt;: 문자열의 길이를 반환한다&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;charAt(int index)&lt;/code&gt;: 특정 인덱스에 위치한 문자를 반환한다.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;substring(int beginIndex, int endIndex)&lt;/code&gt;: 부분 문자열을 반환한다.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;indexOf(String str)&lt;/code&gt;: 특정 문자열이 처음 나타나는 인덱스를 반환한다.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;toLowerCase()&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;toUpperCase()&lt;/code&gt;: 문자열을 각각 소문자 또는 대문자로 변환한다.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;trim()&lt;/code&gt;: 문자열의 양쪽 끝에 있는 공백을 제거한다.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;concat(String str)&lt;/code&gt;: 문자열을 이어 붙인다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;문자열-더하기&quot;&gt;문자열 더하기&lt;/h3&gt;
-
-&lt;p&gt;문자열을 더할 때 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;String&lt;/code&gt;의 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;concat()&lt;/code&gt; 메서드를 사용할 수 있다. 그러나 자바는 편의상 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;+&lt;/code&gt; 연산자를 통해 문자열을 이어 붙이는 기능도 제공한다. 이는 문자열이 자주 사용되기 때문에 자바에서 특별히 지원하는 문법이다.&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;StringConcatMain&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;hello&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot; java&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-        &lt;span class=&quot;c1&quot;&gt;// concat() 메서드를 사용하여 문자열을 결합&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;concat&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// + 연산자를 사용하여 문자열을 결합&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;result1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 출력: hello java&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;result2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 출력: hello java&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;이처럼 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;concat()&lt;/code&gt; 메서드와 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;+&lt;/code&gt; 연산자는 모두 문자열을 이어 붙이지만, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;+&lt;/code&gt;는 자바에서 특별하게 제공하는 기능이다.&lt;/p&gt;
-
-&lt;h2 id=&quot;string또한-불변객체이다&quot;&gt;String또한 불변객체이다.&lt;/h2&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;String&lt;/code&gt;은 불변 객체(immutable object)이다. 한 번 생성된 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;String&lt;/code&gt; 객체의 값은 변경할 수 없다. 예를 들어, 문자열에 대해 어떤 연산을 수행할 때, 기존 문자열이 수정되는 것이 아니라 새로운 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;String&lt;/code&gt; 객체가 생성된다.&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;StringImmutableExample&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;str&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;hello&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;str&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;concat&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot; world&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 출력: hello world&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;인프런 김영한님의 실전 자바 강좌&lt;/p&gt;
-</description>
-        <pubDate>Wed, 18 Sep 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/language/2024/09/18/Java-Mid-04/</link>
-        <guid isPermaLink="true">http://localhost:4000/language/2024/09/18/Java-Mid-04/</guid>
         
         <category>java</category>
         
