@@ -6,12 +6,12 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 29 Sep 2024 21:51:26 +0900</pubDate>
-    <lastBuildDate>Sun, 29 Sep 2024 21:51:26 +0900</lastBuildDate>
+    <pubDate>Sun, 29 Sep 2024 21:53:06 +0900</pubDate>
+    <lastBuildDate>Sun, 29 Sep 2024 21:53:06 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
-        <title>Spring Basic 06 - 빈 생명주기 콜백</title>
+        <title>Spring Basic 07 - Bean Scope</title>
         <description>&lt;h2 id=&quot;빈-스코프란&quot;&gt;&lt;strong&gt;빈 스코프란&lt;/strong&gt;?&lt;/h2&gt;
 
 &lt;p&gt;스프링 빈이 스프링 컨테이너의 시작과 함께 생성되어서 스프링 컨테이너가 종료될 때 까지 유지된다.
@@ -20,9 +20,8 @@
 
 &lt;h2 id=&quot;스프링의-다양한-스코프&quot;&gt;&lt;strong&gt;스프링의 다양한 스코프&lt;/strong&gt;&lt;/h2&gt;
 
-&lt;p&gt;&lt;strong&gt;* 싱글톤&lt;/strong&gt;: 기본 스코프, 스프링 컨테이너의 시작과 종료까지 유지되는 가장 넓은 범위의 스코프이다.&lt;/p&gt;
-
 &lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;싱글톤&lt;/strong&gt;: 기본 스코프, 스프링 컨테이너의 시작과 종료까지 유지되는 가장 넓은 범위의 스코프이다.&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;프로토타입&lt;/strong&gt;: 스프링 컨테이너는 프로토타입 빈의 생성과 의존관계 주입까지만 관여하고 더는 관리하지 않는 매우짧은 범위의 스코프이다.&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;웹 관련 스코프&lt;/strong&gt;
     &lt;ul&gt;
