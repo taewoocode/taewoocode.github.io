@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 30 Sep 2024 01:01:31 +0900</pubDate>
-    <lastBuildDate>Mon, 30 Sep 2024 01:01:31 +0900</lastBuildDate>
+    <pubDate>Mon, 30 Sep 2024 01:01:44 +0900</pubDate>
+    <lastBuildDate>Mon, 30 Sep 2024 01:01:44 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
@@ -29,7 +29,7 @@
   &lt;li&gt;클라이언트 A는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;clientBean.logic()&lt;/code&gt; 을 호출한다.&lt;/li&gt;
   &lt;li&gt;clientBean&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;은 prototypeBean의&lt;/code&gt;addCount()` 를 호출해서 프로토타입 빈의 count를 증가한다.
 count값이 1이 된다.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;여기서&lt;/strong&gt; &lt;strong&gt;중요한&lt;/strong&gt; &lt;strong&gt;점이&lt;/strong&gt; &lt;strong&gt;있는데&lt;/strong&gt;,clientBean&lt;strong&gt;이&lt;/strong&gt; &lt;strong&gt;내부에&lt;/strong&gt; &lt;strong&gt;가지고&lt;/strong&gt; &lt;strong&gt;있는&lt;/strong&gt; &lt;strong&gt;프로토타입&lt;/strong&gt; &lt;strong&gt;빈은&lt;/strong&gt; &lt;strong&gt;이미&lt;/strong&gt; &lt;strong&gt;과거에&lt;/strong&gt; &lt;strong&gt;주입이&lt;/strong&gt; &lt;strong&gt;끝난&lt;/strong&gt; &lt;strong&gt;빈이다&lt;/strong&gt;.
+  &lt;li&gt;&lt;strong&gt;여기서&lt;/strong&gt; &lt;strong&gt;중요한&lt;/strong&gt; &lt;strong&gt;점이&lt;/strong&gt; &lt;strong&gt;있는데&lt;/strong&gt;, clientBean&lt;strong&gt;이&lt;/strong&gt; &lt;strong&gt;내부에&lt;/strong&gt; &lt;strong&gt;가지고&lt;/strong&gt; &lt;strong&gt;있는&lt;/strong&gt; &lt;strong&gt;프로토타입&lt;/strong&gt; &lt;strong&gt;빈은&lt;/strong&gt; &lt;strong&gt;이미&lt;/strong&gt; &lt;strong&gt;과거에&lt;/strong&gt; &lt;strong&gt;주입이&lt;/strong&gt; &lt;strong&gt;끝난&lt;/strong&gt; &lt;strong&gt;빈이다&lt;/strong&gt;.
 &lt;strong&gt;주입&lt;/strong&gt; &lt;strong&gt;시점에&lt;/strong&gt; &lt;strong&gt;스프링&lt;/strong&gt; &lt;strong&gt;컨테이너에&lt;/strong&gt; &lt;strong&gt;요청해서&lt;/strong&gt; &lt;strong&gt;프로토타입&lt;/strong&gt; &lt;strong&gt;빈이&lt;/strong&gt; &lt;strong&gt;새로&lt;/strong&gt; &lt;strong&gt;생성이&lt;/strong&gt; &lt;strong&gt;된&lt;/strong&gt; &lt;strong&gt;것이지&lt;/strong&gt;, &lt;strong&gt;사용&lt;/strong&gt; &lt;strong&gt;할&lt;/strong&gt; &lt;strong&gt;때마다&lt;/strong&gt; &lt;strong&gt;새로&lt;/strong&gt; &lt;strong&gt;생성되는&lt;/strong&gt; &lt;strong&gt;것이&lt;/strong&gt; &lt;strong&gt;아니다&lt;/strong&gt;!&lt;/li&gt;
   &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;clientBean&lt;/code&gt; 은 prototypeBean의 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;addCount()&lt;/code&gt; 를 호출해서 프로토타입 빈의 count를 증가한다. 원래 count 값이 1이었으므로 2가 된다.&lt;/li&gt;
 &lt;/ul&gt;

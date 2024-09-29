@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Spring Basic 07 - Bean Scope 02
+title: Spring Basic 08 - Bean Scope 02
 subtitle: ""
 categories: framework
 tags: spring
