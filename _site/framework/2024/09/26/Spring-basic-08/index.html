@@ -282,9 +282,9 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
   <li>클라이언트 A는 <code class="language-plaintext highlighter-rouge">clientBean.logic()</code> 을 호출한다.</li>
   <li>clientBean<code class="language-plaintext highlighter-rouge">은 prototypeBean의</code>addCount()` 를 호출해서 프로토타입 빈의 count를 증가한다.
 count값이 1이 된다.</li>
-  <li><strong>여기서</strong> <strong>중요한</strong> <strong>점이</strong> <strong>있는데</strong>, clientBean<strong>이</strong> <strong>내부에</strong> <strong>가지고</strong> <strong>있는</strong> <strong>프로토타입</strong> <strong>빈은</strong> <strong>이미</strong> <strong>과거에</strong> <strong>주입이</strong> <strong>끝난</strong> <strong>빈이다</strong>. <strong>주입</strong> <strong>시점에</strong> <strong>스프링</strong> <strong>컨테이너에</strong> <strong>요청해서</strong> <strong>프로토타입</strong> <strong>빈이</strong> <strong>새로</strong> <strong>생성이</strong> <strong>된</strong> <strong>것이지</strong>, <strong>사용</strong> <strong>할</strong> <strong>때마다</strong> <strong>새로</strong> <strong>생성되는</strong> <strong>것이</strong> <strong>아니다</strong>!**</li>
-  <li><code class="language-plaintext highlighter-rouge">clientBean</code> 은 prototypeBean의 <code class="language-plaintext highlighter-rouge">addCount()</code> 를 호출해서 프로토타입 빈의 count를 증가한다. 원
-래 count 값이 1이었으므로 2가 된다.</li>
+  <li><strong>여기서</strong> <strong>중요한</strong> <strong>점이</strong> <strong>있는데</strong>,clientBean<strong>이</strong> <strong>내부에</strong> <strong>가지고</strong> <strong>있는</strong> <strong>프로토타입</strong> <strong>빈은</strong> <strong>이미</strong> <strong>과거에</strong> <strong>주입이</strong> <strong>끝난</strong> <strong>빈이다</strong>.
+<strong>주입</strong> <strong>시점에</strong> <strong>스프링</strong> <strong>컨테이너에</strong> <strong>요청해서</strong> <strong>프로토타입</strong> <strong>빈이</strong> <strong>새로</strong> <strong>생성이</strong> <strong>된</strong> <strong>것이지</strong>, <strong>사용</strong> <strong>할</strong> <strong>때마다</strong> <strong>새로</strong> <strong>생성되는</strong> <strong>것이</strong> <strong>아니다</strong>!</li>
+  <li><code class="language-plaintext highlighter-rouge">clientBean</code> 은 prototypeBean의 <code class="language-plaintext highlighter-rouge">addCount()</code> 를 호출해서 프로토타입 빈의 count를 증가한다. 원래 count 값이 1이었으므로 2가 된다.</li>
 </ul>
 
 <h2 id="싱글톤-빈이-프로토타입-빈을-주입받을-경우">싱글톤 빈이 프로토타입 빈을 주입받을 경우</h2>
@@ -293,7 +293,8 @@ count값이 1이 된다.</li>
 
 <ul>
   <li>Scope에 singleton이라고 명시를 해줬는데 사실 아무것도 쓰지 않은 값이어도 default로 싱글톤이 유지된다.</li>
-  <li>여기서 중요한 점은 싱글톤 빈인 <code class="language-plaintext highlighter-rouge">ClientBean</code>이 <strong>프로토타입 빈을 주입받을 경우</strong>, <code class="language-plaintext highlighter-rouge">ClientBean</code>이 생성될 때만 <code class="language-plaintext highlighter-rouge">PrototypeBean</code>의 인스턴스가 주입된다. 즉, <code class="language-plaintext highlighter-rouge">ClientBean</code>이 생성될 때 주입된 <strong>하나의 프로토타입 빈 인스턴스</strong>를 계속 사용하게 된다. 이후에 <code class="language-plaintext highlighter-rouge">logic()</code> 메서드를 호출할 때마다 새로운 <code class="language-plaintext highlighter-rouge">PrototypeBean</code>이 생성되지 않고, 처음 주입된 동일한 인스턴스를 사용하게 되는 것이다. → 그 이유는 이미 생성시점에 빈을 만들어 두었기 때문이다.</li>
+  <li>여기서 중요한 점은 싱글톤 빈인 <code class="language-plaintext highlighter-rouge">ClientBean</code>이 <strong>프로토타입 빈을 주입받을 경우</strong>, <code class="language-plaintext highlighter-rouge">ClientBean</code>이 생성될 때만 <code class="language-plaintext highlighter-rouge">PrototypeBean</code>의 인스턴스가 주입된다.</li>
+  <li><code class="language-plaintext highlighter-rouge">ClientBean</code>이 생성될 때 주입된 <strong>하나의 프로토타입 빈 인스턴스</strong>를 계속 사용하게 된다. 이후에 <code class="language-plaintext highlighter-rouge">logic()</code> 메서드를 호출할 때마다 새로운 <code class="language-plaintext highlighter-rouge">PrototypeBean</code>이 생성되지 않고, 처음 주입된 동일한 인스턴스를 사용하게 되는 것이다. → 그 이유는 이미 생성시점에 빈을 만들어 두었기 때문이다.</li>
   <li>사실 프로토타입빈은 요청할 때 마다 계속 다른 인스턴스를 보내주는 개념인데 싱글톤과 같이 사용하게 된다면 싱글톤이 더 우선이 되는 거 같은 개념인 것 같다.</li>
 </ul>
 
