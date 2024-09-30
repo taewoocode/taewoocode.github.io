@@ -6,9 +6,71 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 30 Sep 2024 19:19:43 +0900</pubDate>
-    <lastBuildDate>Mon, 30 Sep 2024 19:19:43 +0900</lastBuildDate>
+    <pubDate>Mon, 30 Sep 2024 19:48:54 +0900</pubDate>
+    <lastBuildDate>Mon, 30 Sep 2024 19:48:54 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
+    
+      <item>
+        <title>Spring Basic 11 - Proxy Mode</title>
+        <description>&lt;h2 id=&quot;프록시-모드로-사용해보기&quot;&gt;프록시 모드로 사용해보기&lt;/h2&gt;
+
+&lt;p&gt;&lt;img width=&quot;716&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/559a7154-64f4-479e-b7b3-35992bcc465b&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;proxyMode = ScopedProxyMode.TARGET_CLASS&lt;/code&gt; 를 추가해주자.&lt;/li&gt;
+  &lt;li&gt;적용 대상이 인터페이스가 아닌 클래스면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TARGET_CLASS&lt;/code&gt; 를 선택&lt;/li&gt;
+  &lt;li&gt;적용 대상이 인터페이스면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;INTERFACES&lt;/code&gt; 를 선택&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img width=&quot;683&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/7ab13754-da53-4b47-9839-41ab02ff9593&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;프록시 모드로 해도 Mylogger와 똑같이 동작이 된다. 코드의 구현이 변경됨이 없이 똑같이 동작할 수 있는 이유는 무엇일까?
+    &lt;ul&gt;
+      &lt;li&gt;이유는 MyLogger의 가짜 프록시 클래스를 만들어두고 HTTP request와 상관 없이 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;가짜 프록시 클래스&lt;/code&gt;를 다른 빈에 미리 주입해 둘 수 있다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;프록시는-어떻게-동작할까&quot;&gt;프록시는 어떻게 동작할까?&lt;/h2&gt;
+
+&lt;p&gt;&lt;img width=&quot;632&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/b43e6ca1-3226-4838-b9ca-4bad935f17d1&quot; /&gt;
+&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/9a762e25-decf-4938-a3a0-91716b97978d&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;cglib라는-라이브러리로-내-클래스를-상속-받은-가짜-프록시-객체를-만들어서-주입&quot;&gt;CGLIB&lt;strong&gt;라는&lt;/strong&gt; &lt;strong&gt;라이브러리로&lt;/strong&gt; &lt;strong&gt;내&lt;/strong&gt; &lt;strong&gt;클래스를&lt;/strong&gt; &lt;strong&gt;상속&lt;/strong&gt; &lt;strong&gt;받은&lt;/strong&gt; &lt;strong&gt;가짜&lt;/strong&gt; &lt;strong&gt;프록시&lt;/strong&gt; &lt;strong&gt;객체를&lt;/strong&gt; &lt;strong&gt;만들어서&lt;/strong&gt; &lt;strong&gt;주입&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@Scope&lt;/code&gt; 의 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;proxyMode = ScopedProxyMode.TARGET_CLASS)&lt;/code&gt; 를 설정하면 스프링 컨테이너는 CGLIB
+라는 바이트코드를 조작하는 라이브러리를 사용해서, MyLogger를 상속받은 가짜 프록시 객체를 생성한다.&lt;/li&gt;
+  &lt;li&gt;결과는 우리가 등록한 순수한 MyLogger 클래스가 아니라 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MyLogger$ $EnhancerBySpringCGLIB&lt;/code&gt; 이라는 클래스로 만들어진 객체가 대신 등록된 것을 확인한다.&lt;/li&gt;
+  &lt;li&gt;그리고 스프링 컨테이너에 “myLogger”라는 이름으로 진짜 대신에 이 가짜 프록시 객체를 등록된다.&lt;/li&gt;
+  &lt;li&gt;의존관계 주입도 이 가짜 프록시 객체가 주입된다.&lt;/li&gt;
+  &lt;li&gt;즉 클라이언트 A,B가 MyLoggerProxy를 요청하게 되면 가짜 프록시 객체가 request 스코프의 진짜 mylogger.log를 호출하게 되고 가짜 프록시 객체는 원본을 상속 받아져서 만들어 졌기 때문에 객체를 사용하는 입장인 클라이언트 측에서는 이 객체가 진짜인지 가짜인지 구분할 방법은 없다. →  다형성&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;정리하면&quot;&gt;정리하면&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CGLIB&lt;/code&gt;이라는 라이브러리를 활용하여 내 클래스에 가짜 프록시 객체를 만들어서 주입한다.&lt;/li&gt;
+  &lt;li&gt;요청이 오면 가짜 프록시 객체가 실제 빈을 요청하는 로직이다.&lt;/li&gt;
+  &lt;li&gt;동작은 싱글톤이랑 유사하다.&lt;/li&gt;
+  &lt;li&gt;주입되는 시점에 가짜 proxy 객체는 내부에서 실제 빈을 요청하는 위임 로직이 들어가 있다. (컨테이너 싹다 찾아봐)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;김영한님의 스프링 강의 정리&lt;/p&gt;
+</description>
+        <pubDate>Thu, 26 Sep 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/framework/2024/09/26/Spring-basic-11/</link>
+        <guid isPermaLink="true">http://localhost:4000/framework/2024/09/26/Spring-basic-11/</guid>
+        
+        <category>spring</category>
+        
+        
+        <category>framework</category>
+        
+      </item>
     
       <item>
         <title>Spring Basic 10 - Web Scope</title>
@@ -3755,114 +3817,6 @@ s에서 분리한 문자열을 빼고 남은 부분에 대해서 이 과정을 �
         <pubDate>Wed, 18 Sep 2024 00:00:00 +0900</pubDate>
         <link>http://localhost:4000/language/2024/09/18/Java-Mid-10/</link>
         <guid isPermaLink="true">http://localhost:4000/language/2024/09/18/Java-Mid-10/</guid>
-        
-        <category>java</category>
-        
-        
-        <category>language</category>
-        
-      </item>
-    
-      <item>
-        <title>Java Mid 09 - Nested Class</title>
-        <description>&lt;h2 id=&quot;중첩-클래스-내부-클래스란&quot;&gt;중첩 클래스, 내부 클래스란?&lt;/h2&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(...)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;c1&quot;&gt;//...&lt;/span&gt;
-		&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(...){&lt;/span&gt;
-			&lt;span class=&quot;c1&quot;&gt;//...&lt;/span&gt;
-		&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;다음과 같이 클래스 안에 클래스를 중첩해서 정의하는데, 이것을 중첩 클래스(Nested Class)라고 한다.&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Outer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-	&lt;span class=&quot;c1&quot;&gt;//nested Class&lt;/span&gt;
-		&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Nested&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-			&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-			&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;static키워드를-통해-분류된다&quot;&gt;Static키워드를 통해 분류된다.&lt;/h2&gt;
-&lt;p&gt;&lt;img width=&quot;615&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/9ec56932-3e7f-4775-958f-ced2e9b3d989&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;중첩과-내부의-차이&quot;&gt;중첩과 내부의 차이&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;중첩 : 어떤 것이 내부에 위치하거나 포함되는 구조적인 관계
-    &lt;ul&gt;
-      &lt;li&gt;나의 안에 있지만 내 것이 아니다.
-        &lt;ul&gt;
-          &lt;li&gt;큰 나무 상자안에 다른 작은 나무 상자가 있다고 생각하면 쉽다..&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;내부 : 나의 내부에 있는 나를 구성하는 요소
-    &lt;ul&gt;
-      &lt;li&gt;나의 심장은 나의 구성요소이다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;nested.inner.ex2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Car&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;model&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;chargeLevel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Engine&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;engine&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Car&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;model&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;chargeLevel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;model&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;model&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;chargeLevel&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;chargeLevel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;engine&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Engine&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//내 정보를 넘겨서 instance를 생성&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;engine&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;model&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;시작 완료&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Engine&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;충전 레벨을 확인:&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;chargeLevel&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-            &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;model&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;의 엔진을 구동합니다.&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;엔진을 내부 클래스로 만들었다.&lt;/li&gt;
-  &lt;li&gt;Engine.start()를 비교해보자
-    &lt;ul&gt;
-      &lt;li&gt;Car의 인스턴스 변수인 chargeLevel에 직접 접근할 수 잇다.&lt;/li&gt;
-      &lt;li&gt;Car의 인스턴스 변수인 model에 직접 접근할 수 있다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;중첩-클래스는-언제-사용하는가&quot;&gt;중첩 클래스는 언제 사용하는가?&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;중첩 클래스는 특정 클래스가 다른 하나의 클래스 안에서만 사용이 되거나, 둘이 아주 긴밀하게 연결되어 있는 특별한 경우에만 사용해야 한다. 외부 여러곳에서 특정 클래스를 사용한다면 중첩 클래스로 사용하면 안된다.&lt;/li&gt;
-  &lt;li&gt;논리적인 그룹화 : 특정 클래스가 다른 하나의 클래스 안에서만 사용되는 경우 해당 클래스 안에 포함되는 것이 논리적으로 더 그룹화가 된다. 패키지를 열었을 때 다른 곳에서 사용될 필요가 없는 중첩 클래스가 외부에 노출되지 않는 장점도 있다.&lt;/li&gt;
-  &lt;li&gt;캡슐화 : 중첩 클래스는 바깥 클래스의 private멤버에 접근할 수 있다. 이렇게 해서 둘이 긴밀하게 연결하고 불필요한 public 메서드를 제거할 수 있다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;인프런 김영한님의 자바 강좌 + 나의 뇌&lt;/p&gt;
-</description>
-        <pubDate>Wed, 18 Sep 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/language/2024/09/18/Java-Mid-09/</link>
-        <guid isPermaLink="true">http://localhost:4000/language/2024/09/18/Java-Mid-09/</guid>
         
         <category>java</category>
         
