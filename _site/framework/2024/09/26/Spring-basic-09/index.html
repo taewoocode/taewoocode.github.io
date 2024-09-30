@@ -296,9 +296,20 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
 <p><img width="691" alt="image" src="https://github.com/user-attachments/assets/1430459e-9584-4ca6-9a46-593668cfee88" />
 <img width="701" alt="image" src="https://github.com/user-attachments/assets/18aab303-e323-45bb-9699-ec4454a484d9" /></p>
 
+<p>실행해보면 <code class="language-plaintext highlighter-rouge">provider.get()</code> 을 통해서 항상 새로운 프로토타입 빈이 생성되는 것을 확인할 수 있다.
+<code class="language-plaintext highlighter-rouge">provider</code> 의 <code class="language-plaintext highlighter-rouge">get()</code> 을 호출하면 내부에서는 스프링 컨테이너를 통해 해당 빈을 찾아서 반환한다. (<strong>DL</strong>)
+자바 표준이고, 기능이 단순하므로 단위테스트를 만들거나 mock 코드를 만들기는 훨씬 쉬워진다.
+<code class="language-plaintext highlighter-rouge">Provider</code> 는 지금 딱 필요한 DL 정도의 기능만 제공한다.</p>
+
+<h2 id="프로토타입은-그럼-언제-사용할까">프로토타입은 그럼 언제 사용할까?</h2>
+
+<ul>
+  <li>사용할 때 마다 의존관계 주입이 완료된 새로운 객체가 필요할 때 사용된다.</li>
+</ul>
+
 <h2 id="reference">Reference</h2>
 
-<p>김영한님의 스프링 강의 정리</p>
+<p>김영한님의 스프링 강의 정리 + 어렵다 스프링</p>
 
     <br />
     <br />

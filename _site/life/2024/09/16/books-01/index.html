@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Spring Basic 01 -제어의 역전, ApplicationContext-" />
+<meta property="og:title" content="객체지향의 사실과 오해를 읽으며" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,17 +52,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Spring Basic 01 -제어의 역전, ApplicationContext- &middot; 일벌리는 개발자</title>
+<title>객체지향의 사실과 오해를 읽으며 &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="제어의 역전(Inversion of Control)
+        content="객체지향의 사실과 오해
 
 "
 />
 <meta
         property="og:description"
-        content="제어의 역전(Inversion of Control)
+        content="객체지향의 사실과 오해
 
 "
 />
@@ -72,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/framework/2024/09/16/Spring-basic-01/" />
-<meta property="og:url" content="http://localhost:4000/framework/2024/09/16/Spring-basic-01/" />
+<link rel="canonical" href="http://localhost:4000/life/2024/09/16/books-01/" />
+<meta property="og:url" content="http://localhost:4000/life/2024/09/16/books-01/" />
 
 <link
         rel="alternate"
@@ -82,8 +82,10 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         href="http://localhost:4000/feed.xml"
 />
 
+
+<link rel="prev" href="http://localhost:4000/framework/2024/09/16/Spring-basic-01/" />
  
-<link rel="next" href="http://localhost:4000/life/2024/09/16/books-01/" />
+<link rel="next" href="http://localhost:4000/life/2024/09/16/daily-01/" />
 
 
 <link
@@ -181,11 +183,11 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-framework/2024/09/16/Spring-basic-01" class="post" role="article">
+<article id="post-life/2024/09/16/books-01" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      Spring Basic 01 -제어의 역전, ApplicationContext-
+      객체지향의 사실과 오해를 읽으며
       
     </h1>
 
@@ -201,7 +203,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 
 
 
-in <a href="/category/framework/" data-flip="title">Framework</a>
+in <a href="/category/life/" data-flip="title">Life</a>
 
       
 
@@ -213,7 +215,7 @@ in <a href="/category/framework/" data-flip="title">Framework</a>
 
 
 
-on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
+on <a href="/tag/daily-books/" data-flip="title">Books</a>
 
     </p>
 
@@ -265,25 +267,281 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
     </style>
 
     <!--<br />-->
-    <h2 id="제어의-역전inversion-of-control">제어의 역전(Inversion of Control)</h2>
+    <h2 id="객체지향의-사실과-오해">객체지향의 사실과 오해</h2>
 
-<p>프로그램의 제어흐름을 직접 제어하는 것이 아니라 외부(스프링)이 관리하는 것을 제어의 역전(loC)라고 한다.</p>
+<p><img width="444" alt="image" src="https://github.com/user-attachments/assets/a06181c9-e028-4a82-bdd4-9e6bfce74d82" /></p>
 
-<h2 id="스프링-컨테이너">스프링 컨테이너</h2>
-<h3 id="applicationcontext">ApplicationContext</h3>
-<p><img width="700" alt="스크린샷 2024-09-16 오후 9 06 08" src="https://github.com/user-attachments/assets/76d1d251-e001-48b7-b0fc-8472a2380792" /></p>
+<blockquote>
+  <p>‘객체지향적인 관점으로 개발’ 그러니까 객체지향이 뭔데? 라는 식으로 객체지향은 항상 추상적으로 다가왔었다. 
+여태 살아오며 “객체지향”에 대해서 나는 전혀 모르는 사람이었다고 해도 과언이 아니다. 
+그러다가 우연히 멘토님을 뵙게 되어 가르침 얻었고 그리고 권유해 주신 ‘객체지향의 사실과 오해’ 라는 책을 통해 조금은 객체지향에 대해서 알게 되는 감사함을 느끼게 되었다. 
+책에는 정말 많은 내용들이 담겨있지만, 그중에서도 인상 깊게 읽었던 내용들을 정리해 보고자 이 글을 작성하게 되었다.</p>
+
+</blockquote>
+
+<h2 id="객체지향은-현실세계를-모방했다">객체지향은 현실세계를 모방했다?</h2>
+
+<blockquote>
+  <p>현실 세계에서 식별가능한 개체 또는 사물은 모두 “상태” 와 “행동”을 가진 객체로 볼 수 있으며, 이를 소프트웨어 세계에 모방해 놓은 것이 “객체지향”이다.</p>
+
+</blockquote>
+
+<p>객체지향에 대해서 한 번쯤 공부를 해봤다면 들어봤을 법한 내용이다. 이 말이 맞는 말 이기는 하다만, 오류가 존재한다. 현실 세계에서의 객체와, 소프트웨어 세계에서의 객체는 분명한 차이점이 존재한다.</p>
+
+<p>예전에 멘토님이 말씀해 주셨는데, 현실 세계에서의 물은 스스로 양을 줄이거나 늘릴 수 없는 수동적인 존재지만, 소프트웨어 세계에서는 스스로 물의 양을 늘리거나 줄일 수 있는 자율적인 존재라고 하셨었다.</p>
+
+<p>또한 물은 스스로의 상태를 관리하고 필요에 따라 추가적인 능력도 갖출 수 있다.</p>
+
+<p>객체지향의 목적은 현실 세계를 모방하는 것이 아닌 즉 새로운 세계를 창조하는 것이고, 이 부분을 이해하는 것이 객체지향 적인 관점에서의 설계이다.</p>
+
+<blockquote>
+  <p>클래스는 객체를 찍어내는 설계도(틀)이다.</p>
+
+</blockquote>
+
+<p>우리는 위에 말이 너무 당연하다는 듯이 머릿속에 있지만, 객체지향이라는 세계에서의 주인공은 ‘클래스’가 아닌 ‘객체’이다.</p>
+
+<p>객체지향에서의 설계에서 중요한 것은 어떤 클래스를 만들어낼까? 가 아닌 어떤 객체들이 메시지를 주고 받는 것이 좋을까?를 고민해야 하는 것이 맞는 선택인 것이다.</p>
+
+<h2 id="객체의-행동이-상태를-결정한다">객체의 행동이 상태를 결정한다.</h2>
+
+<p>책을 읽기전 나는 ,객체의 필요한 상태 즉 데이터를 정의내리고 이와 관련된 메서드가 어떤 것이 있을까? 를 고민했었다. 하지만 책에서는 이러한 설계의 방식을 지적하며 상태를 먼저 생각하고 행동을 결정하는 방식은 협력에 있어서 적합한 객체를 만들지 못할 가능성이 크다고 말하고 있다.</p>
+
+<p>객체의 존재이유는 협력하기 위함이다. 그리고 이를 위해서는 객체들은 메시지를 주고 받는다. 따라서 메시지를 처리해야 할 행동이 먼저 정의가 되어야 하고, 그 다음에 행동을 뒷받침 할 데이터가 필요하다.</p>
+
+<h2 id="메시지는-수신자객체의-책임을-결정한다">메시지는 수신자(객체)의 책임을 결정한다.</h2>
+
+<p>객체들의 가장 중요한 키포인트는 ‘메시지’이다. 객체들은 자신에게 할당된 책임을 완수하기 위해, 다른 객체들의 도움을 요청하기도 하며, 이 행위를 위해서 수신하기 전 적합한 객체를 선택하고, 선택한 객체에게 메시지를 전송한다. 수신을 받은 객체는 반드시 메시지를 처리해야 하는 책임을 가지게 된다.</p>
+
+<p>이와 같은 방식은 객체들은 소통하며 수신받은 객체는 또 다른 객체에게 도움을 요청하며 메시지를 보내게 된다.</p>
+
+<p>주고받는 메시지가 어느정도 ‘정의’되고 나면 어느새 객체들의 책임들이 모여 하나의 ‘애플리케이션’ 을 이루게 된다. 객체가 메시지를 선택하는 것이 아닌 메시지가 객체를 선택한다.</p>
+
+<h2 id="메소드는-메시지는">메소드는? 메시지는?</h2>
+
+<p>책에서는 메시지를 ‘what’ 즉 무엇을 실행할 것인지를 정의해 두었고, 메소드는 ‘How’ 어떻게 실행할지를 정의해 두었다. 동일한 메시지라고 하더라도 각각의 메소드로 처리될 수 있으며 이러한 메시지와 메소드간의 1:N 방식을 다형성이라고 책에서는 가르친다.</p>
+
+<h2 id="객체지향-설계-방식">객체지향 설계 방식</h2>
+
+<p>1) 도메인에 필요한 객체 정리</p>
+
+<p>2) 필요한 메시지 추가</p>
+
+<p>3) 메시지를 수신할 객체 선택</p>
+
+<p>4) 더이상 필요한 메시지가 없을 때까지 2-3 과정 반복</p>
+
+<p>5) 객체들이 수신하는 메시지를 바탕으로 객체들의 인터페이스 구성</p>
+
+<p>6) 객체들의 메소드를 구현</p>
+
+<p>예를 들어 “붕어빵 가게”라는 도메인 모델의 객체지향 설계를 한다고 가정한다면.</p>
+
+<h2 id="도메인에-필요한-객체들-정리">도메인에 필요한 객체들 정리</h2>
+
+<p><img width="687" alt="image" src="https://github.com/user-attachments/assets/3d48ebd6-7de8-48a6-8c9d-9acdc2b5f5ab" /></p>
+
+<p>우선 ‘붕어빵’이라는 객체가 있어야될 것이고, ‘붕어빵’을 구매하는 ‘손님’, 또 ‘붕어빵’을 만드는 ‘붕어빵 장수’ 객체가 필요할 것이다. 
+또 ‘붕어빵 장수’는 ‘손님’한테 받은 돈을 저장하기 위해 ‘금고’라는 객체를 하나 가져야할 것이다.</p>
+
+<h2 id="메시지-추가-객체-선택">메시지 추가, 객체 선택</h2>
+
+<p><img width="699" alt="image" src="https://github.com/user-attachments/assets/4f077fcb-8c8c-4277-8e65-c8a50c005b03" /></p>
+
+<p>첫번째로 필요한 메시지는 ‘ 붕어빵을 주문하라’ 이다.</p>
+
+<p>그럼 이 메시지는 누가 받는 것일까? 당연히 손님일 것이다.</p>
+
+<p>하지만 ‘손님’은 붕어빵을 만들 수 없기 때문에 다른 객체에게 도움을 요청해야 하므로 ‘붕어빵 장수’에게 메시지를 요청해야 한다. 
+그 다음 ‘붕어빵 장수’는 붕어빵을 만들기 전에 ‘손님’에게 받을 돈을 지정해야 하고, ‘금고’에게 메시지를 요청한다.</p>
+
+<h2 id="책의-내용들을-바탕으로-이해한-설계를-해보자">책의 내용들을 바탕으로 이해한 설계를 해보자.</h2>
+
+<p>Barista</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Barista</span> <span class="o">{</span>
+
+    <span class="kt">void</span> <span class="nf">takeOrder</span><span class="o">(</span><span class="nc">String</span> <span class="n">coffeeType</span><span class="o">,</span> <span class="kt">int</span> <span class="n">price</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"바리스타 : 고객님 께서 주문하신 "</span> <span class="o">+</span> <span class="n">coffeeType</span> <span class="o">+</span> <span class="s">" "</span> <span class="o">+</span> <span class="n">price</span> <span class="o">+</span> <span class="s">"원 되겠습니다. 곧 준비해드리겠습니다"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kt">void</span> <span class="nf">makeCoffee</span><span class="o">(</span><span class="nc">String</span> <span class="n">coffeeType</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"손님 : 음~ 이 맛은 "</span> <span class="o">+</span> <span class="n">coffeeType</span> <span class="o">+</span> <span class="s">" 맛이야~ 맛있는걸"</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Coffee</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Coffee</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">price</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">Coffee</span><span class="o">(</span><span class="nc">MenuItem</span> <span class="n">menuItem</span><span class="o">){</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">menuItem</span><span class="o">.</span><span class="na">getName</span><span class="o">();</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">price</span> <span class="o">=</span> <span class="n">menuItem</span><span class="o">.</span><span class="na">getPrice</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>CoffeeMain</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CoffeeMain</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Scanner</span> <span class="n">scanner</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Scanner</span><span class="o">(</span><span class="nc">System</span><span class="o">.</span><span class="na">in</span><span class="o">);</span>
+
+        <span class="c1">// 메뉴 아이템 생성</span>
+        <span class="nc">MenuItem</span> <span class="n">americano</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">MenuItem</span><span class="o">(</span><span class="s">"아메리카노"</span><span class="o">,</span> <span class="mi">1500</span><span class="o">);</span>
+        <span class="nc">MenuItem</span> <span class="n">cappuccino</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">MenuItem</span><span class="o">(</span><span class="s">"카푸치노"</span><span class="o">,</span> <span class="mi">2000</span><span class="o">);</span>
+        <span class="nc">MenuItem</span> <span class="n">caramelMacchiato</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">MenuItem</span><span class="o">(</span><span class="s">"카라멜 마키야또"</span><span class="o">,</span> <span class="mi">2500</span><span class="o">);</span>
+        <span class="nc">MenuItem</span> <span class="n">espresso</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">MenuItem</span><span class="o">(</span><span class="s">"에스프레소"</span><span class="o">,</span> <span class="mi">2500</span><span class="o">);</span>
+
+        <span class="c1">// 메뉴 생성</span>
+        <span class="nc">MenuItem</span><span class="o">[]</span> <span class="n">menuItems</span> <span class="o">=</span> <span class="o">{</span><span class="n">americano</span><span class="o">,</span> <span class="n">cappuccino</span><span class="o">,</span> <span class="n">caramelMacchiato</span><span class="o">,</span> <span class="n">espresso</span><span class="o">};</span>
+        <span class="nc">Menu</span> <span class="n">menu</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Menu</span><span class="o">(</span><span class="n">menuItems</span><span class="o">);</span>
+
+        <span class="c1">// 손님 생성</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"이름을 입력하세요: "</span><span class="o">);</span>
+        <span class="nc">String</span> <span class="n">customerName</span> <span class="o">=</span> <span class="n">scanner</span><span class="o">.</span><span class="na">nextLine</span><span class="o">();</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"소지금을 입력하세요: "</span><span class="o">);</span>
+        <span class="kt">int</span> <span class="n">customerWallet</span> <span class="o">=</span> <span class="n">scanner</span><span class="o">.</span><span class="na">nextInt</span><span class="o">();</span>
+        <span class="nc">Customer</span> <span class="n">customer</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Customer</span><span class="o">(</span><span class="n">customerName</span><span class="o">,</span> <span class="n">customerWallet</span><span class="o">);</span>
+
+        <span class="c1">// 바리스타 생성</span>
+        <span class="nc">Barista</span> <span class="n">barista</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Barista</span><span class="o">();</span>
+
+        <span class="k">while</span> <span class="o">(</span><span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// 메뉴판 출력</span>
+            <span class="n">menu</span><span class="o">.</span><span class="na">printMenu</span><span class="o">();</span>
+
+            <span class="c1">// 손님이 커피 선택</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"커피를 선택하세요 (번호 입력): "</span><span class="o">);</span>
+            <span class="kt">int</span> <span class="n">choice</span> <span class="o">=</span> <span class="n">scanner</span><span class="o">.</span><span class="na">nextInt</span><span class="o">();</span>
+
+            <span class="c1">// 선택한 메뉴 아이템 가져오기</span>
+            <span class="nc">MenuItem</span> <span class="n">selectedMenuItem</span> <span class="o">=</span> <span class="n">menu</span><span class="o">.</span><span class="na">getMenuItem</span><span class="o">(</span><span class="n">choice</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="n">selectedMenuItem</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c1">// 손님이 커피 주문</span>
+                <span class="n">customer</span><span class="o">.</span><span class="na">orderCoffee</span><span class="o">(</span><span class="n">selectedMenuItem</span><span class="o">,</span> <span class="n">barista</span><span class="o">);</span>
+
+                <span class="c1">// 손님의 현재 소지금 출력</span>
+                <span class="n">customer</span><span class="o">.</span><span class="na">printWallet</span><span class="o">();</span>
+
+                <span class="c1">// 커피를 마셨다면 종료</span>
+                <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"더 주문하시겠습니까? (1: 예, 2: 아니오): "</span><span class="o">);</span>
+                <span class="kt">int</span> <span class="n">continueOrder</span> <span class="o">=</span> <span class="n">scanner</span><span class="o">.</span><span class="na">nextInt</span><span class="o">();</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">continueOrder</span> <span class="o">!=</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"프로그램을 종료합니다."</span><span class="o">);</span>
+                    <span class="k">break</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"잘못된 선택입니다. 다시 선택하세요."</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Customer</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Customer</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">wallet</span><span class="o">;</span>
+
+    <span class="nc">Customer</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">,</span> <span class="kt">int</span> <span class="n">wallet</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">wallet</span> <span class="o">=</span> <span class="n">wallet</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kt">void</span> <span class="nf">orderCoffee</span><span class="o">(</span><span class="nc">MenuItem</span> <span class="n">menuItem</span><span class="o">,</span> <span class="nc">Barista</span> <span class="n">barista</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">price</span> <span class="o">=</span> <span class="n">menuItem</span><span class="o">.</span><span class="na">getPrice</span><span class="o">();</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">wallet</span> <span class="o">&lt;</span> <span class="n">price</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">name</span> <span class="o">+</span> <span class="s">" : 소지금이 적어 주문할 수 없어"</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="n">barista</span><span class="o">.</span><span class="na">takeOrder</span><span class="o">(</span><span class="n">menuItem</span><span class="o">.</span><span class="na">getName</span><span class="o">(),</span> <span class="n">price</span><span class="o">);</span>
+            <span class="n">barista</span><span class="o">.</span><span class="na">makeCoffee</span><span class="o">(</span><span class="n">menuItem</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
+            <span class="n">wallet</span> <span class="o">-=</span> <span class="n">price</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kt">void</span> <span class="nf">printWallet</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">name</span> <span class="o">+</span> <span class="s">"의 현재 소지금: "</span> <span class="o">+</span> <span class="n">wallet</span> <span class="o">+</span> <span class="s">"원"</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Menu</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Menu</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="nc">MenuItem</span><span class="o">[]</span> <span class="n">items</span><span class="o">;</span>
+
+    <span class="nc">Menu</span><span class="o">(</span><span class="nc">MenuItem</span><span class="o">[]</span> <span class="n">items</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">items</span> <span class="o">=</span> <span class="n">items</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kt">void</span> <span class="nf">printMenu</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">items</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">((</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span> <span class="o">+</span> <span class="s">". "</span> <span class="o">+</span> <span class="n">items</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">" - "</span> <span class="o">+</span> <span class="n">items</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">getPrice</span><span class="o">()</span> <span class="o">+</span> <span class="s">"원"</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="nc">MenuItem</span> <span class="nf">getMenuItem</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">index</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="n">items</span><span class="o">.</span><span class="na">length</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">items</span><span class="o">[</span><span class="n">index</span><span class="o">];</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>MenuItem</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MenuItem</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">price</span><span class="o">;</span>
+
+    <span class="nc">MenuItem</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">,</span> <span class="kt">int</span> <span class="n">price</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">price</span> <span class="o">=</span> <span class="n">price</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nc">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kt">int</span> <span class="nf">getPrice</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">price</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h2 id="다시-객체지향이라는-단어로-돌아오자면">다시 객체지향이라는 단어로 돌아오자면</h2>
+
 <ul>
-  <li>ApplicationContext를 스프링 컨테이너라고 한다.</li>
-  <li>기존에는 개발자가 AppConfig를 사용해서 직접 객체를 생성하고 DI를 했지만, 이제부터는 스프링 컨테이너를 통해서 사용한다.</li>
-  <li>스프링 컨테이너에서는 Configuration이 붙은 객체를 설정 정보로 사용한다. @Bean이라 붙은 메서드를 모두 호출해서 반환된 객체를 스프링 컨테이너로 등록한다. 이렇게 스프링 컨테이너로 등록된 객체를 스프링 빈이라고 한다.</li>
-  <li>예전에는 AppConfig를 통해서 필요한 객체를 직접 조회했지만, 이제는 스프링 컨테이너를 통해서 필요한 스프링 빈을 찾는다. 스프링 빈은 applicationContext.getBean()을 통해서 찾을 수 있다.</li>
-  <li>스프링 빈은 @Bean이 붙은 메서드의 명을 빈의 이름으로 사용하여 컨테이너에 등록한다.</li>
-  <li>스프링 컨테이너에 객체를 스프링 빈으로 등록하고, 찾을 수 있다.</li>
+  <li>시스템을, 상호작용하는 자율적인 객체들의 공동체로 바라보고 객체를 이용해 시스템을 분할하는 방법이다.</li>
+  <li>자율적인 객체는 상태와 행위를 함께 지니며 스스로 자신을 책임진다.</li>
+  <li>객체는 시스템의 행위를 구현하기 위해 다른 객체와 협력한다.</li>
+  <li>객체는 협력하기 위해 다른 객체에게 메시지를 전송하고 이를 수신한 객체는 적합한 메서드를 자율적으로 선택한다.</li>
 </ul>
 
-<h2 id="reference">Reference</h2>
+<h2 id="책을-읽고-난-이후">책을 읽고 난 이후</h2>
 
-<p>인프런 김영한님의 스프링 프레임워크 핵심 기술 강좌</p>
+<p>사실 아직도 객체지향적인 설계는 쉽지 않으며 많이 부딪쳐보고 설계해 봐야 알 수 있는 개념이라고 생각한다.</p>
+
+<p>예제 코드가 조금 있어서 개념에 이해에 도움이 된 것은 사실이지만 실제 구현 부분이 더 명확하게 있었다면 더욱 나에게 맞지 않았을까 생각한다.</p>
+
+<p>이러한 아쉬운 점에도 불구하고 ’객체지향’ 이라는 주제가 주어졌을 때 초등학생에게도 이에 대한 개념을 설명해 줄 수 있다면 좋은 책임에는 분명하다.</p>
+
+<p>결론은 객체지향은 ‘객체를 지향하라는 있는 그대로의 말 뜻으로 작성하는 것이다’</p>
+
+<p>클래스 중심설계에서 객체를 위한 코드를 작성하게 되는 것 또한 많은 경험을 통한 레거시 코드들을 작성해보며 이해가 되지 않을까 생각한다.</p>
 
     <br />
     <br />
@@ -297,12 +555,12 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=Spring Basic 01 -제어의 역전, ApplicationContext-&amp;url=http://localhost:4000/framework/2024/09/16/Spring-basic-01/"
+    <a href="http://twitter.com/share?text=객체지향의 사실과 오해를 읽으며&amp;url=http://localhost:4000/life/2024/09/16/books-01/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/framework/2024/09/16/Spring-basic-01/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/life/2024/09/16/books-01/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -329,11 +587,11 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
 
 
 <li class="h4">
-  <a href="/framework/2024/09/26/Spring-basic-09/" data-flip="title">
-    <span>Spring Basic 09 - Bean Scope 03</span>
+  <a href="/life/2024/09/23/daily-02/" data-flip="title">
+    <span>KPT 회고의 시작</span>
   </a>
-  <small><time datetime="2024-09-26T00:00:00+09:00">
-    26 Sep 2024
+  <small><time datetime="2024-09-23T00:00:00+09:00">
+    23 Sep 2024
   </time></small>
 </li>
 
@@ -345,35 +603,19 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
 
 
 <li class="h4">
-  <a href="/framework/2024/09/26/Spring-basic-08/" data-flip="title">
-    <span>Spring Basic 08 - Bean Scope 02</span>
+  <a href="/life/2024/09/16/daily-01/" data-flip="title">
+    <span>블로그 시작의 계기</span>
   </a>
-  <small><time datetime="2024-09-26T00:00:00+09:00">
-    26 Sep 2024
+  <small><time datetime="2024-09-16T00:00:00+09:00">
+    16 Sep 2024
   </time></small>
 </li>
 
         
       
-        
         
           
-
-
-<li class="h4">
-  <a href="/framework/2024/09/26/Spring-basic-07/" data-flip="title">
-    <span>Spring Basic 07 - Bean Scope</span>
-  </a>
-  <small><time datetime="2024-09-26T00:00:00+09:00">
-    26 Sep 2024
-  </time></small>
-</li>
-
-        
-      
-        
-        
-      
+          
     
   </ul>
 </aside>
