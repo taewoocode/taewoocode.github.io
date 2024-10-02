@@ -6,9 +6,85 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 02 Oct 2024 18:55:29 +0900</pubDate>
-    <lastBuildDate>Wed, 02 Oct 2024 18:55:29 +0900</lastBuildDate>
+    <pubDate>Wed, 02 Oct 2024 19:41:09 +0900</pubDate>
+    <lastBuildDate>Wed, 02 Oct 2024 19:41:09 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
+    
+      <item>
+        <title>Spring Basic 13 - Dependency Injection 02</title>
+        <description>&lt;h2 id=&quot;다양한-의존관계-주입방법&quot;&gt;다양한 의존관계 주입방법&lt;/h2&gt;
+
+&lt;h3 id=&quot;생성자-주입&quot;&gt;생성자 주입&lt;/h3&gt;
+
+&lt;p&gt;&lt;img width=&quot;685&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/74851915-6589-456c-acef-669f2117b4dc&quot; /&gt;
+&lt;img width=&quot;677&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/b3be400b-05b5-4845-9a22-b9b32de50bdc&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;생성자 주입은 생성자의 호출 시점에 1회 호출이 되는 것을 보장한다. 그렇기 때문에 주입받은 객체가 변하지 않거나, 반드시 객체의 주입이 필요한 경우에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;강제하기 위해&lt;/code&gt; 사용할 수 있다.&lt;/li&gt;
+  &lt;li&gt;Spring은 생성자 주입을 적극 추천하고 있기 때문에 생성자가 한개만 있을 경우엔 @Autowired를 생략해도 주입이 가능하도록 편의성을 제공한다. 따라서 위에 두 코드는 같은 기능을 하는 코드라고 볼 수 있다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;수정자-주입&quot;&gt;수정자 주입&lt;/h3&gt;
+
+&lt;p&gt;&lt;img width=&quot;668&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/c2686db3-93d7-4c90-ad88-9143f9f2e330&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;@Autowired로 주입할 대상이 없으면 오류가 발생한다.
+주입할 대상이 없어도 동작하도록 만드려면 @Autowired(required = false)를 통해 설정은 가능하다. 
+스프링 초기에는 수정자 주입이 자주 사용되었다고 한다. 당시에는 setXXX, getXXX들의 프로퍼티 기반으로 요구하는 자바의 기본 스펙 때문이었다고 한다. 하지만 시간이 지나면서 점차 수정자 주입이 아닌 생성자 주입으로 발전하게 되었다.&lt;/p&gt;
+
+&lt;h3 id=&quot;필드-주입&quot;&gt;필드 주입&lt;/h3&gt;
+
+&lt;p&gt;&lt;img width=&quot;688&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/6aecee58-3c65-4c95-a3c8-988e5b04eee8&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;필드 주입을 사용하게 되면 코드가 간결해지고 보기는 좋아진다. 하지만 필드주입을 이용하게 되면, 추천하지 않는다는 문구가 뜬다. 
+이유는 외부에서 접근이 불가능하다는 단점이 존재하게 되는데, 테스트 코드의 중요성이 부각됨에 따라서 외부에서 사용할 수 없다는 이유로 지양하는 방식이 되었다.&lt;/p&gt;
+
+&lt;h2 id=&quot;생성자-주입이-가장-권장되는-방식이다&quot;&gt;생성자 주입이 가장 권장되는 방식이다.&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;이유는 객체의 불변성을 확보하고, 테스트 코드의 작성이 용이하며, final 키워드 작성 및 Lombok과의 결합 순환 참조 에러 방지가 이유가 될 수 있다.&lt;/li&gt;
+  &lt;li&gt;실제로 개발을 하다 보면 의존 관계의 변경이 필요한 상황은 거의 없다. 하지만 수정자 주입이나 일반 메소드 주입을 이용하면 불필요하게 수정의 가능성을 열어두어 유지보수성을 떨어뜨린다. 그러므로 생성자 주입을 통해 변경의 가능성을 배제하고 불변성을 보장하는 것이 좋다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;테스트가-특정-프레임워크에-의존적이다&quot;&gt;테스트가 특정 프레임워크에 의존적이다.&lt;/h3&gt;
+
+&lt;p&gt;&lt;img width=&quot;652&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/9fa5fa43-b3d7-4c48-b59b-63b6430791e3&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;테스트가 특정 프레임워크에 의존하는 것은 침투적이므로 좋지 못하다. 
+그러므로 가능한 순수 자바로 테스트를 작성하는 것이 가장 좋은데, 생성자 주입이 아닌 다른 주입으로 작성된 코드는 순수한 자바 코드로 단위 테스트를 작성하는 것이 어렵다.&lt;/p&gt;
+
+&lt;h3 id=&quot;순수한-자바로-테스트-코드를-작성하는-것이-가장-좋다&quot;&gt;순수한 자바로 테스트 코드를 작성하는 것이 가장 좋다.&lt;/h3&gt;
+
+&lt;p&gt;&lt;img width=&quot;698&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/5e508862-b799-4ff2-9464-f71ef4f0114a&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;테스트 코드는 Spring 위에서 동작하지 않으므로 의존 관계 주입이 되지 않을 것이고, memberRepository가 null이 되어 add 호출 시 NPE가 발생할 것이다.&lt;/p&gt;
+
+&lt;p&gt;자바 스프링에서 의존성 주입 방식을 선택할 때 각 방식마다 장단점이 존재한다. 
+우선, Setter 주입을 사용하면 객체 생성 후에 의존성을 주입할 수 있는 유연함이 있지만, 이는 객체의 상태를 변경 가능하게 열어두는 단점이 있다. 
+즉, 외부에서 객체의 상태를 변경할 수 있어 코드의 불변성이 깨질 위험이 있다.
+반면, @Autowired를 통해 의존성을 주입하면 스프링이 자동으로 의존성을 처리해주므로 편리하지만, 이 방식으로 테스트 코드를 작성할 경우 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;스프링 컨텍스트를 로드&lt;/code&gt;해야 한다. 
+이로 인해 단순한 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;단위 테스트가 아닌 통합 테스트&lt;/code&gt;로 변하게 되며, 스프링이 컴포넌트를 등록하고 초기화하는 데 시간이 소요되어 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;테스트 비용이 증가&lt;/code&gt;하는 단점이 있다.
+또한, 리플렉션을 사용하면 객체의 메타 정보를 동적으로 수정할 수 있는 유연함이 있지만, 이는 테스트 코드가 깨지기 쉬운 구조가 되어 코드 안정성을 해칠 수 있다. 
+리플렉션은 코드가 변경될 때 의도치 않게 테스트가 실패할 가능성을 내포하고 있다.
+이와 대조적으로, 생성자 주입을 사용하면 객체가 생성될 때 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;필요한 의존성을 명시적으로 주입&lt;/code&gt;받을 수 있으며, 주입해야 할 의존성이 누락된 경우 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;컴파일 시점에서 오류를 발견할 수 있는 장점&lt;/code&gt;이 있다. 
+또한, 테스트 코드 작성 시에는 의존성을 생성자 파라미터로 직접 전달할 수 있어, 스프링 컨텍스트를 로드하지 않고도 테스트를 수행할 수 있다. 
+이를 통해 테스트가 더 빠르고 안정적으로 이루어질 수 있다.
+따라서 생성자 주입 방식은 컴파일 시점에 안정성을 보장하고, 테스트의 효율성과 편리함을 높이는 선택이 될 수 있다.&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-collaborators.html&quot;&gt;https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-collaborators.html&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Fri, 27 Sep 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/framework/2024/09/27/Spring-basic-13/</link>
+        <guid isPermaLink="true">http://localhost:4000/framework/2024/09/27/Spring-basic-13/</guid>
+        
+        <category>spring</category>
+        
+        
+        <category>framework</category>
+        
+      </item>
     
       <item>
         <title>Spring Basic 12 - Dependency Injection 01</title>
@@ -3494,129 +3570,6 @@ s에서 분리한 문자열을 빼고 남은 부분에 대해서 이 과정을 �
         <pubDate>Wed, 18 Sep 2024 00:00:00 +0900</pubDate>
         <link>http://localhost:4000/language/2024/09/18/Java-Mid-14/</link>
         <guid isPermaLink="true">http://localhost:4000/language/2024/09/18/Java-Mid-14/</guid>
-        
-        <category>java</category>
-        
-        
-        <category>language</category>
-        
-      </item>
-    
-      <item>
-        <title>Java Mid 13 - Generic 2</title>
-        <description>&lt;h2 id=&quot;제네릭-활용예제&quot;&gt;제네릭 활용예제&lt;/h2&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;generic.test.ex3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AnimalHospitalV2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-    &lt;span class=&quot;c1&quot;&gt;//다형성을 통한 중복제거&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;animal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;animal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;animal&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;animal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;c1&quot;&gt;//T의 타입을 정의하는 시점에는 알 수가 없다. Object기능만 사용한다. -&amp;gt; Object는 모든 객체의 부모&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;checkup&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-        &lt;span class=&quot;n&quot;&gt;animal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;animal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;equals&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-        &lt;span class=&quot;cm&quot;&gt;/*System.out.println( &quot;동물이름 : &quot; + animal.getName() );
-        System.out.println( &quot;동물크기 : &quot; + animal.getSize() );
-        animal.sound()*/&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;bigger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt;/*
-        return animal.getSize() &amp;gt; target.getSize() ? animal : target;
-*/&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;T 를 사용해서 제네릭 타입을 선언했다.&lt;/p&gt;
-
-&lt;p&gt;제네릭 타입을 선언하면 자바 컴파일러 입장에서 T에 어떤 값이 들어올지 예측할 수 없다. 우리는 Animal 타입의 자식이 들어오기를 기대했지만, 여기 코드 어디에도 Animal에 대한 정보가 없다. (T타입 즉 제네릭으로 정의했기 때문에). T에는 타입 인자로 Integer가 들어올 수도 있고, Dog가 들어올 수도 있다.&lt;/p&gt;
-
-&lt;p&gt;물론 Object가 들어올 수도 있다.&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;generic.test.ex3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;generic.animal.Cat&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;generic.animal.Dog&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AnimalHostpitalMainV2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;AnimalHospitalV2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Dog&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dogHospital&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AnimalHospitalV2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;();&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;AnimalHospitalV2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Cat&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;catHospital&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AnimalHospitalV2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;();&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;AnimalHospitalV2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;integerHospital&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AnimalHospitalV2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;();&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;AnimalHospitalV2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ObjectHospital&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AnimalHospitalV2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;();&lt;/span&gt;
-        
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;이 코드에서의 문제는?&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;제네릭에서 타입 매개변수를 사용하면 어떠한 타입이든 들어올 수 있다.&lt;/li&gt;
-  &lt;li&gt;따라서 타입 매개변수를 어떤 타입이든 수용할 수 있는 Object로 가정하고, Object의 기능만 사용할 수 있다.
-    &lt;ul&gt;
-      &lt;li&gt;발생한 문제들을 생각해보면 매개변수를 Animal로 제한하지 않았기 때문이다. 타입 인자가 모두 animal과 그 자식만 들어올 수 있게 제한한다면 어떨까?&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;타입-매개변수-제한&quot;&gt;타입 매개변수 제한&lt;/h2&gt;
-
-&lt;p&gt;타입 매개변수를 특정 타입으로 제한할 수 있다.&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;generic.test.ex3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;generic.animal.Animal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;//T에 들어올 수 있는 것은 Animal 혹은 그 자식들만 들어올 수 있다.-&amp;gt; T는 animal의 자식들을 쓸 수 있다.&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AnimalHospitalV3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Animal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;animal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;animal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;animal&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;animal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;checkup&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;동물이름 : &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;animal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;동물크기 : &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;animal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getSize&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;animal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;sound&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;bigger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;animal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getSize&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getSize&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;animal&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;핵심은 &lt;T extends=&quot;&quot; Animal=&quot;&quot;&gt;이다.&lt;/T&gt;&lt;/li&gt;
-  &lt;li&gt;타입 매개변수 T를 animal과 그 자식만 받을 수 있도록 제한을 두는 것이다.&lt;/li&gt;
-  &lt;li&gt;즉 T의 상한이 Animal이 되는 것이다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;이렇게 되면 자바 컴파일러는 T에 입력할 수 있는 값의 범위를 예측할 수 있다.&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;인프런 김영한님의 자바강좌 + 나의 뇌&lt;/p&gt;
-</description>
-        <pubDate>Wed, 18 Sep 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/language/2024/09/18/Java-Mid-13/</link>
-        <guid isPermaLink="true">http://localhost:4000/language/2024/09/18/Java-Mid-13/</guid>
         
         <category>java</category>
         
