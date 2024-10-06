@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Spring JDBC 01 - Hello JDBC" />
+<meta property="og:title" content="Spring JDBC 02 - JDBC Connection" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,17 +52,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Spring JDBC 01 - Hello JDBC &middot; 일벌리는 개발자</title>
+<title>Spring JDBC 02 - JDBC Connection &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="JDBC?
+        content="JDBC는 Connection 정보를 어떻게 넘겨줄까
 
 "
 />
 <meta
         property="og:description"
-        content="JDBC?
+        content="JDBC는 Connection 정보를 어떻게 넘겨줄까
 
 "
 />
@@ -72,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/framework/2024/09/28/Spring-Data-jdbc-01/" />
-<meta property="og:url" content="http://localhost:4000/framework/2024/09/28/Spring-Data-jdbc-01/" />
+<link rel="canonical" href="http://localhost:4000/framework/2024/09/28/Spring-Data-jdbc-02/" />
+<meta property="og:url" content="http://localhost:4000/framework/2024/09/28/Spring-Data-jdbc-02/" />
 
 <link
         rel="alternate"
@@ -83,10 +83,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/framework/2024/09/27/Spring-basic-13/" />
+<link rel="prev" href="http://localhost:4000/framework/2024/09/28/Spring-Data-jdbc-01/" />
  
-<link rel="next" href="http://localhost:4000/framework/2024/09/28/Spring-Data-jdbc-02/" />
-
 
 <link
         rel="apple-touch-icon"
@@ -183,11 +181,11 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-framework/2024/09/28/Spring-Data-jdbc-01" class="post" role="article">
+<article id="post-framework/2024/09/28/Spring-Data-jdbc-02" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      Spring JDBC 01 - Hello JDBC
+      Spring JDBC 02 - JDBC Connection
       
     </h1>
 
@@ -267,32 +265,48 @@ on <a href="/tag/framework-spring-data-jpa/" data-flip="title">Spring Data JPA</
     </style>
 
     <!--<br />-->
-    <h2 id="jdbc">JDBC?</h2>
+    <h2 id="jdbc는-connection-정보를-어떻게-넘겨줄까">JDBC는 Connection 정보를 어떻게 넘겨줄까</h2>
 
-<p>JDBC(Java Database Connectivity)는 자바 프로그래밍 언어를 사용해 데이터베이스에 접근할 수 있도록 하는 자바 API이다. 
-이를 통해서 우리는 데이터베이스에 접속하고, SQL을 실행하고, 이를 통해 데이터를 가져오거나 삭제하는 등 데이터를 다룰 수 있게 된다. 
-단순하게 데이터베이스와 통신할 수 있는 기술이구나! 라고 생각할 수도 있지만 그보다 더 중요하게 이해해야 할 것이 있다.</p>
+<p><img width="689" alt="image" src="https://github.com/user-attachments/assets/c20c048b-4313-4858-b74d-94c17f3f767d" /></p>
 
-<h2 id="jdbc가-등장하게-된-배경"><strong>JDBC가 등장하게 된 배경</strong></h2>
+<p>우선 커넥션 정보를 가지고 있는 클래스를 통해서 URL, USERNAME, PASSWORD를 담고 있는 클래스를 하나 정의한다.</p>
 
-<p>JDBC가 등장하게 된 이유는 무엇일까? 바로 결론부터 말하자면 데이터베이스 접근의 표준화를 위해서다.
-데이터베이스에는 Oracle Database, MySQL, PostgreSQL 와 같이 여러 종류의 데이터베이스가 있다는 사실을 알고 있을 것이다.
-각각 데이터베이스마다 SQL를 전달하거나 결과를 응답받는 방법들이 다 다르고 데이터베이스의 종류는 수십 개가 존재한다.
-JDBC가 존재하기 전에는 이런 데이터베이스마다 존재하는 고유한 API를 직접 사용했었다.
-이에 따라 개발자는 기존의 데이터베이스를 다른 데이터베이스로 교체해야 하는 경우에는 데이터베이스에 맞게 기존의 코드를 모두 수정해야 했으며 심지어 각각의 데이터베이스를 사용하는 방법도 새로 학습해야 했다.
-따라서 표준이라는 게 필요했으며 JDBC의 표준 인터페이스(추상화) 덕분에 개발자는 데이터베이스를 쉽게 변경할 수 있게 되었고 변경에 유연하게 대처할 수 있게 되었다.</p>
+<p><img width="705" alt="image" src="https://github.com/user-attachments/assets/7a293b96-7186-4567-a70e-04c11d7f56bb" /></p>
 
-<h2 id="jdbc의-동작">JDBC의 동작</h2>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">DriverManager.getConnection(URL, USERNAME, PASSWORD)</code>  를 getConnection을 통해 인자로 넘겨준다. 그리고 넘겨준 정보들의 반환 값들을 통해 connection 객체를 반환받는다.</li>
+  <li><strong>데이터베이스 연결 시도는</strong> <code class="language-plaintext highlighter-rouge">DriverManager</code> 클래스 내부에서 해당 정보를 기반으로 데이터베이스에 연결을 시도한다.</li>
+  <li><strong>결과 반환값은</strong> 연결이 성공하면, <strong>데이터베이스와의 연결을 나타내는 <code class="language-plaintext highlighter-rouge">Connection</code> 객체</strong>를 반환하고 이 반환된 객체가 코드 내에서 <code class="language-plaintext highlighter-rouge">Connection connection</code> 변수에 저장된다.</li>
+  <li>그리고 <code class="language-plaintext highlighter-rouge">SQLException</code>이 발생할 경우, 즉 데이터베이스 연결에 문제가 생겼을<code class="language-plaintext highlighter-rouge">IllegalStateException</code>이라는 런타임 예외로 변환하여 던진다. Checked Exception인 <code class="language-plaintext highlighter-rouge">SQLException</code>을 런타임 예외로 바꿔서 예외 처리를 간소화 시킨다.
+    <ul>
+      <li>간소화의 이유는 <code class="language-plaintext highlighter-rouge">SQLException</code>과 같은 <strong>체크드 예외(Checked Exception)</strong>는 컴파일 시점에서 반드시 처리해야 하는 예외이므로  코드가 복잡해질 수 있다.  반면 <strong>런타임 예외(Unchecked Exception)</strong>는 컴파일러가 처리할 필요가 없기 때문에, 호출하는 쪽에서 자유롭게 처리할 수 있다.</li>
+    </ul>
+  </li>
+</ul>
 
-<p><img width="694" alt="image" src="https://github.com/user-attachments/assets/a04667af-ff21-49a0-a5e3-0eff24d53044" /></p>
+<p><img width="691" alt="image" src="https://github.com/user-attachments/assets/3e1d9f2d-6600-46b1-986d-99dec1a4268d" />
+<img width="629" alt="image" src="https://github.com/user-attachments/assets/03cdf493-991c-4e6e-809c-838c0dce4076" /></p>
 
-<p>먼저 JDBC API를 사용하기 위해서는 JDBC 드라이버를 먼저 로딩한 후 데이터베이스와 연결해야 한다.
-JDBC 드라이버는 JDBC 인터페이스를 구현한 구현체라고 생각할 수 있으며
-특정 데이터베이스 벤더(Oracle, MySQL, PostgreSQL 등)에 대한 연결과 데이터베이스에 대한 작업을 가능하게 해준다.</p>
+<ul>
+  <li>실행 결과를 보면 <code class="language-plaintext highlighter-rouge">class=class org.h2.jdbc.JdbcConnection</code> 부분을 확인할 수 있다. 이것이 바로 H2 데이터베이스 드라이버가 제공하는 H2 전용 커넥션이다. 물론 이 커넥션은 JDBC 표준 커넥션 인터페이스인<code class="language-plaintext highlighter-rouge">java.sql.Connection</code> 인터페이스를 구현하고 있다.</li>
+</ul>
+
+<h2 id="필요한-정보를-담아서-인자로-넘기자">필요한 정보를 담아서 인자로 넘기자</h2>
+
+<ul>
+  <li>JDBC가 제공하는 <code class="language-plaintext highlighter-rouge">DriverManager</code> 는 라이브러리에 등록된 DB 드라이버들을 관리하고, 커넥션을 획득하는 기능을제공한다.</li>
+  <li><code class="language-plaintext highlighter-rouge">DriverManager</code> 는 라이브러리에 등록된 드라이버 목록을 자동으로 인식한다. 이 드라이버들에게 순서대로 다음 정보를 넘겨서 커넥션을 획득할 수 있는지 확인한다.</li>
+  <li>URL이 <code class="language-plaintext highlighter-rouge">jdbc:h2</code>로 시작하면 이것은 h2 데이터베이스에 접근하기 위한 규칙이다. 따라서 H2 드라이버는
+본인이 처리할 수 있으므로 실제 데이터베이스에 연결해서 커넥션을 획득하고 이 커넥션을 클라이언트에 반
+환한다.</li>
+  <li>반면에 URL이 <code class="language-plaintext highlighter-rouge">jdbc:h2</code>로 시작했는데 MySQL 드라이버가 먼저 실행되면 이 경우 본인이 처리
+할 수 없다는 결과를 반환하게 되고, 다음 드라이버에게 순서가 넘어간다.</li>
+  <li>이렇게 찾은 구현체가 클라이언트에 반환된다.</li>
+</ul>
 
 <h2 id="reference">Reference</h2>
 
-<p>김영한님의 스프링 강의 정리 + 어렵다 스프링</p>
+<p>김영한님의 스프링 강의 정리 +</p>
 
     <br />
     <br />
@@ -306,12 +320,12 @@ JDBC 드라이버는 JDBC 인터페이스를 구현한 구현체라고 생각할
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=Spring JDBC 01 - Hello JDBC&amp;url=http://localhost:4000/framework/2024/09/28/Spring-Data-jdbc-01/"
+    <a href="http://twitter.com/share?text=Spring JDBC 02 - JDBC Connection&amp;url=http://localhost:4000/framework/2024/09/28/Spring-Data-jdbc-02/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/framework/2024/09/28/Spring-Data-jdbc-01/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/framework/2024/09/28/Spring-Data-jdbc-02/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -333,13 +347,16 @@ JDBC 드라이버는 JDBC 인터페이스를 구현한 구현체라고 생각할
       
       
         
+          
+          
+        
         
           
 
 
 <li class="h4">
-  <a href="/framework/2024/09/28/Spring-Data-jdbc-02/" data-flip="title">
-    <span>Spring JDBC 02 - JDBC Connection</span>
+  <a href="/framework/2024/09/28/Spring-Data-jdbc-01/" data-flip="title">
+    <span>Spring JDBC 01 - Hello JDBC</span>
   </a>
   <small><time datetime="2024-09-28T00:00:00+09:00">
     28 Sep 2024
@@ -348,9 +365,6 @@ JDBC 드라이버는 JDBC 인터페이스를 구현한 구현체라고 생각할
 
         
       
-        
-          
-          
         
         
           
