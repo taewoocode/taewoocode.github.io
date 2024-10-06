@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Fetch Join - 특징과 한계
+title: Spring JDBC 01 - Hello JDBC
 subtitle: ''
 categories: framework
 tags: jpa
