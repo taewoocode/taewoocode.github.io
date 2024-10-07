@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Java Mid 02 - Primitive Type, Reference Type" />
+<meta property="og:title" content="Java Adv - Synchronized Method" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,17 +52,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Java Mid 02 - Primitive Type, Reference Type &middot; 일벌리는 개발자</title>
+<title>Java Adv - Synchronized Method &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="기본형과 참조형
+        content="Synchronized로 동시성 제어하기
 
 "
 />
 <meta
         property="og:description"
-        content="기본형과 참조형
+        content="Synchronized로 동시성 제어하기
 
 "
 />
@@ -72,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/language/2024/09/18/Java-Mid-02/" />
-<meta property="og:url" content="http://localhost:4000/language/2024/09/18/Java-Mid-02/" />
+<link rel="canonical" href="http://localhost:4000/language/2024/09/28/Java-Adv-05/" />
+<meta property="og:url" content="http://localhost:4000/language/2024/09/28/Java-Adv-05/" />
 
 <link
         rel="alternate"
@@ -83,9 +83,9 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/language/2024/09/18/Java-Mid-01/" />
+<link rel="prev" href="http://localhost:4000/framework/2024/09/27/Spring-basic-13/" />
  
-<link rel="next" href="http://localhost:4000/language/2024/09/18/Java-Mid-03/" />
+<link rel="next" href="http://localhost:4000/framework/2024/09/28/Spring-Data-jdbc-01/" />
 
 
 <link
@@ -183,16 +183,16 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-language/2024/09/18/Java-Mid-02" class="post" role="article">
+<article id="post-language/2024/09/28/Java-Adv-05" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      Java Mid 02 - Primitive Type, Reference Type
+      Java Adv - Synchronized Method
       
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
+      <time datetime="2024-09-28T00:00:00+09:00">28 Sep 2024</time>
       
 
 
@@ -267,83 +267,62 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
     </style>
 
     <!--<br />-->
-    <h2 id="기본형과-참조형">기본형과 참조형</h2>
+    <h2 id="synchronized로-동시성-제어하기">Synchronized로 동시성 제어하기</h2>
 
-<p>자바의 데이터 타입은 크게 기본형(Primitive Type)과 참조형(Reference Type)으로 나눌 수 있다. 이 두 가지 타입은 메모리 할당 방식과 데이터 저장 방식에서 큰 차이가 있다.</p>
-
-<h3 id="기본형-primitive-type">기본형 (Primitive Type)</h3>
-
-<p>기본형 데이터 타입은 값 자체를 저장하며, 각 변수는 고유한 값을 가진다. 따라서 하나의 값을 여러 변수에서 절대로 공유하지 않는다. 기본형 데이터 타입에는 다음과 같은 종류가 있다.</p>
+<p><img width="502" alt="image" src="https://github.com/user-attachments/assets/9920b377-48b6-4d10-a2c6-c1d6d49cc752" />
+<img width="448" alt="image" src="https://github.com/user-attachments/assets/da0e146d-ad3a-40d8-9b63-855af1171660" /></p>
 
 <ul>
-  <li><strong>정수형 (Integer Types)</strong>: <code class="language-plaintext highlighter-rouge">byte</code>, <code class="language-plaintext highlighter-rouge">short</code>, <code class="language-plaintext highlighter-rouge">int</code>, <code class="language-plaintext highlighter-rouge">long</code></li>
-  <li><strong>실수형 (Floating Point Types)</strong>: <code class="language-plaintext highlighter-rouge">float</code>, <code class="language-plaintext highlighter-rouge">double</code></li>
-  <li><strong>문자형 (Character Type)</strong>: <code class="language-plaintext highlighter-rouge">char</code></li>
-  <li><strong>논리형 (Boolean Type)</strong>: <code class="language-plaintext highlighter-rouge">boolean</code></li>
+  <li>우선 코드의 결과부터 보면 t1의 작업이 모두 수행이 되고(검증, 결과) 이 후에 t2의 작업이 수행이 된다.</li>
+  <li>따라서 t1,t2가 동시에 출금하지 않아서 클라이언트는 동시성 오류를 피할 수 있게 되었다.</li>
+  <li>synchronized는 도대체 뭘까?</li>
 </ul>
 
-<p>예시코드</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">java코드</span> <span class="n">복사</span>
-<span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">5</span><span class="o">;</span>
-<span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="o">;</span>  <span class="c1">// b는 a의 값을 복사. 이후 a와 b는 서로 독립적인 변수가 된다.</span>
-<span class="n">a</span> <span class="o">=</span> <span class="mi">10</span><span class="o">;</span>     <span class="c1">// a의 값을 변경해도 b의 값은 영향을 받지 않는다.</span>
-
-</code></pre></div></div>
-
-<h3 id="참조형-reference-type">참조형 (Reference Type)</h3>
-
-<p>참조형 데이터 타입은 실제 데이터 값이 아닌 데이터가 저장된 메모리 주소(참조값)를 저장한다. 따라서 하나의 객체를 여러 변수에서 공유할 수 있다. 참조형 데이터 타입에는 다음과 같은 종류가 있다. → 참조값을 전달한다.</p>
+<h2 id="모든-객체인스턴스는-내부에-자신만의-락lock-을-가지고-있다"><strong>모든</strong> <strong>객체</strong>(<strong>인스턴스</strong>)<strong>는</strong> <strong>내부에</strong> <strong>자신만의</strong> <strong>락</strong>(<code class="language-plaintext highlighter-rouge">lock</code> )<strong>을</strong> <strong>가지고</strong> <strong>있다</strong>.</h2>
 
 <ul>
-  <li><strong>클래스 (Classes)</strong></li>
-  <li><strong>인터페이스 (Interfaces)</strong></li>
-  <li><strong>배열 (Arrays)</strong></li>
-  <li><strong>열거형 (Enums)</strong></li>
+  <li>모니터 락(monitor lock)이라도고 부른다.</li>
+  <li>객체 내부에 있고 우리가 확인하기는 어렵다.</li>
+  <li>스레드가 <code class="language-plaintext highlighter-rouge">synchronized</code> 키워드가 있는 메서드에 진입하려면 반드시 해당 인스턴스의 락이 있어야 한다!</li>
+  <li>여기서는 <code class="language-plaintext highlighter-rouge">BankAccount(x001)</code> 인스턴스의 <code class="language-plaintext highlighter-rouge">synchronized withdraw()</code> 메서드를 호출하므로 이 인스턴스의 락이 필요하다. 스레드 <code class="language-plaintext highlighter-rouge">t1</code> , <code class="language-plaintext highlighter-rouge">t2</code> 는 <code class="language-plaintext highlighter-rouge">withdraw()</code> 를 실행하기 직전이다.</li>
 </ul>
 
-<p>예시코드</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">java코드</span> <span class="n">복사</span>
-<span class="kd">class</span> <span class="nc">MyObject</span> <span class="o">{</span>
-    <span class="kt">int</span> <span class="n">value</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="nc">MyObject</span> <span class="n">obj1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">MyObject</span><span class="o">();</span>
-<span class="n">obj1</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="mi">5</span><span class="o">;</span>
-
-<span class="nc">MyObject</span> <span class="n">obj2</span> <span class="o">=</span> <span class="n">obj1</span><span class="o">;</span>  <span class="c1">// obj1과 obj2는 같은 객체를 참조한다.</span>
-<span class="n">obj1</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="mi">10</span><span class="o">;</span>       <span class="c1">// obj1을 통해 객체의 값을 변경하면 obj2에서도 변경된 값을 볼 수 있습니다.</span>
-<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">obj2</span><span class="o">.</span><span class="na">value</span><span class="o">);</span>  <span class="c1">// 출력: 10</span>
-
-<span class="c1">// obj에 참조값 x001이 저장이 되었디고 한다면 obj1의 참조값을 obj2에도 저장하기 때문에 결국에는 같은 메모리 주소값을 참조하게 되는 매커니즘이다.</span>
-</code></pre></div></div>
-
-<h2 id="사이드-이펙트">사이드 이펙트</h2>
+<h2 id="synchronized-키워드의-동작">Synchronized 키워드의 동작</h2>
 
 <ul>
-  <li>프로그래밍에서 어떤 계산이 주된 작업 외에 추가적인 부수효과를 일으키는 것을 말한다.</li>
-  <li>공유 참조를 예시로 생각할 수 있는데 위에 코드처럼 obj1을 변경했는데 obj2까지 의도치 않게 변경됨을 말한다.
+  <li>t1이 먼저 실행된다고 가정한다.</li>
+  <li>스레드 <code class="language-plaintext highlighter-rouge">t1</code> 이 먼저 <code class="language-plaintext highlighter-rouge">synchronized</code> 키워드가 있는 <code class="language-plaintext highlighter-rouge">withdraw()</code> 메서드를 호출한다.</li>
+  <li><code class="language-plaintext highlighter-rouge">synchronized</code> 메서드를 호출하려면 먼저 해당 인스턴스의 락이 필요하다.</li>
+  <li>락이 있으므로 스레드 <code class="language-plaintext highlighter-rouge">t1</code> 은 <code class="language-plaintext highlighter-rouge">BankAccount(x001)</code> 인스턴스에 있는 락을 획득한다.</li>
+  <li>스레드 <code class="language-plaintext highlighter-rouge">t1</code> 은 해당 인스턴스의 락을 획득했기 때문에 <code class="language-plaintext highlighter-rouge">withdraw()</code> 메서드에 진입할 수 있다.</li>
+  <li>스레드 <code class="language-plaintext highlighter-rouge">t2</code>도<code class="language-plaintext highlighter-rouge">withdraw()</code> 메서드 호출을 시도한다. <code class="language-plaintext highlighter-rouge">synchronized</code> 메서드를 호출하려면 먼저 해당 인스턴스의 락이 필요하다.(언젠가는 락이 오겠지..)</li>
+  <li>스레드 <code class="language-plaintext highlighter-rouge">t2</code> 는 <code class="language-plaintext highlighter-rouge">BankAccount(x001)</code> 인스턴스에 있는 락 획득을 시도한다. 하지만 락이 없다.</li>
+  <li>락이 없으면 <code class="language-plaintext highlighter-rouge">t2</code> 스레드는 락을 획득할 때 까지 <code class="language-plaintext highlighter-rouge">BLOCKED</code> 상태로 대기한다. <code class="language-plaintext highlighter-rouge">t2</code> 스레드의 상태는 <code class="language-plaintext highlighter-rouge">RUNNABLE</code> <code class="language-plaintext highlighter-rouge">BLOCKED</code> 상태로 변하고, 락을 획득할 때 까지 무한정 대기한다. 참고로 <code class="language-plaintext highlighter-rouge">BLOCKED</code> 상태가 되면 락을 다시 획득하기 전까지는 계속 대기하고, CPU 실행 스케줄링에 들어가지 않는다.</li>
+  <li><code class="language-plaintext highlighter-rouge">t1</code> : 메서드 호출이 끝나면 락을 반납한다.</li>
+  <li><code class="language-plaintext highlighter-rouge">t2</code> : 인스턴스에 락이 반납되면 <strong>**락</strong> <strong>획득을</strong> <strong>대기하는</strong> <strong>스레드는</strong> <strong>자동으로</strong> <strong>락을</strong> <strong>획득</strong>**한다.
     <ul>
-      <li>프로젝트나 코드가 복잡해지면 디버깅이 어려워지고 코드의 안정성이 저하된다.</li>
+      <li>이때 락을 획득한 스레드는 <code class="language-plaintext highlighter-rouge">BLOCKED</code> <code class="language-plaintext highlighter-rouge">RUNNABLE</code> 상태가 되고, 다시 코드를 실행한다.</li>
     </ul>
   </li>
 </ul>
 
-<h2 id="사이드-이펙트-해결-방안">사이드 이펙트 해결 방안</h2>
+<h2 id="락은-순서를-보장해주지는-않는다">락은 순서를 보장해주지는 않는다.</h2>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">MyObject</span> <span class="n">obj1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">MyObject</span><span class="o">();</span> <span class="c1">//x001</span>
-<span class="nc">MyObject</span> <span class="n">obj2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">MyObject</span><span class="o">();</span> <span class="c1">//x002</span>
-</code></pre></div></div>
+<p>만약 <code class="language-plaintext highlighter-rouge">BankAccount(x001)</code> 인스턴스의 <code class="language-plaintext highlighter-rouge">withdraw()</code> 를 수 많은 스레드가 동시에 호출한다면, 1개의 스레드만 락을 획득하고 나머지는 모두 <code class="language-plaintext highlighter-rouge">BLOCKED</code> 상태가 된다. 
+그리고 이후에 <code class="language-plaintext highlighter-rouge">BankAccount(x001)</code> 인스턴스에 락을 반납하면, 해당 인스턴스의 락을 기다리는 수 많은 스레드 중에 하나의 스레드만 락을 획득하고, 락을 획득한 스레드만<code class="language-plaintext highlighter-rouge">BLOCKED</code> <code class="language-plaintext highlighter-rouge">RUNNABLE</code> 상태가 된다. 이때 어떤 순서로 락을 획득하는지는 자바 표준에 정의되어 있지 않다. 따라서 순서를 보장하지 않고, 환경에 따라서 순서가 달라질 수 있다.</p>
 
-<ul>
-  <li>해결방안은 아주 단순하다. 처음부터 서로 다른 인스턴스를 참조하면 된다.</li>
-  <li>처음부터 서로 다른 인스턴스를 참조하기 때문에 ob2를 변경해도 obj1에 영향을 주지 않는다.</li>
-</ul>
+<h2 id="실무에서는-어떻게-적용해야-할까">실무에서는 어떻게 적용해야 할까?</h2>
+
+<p><code class="language-plaintext highlighter-rouge">synchronized</code> 의 가장 큰 장점이자 단점은 한 번에 하나의 스레드만 실행할 수 있다는 점이다. 
+여러 스레드가 동시에실행하지 못하기 때문에, 전체로 보면 성능이 떨어질 수 있다. 따라서 <code class="language-plaintext highlighter-rouge">synchronized</code> 를 통해 여러 스레드를 동시에 실행할 수 없는 코드 구간은 꼭! 필요한 곳으로 한정해서 설정해야 한다.
+그래도 성능을 고려한 설계 보다는 상대적으로 검증이 중요한 비즈니스 로직에서는 synchronized를 고려해볼만 한다.</p>
 
 <h2 id="reference">Reference</h2>
 
-<p>인프런 김영한님의 실전 자바 강좌</p>
+<p>김영한님의 자바 강의</p>
+
+<p><a href="https://stackoverflow.com/questions/20906548/why-is-synchronized-block-better-than-synchronized-method">https://stackoverflow.com/questions/20906548/why-is-synchronized-block-better-than-synchronized-method</a></p>
+
 
     <br />
     <br />
@@ -357,12 +336,12 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=Java Mid 02 - Primitive Type, Reference Type&amp;url=http://localhost:4000/language/2024/09/18/Java-Mid-02/"
+    <a href="http://twitter.com/share?text=Java Adv - Synchronized Method&amp;url=http://localhost:4000/language/2024/09/28/Java-Adv-05/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/09/18/Java-Mid-02/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/09/28/Java-Adv-05/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -384,21 +363,8 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
       
       
         
-        
           
-
-
-<li class="h4">
-  <a href="/language/2024/09/28/Java-Adv-05/" data-flip="title">
-    <span>Java Adv - Synchronized Method</span>
-  </a>
-  <small><time datetime="2024-09-28T00:00:00+09:00">
-    28 Sep 2024
-  </time></small>
-</li>
-
-        
-      
+          
         
         
           
@@ -432,6 +398,19 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
         
       
         
+        
+          
+
+
+<li class="h4">
+  <a href="/language/2024/09/21/Java-Adv-02/" data-flip="title">
+    <span>Java Adv - Thread 2</span>
+  </a>
+  <small><time datetime="2024-09-21T00:00:00+09:00">
+    21 Sep 2024
+  </time></small>
+</li>
+
         
       
     
