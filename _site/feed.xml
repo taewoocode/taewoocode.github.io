@@ -6,17 +6,16 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 08 Oct 2024 03:53:48 +0900</pubDate>
-    <lastBuildDate>Tue, 08 Oct 2024 03:53:48 +0900</lastBuildDate>
+    <pubDate>Tue, 08 Oct 2024 03:55:34 +0900</pubDate>
+    <lastBuildDate>Tue, 08 Oct 2024 03:55:34 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
         <title>DFS - Depth First Search</title>
         <description>&lt;h2 id=&quot;깊이-우선-탐색depth-first-search&quot;&gt;깊이 우선 탐색(Depth First Search)&lt;/h2&gt;
 
-&lt;p&gt;DFS란 말 그대로 깊이를 우선적으로 탐색하는 방법이다. 좀 더 쉽게 말하면, 갈림길(분기점)이 있다면 한방향으로 끝까지 간 후에 답을 확인하는 과정을 반복한다. 따라서 재귀함수를 기본적으로 이해를 해야한다.&lt;/p&gt;
-
-&lt;h2 id=&quot;코드-구현&quot;&gt;코드 구현&lt;/h2&gt;
+&lt;p&gt;DFS란 말 그대로 깊이를 우선적으로 탐색하는 방법이다. 좀 더 쉽게 말하면, 갈림길(분기점)이 있다면 한방향으로 끝까지 간 후에 답을 확인하는 과정을 반복한다. 따라서 재귀함수를 기본적으로 이해를 해야한다.
+다음 코드를 통해 알아보자.&lt;/p&gt;
 
 &lt;div class=&quot;language-cpp highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#include&lt;/span&gt;&lt;span class=&quot;cpf&quot;&gt;&amp;lt;bits/stdc++.h&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
 &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;namespace&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
@@ -52,7 +51,7 @@
 u로부터 인접해 있는 간선들이 0이라면 dfs를 호출하여 재귀적으로 탐색한다.
 재귀 함수는 &lt;strong&gt;LIFO&lt;/strong&gt;(Last In, First Out) 원칙을 따른다. 즉, 가장 나중에 호출된 함수가 가장 먼저 종료된다.
 ex) f(1) → f(2) → f(3)으로 호출을 했다면 f(3) → f(2) → f(1) 순서로 종료가 된다.
-재귀 함수가 호출될 때마다 호출된 함수가 스택(stack)에 쌓이는데, 나중에 쌓인 함수가 먼저 처리됩니다. 
+재귀 함수가 호출될 때마다 호출된 함수가 스택(stack)에 쌓이는데, 나중에 쌓인 함수가 먼저 처리된다. 
 따라서 가장 처음 호출된 함수는 스택의 가장 아래에 쌓이게 되고, 가장 나중에 호출된 함수가 먼저 완료된 후, 그 다음 함수가 완료되며 순차적으로 스택에서 제거된다. 
 복습 차원겸 간만에 풀어보았는데 인접리스트부터 다시 dfs를 복습하려니 가물가물해서 시간이 오래걸렸다.&lt;/p&gt;
 
