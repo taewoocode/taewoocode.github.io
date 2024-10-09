@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Spring JDBC 03 - JDBC ConnectionPool
+title: Spring JDBC 04 - JDBC ConnectionPool
 subtitle: ''
 categories: framework
 tags: jpa
