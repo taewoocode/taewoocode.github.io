@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Spring JDBC 02 - JDBC Connection" />
+<meta property="og:title" content="Home" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,18 +52,16 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Spring JDBC 02 - JDBC Connection &middot; 일벌리는 개발자</title>
+<title>Home &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="JDBC는 Connection 정보를 어떻게 넘겨줄까
-
+        content="일을 벌여놔야 주워 담을 수 있습니다.
 "
 />
 <meta
         property="og:description"
-        content="JDBC는 Connection 정보를 어떻게 넘겨줄까
-
+        content="일을 벌여놔야 주워 담을 수 있습니다.
 "
 />
 
@@ -72,8 +70,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/framework/2024/09/28/Spring-Data-jdbc-02/" />
-<meta property="og:url" content="http://localhost:4000/framework/2024/09/28/Spring-Data-jdbc-02/" />
+<link rel="canonical" href="http://localhost:4000/page-8/" />
+<meta property="og:url" content="http://localhost:4000/page-8/" />
 
 <link
         rel="alternate"
@@ -82,11 +80,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         href="http://localhost:4000/feed.xml"
 />
 
-
-<link rel="prev" href="http://localhost:4000/framework/2024/09/28/Spring-Data-jdbc-01/" />
  
-<link rel="next" href="http://localhost:4000/cs/2024/09/29/Algorithm-05/" />
-
 
 <link
         rel="apple-touch-icon"
@@ -182,17 +176,18 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
             data-image="/assets/img/dp.jpeg"
     >
       
+  
 
-<article id="post-framework/2024/09/28/Spring-Data-jdbc-02" class="post" role="article">
+<article id="post-framework/2024/09/16/Spring-basic-01" class="post mb6" role="article">
   <header>
     <h1 class="post-title">
-      
-      Spring JDBC 02 - JDBC Connection
-      
+      <a href="/framework/2024/09/16/Spring-basic-01/" data-flip="title">
+      Spring Basic 01 -제어의 역전, ApplicationContext-
+      </a>
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-09-28T00:00:00+09:00">28 Sep 2024</time>
+      <time datetime="2024-09-16T00:00:00+09:00">16 Sep 2024</time>
       
 
 
@@ -215,7 +210,7 @@ in <a href="/category/framework/" data-flip="title">Framework</a>
 
 
 
-on <a href="/tag/framework-spring-data-jpa/" data-flip="title">Spring Data JPA</a>
+on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
 
     </p>
 
@@ -228,196 +223,34 @@ on <a href="/tag/framework-spring-data-jpa/" data-flip="title">Spring Data JPA</
 
 
   
-  <div class="markdown-body">
+  <h2 id="제어의-역전inversion-of-control">제어의 역전(Inversion of Control)</h2>
 
-    <!--  -->
-    <style>
-      .myAd1190 {
-        width: 48%;
-        height: 280px;
-      }
 
-      .myAd1290 {
-        width: 48%;
-        height: 280px;
-      }
-
-      @media(max-width: 800px) {
-        .myAd1190 {
-          display: none;
-        }
-
-        .myAd1290 {
-          width: 98%;
-        }
-      }
-
-      .row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        height: 300px;
-      }
-
-      .row-center {
-        display: flex;
-        justify-content: center;
-        height: 258px;
-      }
-    </style>
-
-    <!--<br />-->
-    <h2 id="jdbc는-connection-정보를-어떻게-넘겨줄까">JDBC는 Connection 정보를 어떻게 넘겨줄까</h2>
-
-<p><img width="689" alt="image" src="https://github.com/user-attachments/assets/c20c048b-4313-4858-b74d-94c17f3f767d" /></p>
-
-<p>우선 커넥션 정보를 가지고 있는 클래스를 통해서 URL, USERNAME, PASSWORD를 담고 있는 클래스를 하나 정의한다.</p>
-
-<p><img width="705" alt="image" src="https://github.com/user-attachments/assets/7a293b96-7186-4567-a70e-04c11d7f56bb" /></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">DriverManager.getConnection(URL, USERNAME, PASSWORD)</code>  를 getConnection을 통해 인자로 넘겨준다. 그리고 넘겨준 정보들의 반환 값들을 통해 connection 객체를 반환받는다.</li>
-  <li><strong>데이터베이스 연결 시도는</strong> <code class="language-plaintext highlighter-rouge">DriverManager</code> 클래스 내부에서 해당 정보를 기반으로 데이터베이스에 연결을 시도한다.</li>
-  <li><strong>결과 반환값은</strong> 연결이 성공하면, <strong>데이터베이스와의 연결을 나타내는 <code class="language-plaintext highlighter-rouge">Connection</code> 객체</strong>를 반환하고 이 반환된 객체가 코드 내에서 <code class="language-plaintext highlighter-rouge">Connection connection</code> 변수에 저장된다.</li>
-  <li>그리고 <code class="language-plaintext highlighter-rouge">SQLException</code>이 발생할 경우, 즉 데이터베이스 연결에 문제가 생겼을<code class="language-plaintext highlighter-rouge">IllegalStateException</code>이라는 런타임 예외로 변환하여 던진다. Checked Exception인 <code class="language-plaintext highlighter-rouge">SQLException</code>을 런타임 예외로 바꿔서 예외 처리를 간소화 시킨다.
-    <ul>
-      <li>간소화의 이유는 <code class="language-plaintext highlighter-rouge">SQLException</code>과 같은 <strong>체크드 예외(Checked Exception)</strong>는 컴파일 시점에서 반드시 처리해야 하는 예외이므로  코드가 복잡해질 수 있다.  반면 <strong>런타임 예외(Unchecked Exception)</strong>는 컴파일러가 처리할 필요가 없기 때문에, 호출하는 쪽에서 자유롭게 처리할 수 있다.</li>
-    </ul>
-  </li>
-</ul>
-
-<p><img width="691" alt="image" src="https://github.com/user-attachments/assets/3e1d9f2d-6600-46b1-986d-99dec1a4268d" />
-<img width="629" alt="image" src="https://github.com/user-attachments/assets/03cdf493-991c-4e6e-809c-838c0dce4076" /></p>
-
-<ul>
-  <li>실행 결과를 보면 <code class="language-plaintext highlighter-rouge">class=class org.h2.jdbc.JdbcConnection</code> 부분을 확인할 수 있다. 이것이 바로 H2 데이터베이스 드라이버가 제공하는 H2 전용 커넥션이다. 물론 이 커넥션은 JDBC 표준 커넥션 인터페이스인<code class="language-plaintext highlighter-rouge">java.sql.Connection</code> 인터페이스를 구현하고 있다.</li>
-</ul>
-
-<h2 id="필요한-정보를-담아서-인자로-넘기자">필요한 정보를 담아서 인자로 넘기자</h2>
-
-<ul>
-  <li>JDBC가 제공하는 <code class="language-plaintext highlighter-rouge">DriverManager</code> 는 라이브러리에 등록된 DB 드라이버들을 관리하고, 커넥션을 획득하는 기능을제공한다.</li>
-  <li><code class="language-plaintext highlighter-rouge">DriverManager</code> 는 라이브러리에 등록된 드라이버 목록을 자동으로 인식한다. 이 드라이버들에게 순서대로 다음 정보를 넘겨서 커넥션을 획득할 수 있는지 확인한다.</li>
-  <li>URL이 <code class="language-plaintext highlighter-rouge">jdbc:h2</code>로 시작하면 이것은 h2 데이터베이스에 접근하기 위한 규칙이다. 따라서 H2 드라이버는
-본인이 처리할 수 있으므로 실제 데이터베이스에 연결해서 커넥션을 획득하고 이 커넥션을 클라이언트에 반
-환한다.</li>
-  <li>반면에 URL이 <code class="language-plaintext highlighter-rouge">jdbc:h2</code>로 시작했는데 MySQL 드라이버가 먼저 실행되면 이 경우 본인이 처리
-할 수 없다는 결과를 반환하게 되고, 다음 드라이버에게 순서가 넘어간다.</li>
-  <li>이렇게 찾은 구현체가 클라이언트에 반환된다.</li>
-</ul>
-
-<h2 id="reference">Reference</h2>
-
-<p>김영한님의 스프링 강의 정리</p>
-
-    <br />
-    <br />
-  </div>
+  <p class="read-more"><a class="heading" href="/framework/2024/09/16/Spring-basic-01/" data-flip="title">Continue reading </a>
+  </p>
   
 
 </article>
 
-<!--<hr class="dingbat" />-->
-<!--
-<div class="share">
-  <h2>Share this post</h2>
-  <div class="share-body">
-    <a href="http://twitter.com/share?text=Spring JDBC 02 - JDBC Connection&amp;url=http://localhost:4000/framework/2024/09/28/Spring-Data-jdbc-02/"
-      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-      <span class="icon-twitter">
-      </span>
-    </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/framework/2024/09/28/Spring-Data-jdbc-02/"
-      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-      <span class="icon-facebook">
-      </span>
-    </a>
-  </div>
-</div>
--->
-<br />
 
 
-
-
-<aside class="related" role="complementary">
-  <h2 class="hr">Related Posts</h2>
-
-  <ul class="related-posts">
-    
+<h2 class="sr-only">Pagination</h2>
+<nav class="pagination heading" role="navigation">
+  <ul>
+    <li class="pagination-item older" >
       
+        <span>Older</span>
       
+    </li>
+    <li class="pagination-item newer" >
       
-        
-        
-          
-
-
-<li class="h4">
-  <a href="/framework/2024/10/01/Spring-Data-jdbc-06/" data-flip="title">
-    <span>Spring JDBC 06 - JDBC Transaction 02</span>
-  </a>
-  <small><time datetime="2024-10-01T00:00:00+09:00">
-    01 Oct 2024
-  </time></small>
-</li>
-
-        
+        <a rel="prev" href="/page-7/">Newer</a>
       
-        
-        
-          
-
-
-<li class="h4">
-  <a href="/framework/2024/09/30/Spring-Data-jdbc-05/" data-flip="title">
-    <span>Spring JDBC 05 - JDBC Transaction</span>
-  </a>
-  <small><time datetime="2024-09-30T00:00:00+09:00">
-    30 Sep 2024
-  </time></small>
-</li>
-
-        
-      
-        
-        
-          
-
-
-<li class="h4">
-  <a href="/framework/2024/09/30/Spring-Data-jdbc-04/" data-flip="title">
-    <span>Spring JDBC 04 - JDBC ConnectionPool</span>
-  </a>
-  <small><time datetime="2024-09-30T00:00:00+09:00">
-    30 Sep 2024
-  </time></small>
-</li>
-
-        
-      
-        
-        
-      
-    
+    </li>
   </ul>
-</aside>
-  <aside class="comments" role="complementary">
-  <h2>Comments</h2>
-  <hr/>
+</nav>
 
-  <script src="https://utteranc.es/client.js"
-          repo="taewoocode/taewoocode.github.io"
-          issue-term="title"
-          theme="github-light"
-          crossorigin="anonymous"
-          async>
-  </script>
-  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
-</aside>
-
-
-       <footer>
+  <footer>
   <hr/>
   
     <p>© 2022. by taewoo</p>

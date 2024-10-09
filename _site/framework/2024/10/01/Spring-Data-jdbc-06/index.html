@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Spring JDBC 02 - JDBC Connection" />
+<meta property="og:title" content="Spring JDBC 06 - JDBC Transaction 02" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,17 +52,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Spring JDBC 02 - JDBC Connection &middot; 일벌리는 개발자</title>
+<title>Spring JDBC 06 - JDBC Transaction 02 &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="JDBC는 Connection 정보를 어떻게 넘겨줄까
+        content="트랜잭션 사용법
 
 "
 />
 <meta
         property="og:description"
-        content="JDBC는 Connection 정보를 어떻게 넘겨줄까
+        content="트랜잭션 사용법
 
 "
 />
@@ -72,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/framework/2024/09/28/Spring-Data-jdbc-02/" />
-<meta property="og:url" content="http://localhost:4000/framework/2024/09/28/Spring-Data-jdbc-02/" />
+<link rel="canonical" href="http://localhost:4000/framework/2024/10/01/Spring-Data-jdbc-06/" />
+<meta property="og:url" content="http://localhost:4000/framework/2024/10/01/Spring-Data-jdbc-06/" />
 
 <link
         rel="alternate"
@@ -83,10 +83,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/framework/2024/09/28/Spring-Data-jdbc-01/" />
+<link rel="prev" href="http://localhost:4000/framework/2024/09/30/Spring-Data-jdbc-05/" />
  
-<link rel="next" href="http://localhost:4000/cs/2024/09/29/Algorithm-05/" />
-
 
 <link
         rel="apple-touch-icon"
@@ -183,16 +181,16 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-framework/2024/09/28/Spring-Data-jdbc-02" class="post" role="article">
+<article id="post-framework/2024/10/01/Spring-Data-jdbc-06" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      Spring JDBC 02 - JDBC Connection
+      Spring JDBC 06 - JDBC Transaction 02
       
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-09-28T00:00:00+09:00">28 Sep 2024</time>
+      <time datetime="2024-10-01T00:00:00+09:00">01 Oct 2024</time>
       
 
 
@@ -267,43 +265,109 @@ on <a href="/tag/framework-spring-data-jpa/" data-flip="title">Spring Data JPA</
     </style>
 
     <!--<br />-->
-    <h2 id="jdbc는-connection-정보를-어떻게-넘겨줄까">JDBC는 Connection 정보를 어떻게 넘겨줄까</h2>
+    <h2 id="트랜잭션-사용법"><strong>트랜잭션</strong> <strong>사용법</strong></h2>
 
-<p><img width="689" alt="image" src="https://github.com/user-attachments/assets/c20c048b-4313-4858-b74d-94c17f3f767d" /></p>
-
-<p>우선 커넥션 정보를 가지고 있는 클래스를 통해서 URL, USERNAME, PASSWORD를 담고 있는 클래스를 하나 정의한다.</p>
-
-<p><img width="705" alt="image" src="https://github.com/user-attachments/assets/7a293b96-7186-4567-a70e-04c11d7f56bb" /></p>
+<p>데이터 변경 쿼리를 실행하고 데이터베이스에 그 결과를 반영하려면 커밋 명령어인 <code class="language-plaintext highlighter-rouge">commit</code> 을 호출하고, 결과를 반영하고 싶지 않으면 롤백 명령어인 <code class="language-plaintext highlighter-rouge">rollback</code> 을 호출하면 된다.</p>
 
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">DriverManager.getConnection(URL, USERNAME, PASSWORD)</code>  를 getConnection을 통해 인자로 넘겨준다. 그리고 넘겨준 정보들의 반환 값들을 통해 connection 객체를 반환받는다.</li>
-  <li><strong>데이터베이스 연결 시도는</strong> <code class="language-plaintext highlighter-rouge">DriverManager</code> 클래스 내부에서 해당 정보를 기반으로 데이터베이스에 연결을 시도한다.</li>
-  <li><strong>결과 반환값은</strong> 연결이 성공하면, <strong>데이터베이스와의 연결을 나타내는 <code class="language-plaintext highlighter-rouge">Connection</code> 객체</strong>를 반환하고 이 반환된 객체가 코드 내에서 <code class="language-plaintext highlighter-rouge">Connection connection</code> 변수에 저장된다.</li>
-  <li>그리고 <code class="language-plaintext highlighter-rouge">SQLException</code>이 발생할 경우, 즉 데이터베이스 연결에 문제가 생겼을<code class="language-plaintext highlighter-rouge">IllegalStateException</code>이라는 런타임 예외로 변환하여 던진다. Checked Exception인 <code class="language-plaintext highlighter-rouge">SQLException</code>을 런타임 예외로 바꿔서 예외 처리를 간소화 시킨다.
+  <li><strong><em>커밋을** **호출하기** **전까지는** **임시로** **데이터를** **저장</em></strong>하는 것이다. 따라서 해당 트랜잭션을 시작한 세션(사용자)에게만 변경 데이터가 보이고 다른 세션(사용자)에게는 변경 데이터가 보이지 않는다.</li>
+</ul>
+
+<h2 id="신규-데이터-추가">신규 데이터 추가</h2>
+
+<p><img width="693" alt="image" src="https://github.com/user-attachments/assets/f2221f73-f290-4305-996f-cd20a2c688cd" /></p>
+
+<ul>
+  <li>세션1은 트랜잭션을 시작하고 신규 회원1, 신규 회원2를 DB에 추가했다. 아직 커밋은 하지 않은 상태이다.</li>
+  <li>새로운 데이터는 임시 상태로 저장된다.</li>
+  <li>세션1은 <code class="language-plaintext highlighter-rouge">select</code> 쿼리를 실행해서 본인이 입력한 신규 회원1, 신규 회원2를 조회할 수 있다.
     <ul>
-      <li>간소화의 이유는 <code class="language-plaintext highlighter-rouge">SQLException</code>과 같은 <strong>체크드 예외(Checked Exception)</strong>는 컴파일 시점에서 반드시 처리해야 하는 예외이므로  코드가 복잡해질 수 있다.  반면 <strong>런타임 예외(Unchecked Exception)</strong>는 컴파일러가 처리할 필요가 없기 때문에, 호출하는 쪽에서 자유롭게 처리할 수 있다.</li>
+      <li>커밋을 하기 전까지 세션2는 세션1의 데이터 변경을 확인할 수 없다.</li>
     </ul>
   </li>
+  <li>세션2는 <code class="language-plaintext highlighter-rouge">select</code> 쿼리를 실행해도 신규 회원들을 조회할 수 없다. 왜냐하면 세션1이 아직 커밋을 하지 않았기 때문이다.</li>
 </ul>
 
-<p><img width="691" alt="image" src="https://github.com/user-attachments/assets/3e1d9f2d-6600-46b1-986d-99dec1a4268d" />
-<img width="629" alt="image" src="https://github.com/user-attachments/assets/03cdf493-991c-4e6e-809c-838c0dce4076" /></p>
+<h2 id="커밋하지-않은-정보를-다른-세션에서-확인을-하게-된다면">커밋하지 않은 정보를 다른 세션에서 확인을 하게 된다면?</h2>
+
+<p>예를 들어서 커밋하지 않는 데이터가 보인다면, 세션2는 데이터를 조회했을 때 신규 회원1, 2가 보일 것이다. 따
+라서 신규 회원1, 신규 회원2가 있다고 가정하고 어떤 로직을 수행할 수 있다. 그런데 세션1이 롤백을 수행하면
+신규 회원1, 신규 회원2의 데이터가 사라지게 된다. 따라서 데이터 정합성에 큰 문제가 발생한다.
+세션2에서 세션1이 아직 커밋하지 않은 변경 데이터가 보이다면, 세션1이 롤백 했을 때 심각한 문제가 발생할 수
+있다. 따라서 커밋 전의 데이터는 다른 세션에서 보이지 않는다. 깃허브의 동작 과정이랑 비슷하다고 생각하면 된다.</p>
+
+<h2 id="rollback-호출">RollBack 호출</h2>
+
+<p>데이터베이스에 반영한 모든 데이터가 처음 상태로 복구된다.
+수정하거나 삭제한 데이터도 <code class="language-plaintext highlighter-rouge">rollback</code> 을 호출하면 모두 트랜잭션을 시작하기 직전의 상태로 복구된다.</p>
+
+<h1 id="트랜잭션---자동-커밋과-수동-커밋">트랜잭션 - 자동 커밋과 수동 커밋</h1>
+
+<p>트랜잭션을 사용할 때, 자동 커밋(Autocommit)과 수동 커밋(Manual Commit)의 개념을 이해하는 것이 중요하다. 각각의 모드는 트랜잭션의 작동 방식에 큰 영향을 미친다.</p>
+
+<h2 id="데이터베이스-스키마">데이터베이스 스키마</h2>
+
+<p>트랜잭션 예제를 실행하기 위한 데이터베이스 스키마는 다음과 같다.</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">DROP</span> <span class="k">TABLE</span> <span class="n">member</span> <span class="n">IF</span> <span class="k">EXISTS</span><span class="p">;</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">member</span> <span class="p">(</span>
+    <span class="n">member_id</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+    <span class="n">money</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">DEFAULT</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">member_id</span><span class="p">)</span>
+<span class="p">);</span>
+</code></pre></div></div>
+
+<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gh"># 트랜잭션 - 자동 커밋과 수동 커밋</span>
+
+트랜잭션을 사용할 때, 자동 커밋(Autocommit)과 수동 커밋(Manual Commit)의 개념을 이해하는 것이 중요하다. 각각의 모드는 트랜잭션의 작동 방식에 큰 영향을 미친다.
+
+<span class="gu">## 데이터베이스 스키마</span>
+
+트랜잭션 예제를 실행하기 위한 데이터베이스 스키마는 다음과 같다.
+
+<span class="p">```</span><span class="nl">sql
+</span><span class="k">DROP</span> <span class="k">TABLE</span> <span class="n">member</span> <span class="n">IF</span> <span class="k">EXISTS</span><span class="p">;</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">member</span> <span class="p">(</span>
+    <span class="n">member_id</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+    <span class="n">money</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">DEFAULT</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">member_id</span><span class="p">)</span>
+<span class="p">);</span>
+
+</code></pre></div></div>
+
+<h2 id="자동-커밋-autocommit">자동 커밋 (Autocommit)</h2>
+
+<p>자동 커밋 모드가 설정되면, 각 쿼리 실행 직후에 자동으로 커밋이 호출된다. 이는 쿼리를 실행할 때마다 자동으로 트랜잭션이 커밋되기 때문에 편리하지만, 여러 쿼리를 그룹으로 묶어 트랜잭션을 처리하는 것이 불가능하다.</p>
+
+<h3 id="자동-커밋-설정">자동 커밋 설정</h3>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SET</span> <span class="n">autocommit</span> <span class="k">TRUE</span><span class="p">;</span> <span class="o">//</span> <span class="err">자동</span> <span class="err">커밋</span> <span class="err">모드</span> <span class="err">설정</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">member</span><span class="p">(</span><span class="n">member_id</span><span class="p">,</span> <span class="n">money</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">'data1'</span><span class="p">,</span> <span class="mi">10000</span><span class="p">);</span> <span class="o">//</span> <span class="err">자동</span> <span class="err">커밋</span> <span class="err">발생</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">member</span><span class="p">(</span><span class="n">member_id</span><span class="p">,</span> <span class="n">money</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">'data2'</span><span class="p">,</span> <span class="mi">10000</span><span class="p">);</span> <span class="o">//</span> <span class="err">자동</span> <span class="err">커밋</span> <span class="err">발생</span>
+
+</code></pre></div></div>
+
+<p>이 경우, 각 쿼리가 실행될 때마다 자동으로 커밋이 이루어지므로 원자성을 보장하지 못한다.</p>
+
+<h2 id="수동-커밋-manual-commit">수동 커밋 (Manual Commit)</h2>
+
+<p>수동 커밋 모드에서는 트랜잭션을 명시적으로 시작하고 종료할 수 있다. 이 모드에서는 사용자가 <code class="language-plaintext highlighter-rouge">commit</code> 또는 <code class="language-plaintext highlighter-rouge">rollback</code>을 호출하여 트랜잭션을 완료하거나 취소해야 한다.</p>
+
+<h3 id="수동-커밋-설정">수동 커밋 설정</h3>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SET</span> <span class="n">autocommit</span> <span class="k">FALSE</span><span class="p">;</span> <span class="o">//</span> <span class="err">수동</span> <span class="err">커밋</span> <span class="err">모드</span> <span class="err">설정</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">member</span><span class="p">(</span><span class="n">member_id</span><span class="p">,</span> <span class="n">money</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">'data3'</span><span class="p">,</span> <span class="mi">10000</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">member</span><span class="p">(</span><span class="n">member_id</span><span class="p">,</span> <span class="n">money</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">'data4'</span><span class="p">,</span> <span class="mi">10000</span><span class="p">);</span>
+<span class="k">COMMIT</span><span class="p">;</span> <span class="o">//</span> <span class="err">수동</span> <span class="err">커밋</span> <span class="err">발생</span>
+        
+</code></pre></div></div>
 
 <ul>
-  <li>실행 결과를 보면 <code class="language-plaintext highlighter-rouge">class=class org.h2.jdbc.JdbcConnection</code> 부분을 확인할 수 있다. 이것이 바로 H2 데이터베이스 드라이버가 제공하는 H2 전용 커넥션이다. 물론 이 커넥션은 JDBC 표준 커넥션 인터페이스인<code class="language-plaintext highlighter-rouge">java.sql.Connection</code> 인터페이스를 구현하고 있다.</li>
-</ul>
-
-<h2 id="필요한-정보를-담아서-인자로-넘기자">필요한 정보를 담아서 인자로 넘기자</h2>
-
-<ul>
-  <li>JDBC가 제공하는 <code class="language-plaintext highlighter-rouge">DriverManager</code> 는 라이브러리에 등록된 DB 드라이버들을 관리하고, 커넥션을 획득하는 기능을제공한다.</li>
-  <li><code class="language-plaintext highlighter-rouge">DriverManager</code> 는 라이브러리에 등록된 드라이버 목록을 자동으로 인식한다. 이 드라이버들에게 순서대로 다음 정보를 넘겨서 커넥션을 획득할 수 있는지 확인한다.</li>
-  <li>URL이 <code class="language-plaintext highlighter-rouge">jdbc:h2</code>로 시작하면 이것은 h2 데이터베이스에 접근하기 위한 규칙이다. 따라서 H2 드라이버는
-본인이 처리할 수 있으므로 실제 데이터베이스에 연결해서 커넥션을 획득하고 이 커넥션을 클라이언트에 반
-환한다.</li>
-  <li>반면에 URL이 <code class="language-plaintext highlighter-rouge">jdbc:h2</code>로 시작했는데 MySQL 드라이버가 먼저 실행되면 이 경우 본인이 처리
-할 수 없다는 결과를 반환하게 되고, 다음 드라이버에게 순서가 넘어간다.</li>
-  <li>이렇게 찾은 구현체가 클라이언트에 반환된다.</li>
+  <li>수동 커밋 모드에서는 명시적으로 트랜잭션의 시작과 끝을 관리할 수 있어 데이터의 일관성을 유지할 수 있다.</li>
+  <li><strong>트랜잭션의 원자성</strong>: 트랜잭션은 일련의 작업이 모두 성공적으로 완료되어야 하며, 그렇지 않을 경우 모든 작업이 취소되어야 한다. 이는 수동 커밋 모드에서 효과적으로 수행할 수 있다.</li>
+  <li><strong>세션 유지</strong>: 자동 커밋 모드나 수동 커밋 모드는 세션이 유지되는 동안 계속해서 적용된다. 따라서, 필요에 따라 언제든지 모드를 변경할 수 있다.</li>
+  <li><strong>에러 처리</strong>: 수동 커밋 모드에서는 에러가 발생했을 때 <code class="language-plaintext highlighter-rouge">rollback</code>을 사용하여 이전 상태로 되돌릴 수 있다. 이는 데이터 무결성을 유지하는 데 중요한 역할을 한다.</li>
+  <li><strong>기본 설정</strong>: 대부분의 데이터베이스는 기본적으로 자동 커밋 모드로 설정되어 있으므로, 트랜잭션을 제대로 사용하기 위해서는 수동 커밋 모드로 설정하는 것이 필요하다.</li>
 </ul>
 
 <h2 id="reference">Reference</h2>
@@ -322,12 +386,12 @@ on <a href="/tag/framework-spring-data-jpa/" data-flip="title">Spring Data JPA</
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=Spring JDBC 02 - JDBC Connection&amp;url=http://localhost:4000/framework/2024/09/28/Spring-Data-jdbc-02/"
+    <a href="http://twitter.com/share?text=Spring JDBC 06 - JDBC Transaction 02&amp;url=http://localhost:4000/framework/2024/10/01/Spring-Data-jdbc-06/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/framework/2024/09/28/Spring-Data-jdbc-02/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/framework/2024/10/01/Spring-Data-jdbc-06/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -349,21 +413,8 @@ on <a href="/tag/framework-spring-data-jpa/" data-flip="title">Spring Data JPA</
       
       
         
-        
           
-
-
-<li class="h4">
-  <a href="/framework/2024/10/01/Spring-Data-jdbc-06/" data-flip="title">
-    <span>Spring JDBC 06 - JDBC Transaction 02</span>
-  </a>
-  <small><time datetime="2024-10-01T00:00:00+09:00">
-    01 Oct 2024
-  </time></small>
-</li>
-
-        
-      
+          
         
         
           
@@ -397,6 +448,19 @@ on <a href="/tag/framework-spring-data-jpa/" data-flip="title">Spring Data JPA</
         
       
         
+        
+          
+
+
+<li class="h4">
+  <a href="/framework/2024/09/30/Spring-Data-jdbc-03/" data-flip="title">
+    <span>Spring JDBC 03 - JDBC DrivenManager</span>
+  </a>
+  <small><time datetime="2024-09-30T00:00:00+09:00">
+    30 Sep 2024
+  </time></small>
+</li>
+
         
       
     
