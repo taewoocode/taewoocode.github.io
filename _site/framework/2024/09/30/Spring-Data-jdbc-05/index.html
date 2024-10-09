@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Home" />
+<meta property="og:title" content="Spring JDBC 05 - JDBC Transaction" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,16 +52,18 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Home &middot; 일벌리는 개발자</title>
+<title>Spring JDBC 05 - JDBC Transaction &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="일을 벌여놔야 주워 담을 수 있습니다.
+        content="Transaction
+
 "
 />
 <meta
         property="og:description"
-        content="일을 벌여놔야 주워 담을 수 있습니다.
+        content="Transaction
+
 "
 />
 
@@ -70,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/page-2/" />
-<meta property="og:url" content="http://localhost:4000/page-2/" />
+<link rel="canonical" href="http://localhost:4000/framework/2024/09/30/Spring-Data-jdbc-05/" />
+<meta property="og:url" content="http://localhost:4000/framework/2024/09/30/Spring-Data-jdbc-05/" />
 
 <link
         rel="alternate"
@@ -80,6 +82,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         href="http://localhost:4000/feed.xml"
 />
 
+
+<link rel="prev" href="http://localhost:4000/framework/2024/09/30/Spring-Data-jdbc-04/" />
  
 
 <link
@@ -176,18 +180,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
             data-image="/assets/img/dp.jpeg"
     >
       
-  
 
-<article id="post-framework/2024/09/27/Spring-basic-13" class="post mb6" role="article">
+<article id="post-framework/2024/09/30/Spring-Data-jdbc-05" class="post" role="article">
   <header>
     <h1 class="post-title">
-      <a href="/framework/2024/09/27/Spring-basic-13/" data-flip="title">
-      Spring Basic 13 - Dependency Injection 02
-      </a>
+      
+      Spring JDBC 05 - JDBC Transaction
+      
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-09-27T00:00:00+09:00">27 Sep 2024</time>
+      <time datetime="2024-09-30T00:00:00+09:00">30 Sep 2024</time>
       
 
 
@@ -210,7 +213,7 @@ in <a href="/category/framework/" data-flip="title">Framework</a>
 
 
 
-on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
+on <a href="/tag/framework-spring-data-jpa/" data-flip="title">Spring Data JPA</a>
 
     </p>
 
@@ -223,433 +226,202 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
 
 
   
-  <h2 id="다양한-의존관계-주입방법">다양한 의존관계 주입방법</h2>
+  <div class="markdown-body">
 
+    <!--  -->
+    <style>
+      .myAd1190 {
+        width: 48%;
+        height: 280px;
+      }
 
-  <p class="read-more"><a class="heading" href="/framework/2024/09/27/Spring-basic-13/" data-flip="title">Continue reading </a>
-  </p>
+      .myAd1290 {
+        width: 48%;
+        height: 280px;
+      }
+
+      @media(max-width: 800px) {
+        .myAd1190 {
+          display: none;
+        }
+
+        .myAd1290 {
+          width: 98%;
+        }
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 300px;
+      }
+
+      .row-center {
+        display: flex;
+        justify-content: center;
+        height: 258px;
+      }
+    </style>
+
+    <!--<br />-->
+    <h2 id="transaction">Transaction</h2>
+
+<p>데이터를 저장할 때 단순히 파일에 저장해도 되는데, 데이터베이스에 저장하는 이유는 무엇일까?
+여러가지 이유가 있지만, 가장 대표적인 이유는 바로 데이터베이스는 트랜잭션이라는 개념을 지원하기 때문이다.
+트랜잭션을 이름 그대로 번역하면 거래라는 뜻이다. 이것을 쉽게 풀어서 이야기하면, 데이터베이스에서 트랜잭션은 하나의 거래를 안전하게 처리하도록 보장해주는 것을 뜻한다. 그런데 하나의 거래를 안전하게 처리하려면 생각보다 고려해야 할 점이 많다. 예를 들어서 A의 5000원을 B에게 계좌이체한다고 생각해보자. A의 잔고를 5000원 감소하고, B의 잔고를 5000원 증가해야한다.</p>
+
+<h2 id="5000원-계좌이체">5000<strong>원</strong> <strong>계좌이체</strong></h2>
+
+<ul>
+  <li>A의 잔고를 5000원 감소</li>
+  <li>B의 잔고를 5000원 증가</li>
+</ul>
+
+<p>계좌이체라는 거래는 이렇게 2가지 작업이 합쳐져서 하나의 작업처럼 동작해야 한다. 만약 1번은 성공했는데 2번에서시스템에 문제가 발생하면 계좌이체는 실패하고, A의 잔고만 5000원 감소하는 심각한 문제가 발생한다.</p>
+
+<p>데이터베이스가 제공하는 트랜잭션 기능을 사용하면 1,2 둘다 함께 성공해야 저장하고, 중간에 하나라도 실패하면 거래전의 상태로 돌아갈 수 있다. 만약 1번은 성공했는데 2번에서 시스템에 문제가 발생하면 계좌이체는 실패하고, 거래 전의 상태로 완전히 돌아갈 수 있다. 결과적으로 A의 잔고가 감소하지 않는다.</p>
+
+<p>모든 작업이 성공해서 데이터베이스에 정상 반영하는 것을 커밋(<code class="language-plaintext highlighter-rouge">Commit</code> )이라 하고, 작업 중 하나라도 실패해서 거래 이전으로 되돌리는 것을 롤백(<code class="language-plaintext highlighter-rouge">Rollback</code> )이라 한다.</p>
+
+<h2 id="트랜잭션-acid"><strong>트랜잭션</strong> ACID</h2>
+
+<p>트랜잭션은 ACID(http://en.wikipedia.org/wiki/ACID)라 하는 원자성(Atomicity), 일관성(Consistency), 격리성(Isolation), 지속성(Durability)을 보장해야 한다.</p>
+
+<ul>
+  <li><strong>*원자성</strong>:** 트랜잭션 내에서 실행한 작업들은 마치 하나의 작업인 것처럼 모두 성공 하거나 모두 실패해야 한다.</li>
+  <li><strong>*일관성</strong>:** 모든 트랜잭션은 일관성 있는 데이터베이스 상태를 유지해야 한다. 예를 들어 데이터베이스에서 정한 무결성 제약 조건을 항상 만족해야 한다.</li>
+  <li><strong>*격리성</strong>:** 동시에 실행되는 트랜잭션들이 서로에게 영향을 미치지 않도록 격리한다. 예를 들어 동시에 같은 데이터를 수정하지 못하도록 해야 한다. 격리성은 동시성과 관련된 성능 이슈로 인해 트랜잭션 격리 수준(Isolationlevel)을 선택할 수 있다.
+    <ul>
+      <li>예를 들면 하나의 데이터베이스에 여러명이 접근을 하게 되었을 때(Multi Therad)의 환경에서 같은 데이터를 수정하면 문제가 발생할 수 있다. → 그래서 격리가 필요하다.</li>
+      <li>격리성은 동시에 트래픽이 접근 했을 때 한번에 하나씩 처리가 되어야 완벽한 격리라고 볼 수 있다.</li>
+      <li>근데 Thread를 동시성과 관련하여 성능이슈 문제가 발생할 수 있다.</li>
+      <li>격리성을 너무 고려하다 보면 한개의 트랜잭션을 수행하는데 있어서 많은 시간이 걸린다.</li>
+      <li>따라서 격리성에도 어느정도 조건을 추가할 수 있다.</li>
+    </ul>
+  </li>
+  <li><strong>*지속성</strong>:** 트랜잭션을 성공적으로 끝내면 그 결과가 항상 기록되어야 한다. 중간에 시스템에 문제가 발생해도 데이터베이스 로그 등을 사용해서 성공한 트랜잭션 내용을 복구해야 한다.</li>
+</ul>
+
+<p>##</p>
+
+<p>위에 문제에서 가장 고민해 보아야 할 점은 성능이슈와 관련된 격리성이다. 
+트랜잭션 관에 격리성을 완벽하게 보장하려면 순서대로 실행을 해야한다. 
+Thread 100개에서 동시에 요청이 들어왔고 하나의 트랜잭션에서 예를들어 2초가 걸린다면 순번표를 뽑고 마지막 순번자는 200초를 기다려야 결과를 반환받을 수 있다. 
+따라서 하나의 트랜잭션을 수행하기 위한 성능과 격리성의 중점을 찾는 것이 중요하다.</p>
+
+<h2 id="reference">Reference</h2>
+
+<p>김영한님의 스프링 강의 정리</p>
+
+    <br />
+    <br />
+  </div>
   
 
 </article>
 
-
-  
-
-<article id="post-framework/2024/09/27/Spring-basic-12" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/framework/2024/09/27/Spring-basic-12/" data-flip="title">
-      Spring Basic 12 - Dependency Injection 01
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-27T00:00:00+09:00">27 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/framework/" data-flip="title">Framework</a>
-
-      
+<!--<hr class="dingbat" />-->
+<!--
+<div class="share">
+  <h2>Share this post</h2>
+  <div class="share-body">
+    <a href="http://twitter.com/share?text=Spring JDBC 05 - JDBC Transaction&amp;url=http://localhost:4000/framework/2024/09/30/Spring-Data-jdbc-05/"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="icon-twitter">
+      </span>
+    </a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/framework/2024/09/30/Spring-Data-jdbc-05/"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="icon-facebook">
+      </span>
+    </a>
+  </div>
+</div>
+-->
+<br />
 
 
 
 
+<aside class="related" role="complementary">
+  <h2 class="hr">Related Posts</h2>
 
-
-
-
-
-on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
-
-    </p>
-
+  <ul class="related-posts">
     
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="dependency-injection">Dependency Injection</h2>
-
-
-  <p class="read-more"><a class="heading" href="/framework/2024/09/27/Spring-basic-12/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-framework/2024/09/26/Spring-basic-11" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/framework/2024/09/26/Spring-basic-11/" data-flip="title">
-      Spring Basic 11 - Proxy Mode
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-26T00:00:00+09:00">26 Sep 2024</time>
       
-
-
-
-
-
-
-
-
-
-in <a href="/category/framework/" data-flip="title">Framework</a>
-
       
+      
+        
+          
+          
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/framework/2024/09/30/Spring-Data-jdbc-04/" data-flip="title">
+    <span>Spring JDBC 04 - JDBC ConnectionPool</span>
+  </a>
+  <small><time datetime="2024-09-30T00:00:00+09:00">
+    30 Sep 2024
+  </time></small>
+</li>
+
+        
+      
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/framework/2024/09/30/Spring-Data-jdbc-03/" data-flip="title">
+    <span>Spring JDBC 03 - JDBC DrivenManager</span>
+  </a>
+  <small><time datetime="2024-09-30T00:00:00+09:00">
+    30 Sep 2024
+  </time></small>
+</li>
+
+        
+      
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/framework/2024/09/28/Spring-Data-jdbc-02/" data-flip="title">
+    <span>Spring JDBC 02 - JDBC Connection</span>
+  </a>
+  <small><time datetime="2024-09-28T00:00:00+09:00">
+    28 Sep 2024
+  </time></small>
+</li>
 
-
-
-on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
-
-    </p>
-
+        
+      
     
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="프록시-모드로-사용해보기">프록시 모드로 사용해보기</h2>
-
-
-  <p class="read-more"><a class="heading" href="/framework/2024/09/26/Spring-basic-11/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-framework/2024/09/26/Spring-basic-10" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/framework/2024/09/26/Spring-basic-10/" data-flip="title">
-      Spring Basic 10 - Web Scope
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-26T00:00:00+09:00">26 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/framework/" data-flip="title">Framework</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="웹-스코프"><strong>웹</strong> <strong>스코프</strong></h2>
-
-
-  <p class="read-more"><a class="heading" href="/framework/2024/09/26/Spring-basic-10/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-framework/2024/09/26/Spring-basic-09" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/framework/2024/09/26/Spring-basic-09/" data-flip="title">
-      Spring Basic 09 - Bean Scope 03
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-26T00:00:00+09:00">26 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/framework/" data-flip="title">Framework</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="싱글톤-빈과-프로토타입-빈을-함께-사용할-때-마다-새로운-빈-형성하기">싱글톤 빈과 프로토타입 빈을 함께 사용할 때 마다 새로운 빈 형성하기</h2>
-
-
-  <p class="read-more"><a class="heading" href="/framework/2024/09/26/Spring-basic-09/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-framework/2024/09/26/Spring-basic-08" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/framework/2024/09/26/Spring-basic-08/" data-flip="title">
-      Spring Basic 08 - Bean Scope 02
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-26T00:00:00+09:00">26 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/framework/" data-flip="title">Framework</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="싱글톤과-프로토타입-빈">싱글톤과 프로토타입 빈</h2>
-
-
-  <p class="read-more"><a class="heading" href="/framework/2024/09/26/Spring-basic-08/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-framework/2024/09/26/Spring-basic-07" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/framework/2024/09/26/Spring-basic-07/" data-flip="title">
-      Spring Basic 07 - Bean Scope
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-26T00:00:00+09:00">26 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/framework/" data-flip="title">Framework</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="빈-스코프란"><strong>빈 스코프란</strong>?</h2>
-
-
-  <p class="read-more"><a class="heading" href="/framework/2024/09/26/Spring-basic-07/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-cs/2024/09/26/Algorithm-04" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/cs/2024/09/26/Algorithm-04/" data-flip="title">
-      백준 2309 문제풀이
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-26T00:00:00+09:00">26 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="문제-링크">문제 링크</h2>
-
-
-  <p class="read-more"><a class="heading" href="/cs/2024/09/26/Algorithm-04/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-
-<h2 class="sr-only">Pagination</h2>
-<nav class="pagination heading" role="navigation">
-  <ul>
-    <li class="pagination-item older" >
-      
-        <a rel="next" href="/page-3/">Older</a>
-      
-    </li>
-    <li class="pagination-item newer" >
-      
-        <a rel="prev" href="/">Newer</a>
-      
-    </li>
   </ul>
-</nav>
+</aside>
+  <aside class="comments" role="complementary">
+  <h2>Comments</h2>
+  <hr/>
 
-  <footer>
+  <script src="https://utteranc.es/client.js"
+          repo="taewoocode/taewoocode.github.io"
+          issue-term="title"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+</aside>
+
+
+       <footer>
   <hr/>
   
     <p>© 2022. by taewoo</p>
