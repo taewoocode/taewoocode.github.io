@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 09 Oct 2024 20:11:18 +0900</pubDate>
-    <lastBuildDate>Wed, 09 Oct 2024 20:11:18 +0900</lastBuildDate>
+    <pubDate>Wed, 09 Oct 2024 20:14:22 +0900</pubDate>
+    <lastBuildDate>Wed, 09 Oct 2024 20:14:22 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
@@ -33,7 +33,7 @@
 
 &lt;h2 id=&quot;트랜잭션-acid&quot;&gt;&lt;strong&gt;트랜잭션&lt;/strong&gt; ACID&lt;/h2&gt;
 
-&lt;p&gt;트랜잭션은 ACID(&lt;a href=&quot;트랜잭션은 ACID(http://en.wikipedia.org/wiki/ACID)라 하는 원자성(Atomicity), 일관성(Consistency), 격리성(Isolation), 지속성(Durability)을 보장해야 한다.&quot;&gt;http://en.wikipedia.org/wiki/ACID&lt;/a&gt;)라 하는 원자성(Atomicity), 일관성(Consistency), 격리성(Isolation), 지속성(Durability)을 보장해야 한다.&lt;/p&gt;
+&lt;p&gt;트랜잭션은 ACID(&lt;a href=&quot;http://en.wikipedia.org/wiki/ACID&quot;&gt;http://en.wikipedia.org/wiki/ACID&lt;/a&gt;라 하는 원자성(Atomicity), 일관성(Consistency), 격리성(Isolation), 지속성(Durability)을 보장해야 한다.)라 하는 원자성(Atomicity), 일관성(Consistency), 격리성(Isolation), 지속성(Durability)을 보장해야 한다.&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;&lt;strong&gt;*원자성&lt;/strong&gt;:** 트랜잭션 내에서 실행한 작업들은 마치 하나의 작업인 것처럼 모두 성공 하거나 모두 실패해야 한다.&lt;/li&gt;
