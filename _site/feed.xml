@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 09 Oct 2024 19:04:43 +0900</pubDate>
-    <lastBuildDate>Wed, 09 Oct 2024 19:04:43 +0900</lastBuildDate>
+    <pubDate>Wed, 09 Oct 2024 19:05:55 +0900</pubDate>
+    <lastBuildDate>Wed, 09 Oct 2024 19:05:55 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
@@ -17,7 +17,7 @@
 &lt;p&gt;&lt;img width=&quot;739&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/02e9d434-8a79-4a77-83df-7b132782a5dc&quot; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;커넥션 풀을 사용해 보기 위해서 Hikari객체를 생성하고 라이브러리에 들어가 보았는데 Hikari는 DataSource를 구현하고 있는 구현체였다.&lt;/li&gt;
+  &lt;li&gt;커넥션 풀을 사용해 보기 위해서 Hikari객체를 생성하고 라이브러리에 들어가 보았는데 Hikari는 DataSource를 구현하고 있는 구현체를 였다.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h3 id=&quot;커넥션-풀링-hikariproxyconnectionproxyjdbcconnectiontarget&quot;&gt;커넥션 풀링: HikariProxyConnection(Proxy)JdbcConnection(Target)&lt;/h3&gt;
@@ -26,8 +26,11 @@
 &lt;img width=&quot;704&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/a8a31fb3-0a96-40be-ba70-b4c9d907e834&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;별도의 쓰레드 사용해서 커넥션 풀에 커넥션을 채우고 있는 것을 확인할 수 있다. 
-이 쓰레드는 커넥션 풀에 커넥션을 최대 풀 수(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;10&lt;/code&gt; )까지 채운다. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;그렇다면 왜 별도의 쓰레드&lt;/code&gt;를 사용해서 커넥션 풀에 커넥션을 채우는 것일까?
-커넥션 풀에 커넥션을 채우는 것은 상대적으로 오래 걸리는 일이다. 
+이 쓰레드는 커넥션 풀에 커넥션을 최대 풀 수(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;10&lt;/code&gt; )까지 채운다.&lt;/p&gt;
+
+&lt;h3 id=&quot;왜-별도의-쓰레드를-사용해서-커넥션을-채울까&quot;&gt;왜 별도의 쓰레드를 사용해서 커넥션을 채울까?&lt;/h3&gt;
+
+&lt;p&gt;커넥션 풀에 커넥션을 채우는 것은 상대적으로 오래 걸리는 일이다. 
 애플리케이션을 실행할 때 커넥션 풀을 채울 때 까지 마냥 대기하고 있다면 애플리케이션 실행 시간이 늦어진다. 
 따라서 이렇게 별도의 쓰레드를 사용해서 커넥션 풀을 채워야 애플리케이션 실행 시간에 영향을 주지 않는다.&lt;/p&gt;
 
