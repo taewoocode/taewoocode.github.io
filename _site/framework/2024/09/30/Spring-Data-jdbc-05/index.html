@@ -286,7 +286,7 @@ on <a href="/tag/framework-spring-data-jpa/" data-flip="title">Spring Data JPA</
 
 <h2 id="트랜잭션-acid"><strong>트랜잭션</strong> ACID</h2>
 
-<p>트랜잭션은 ACID(http://en.wikipedia.org/wiki/ACID)라 하는 원자성(Atomicity), 일관성(Consistency), 격리성(Isolation), 지속성(Durability)을 보장해야 한다.</p>
+<p>트랜잭션은 ACID(<a href="트랜잭션은 ACID(http://en.wikipedia.org/wiki/ACID)라 하는 원자성(Atomicity), 일관성(Consistency), 격리성(Isolation), 지속성(Durability)을 보장해야 한다.">http://en.wikipedia.org/wiki/ACID</a>)라 하는 원자성(Atomicity), 일관성(Consistency), 격리성(Isolation), 지속성(Durability)을 보장해야 한다.</p>
 
 <ul>
   <li><strong>*원자성</strong>:** 트랜잭션 내에서 실행한 작업들은 마치 하나의 작업인 것처럼 모두 성공 하거나 모두 실패해야 한다.</li>
@@ -303,7 +303,7 @@ on <a href="/tag/framework-spring-data-jpa/" data-flip="title">Spring Data JPA</
   <li><strong>*지속성</strong>:** 트랜잭션을 성공적으로 끝내면 그 결과가 항상 기록되어야 한다. 중간에 시스템에 문제가 발생해도 데이터베이스 로그 등을 사용해서 성공한 트랜잭션 내용을 복구해야 한다.</li>
 </ul>
 
-<p>##</p>
+<h2 id="고민해-보아야-할-점">고민해 보아야 할 점</h2>
 
 <p>위에 문제에서 가장 고민해 보아야 할 점은 성능이슈와 관련된 격리성이다. 
 트랜잭션 관에 격리성을 완벽하게 보장하려면 순서대로 실행을 해야한다. 
