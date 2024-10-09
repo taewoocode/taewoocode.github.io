@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Home" />
+<meta property="og:title" content="Spring JDBC 03 - JDBC DrivenManager" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,16 +52,18 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Home &middot; 일벌리는 개발자</title>
+<title>Spring JDBC 03 - JDBC DrivenManager &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="일을 벌여놔야 주워 담을 수 있습니다.
+        content="DrivenManager?
+
 "
 />
 <meta
         property="og:description"
-        content="일을 벌여놔야 주워 담을 수 있습니다.
+        content="DrivenManager?
+
 "
 />
 
@@ -70,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/page-3/" />
-<meta property="og:url" content="http://localhost:4000/page-3/" />
+<link rel="canonical" href="http://localhost:4000/framework/2024/09/30/Spring-Data-jdbc-03/" />
+<meta property="og:url" content="http://localhost:4000/framework/2024/09/30/Spring-Data-jdbc-03/" />
 
 <link
         rel="alternate"
@@ -80,6 +82,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         href="http://localhost:4000/feed.xml"
 />
 
+
+<link rel="prev" href="http://localhost:4000/cs/2024/09/29/Algorithm-06/" />
  
 
 <link
@@ -176,18 +180,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
             data-image="/assets/img/dp.jpeg"
     >
       
-  
 
-<article id="post-framework/2024/09/25/Spring-basic-06" class="post mb6" role="article">
+<article id="post-framework/2024/09/30/Spring-Data-jdbc-03" class="post" role="article">
   <header>
     <h1 class="post-title">
-      <a href="/framework/2024/09/25/Spring-basic-06/" data-flip="title">
-      Spring Basic 06 - 빈 생명주기 콜백
-      </a>
+      
+      Spring JDBC 03 - JDBC DrivenManager
+      
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-09-25T00:00:00+09:00">25 Sep 2024</time>
+      <time datetime="2024-09-30T00:00:00+09:00">30 Sep 2024</time>
       
 
 
@@ -210,7 +213,7 @@ in <a href="/category/framework/" data-flip="title">Framework</a>
 
 
 
-on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
+on <a href="/tag/framework-spring-data-jpa/" data-flip="title">Spring Data JPA</a>
 
     </p>
 
@@ -223,433 +226,205 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
 
 
   
-  <h2 id="bean-lifecycle">Bean LifeCycle</h2>
+  <div class="markdown-body">
 
+    <!--  -->
+    <style>
+      .myAd1190 {
+        width: 48%;
+        height: 280px;
+      }
 
-  <p class="read-more"><a class="heading" href="/framework/2024/09/25/Spring-basic-06/" data-flip="title">Continue reading </a>
-  </p>
+      .myAd1290 {
+        width: 48%;
+        height: 280px;
+      }
+
+      @media(max-width: 800px) {
+        .myAd1190 {
+          display: none;
+        }
+
+        .myAd1290 {
+          width: 98%;
+        }
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 300px;
+      }
+
+      .row-center {
+        display: flex;
+        justify-content: center;
+        height: 258px;
+      }
+    </style>
+
+    <!--<br />-->
+    <h2 id="drivenmanager">DrivenManager?</h2>
+
+<ul>
+  <li>DrivenManger는 JDBC 드라이버를 통하여 커넥션을 만드는 클래스이다.
+    <ul>
+      <li>쉽게 말하면 그냥 JDBC에서 커넥션을 위한 객체이다.</li>
+    </ul>
+  </li>
+  <li>Class.forName()으로 특정 클래스를 로딩하면 자동으로 객체가 생성되고 DrivenManager에 등록된다.</li>
+  <li>드라이버 클래스를 찾지 못한경우 ClassNotFoundException을 발생시키므로 반드시 예외처리를 해야한다.</li>
+  <li>자바는 이렇게 표준 인터페이스를 정의해두었고 개발자는 이 표준 인터페이스만 사용해서 개발을 하면 된다.</li>
+  <li>이것을<strong>JDBC 드라이버</strong>라고 한다. MySQL에 접근할 수 있는 것은 MySQL JDBC 드라이버라고 하고, Oracle DB에 접근할 수 있는 것은 Oracle JDBC 드라이버라고 한다.</li>
+</ul>
+
+<h2 id="공통화에-한계">공통화에 한계</h2>
+
+<ul>
+  <li>JDBC의 등장으로 많은 것들이 편리해졌지만  각각의 데이터베이스마다 SQL, 데이터타입 등의 일부 사용법이 다르다.</li>
+  <li>ANSI SQL 표준이라는 것이 있긴 하지만.. 하지만 일반적인 부분만 공통화했어서 한계가 있다. 그래서 데이터베이스를 변경하면 JDBC 코드는 변경하지 않아도 되지만 SQL은 해당 데이터베이스에 맞도록 변경해야 한다.
+    <ul>
+      <li>이 부분들을 또 공통화 시키기 위해서 JPA가 등장했다고 생각하면 된다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="drivenmanagerdatasource">DrivenManagerDataSource</h2>
+
+<p>대부분의 커넥션 풀은 <code class="language-plaintext highlighter-rouge">DataSource</code> 인터페이스를 이미 구현해두었다. 따라서 개발자는 <code class="language-plaintext highlighter-rouge">DBCP2 커넥션 풀</code> ,
+<code class="language-plaintext highlighter-rouge">HikariCP 커넥션 풀</code> 의 코드를 직접 의존하는 것이 아니라 <code class="language-plaintext highlighter-rouge">DataSource</code> 인터페이스에만 의존하도록 애플리
+케이션 로직을 작성하면 된다. 커넥션 풀 구현 기술을 변경하고 싶으면 해당 구현체로 갈아끼우기만 하면 된다.
+<code class="language-plaintext highlighter-rouge">DriverManager</code> 는 <code class="language-plaintext highlighter-rouge">DataSource</code> 인터페이스를 사용하지 않는다. 따라서 <code class="language-plaintext highlighter-rouge">DriverManager</code> 는 직접 사용해야 한다. 
+따라서 <code class="language-plaintext highlighter-rouge">DriverManager</code> 를 사용하다가 <code class="language-plaintext highlighter-rouge">DataSource</code> 기반의 커넥션 풀을 사용하도록 변경하면 관련
+코드를 다 고쳐야 한다. 이런 문제를 해결하기 위해 스프링은 <code class="language-plaintext highlighter-rouge">DriverManager</code>도<code class="language-plaintext highlighter-rouge">DataSource</code> 를 통해서 사용할 수 있도록 <code class="language-plaintext highlighter-rouge">DriverManagerDataSource</code> 라는 <code class="language-plaintext highlighter-rouge">DataSource</code> 를 구현한 클래스를 제공한다.</p>
+
+<p><img width="683" alt="image" src="https://github.com/user-attachments/assets/8f5ed795-6e22-4360-8b7a-1e995d0b0a26" /></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">DriverManager</code> 는 커넥션을 획득할 때 마다 <code class="language-plaintext highlighter-rouge">URL</code> , <code class="language-plaintext highlighter-rouge">USERNAME</code> , <code class="language-plaintext highlighter-rouge">PASSWORD</code> 같은 파라미터를 계속 전달해야한다. 반면에 <code class="language-plaintext highlighter-rouge">DataSource</code> 를 사용하는 방식은 처음 객체를 생성할 때만 필요한 파리미터를 넘겨두고, 커넥션을 획득할 때는 단순히 <code class="language-plaintext highlighter-rouge">dataSource.getConnection()</code> 만 호출하면 된다.</li>
+</ul>
+
+<h2 id="작은-단위로-분리">작은 단위로 분리</h2>
+
+<ul>
+  <li>설정과 사용이라는 관점으로 분리하는 것을 목표로 한다.</li>
+  <li>DataSource는 설정이라는 역할로  DataSource 를 만들어 두는 것을 말한다 (URL, USERNAME, PASSWORD와 같은 정보들을 말한다.</li>
+  <li>설정은 신경쓰지 않고, <code class="language-plaintext highlighter-rouge">DataSource</code> 의 <code class="language-plaintext highlighter-rouge">getConnection()</code> 만 호출해서 사용하면 된다.</li>
+</ul>
+
+<h2 id="reference">Reference</h2>
+
+<p>김영한님의 스프링 강의 정리</p>
+
+    <br />
+    <br />
+  </div>
   
 
 </article>
 
-
-  
-
-<article id="post-framework/2024/09/25/Spring-basic-05" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/framework/2024/09/25/Spring-basic-05/" data-flip="title">
-      Spring Basic 05 - 애노테이션 직접 만들기
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-25T00:00:00+09:00">25 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/framework/" data-flip="title">Framework</a>
-
-      
+<!--<hr class="dingbat" />-->
+<!--
+<div class="share">
+  <h2>Share this post</h2>
+  <div class="share-body">
+    <a href="http://twitter.com/share?text=Spring JDBC 03 - JDBC DrivenManager&amp;url=http://localhost:4000/framework/2024/09/30/Spring-Data-jdbc-03/"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="icon-twitter">
+      </span>
+    </a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/framework/2024/09/30/Spring-Data-jdbc-03/"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="icon-facebook">
+      </span>
+    </a>
+  </div>
+</div>
+-->
+<br />
 
 
 
 
+<aside class="related" role="complementary">
+  <h2 class="hr">Related Posts</h2>
 
-
-
-
-
-on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
-
-    </p>
-
+  <ul class="related-posts">
     
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="애노테이션-만들기">애노테이션 만들기</h2>
-
-
-  <p class="read-more"><a class="heading" href="/framework/2024/09/25/Spring-basic-05/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-framework/2024/09/25/Spring-basic-04" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/framework/2024/09/25/Spring-basic-04/" data-flip="title">
-      Spring Basic 04 - Autowired 는 타입으로 조회를 한다
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-25T00:00:00+09:00">25 Sep 2024</time>
       
-
-
-
-
-
-
-
-
-
-in <a href="/category/framework/" data-flip="title">Framework</a>
-
       
+      
+        
+          
+          
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/framework/2024/09/28/Spring-Data-jdbc-02/" data-flip="title">
+    <span>Spring JDBC 02 - JDBC Connection</span>
+  </a>
+  <small><time datetime="2024-09-28T00:00:00+09:00">
+    28 Sep 2024
+  </time></small>
+</li>
+
+        
+      
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/framework/2024/09/28/Spring-Data-jdbc-01/" data-flip="title">
+    <span>Spring JDBC 01 - Hello JDBC</span>
+  </a>
+  <small><time datetime="2024-09-28T00:00:00+09:00">
+    28 Sep 2024
+  </time></small>
+</li>
+
+        
+      
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/framework/2024/09/27/Spring-basic-13/" data-flip="title">
+    <span>Spring Basic 13 - Dependency Injection 02</span>
+  </a>
+  <small><time datetime="2024-09-27T00:00:00+09:00">
+    27 Sep 2024
+  </time></small>
+</li>
 
-
-
-on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
-
-    </p>
-
+        
+      
     
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="autowired-는-타입으로-조회를-한다">@Autowired 는 타입으로 조회를 한다.</h2>
-
-
-  <p class="read-more"><a class="heading" href="/framework/2024/09/25/Spring-basic-04/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-framework/2024/09/24/Spring-basic-03" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/framework/2024/09/24/Spring-basic-03/" data-flip="title">
-      Spring Basic 03 - 생성자 주입을 선택하라
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-24T00:00:00+09:00">24 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/framework/" data-flip="title">Framework</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="불변">불변</h2>
-
-
-  <p class="read-more"><a class="heading" href="/framework/2024/09/24/Spring-basic-03/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-life/2024/09/23/daily-02" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/life/2024/09/23/daily-02/" data-flip="title">
-      KPT 회고의 시작
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-23T00:00:00+09:00">23 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/life/" data-flip="title">Life</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/daily-daily/" data-flip="title">Daily</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="글을-시작하기에-앞서-회고를-시작하게-된-이유">글을 시작하기에 앞서 회고를 시작하게 된 이유</h2>
-
-
-  <p class="read-more"><a class="heading" href="/life/2024/09/23/daily-02/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-devops/2024/09/22/Kubernetes-basic-02" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/devops/2024/09/22/Kubernetes-basic-02/" data-flip="title">
-      쉽게 배우는 쿠버네티스 - 02
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-22T00:00:00+09:00">22 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/devops/" data-flip="title">Devops</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/devops-k8s/" data-flip="title">Kubernetes</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="k8s-master">K8s Master</h2>
-
-
-  <p class="read-more"><a class="heading" href="/devops/2024/09/22/Kubernetes-basic-02/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-devops/2024/09/22/Kubernetes-basic-01" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/devops/2024/09/22/Kubernetes-basic-01/" data-flip="title">
-      쉽게 배우는 쿠버네티스 - 01
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-22T00:00:00+09:00">22 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/devops/" data-flip="title">Devops</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/devops-k8s/" data-flip="title">Kubernetes</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="학습의-계기">학습의 계기</h2>
-
-
-  <p class="read-more"><a class="heading" href="/devops/2024/09/22/Kubernetes-basic-01/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/22/Java-Adv-04" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/22/Java-Adv-04/" data-flip="title">
-      Java Adv - Thread 4
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-22T00:00:00+09:00">22 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="join">Join</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/22/Java-Adv-04/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-
-<h2 class="sr-only">Pagination</h2>
-<nav class="pagination heading" role="navigation">
-  <ul>
-    <li class="pagination-item older" >
-      
-        <a rel="next" href="/page-4/">Older</a>
-      
-    </li>
-    <li class="pagination-item newer" >
-      
-        <a rel="prev" href="/page-2/">Newer</a>
-      
-    </li>
   </ul>
-</nav>
+</aside>
+  <aside class="comments" role="complementary">
+  <h2>Comments</h2>
+  <hr/>
 
-  <footer>
+  <script src="https://utteranc.es/client.js"
+          repo="taewoocode/taewoocode.github.io"
+          issue-term="title"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+</aside>
+
+
+       <footer>
   <hr/>
   
     <p>© 2022. by taewoo</p>

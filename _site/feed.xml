@@ -6,16 +6,82 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 08 Oct 2024 03:55:34 +0900</pubDate>
-    <lastBuildDate>Tue, 08 Oct 2024 03:55:34 +0900</lastBuildDate>
+    <pubDate>Wed, 09 Oct 2024 18:37:24 +0900</pubDate>
+    <lastBuildDate>Wed, 09 Oct 2024 18:37:24 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
+    
+      <item>
+        <title>Spring JDBC 03 - JDBC DrivenManager</title>
+        <description>&lt;h2 id=&quot;drivenmanager&quot;&gt;DrivenManager?&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;DrivenManger는 JDBC 드라이버를 통하여 커넥션을 만드는 클래스이다.
+    &lt;ul&gt;
+      &lt;li&gt;쉽게 말하면 그냥 JDBC에서 커넥션을 위한 객체이다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Class.forName()으로 특정 클래스를 로딩하면 자동으로 객체가 생성되고 DrivenManager에 등록된다.&lt;/li&gt;
+  &lt;li&gt;드라이버 클래스를 찾지 못한경우 ClassNotFoundException을 발생시키므로 반드시 예외처리를 해야한다.&lt;/li&gt;
+  &lt;li&gt;자바는 이렇게 표준 인터페이스를 정의해두었고 개발자는 이 표준 인터페이스만 사용해서 개발을 하면 된다.&lt;/li&gt;
+  &lt;li&gt;이것을&lt;strong&gt;JDBC 드라이버&lt;/strong&gt;라고 한다. MySQL에 접근할 수 있는 것은 MySQL JDBC 드라이버라고 하고, Oracle DB에 접근할 수 있는 것은 Oracle JDBC 드라이버라고 한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;공통화에-한계&quot;&gt;공통화에 한계&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;JDBC의 등장으로 많은 것들이 편리해졌지만  각각의 데이터베이스마다 SQL, 데이터타입 등의 일부 사용법이 다르다.&lt;/li&gt;
+  &lt;li&gt;ANSI SQL 표준이라는 것이 있긴 하지만.. 하지만 일반적인 부분만 공통화했어서 한계가 있다. 그래서 데이터베이스를 변경하면 JDBC 코드는 변경하지 않아도 되지만 SQL은 해당 데이터베이스에 맞도록 변경해야 한다.
+    &lt;ul&gt;
+      &lt;li&gt;이 부분들을 또 공통화 시키기 위해서 JPA가 등장했다고 생각하면 된다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;drivenmanagerdatasource&quot;&gt;DrivenManagerDataSource&lt;/h2&gt;
+
+&lt;p&gt;대부분의 커넥션 풀은 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DataSource&lt;/code&gt; 인터페이스를 이미 구현해두었다. 따라서 개발자는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DBCP2 커넥션 풀&lt;/code&gt; ,
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;HikariCP 커넥션 풀&lt;/code&gt; 의 코드를 직접 의존하는 것이 아니라 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DataSource&lt;/code&gt; 인터페이스에만 의존하도록 애플리
+케이션 로직을 작성하면 된다. 커넥션 풀 구현 기술을 변경하고 싶으면 해당 구현체로 갈아끼우기만 하면 된다.
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DriverManager&lt;/code&gt; 는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DataSource&lt;/code&gt; 인터페이스를 사용하지 않는다. 따라서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DriverManager&lt;/code&gt; 는 직접 사용해야 한다. 
+따라서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DriverManager&lt;/code&gt; 를 사용하다가 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DataSource&lt;/code&gt; 기반의 커넥션 풀을 사용하도록 변경하면 관련
+코드를 다 고쳐야 한다. 이런 문제를 해결하기 위해 스프링은 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DriverManager&lt;/code&gt;도&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DataSource&lt;/code&gt; 를 통해서 사용할 수 있도록 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DriverManagerDataSource&lt;/code&gt; 라는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DataSource&lt;/code&gt; 를 구현한 클래스를 제공한다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;683&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/8f5ed795-6e22-4360-8b7a-1e995d0b0a26&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DriverManager&lt;/code&gt; 는 커넥션을 획득할 때 마다 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;URL&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;USERNAME&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PASSWORD&lt;/code&gt; 같은 파라미터를 계속 전달해야한다. 반면에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DataSource&lt;/code&gt; 를 사용하는 방식은 처음 객체를 생성할 때만 필요한 파리미터를 넘겨두고, 커넥션을 획득할 때는 단순히 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dataSource.getConnection()&lt;/code&gt; 만 호출하면 된다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;작은-단위로-분리&quot;&gt;작은 단위로 분리&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;설정과 사용이라는 관점으로 분리하는 것을 목표로 한다.&lt;/li&gt;
+  &lt;li&gt;DataSource는 설정이라는 역할로  DataSource 를 만들어 두는 것을 말한다 (URL, USERNAME, PASSWORD와 같은 정보들을 말한다.&lt;/li&gt;
+  &lt;li&gt;설정은 신경쓰지 않고, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DataSource&lt;/code&gt; 의 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;getConnection()&lt;/code&gt; 만 호출해서 사용하면 된다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;김영한님의 스프링 강의 정리&lt;/p&gt;
+</description>
+        <pubDate>Mon, 30 Sep 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/framework/2024/09/30/Spring-Data-jdbc-03/</link>
+        <guid isPermaLink="true">http://localhost:4000/framework/2024/09/30/Spring-Data-jdbc-03/</guid>
+        
+        <category>jpa</category>
+        
+        
+        <category>framework</category>
+        
+      </item>
     
       <item>
         <title>DFS - Depth First Search</title>
         <description>&lt;h2 id=&quot;깊이-우선-탐색depth-first-search&quot;&gt;깊이 우선 탐색(Depth First Search)&lt;/h2&gt;
 
-&lt;p&gt;DFS란 말 그대로 깊이를 우선적으로 탐색하는 방법이다. 좀 더 쉽게 말하면, 갈림길(분기점)이 있다면 한방향으로 끝까지 간 후에 답을 확인하는 과정을 반복한다. 따라서 재귀함수를 기본적으로 이해를 해야한다.
-다음 코드를 통해 알아보자.&lt;/p&gt;
+&lt;p&gt;DFS란 말 그대로 깊이를 우선적으로 탐색하는 방법이다. 좀 더 쉽게 말하면, 갈림길(분기점)이 있다면 한방향으로 끝까지 간 후에 답을 확인하는 과정을 반복한다. 따라서 재귀함수를 기본적으로 이해를 해야한다.&lt;/p&gt;
+
+&lt;h2 id=&quot;코드&quot;&gt;코드&lt;/h2&gt;
 
 &lt;div class=&quot;language-cpp highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#include&lt;/span&gt;&lt;span class=&quot;cpf&quot;&gt;&amp;lt;bits/stdc++.h&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
 &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;namespace&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
@@ -80,7 +146,7 @@ ex) f(1) → f(2) → f(3)으로 호출을 했다면 f(3) → f(2) → f(1) 순�
 
 &lt;p&gt;문제: 12100원을 지불하기 위한 최적의 화폐 사용 방법을 찾기&lt;/p&gt;
 
-&lt;h2 id=&quot;코드-구현&quot;&gt;코드 구현&lt;/h2&gt;
+&lt;h2 id=&quot;코드&quot;&gt;코드&lt;/h2&gt;
 
 &lt;div class=&quot;language-cpp highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#include&lt;/span&gt;&lt;span class=&quot;cpf&quot;&gt;&amp;lt;bits/stdc++.h&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
 &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;namespace&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
@@ -2836,119 +2902,6 @@ s에서 분리한 문자열을 빼고 남은 부분에 대해서 이 과정을 �
         
         
         <category>cs</category>
-        
-      </item>
-    
-      <item>
-        <title>Spring Basic 02 -싱글톤 패턴 적용해보기-</title>
-        <description>&lt;h2 id=&quot;싱글톤-패턴-만들어-보기&quot;&gt;싱글톤 패턴 만들어 보기&lt;/h2&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;hello.core.singleton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SingletonService&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SingletonService&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;instance&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SingletonService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SingletonService&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getInstance&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;instance&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;c1&quot;&gt;//private는 자기자신을 호출한다.&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;SingletonService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;logic&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;싱글톤 객체로직을 호출&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;&lt;img width=&quot;697&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/9eb1d652-95d3-4b14-8975-d54280ec84a3&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;670&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/337ccce6-ed94-44a8-9b9c-f0ce4019db6d&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;596&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/01ff653e-eb25-4398-80fe-74624cec0b16&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;싱글톤으로 구현을하면 클라이언트측에서 요청이 올 때마다 객체를 새로 생성하는 것이 아니라 기존에 만들어둔 객체를 공유해서 효율적으로 사용할 수 있다.&lt;/li&gt;
-  &lt;li&gt;하지만 문제가 많다
-    &lt;ul&gt;
-      &lt;li&gt;안티패턴&lt;/li&gt;
-      &lt;li&gt;싱글톤 패턴을 구현하는 코드 자체가 많이 들어간다.&lt;/li&gt;
-      &lt;li&gt;의존관계상 클라이언트가 구체 클래스에 의존한다.
-        &lt;ul&gt;
-          &lt;li&gt;DIP를 위반하게 된다. → 여기서 또 DIP가 뭔지 알아야 한다.&lt;/li&gt;
-          &lt;li&gt;테스트하기가 어렵다.&lt;/li&gt;
-          &lt;li&gt;내부 속성을 변경하거나 초기화 하기 어렵다.&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;싱글톤-컨테이너&quot;&gt;싱글톤 컨테이너&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;스프링 컨테이너는 싱글톤 패턴의 문제점을 해결하면서, 객체 인스턴스를 싱글톤(1개만 생성)으로 관리한다.&lt;/li&gt;
-  &lt;li&gt;지금까지 우리가 학습한 스프링 빈이 바로 싱글톤으로 관리된다.&lt;/li&gt;
-  &lt;li&gt;스프링 컨테이너는 싱글톤 패턴을 적용하지 않아도, 객체 인스턴스를 관리한다.&lt;/li&gt;
-  &lt;li&gt;스프링 컨테이너는 싱글톤 컨테이너 역할을 한다. 이렇게 싱글톤 객체를 생성하고 관리하는 기능을 싱글톤 레지스트리라고 한다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Test&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@DisplayName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;스프링 컨테이너와 싱글톤&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;springContainer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;//        AppConfig appConfig = new AppConfig();&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;AnnotationConfigApplicationContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ac&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AnnotationConfigApplicationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AppConfig&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;MemberService&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;memberService1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ac&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;memberService&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MemberService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;MemberService&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;memberService2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ac&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;memberService&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MemberService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-        &lt;span class=&quot;c1&quot;&gt;//참조값이 다른 것을 확인&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;memberService1 = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;memberService1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;memberService2 = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;memberService2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-        &lt;span class=&quot;n&quot;&gt;assertThat&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;memberService1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isSameAs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;memberService2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;스프링 컨테이너 덕분에 고객의 요청이 올 때 마다 객체를 생성하는 것이 아니라 이미 만들어진 객체를 공유해서 효율적으로 사용할 수 있다.&lt;/li&gt;
-  &lt;li&gt;스프링의 기본 빈 등록 방식은 싱글톤이지만, 싱글톤 방식만 지원하는 것은 아니다. 요청할 때 마다 새로운 객체를 생성해서 반환하는 기능도 제공한다.&lt;/li&gt;
-  &lt;li&gt;싱글톤 패턴이든, 스프링 같은 컨테이너든 객체 인스턴스를 하나만 생성해서 공유하는 싱글톤 방식은 여러 클라이언트가 하나의 같은 객체 인스턴스를 공유하기 때문에 싱글톤 객체는 상태를 유지(stateful)하게 설계하면 안된다.&lt;/li&gt;
-  &lt;li&gt;무상태로 설계를 해야한다. → 가급적이면 값을 수정해서는 안된다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ConfigurationSingletonTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-    &lt;span class=&quot;nd&quot;&gt;@Test&lt;/span&gt;
-    &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;configurationTest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;ApplicationContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ac&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AnnotationConfigApplicationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AppConfig&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;MemberServiceImpl&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;memberService&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ac&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;memberService&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MemberServiceImpl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;OrderServiceImpl&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;orderService&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ac&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;orderService&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;OrderServiceImpl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;MemberRepository&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;memberRepository&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ac&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;memberRepository&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MemberRepository&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-        &lt;span class=&quot;nc&quot;&gt;MemberRepository&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;memberRepository1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;memberService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getMemberRepository&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;MemberRepository&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;memberRepository2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;orderService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getMemberRepository&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;memberService -&amp;gt; memberRepository = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;memberRepository1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;orderService -&amp;gt; memberRepository = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;memberRepository2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;memberRepository = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;memberRepository&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;김영한님의 스프링 강의 + 나의 뇌&lt;/p&gt;
-</description>
-        <pubDate>Wed, 18 Sep 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/framework/2024/09/18/Spring-basic-02/</link>
-        <guid isPermaLink="true">http://localhost:4000/framework/2024/09/18/Spring-basic-02/</guid>
-        
-        <category>spring</category>
-        
-        
-        <category>framework</category>
         
       </item>
     
