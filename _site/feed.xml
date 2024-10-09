@@ -6,18 +6,18 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 09 Oct 2024 19:01:35 +0900</pubDate>
-    <lastBuildDate>Wed, 09 Oct 2024 19:01:35 +0900</lastBuildDate>
+    <pubDate>Wed, 09 Oct 2024 19:04:12 +0900</pubDate>
+    <lastBuildDate>Wed, 09 Oct 2024 19:04:12 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
         <title>Spring JDBC 03 - JDBC ConnectionPool</title>
         <description>&lt;h2 id=&quot;connectionpool&quot;&gt;ConnectionPool&lt;/h2&gt;
 
-&lt;p&gt;&lt;img width=&quot;697&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/2562b7b5-9b2c-43bb-8920-d9fb2ebcc671&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img width=&quot;739&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/02e9d434-8a79-4a77-83df-7b132782a5dc&quot; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;커넥션 풀을 사용해 보기 위해서 Hikari객체를 생성하고 라이브러리에 들어가 보았는데 Hikari는 DataSource를 구현하고 있는 구현체ㅎ였다.&lt;/li&gt;
+  &lt;li&gt;커넥션 풀을 사용해 보기 위해서 Hikari객체를 생성하고 라이브러리에 들어가 보았는데 Hikari는 DataSource를 구현하고 있는 구현체였다.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h3 id=&quot;커넥션-풀링-hikariproxyconnectionproxyjdbcconnectiontarget&quot;&gt;커넥션 풀링: HikariProxyConnection(Proxy)JdbcConnection(Target)&lt;/h3&gt;

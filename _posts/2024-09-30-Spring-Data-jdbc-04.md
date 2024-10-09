@@ -9,7 +9,8 @@ comments: false
 
 ## ConnectionPool
 
-<img width="697" alt="image" src="https://github.com/user-attachments/assets/2562b7b5-9b2c-43bb-8920-d9fb2ebcc671">
+<img width="739" alt="image" src="https://github.com/user-attachments/assets/02e9d434-8a79-4a77-83df-7b132782a5dc">
+
 
 - 커넥션 풀을 사용해 보기 위해서 Hikari객체를 생성하고 라이브러리에 들어가 보았는데 Hikari는 DataSource를 구현하고 있는 구현체였다.
 
