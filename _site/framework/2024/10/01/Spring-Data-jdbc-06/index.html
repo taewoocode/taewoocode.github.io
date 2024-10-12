@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Spring JDBC 06 - JDBC Transaction 02" />
+<meta property="og:title" content="Spring JDBC 06 - JDBC Transaction commit, rollback" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,7 +52,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Spring JDBC 06 - JDBC Transaction 02 &middot; 일벌리는 개발자</title>
+<title>Spring JDBC 06 - JDBC Transaction commit, rollback &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
@@ -85,6 +85,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 
 <link rel="prev" href="http://localhost:4000/framework/2024/09/30/Spring-Data-jdbc-05/" />
  
+<link rel="next" href="http://localhost:4000/framework/2024/10/02/Spring-Data-jdbc-07/" />
+
 
 <link
         rel="apple-touch-icon"
@@ -185,7 +187,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
   <header>
     <h1 class="post-title">
       
-      Spring JDBC 06 - JDBC Transaction 02
+      Spring JDBC 06 - JDBC Transaction commit, rollback
       
     </h1>
 
@@ -362,9 +364,11 @@ on <a href="/tag/framework-spring-data-jpa/" data-flip="title">Spring Data JPA</
         
 </code></pre></div></div>
 
+<h2 id="정리">정리</h2>
+
 <ul>
   <li>수동 커밋 모드에서는 명시적으로 트랜잭션의 시작과 끝을 관리할 수 있어 데이터의 일관성을 유지할 수 있다.</li>
-  <li><strong>트랜잭션의 원자성</strong>: 트랜잭션은 일련의 작업이 모두 성공적으로 완료되어야 하며, 그렇지 않을 경우 모든 작업이 취소되어야 한다. 이는 수동 커밋 모드에서 효과적으로 수행할 수 있다.</li>
+  <li><strong>트랜잭션의 원자성</strong>: 트랜잭션은 일련의 작업이 모두 성공적으로 완료되어야 하며, 그렇지 않을 경우 모든 작업이 취소되어야 한다.</li>
   <li><strong>세션 유지</strong>: 자동 커밋 모드나 수동 커밋 모드는 세션이 유지되는 동안 계속해서 적용된다. 따라서, 필요에 따라 언제든지 모드를 변경할 수 있다.</li>
   <li><strong>에러 처리</strong>: 수동 커밋 모드에서는 에러가 발생했을 때 <code class="language-plaintext highlighter-rouge">rollback</code>을 사용하여 이전 상태로 되돌릴 수 있다. 이는 데이터 무결성을 유지하는 데 중요한 역할을 한다.</li>
   <li><strong>기본 설정</strong>: 대부분의 데이터베이스는 기본적으로 자동 커밋 모드로 설정되어 있으므로, 트랜잭션을 제대로 사용하기 위해서는 수동 커밋 모드로 설정하는 것이 필요하다.</li>
@@ -386,7 +390,7 @@ on <a href="/tag/framework-spring-data-jpa/" data-flip="title">Spring Data JPA</
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=Spring JDBC 06 - JDBC Transaction 02&amp;url=http://localhost:4000/framework/2024/10/01/Spring-Data-jdbc-06/"
+    <a href="http://twitter.com/share?text=Spring JDBC 06 - JDBC Transaction commit, rollback&amp;url=http://localhost:4000/framework/2024/10/01/Spring-Data-jdbc-06/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
@@ -411,6 +415,22 @@ on <a href="/tag/framework-spring-data-jpa/" data-flip="title">Spring Data JPA</
     
       
       
+      
+        
+        
+          
+
+
+<li class="h4">
+  <a href="/framework/2024/10/02/Spring-Data-jdbc-07/" data-flip="title">
+    <span>Spring JDBC 07 - Transaction 추상화</span>
+  </a>
+  <small><time datetime="2024-10-02T00:00:00+09:00">
+    02 Oct 2024
+  </time></small>
+</li>
+
+        
       
         
           
@@ -439,22 +459,6 @@ on <a href="/tag/framework-spring-data-jpa/" data-flip="title">Spring Data JPA</
 <li class="h4">
   <a href="/framework/2024/09/30/Spring-Data-jdbc-04/" data-flip="title">
     <span>Spring JDBC 04 - JDBC ConnectionPool</span>
-  </a>
-  <small><time datetime="2024-09-30T00:00:00+09:00">
-    30 Sep 2024
-  </time></small>
-</li>
-
-        
-      
-        
-        
-          
-
-
-<li class="h4">
-  <a href="/framework/2024/09/30/Spring-Data-jdbc-03/" data-flip="title">
-    <span>Spring JDBC 03 - JDBC DrivenManager</span>
   </a>
   <small><time datetime="2024-09-30T00:00:00+09:00">
     30 Sep 2024

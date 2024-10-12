@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Spring Basic 03 - 생성자 주입을 선택하라" />
+<meta property="og:title" content="Spring JDBC 07 - Transaction 추상화" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,17 +52,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Spring Basic 03 - 생성자 주입을 선택하라 &middot; 일벌리는 개발자</title>
+<title>Spring JDBC 07 - Transaction 추상화 &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="불변
+        content="트랜잭션 추상화
 
 "
 />
 <meta
         property="og:description"
-        content="불변
+        content="트랜잭션 추상화
 
 "
 />
@@ -72,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/framework/2024/09/24/Spring-basic-03/" />
-<meta property="og:url" content="http://localhost:4000/framework/2024/09/24/Spring-basic-03/" />
+<link rel="canonical" href="http://localhost:4000/framework/2024/10/02/Spring-Data-jdbc-07/" />
+<meta property="og:url" content="http://localhost:4000/framework/2024/10/02/Spring-Data-jdbc-07/" />
 
 <link
         rel="alternate"
@@ -83,10 +83,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/life/2024/09/23/daily-02/" />
+<link rel="prev" href="http://localhost:4000/framework/2024/10/01/Spring-Data-jdbc-06/" />
  
-<link rel="next" href="http://localhost:4000/framework/2024/09/25/Spring-basic-04/" />
-
 
 <link
         rel="apple-touch-icon"
@@ -183,16 +181,16 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-framework/2024/09/24/Spring-basic-03" class="post" role="article">
+<article id="post-framework/2024/10/02/Spring-Data-jdbc-07" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      Spring Basic 03 - 생성자 주입을 선택하라
+      Spring JDBC 07 - Transaction 추상화
       
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-09-24T00:00:00+09:00">24 Sep 2024</time>
+      <time datetime="2024-10-02T00:00:00+09:00">02 Oct 2024</time>
       
 
 
@@ -215,7 +213,7 @@ in <a href="/category/framework/" data-flip="title">Framework</a>
 
 
 
-on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
+on <a href="/tag/framework-spring-data-jpa/" data-flip="title">Spring Data JPA</a>
 
     </p>
 
@@ -267,63 +265,155 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
     </style>
 
     <!--<br />-->
-    <h2 id="불변">불변</h2>
+    <h2 id="트랜잭션-추상화">트랜잭션 추상화</h2>
+
+<p>트랜잭션 추상화의 개념은 서비스 계층이 특정 트랜잭션 기술에 의존하지 않도록 만들기 위한 것이다. 이를 통해 JDBC나 JPA 같은 기술을 변경할 때, 비즈니스 로직을 담고 있는 서비스 계층의 코드가 변경되지 않도록 설계한다. 이 방식은 OCP(Open-Closed Principle, 개방-폐쇄 원칙)에도 부합하며, 코드의 유연성과 확장성을 높인다.</p>
 
 <ul>
-  <li>대부분의 의존관계 주입은 한번 일어나면 애플리케이션 종료시점까지 의존관계를 변경할 일이 없다.</li>
-  <li>의존관계는 애플리케이션 종료 전까지 변하면 안된다.</li>
-  <li>수정자 주입을 사용하면 get, set 메서드를 public으로 열어두어야 한다.</li>
-  <li>누군가 실수로 변경할 수도 있고, 변경하면 안되는 메서드를 열어두는 것은 좋은 설계 방법이 아니다.</li>
-  <li>생성자 주입은 객체를 생성할 때 딱 1번만 호출이 되므로 이후에 호출될 일이 거의 없다. 따라서 불변하게 설계할 수도 있다.</li>
+  <li><strong>트랜잭션이란?</strong>
+트랜잭션은 데이터베이스에 대한 하나의 논리적 작업 단위로, 여러 작업을 하나의 일관된 흐름으로 처리하는 방법이다. 트랜잭션은 크게 세 가지 동작으로 요약된다.
+    <ul>
+      <li><strong>begin()</strong>: 트랜잭션 시작</li>
+      <li><strong>commit()</strong>: 모든 작업이 성공적으로 완료되었을 때 변경 내용을 확정</li>
+      <li><strong>rollback()</strong>: 작업 중 오류가 발생했을 때 모든 작업을 취소하고 상태를 원래대로 복구</li>
+    </ul>
+  </li>
+  <li><strong>트랜잭션 추상화의 필요성</strong>
+일반적으로 JDBC를 사용할 때는 해당 기술에 맞는 트랜잭션 제어 코드를 서비스 계층에 직접 넣어야 했다. 하지만 JPA 같은 다른 트랜잭션 기술로 전환할 경우, 해당 트랜잭션 제어 코드를 다시 수정해야 하는 문제가 발생한다. 이를 해결하기 위해 <code class="language-plaintext highlighter-rouge">TxManager</code> 같은 트랜잭션 제어 인터페이스를 만들어 서비스 계층이 특정 기술에 의존하지 않고, 트랜잭션 처리만을 추상적으로 다루게 한다.</li>
+  <li>
+    <p><strong>TxManager 인터페이스</strong>:
+<code class="language-plaintext highlighter-rouge">TxManager</code>는 트랜잭션을 추상화한 인터페이스다. 이 인터페이스는 트랜잭션의 시작, 커밋, 롤백과 같은 주요 메서드들을 제공한다.</p>
+
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    
+  <span class="kd">public</span> <span class="nc">Interface</span> <span class="nc">TxManager</span> <span class="o">{</span>
+     <span class="kt">void</span> <span class="nf">begin</span><span class="o">();</span>
+     <span class="kt">void</span> <span class="nf">commit</span><span class="o">();</span>
+     <span class="kt">void</span> <span class="nf">rollback</span><span class="o">();</span>
+  <span class="o">}</span>
+</code></pre></div>    </div>
+
+    <p>이를 구현하는 클래스들은 각 기술에 맞는 트랜잭션 처리를 담당한다.</p>
+  </li>
+  <li><strong>구체적 구현체: JdbcTxManager &amp; JpaTxManager</strong>:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">JdbcTxManager</code>: JDBC 기반의 트랜잭션 처리 구현. JDBC 환경에서 트랜잭션을 시작하고, 커밋 또는 롤백하는 로직이 포함된다.</li>
+      <li><code class="language-plaintext highlighter-rouge">JpaTxManager</code>: JPA 기반의 트랜잭션 처리 구현. JPA 환경에서 트랜잭션을 관리하는 방식으로 구현된다.</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>의존성 주입(DI)</strong>:
+DI(Dependency Injection)를 사용하여 서비스 계층이 어떤 구현체를 사용할지 주입받게 한다. 이렇게 하면 서비스는 구체적인 트랜잭션 기술에 의존하지 않고, 필요에 따라 트랜잭션 관리 기술을 쉽게 변경할 수 있다.</p>
+
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    
+  <span class="kd">public</span> <span class="kd">class</span> <span class="nc">SomeService</span> <span class="o">{</span>
+      <span class="kd">private</span> <span class="kd">final</span> <span class="nc">TxManager</span> <span class="n">txManager</span><span class="o">;</span>
+    
+      <span class="kd">public</span> <span class="nf">SomeService</span><span class="o">(</span><span class="nc">TxManager</span> <span class="n">txManager</span><span class="o">)</span> <span class="o">{</span>
+          <span class="k">this</span><span class="o">.</span><span class="na">txManager</span> <span class="o">=</span> <span class="n">txManager</span><span class="o">;</span>
+      <span class="o">}</span>
+    
+      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">executeBusinessLogic</span><span class="o">()</span> <span class="o">{</span>
+          <span class="n">txManager</span><span class="o">.</span><span class="na">begin</span><span class="o">();</span>
+          <span class="k">try</span> <span class="o">{</span>
+              <span class="c1">// 비즈니스 로직 수행</span>
+              <span class="n">txManager</span><span class="o">.</span><span class="na">commit</span><span class="o">();</span>
+          <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+              <span class="n">txManager</span><span class="o">.</span><span class="na">rollback</span><span class="o">();</span>
+              <span class="k">throw</span> <span class="n">e</span><span class="o">;</span>
+          <span class="o">}</span>
+      <span class="o">}</span>
+  <span class="o">}</span>
+</code></pre></div>    </div>
+
+    <p>여기서 트랜잭션 관리 객체가 <code class="language-plaintext highlighter-rouge">TxManager</code> 인터페이스에 의존하고, 구체적인 구현체(JDBC 또는 JPA 트랜잭션 관리자)는 외부에서 주입된다.</p>
+  </li>
 </ul>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Test</span>
-    <span class="kt">void</span> <span class="nf">createOrder2</span><span class="o">()</span> <span class="o">{</span>
-        <span class="nc">OrderServiceImpl</span> <span class="n">orderService</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">OrderServiceImpl</span><span class="o">();</span>
-        <span class="n">orderService</span><span class="o">.</span><span class="na">createOrder</span><span class="o">(</span> <span class="mi">1L</span><span class="o">,</span> <span class="s">"itemA"</span><span class="o">,</span> <span class="mi">10000</span> <span class="o">);</span>
+<ol>
+  <li><strong>OCP 원칙 준수</strong>:
+OCP 원칙은 ‘확장에는 열려 있으나 수정에는 닫혀 있어야 한다’는 원칙이다. 서비스가 <code class="language-plaintext highlighter-rouge">TxManager</code> 인터페이스에 의존하기 때문에, 새로운 트랜잭션 관리 기술이 추가되더라도 서비스 코드는 수정하지 않고 새로운 구현체를 추가하기만 하면 된다. 이로써 서비스 계층의 코드가 변경되지 않고도 트랜잭션 기술을 유연하게 변경할 수 있다.</li>
+</ol>
 
-    <span class="o">}</span>
-</code></pre></div></div>
-
-<p><img width="697" alt="image" src="https://github.com/user-attachments/assets/f893f6f4-7245-4ca1-a458-9dc8fb34be5a" /></p>
-
-<p>그런데 막상 실행 결과는 NPE(Null Point Exception)이 발생하는데, memberRepository, discountPolicy 모두의존관계 주입이 누락되었기 때문이다.
-생성자 주입을 사용하면 다음처럼 주입 데이터를 누락 했을 때 <strong>**컴파일 오류</strong>**가 발생한다.
-그리고 IDE에서 바로 어떤 값을 필수로 주입해야 하는지 알 수 있다.</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Component</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">OrderServiceImpl</span> <span class="kd">implements</span> <span class="nc">OrderService</span> <span class="o">{</span>
-
-    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">MemberRepository</span> <span class="n">memberRepository</span><span class="o">;</span> <span class="c1">//회원 저장소 역할</span>
-    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">DiscountPolicy</span> <span class="n">discountPolicy</span><span class="o">;</span> <span class="c1">//인터페이스만 의존하고 있다.-&gt; 하지만 문제가 있다. -&gt; NullPointException</span>
-	  
-	  <span class="c1">//생성자 주입</span>
-    <span class="kd">public</span> <span class="nf">OrderServiceImpl</span><span class="o">(</span><span class="nc">MemberRepository</span> <span class="n">memberRepository</span><span class="o">,</span> <span class="nc">DiscountPolicy</span> <span class="n">discountPolicy</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">memberRepository</span> <span class="o">=</span> <span class="n">memberRepository</span><span class="o">;</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">discountPolicy</span> <span class="o">=</span> <span class="n">discountPolicy</span><span class="o">;</span>
-    <span class="o">}</span>
-</code></pre></div></div>
+<h3 id="장점">장점:</h3>
 
 <ul>
-  <li>생성자 주입을 선택하면 fianl 키워드를 넣을 수 있다.</li>
-  <li>실수로 생성자를 만드는데 코드를 누락하는 경우 컴파일 에러를 통해서 문제점을 바로 잡을 수 있다.
+  <li><strong>기술 변화의 용이성</strong>: 서비스 계층의 코드를 변경하지 않고도 트랜잭션 기술을 교체할 수 있다.</li>
+  <li><strong>유지보수성 향상</strong>: 코드의 중복을 줄이고, 특정 기술에 종속적인 코드를 제거함으로써 유지보수가 쉬워진다.</li>
+  <li><strong>확장성</strong>: 추가적인 트랜잭션 관리 기술(JDBC 외 다른 ORM 등)을 사용할 때도 코드 수정 없이 새로운 구현체를 추가하는 방식으로 확장할 수 있다.</li>
+</ul>
+
+<p>이와 같은 트랜잭션 추상화를 통해, 다양한 트랜잭션 관리 기술을 유연하게 사용할 수 있는 아키텍처를 만들 수 있다.</p>
+
+<h2 id="외부에서-구체적인-구현체를-결정하는-방법">외부에서 구체적인 구현체를 결정하는 방법</h2>
+
+<p>서비스 코드에서 <code class="language-plaintext highlighter-rouge">TxManager</code>의 구현체가 <code class="language-plaintext highlighter-rouge">JdbcTxManager</code>인지 <code class="language-plaintext highlighter-rouge">JpaTxManager</code>인지 신경 쓰지 않아도 되는 이유는, <strong>외부에서</strong> 그 구체적인 구현체가 주입되기 때문이다.</p>
+
+<ul>
+  <li><strong>Spring 같은 DI 컨테이너를 사용</strong>
     <ul>
-      <li>불변과 누락을 방지한다.</li>
+      <li><code class="language-plaintext highlighter-rouge">SomeService</code>는 <strong>생성자 주입</strong>을 통해 <code class="language-plaintext highlighter-rouge">TxManager</code> 인터페이스를 받습니다. 이때 실제로는 외부에서 <code class="language-plaintext highlighter-rouge">TxManager</code>의 구현체(<code class="language-plaintext highlighter-rouge">JdbcTxManager</code> 또는 <code class="language-plaintext highlighter-rouge">JpaTxManager</code>)가 주입된다.</li>
+      <li>주입되는 구현체는 외부 설정, 환경에 따라 다르게 결정됩니다. 개발자가 <code class="language-plaintext highlighter-rouge">SomeService</code> 클래스 내에서 직접적으로 구현체를 바꿀 필요가 없죠.</li>
     </ul>
   </li>
 </ul>
 
-<h2 id="정리">정리</h2>
+<h3 id="spring을-사용하는-경우-di-컨테이너가-자동으로-주입할-트랜잭션-관리자를-결정">Spring을 사용하는 경우 DI 컨테이너가 자동으로 주입할 트랜잭션 관리자를 결정</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Component</span>
+<span class="nd">@Qualifier</span><span class="o">(</span><span class="s">"jdbcTxManager"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">JdbcTxManager</span> <span class="kd">implements</span> <span class="nc">TxManager</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">begin</span><span class="o">()</span> <span class="o">{</span> <span class="cm">/* JDBC 트랜잭션 시작 */</span> <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">commit</span><span class="o">()</span> <span class="o">{</span> <span class="cm">/* JDBC 커밋 */</span> <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">rollback</span><span class="o">()</span> <span class="o">{</span> <span class="cm">/* JDBC 롤백 */</span> <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="nd">@Component</span>
+<span class="nd">@Qualifier</span><span class="o">(</span><span class="s">"jpaTxManager"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">JpaTxManager</span> <span class="kd">implements</span> <span class="nc">TxManager</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">begin</span><span class="o">()</span> <span class="o">{</span> <span class="cm">/* JPA 트랜잭션 시작 */</span> <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">commit</span><span class="o">()</span> <span class="o">{</span> <span class="cm">/* JPA 커밋 */</span> <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">rollback</span><span class="o">()</span> <span class="o">{</span> <span class="cm">/* JPA 롤백 */</span> <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Service</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SomeService</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">TxManager</span> <span class="n">txManager</span><span class="o">;</span>
+
+    <span class="nd">@Autowired</span>
+    <span class="kd">public</span> <span class="nf">SomeService</span><span class="o">(</span><span class="nd">@Qualifier</span><span class="o">(</span><span class="s">"jdbcTxManager"</span><span class="o">)</span> <span class="nc">TxManager</span> <span class="n">txManager</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">txManager</span> <span class="o">=</span> <span class="n">txManager</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">executeBusinessLogic</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">txManager</span><span class="o">.</span><span class="na">begin</span><span class="o">();</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="c1">// 비즈니스 로직 수행</span>
+            <span class="n">txManager</span><span class="o">.</span><span class="na">commit</span><span class="o">();</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">txManager</span><span class="o">.</span><span class="na">rollback</span><span class="o">();</span>
+            <span class="k">throw</span> <span class="n">e</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<p>Service 클래스는 Spring이 TxManager의 구현체 중 하나를 알아서 주입해 주기 때문에 구체적인 트랜잭션 기술에 의존하지 않는다.</p>
+
+<h3 id="di를-통해-구현체를-주입하는-이유">DI를 통해 구현체를 주입하는 이유</h3>
 
 <ul>
-  <li>생성자 주입 방식을 선택하는 이유는 여러가지가 있지만, 프레임워크에 의존하지 않고, 순수한 자바 언어의 특징을 잘 살리는 방법이다.</li>
-  <li>기본으로 생성자 주입을 사용하고, 필수 값이 아닌 경우에는 수정자 주입 방식을 옵션으로 부여하면 된다. 생성자 주입과 수정자 주입을 동시에 할 수 있다.</li>
-  <li>항상 생성자 주입을 선택하라, 그리고 가끔 옵션이 필요하면 수정자 주입을 선택하라, 필드 주입은 사용하지 않는게 좋다.</li>
+  <li><strong>유연성</strong>: <code class="language-plaintext highlighter-rouge">SomeService</code> 클래스는 트랜잭션 관리가 필요하지만, 그게 JDBC인지 JPA인지는 신경 쓸 필요가 없다. 구체적인 구현은 외부에서 주입되므로, <code class="language-plaintext highlighter-rouge">SomeService</code>는 항상 <code class="language-plaintext highlighter-rouge">TxManager</code> 인터페이스만 사용하고 트랜잭션 기술에 따라 코드 변경을 하지 않아도 된다</li>
+  <li><strong>OCP 원칙 준수</strong>: <code class="language-plaintext highlighter-rouge">SomeService</code>가 특정 트랜잭션 기술에 의존하지 않기 때문에, 코드 수정 없이 트랜잭션 기술을 변경할 수 있다. 이로써 OCP(Open-Closed Principle)를 따르게 됩니다. 새로운 트랜잭션 관리 기술을 추가해도 <code class="language-plaintext highlighter-rouge">SomeService</code>는 수정되지 않는다.</li>
 </ul>
+
+<p>따라서, <strong>외부에서 주입되므로</strong> 실제 코드에서는 <code class="language-plaintext highlighter-rouge">SomeService</code> 내부에서 <code class="language-plaintext highlighter-rouge">JdbcTxManager</code>나 <code class="language-plaintext highlighter-rouge">JpaTxManager</code>를 직접적으로 변경할 필요가 없다. <strong>외부에서 어떤 구현체를 주입할지 결정</strong>하면 되는 것</p>
 
 <h2 id="reference">Reference</h2>
 
-<p>김영한님의 스프링 강의 + 나의 뇌</p>
+<p>김영한님의 스프링 강의 정리</p>
 
     <br />
     <br />
@@ -337,12 +427,12 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=Spring Basic 03 - 생성자 주입을 선택하라&amp;url=http://localhost:4000/framework/2024/09/24/Spring-basic-03/"
+    <a href="http://twitter.com/share?text=Spring JDBC 07 - Transaction 추상화&amp;url=http://localhost:4000/framework/2024/10/02/Spring-Data-jdbc-07/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/framework/2024/09/24/Spring-basic-03/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/framework/2024/10/02/Spring-Data-jdbc-07/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -364,21 +454,8 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
       
       
         
-        
           
-
-
-<li class="h4">
-  <a href="/framework/2024/10/02/Spring-Data-jdbc-07/" data-flip="title">
-    <span>Spring JDBC 07 - Transaction 추상화</span>
-  </a>
-  <small><time datetime="2024-10-02T00:00:00+09:00">
-    02 Oct 2024
-  </time></small>
-</li>
-
-        
-      
+          
         
         
           
@@ -412,6 +489,19 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
         
       
         
+        
+          
+
+
+<li class="h4">
+  <a href="/framework/2024/09/30/Spring-Data-jdbc-04/" data-flip="title">
+    <span>Spring JDBC 04 - JDBC ConnectionPool</span>
+  </a>
+  <small><time datetime="2024-09-30T00:00:00+09:00">
+    30 Sep 2024
+  </time></small>
+</li>
+
         
       
     

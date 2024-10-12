@@ -6,12 +6,175 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 09 Oct 2024 20:34:36 +0900</pubDate>
-    <lastBuildDate>Wed, 09 Oct 2024 20:34:36 +0900</lastBuildDate>
+    <pubDate>Sun, 13 Oct 2024 01:23:35 +0900</pubDate>
+    <lastBuildDate>Sun, 13 Oct 2024 01:23:35 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
-        <title>Spring JDBC 06 - JDBC Transaction 02</title>
+        <title>Spring JDBC 07 - Transaction 추상화</title>
+        <description>&lt;h2 id=&quot;트랜잭션-추상화&quot;&gt;트랜잭션 추상화&lt;/h2&gt;
+
+&lt;p&gt;트랜잭션 추상화의 개념은 서비스 계층이 특정 트랜잭션 기술에 의존하지 않도록 만들기 위한 것이다. 이를 통해 JDBC나 JPA 같은 기술을 변경할 때, 비즈니스 로직을 담고 있는 서비스 계층의 코드가 변경되지 않도록 설계한다. 이 방식은 OCP(Open-Closed Principle, 개방-폐쇄 원칙)에도 부합하며, 코드의 유연성과 확장성을 높인다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;트랜잭션이란?&lt;/strong&gt;
+트랜잭션은 데이터베이스에 대한 하나의 논리적 작업 단위로, 여러 작업을 하나의 일관된 흐름으로 처리하는 방법이다. 트랜잭션은 크게 세 가지 동작으로 요약된다.
+    &lt;ul&gt;
+      &lt;li&gt;&lt;strong&gt;begin()&lt;/strong&gt;: 트랜잭션 시작&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;commit()&lt;/strong&gt;: 모든 작업이 성공적으로 완료되었을 때 변경 내용을 확정&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;rollback()&lt;/strong&gt;: 작업 중 오류가 발생했을 때 모든 작업을 취소하고 상태를 원래대로 복구&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;트랜잭션 추상화의 필요성&lt;/strong&gt;
+일반적으로 JDBC를 사용할 때는 해당 기술에 맞는 트랜잭션 제어 코드를 서비스 계층에 직접 넣어야 했다. 하지만 JPA 같은 다른 트랜잭션 기술로 전환할 경우, 해당 트랜잭션 제어 코드를 다시 수정해야 하는 문제가 발생한다. 이를 해결하기 위해 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TxManager&lt;/code&gt; 같은 트랜잭션 제어 인터페이스를 만들어 서비스 계층이 특정 기술에 의존하지 않고, 트랜잭션 처리만을 추상적으로 다루게 한다.&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;TxManager 인터페이스&lt;/strong&gt;:
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TxManager&lt;/code&gt;는 트랜잭션을 추상화한 인터페이스다. 이 인터페이스는 트랜잭션의 시작, 커밋, 롤백과 같은 주요 메서드들을 제공한다.&lt;/p&gt;
+
+    &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    
+  &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TxManager&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+     &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;begin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+     &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;commit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+     &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;rollback&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+
+    &lt;p&gt;이를 구현하는 클래스들은 각 기술에 맞는 트랜잭션 처리를 담당한다.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;구체적 구현체: JdbcTxManager &amp;amp; JpaTxManager&lt;/strong&gt;:
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;JdbcTxManager&lt;/code&gt;: JDBC 기반의 트랜잭션 처리 구현. JDBC 환경에서 트랜잭션을 시작하고, 커밋 또는 롤백하는 로직이 포함된다.&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;JpaTxManager&lt;/code&gt;: JPA 기반의 트랜잭션 처리 구현. JPA 환경에서 트랜잭션을 관리하는 방식으로 구현된다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;의존성 주입(DI)&lt;/strong&gt;:
+DI(Dependency Injection)를 사용하여 서비스 계층이 어떤 구현체를 사용할지 주입받게 한다. 이렇게 하면 서비스는 구체적인 트랜잭션 기술에 의존하지 않고, 필요에 따라 트랜잭션 관리 기술을 쉽게 변경할 수 있다.&lt;/p&gt;
+
+    &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    
+  &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SomeService&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TxManager&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;txManager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    
+      &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;SomeService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;TxManager&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;txManager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;txManager&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;txManager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    
+      &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;executeBusinessLogic&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;txManager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;begin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+              &lt;span class=&quot;c1&quot;&gt;// 비즈니스 로직 수행&lt;/span&gt;
+              &lt;span class=&quot;n&quot;&gt;txManager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;commit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+          &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+              &lt;span class=&quot;n&quot;&gt;txManager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;rollback&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+              &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+          &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+
+    &lt;p&gt;여기서 트랜잭션 관리 객체가 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TxManager&lt;/code&gt; 인터페이스에 의존하고, 구체적인 구현체(JDBC 또는 JPA 트랜잭션 관리자)는 외부에서 주입된다.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;OCP 원칙 준수&lt;/strong&gt;:
+OCP 원칙은 ‘확장에는 열려 있으나 수정에는 닫혀 있어야 한다’는 원칙이다. 서비스가 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TxManager&lt;/code&gt; 인터페이스에 의존하기 때문에, 새로운 트랜잭션 관리 기술이 추가되더라도 서비스 코드는 수정하지 않고 새로운 구현체를 추가하기만 하면 된다. 이로써 서비스 계층의 코드가 변경되지 않고도 트랜잭션 기술을 유연하게 변경할 수 있다.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;장점&quot;&gt;장점:&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;기술 변화의 용이성&lt;/strong&gt;: 서비스 계층의 코드를 변경하지 않고도 트랜잭션 기술을 교체할 수 있다.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;유지보수성 향상&lt;/strong&gt;: 코드의 중복을 줄이고, 특정 기술에 종속적인 코드를 제거함으로써 유지보수가 쉬워진다.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;확장성&lt;/strong&gt;: 추가적인 트랜잭션 관리 기술(JDBC 외 다른 ORM 등)을 사용할 때도 코드 수정 없이 새로운 구현체를 추가하는 방식으로 확장할 수 있다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;이와 같은 트랜잭션 추상화를 통해, 다양한 트랜잭션 관리 기술을 유연하게 사용할 수 있는 아키텍처를 만들 수 있다.&lt;/p&gt;
+
+&lt;h2 id=&quot;외부에서-구체적인-구현체를-결정하는-방법&quot;&gt;외부에서 구체적인 구현체를 결정하는 방법&lt;/h2&gt;
+
+&lt;p&gt;서비스 코드에서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TxManager&lt;/code&gt;의 구현체가 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;JdbcTxManager&lt;/code&gt;인지 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;JpaTxManager&lt;/code&gt;인지 신경 쓰지 않아도 되는 이유는, &lt;strong&gt;외부에서&lt;/strong&gt; 그 구체적인 구현체가 주입되기 때문이다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Spring 같은 DI 컨테이너를 사용&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SomeService&lt;/code&gt;는 &lt;strong&gt;생성자 주입&lt;/strong&gt;을 통해 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TxManager&lt;/code&gt; 인터페이스를 받습니다. 이때 실제로는 외부에서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TxManager&lt;/code&gt;의 구현체(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;JdbcTxManager&lt;/code&gt; 또는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;JpaTxManager&lt;/code&gt;)가 주입된다.&lt;/li&gt;
+      &lt;li&gt;주입되는 구현체는 외부 설정, 환경에 따라 다르게 결정됩니다. 개발자가 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SomeService&lt;/code&gt; 클래스 내에서 직접적으로 구현체를 바꿀 필요가 없죠.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;spring을-사용하는-경우-di-컨테이너가-자동으로-주입할-트랜잭션-관리자를-결정&quot;&gt;Spring을 사용하는 경우 DI 컨테이너가 자동으로 주입할 트랜잭션 관리자를 결정&lt;/h3&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@Qualifier&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;jdbcTxManager&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;JdbcTxManager&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TxManager&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;begin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;cm&quot;&gt;/* JDBC 트랜잭션 시작 */&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;commit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;cm&quot;&gt;/* JDBC 커밋 */&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;rollback&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;cm&quot;&gt;/* JDBC 롤백 */&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@Qualifier&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;jpaTxManager&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;JpaTxManager&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TxManager&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;begin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;cm&quot;&gt;/* JPA 트랜잭션 시작 */&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;commit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;cm&quot;&gt;/* JPA 커밋 */&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;rollback&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;cm&quot;&gt;/* JPA 롤백 */&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Service&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SomeService&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TxManager&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;txManager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Autowired&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;SomeService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@Qualifier&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;jdbcTxManager&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TxManager&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;txManager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;txManager&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;txManager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;executeBusinessLogic&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;txManager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;begin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;c1&quot;&gt;// 비즈니스 로직 수행&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;txManager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;commit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;txManager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;rollback&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Service 클래스는 Spring이 TxManager의 구현체 중 하나를 알아서 주입해 주기 때문에 구체적인 트랜잭션 기술에 의존하지 않는다.&lt;/p&gt;
+
+&lt;h3 id=&quot;di를-통해-구현체를-주입하는-이유&quot;&gt;DI를 통해 구현체를 주입하는 이유&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;유연성&lt;/strong&gt;: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SomeService&lt;/code&gt; 클래스는 트랜잭션 관리가 필요하지만, 그게 JDBC인지 JPA인지는 신경 쓸 필요가 없다. 구체적인 구현은 외부에서 주입되므로, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SomeService&lt;/code&gt;는 항상 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TxManager&lt;/code&gt; 인터페이스만 사용하고 트랜잭션 기술에 따라 코드 변경을 하지 않아도 된다&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;OCP 원칙 준수&lt;/strong&gt;: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SomeService&lt;/code&gt;가 특정 트랜잭션 기술에 의존하지 않기 때문에, 코드 수정 없이 트랜잭션 기술을 변경할 수 있다. 이로써 OCP(Open-Closed Principle)를 따르게 됩니다. 새로운 트랜잭션 관리 기술을 추가해도 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SomeService&lt;/code&gt;는 수정되지 않는다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;따라서, &lt;strong&gt;외부에서 주입되므로&lt;/strong&gt; 실제 코드에서는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SomeService&lt;/code&gt; 내부에서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;JdbcTxManager&lt;/code&gt;나 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;JpaTxManager&lt;/code&gt;를 직접적으로 변경할 필요가 없다. &lt;strong&gt;외부에서 어떤 구현체를 주입할지 결정&lt;/strong&gt;하면 되는 것&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;김영한님의 스프링 강의 정리&lt;/p&gt;
+</description>
+        <pubDate>Wed, 02 Oct 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/framework/2024/10/02/Spring-Data-jdbc-07/</link>
+        <guid isPermaLink="true">http://localhost:4000/framework/2024/10/02/Spring-Data-jdbc-07/</guid>
+        
+        <category>jpa</category>
+        
+        
+        <category>framework</category>
+        
+      </item>
+    
+      <item>
+        <title>Spring JDBC 06 - JDBC Transaction commit, rollback</title>
         <description>&lt;h2 id=&quot;트랜잭션-사용법&quot;&gt;&lt;strong&gt;트랜잭션&lt;/strong&gt; &lt;strong&gt;사용법&lt;/strong&gt;&lt;/h2&gt;
 
 &lt;p&gt;데이터 변경 쿼리를 실행하고 데이터베이스에 그 결과를 반영하려면 커밋 명령어인 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;commit&lt;/code&gt; 을 호출하고, 결과를 반영하고 싶지 않으면 롤백 명령어인 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;rollback&lt;/code&gt; 을 호출하면 된다.&lt;/p&gt;
@@ -109,9 +272,11 @@
         
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
+&lt;h2 id=&quot;정리&quot;&gt;정리&lt;/h2&gt;
+
 &lt;ul&gt;
   &lt;li&gt;수동 커밋 모드에서는 명시적으로 트랜잭션의 시작과 끝을 관리할 수 있어 데이터의 일관성을 유지할 수 있다.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;트랜잭션의 원자성&lt;/strong&gt;: 트랜잭션은 일련의 작업이 모두 성공적으로 완료되어야 하며, 그렇지 않을 경우 모든 작업이 취소되어야 한다. 이는 수동 커밋 모드에서 효과적으로 수행할 수 있다.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;트랜잭션의 원자성&lt;/strong&gt;: 트랜잭션은 일련의 작업이 모두 성공적으로 완료되어야 하며, 그렇지 않을 경우 모든 작업이 취소되어야 한다.&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;세션 유지&lt;/strong&gt;: 자동 커밋 모드나 수동 커밋 모드는 세션이 유지되는 동안 계속해서 적용된다. 따라서, 필요에 따라 언제든지 모드를 변경할 수 있다.&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;에러 처리&lt;/strong&gt;: 수동 커밋 모드에서는 에러가 발생했을 때 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;rollback&lt;/code&gt;을 사용하여 이전 상태로 되돌릴 수 있다. 이는 데이터 무결성을 유지하는 데 중요한 역할을 한다.&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;기본 설정&lt;/strong&gt;: 대부분의 데이터베이스는 기본적으로 자동 커밋 모드로 설정되어 있으므로, 트랜잭션을 제대로 사용하기 위해서는 수동 커밋 모드로 설정하는 것이 필요하다.&lt;/li&gt;
@@ -2349,104 +2514,6 @@ count값이 1이 된다.&lt;/li&gt;
         <pubDate>Sat, 21 Sep 2024 00:00:00 +0900</pubDate>
         <link>http://localhost:4000/language/2024/09/21/Java-Adv-02/</link>
         <guid isPermaLink="true">http://localhost:4000/language/2024/09/21/Java-Adv-02/</guid>
-        
-        <category>java</category>
-        
-        
-        <category>language</category>
-        
-      </item>
-    
-      <item>
-        <title>Java Adv - Thread 1</title>
-        <description>&lt;h2 id=&quot;자바의-메모리-구조&quot;&gt;자바의 메모리 구조&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;메서드 영역 : 메서드 영역은 프로그램을 실행하는데 필요한 공통 데이터들을 관리한다. → 이 영역은 프로그램의 모든 영역에서 굥유한다
-    &lt;ul&gt;
-      &lt;li&gt;클래스 정보 : 클래스의 실행 코드(바이트 코드), 필드, 메서드 생성자 코드든 모든 실행 코드가 존재한다.&lt;/li&gt;
-      &lt;li&gt;static 영역 : static 변수들을 보관한다.&lt;/li&gt;
-      &lt;li&gt;런타임 상수 : 프로그램을 실행하는데 필요한 공통 리터럴 상수를 보관한다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;스택 영역 : 자바 실행 시, 하나의 실행 스택이 형성된다. 각 스택 프레임은 지역 변수, 중간 연산 결과, 메서드 호출 정보 등을 포함한다.
-    &lt;ul&gt;
-      &lt;li&gt;스택 프레임 : 스택 영역에 쌓이는 네모 박스가 하나의 스택 프레임이다. 메서드를 호출할 때 마다 하나의 스택 프레임이 쌓이고, 메서드가 종료되면 스택 프레임이 제거된다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;힙 영역 : 객체(인스턴스) 와 배열이 생성되는 곳 가비지 컬렉션이 이루어지는 주요 영역이며 더 이상 참조되지 않는 객체는 GC에 의해서 제거된다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;참고 : 스택 영역은 더 정확히는 각 스레드별로 하나의 실행 스택이 생성되고 따라서 스레드 수 만큼 스택이 생성된다. 지금은 스레드를 1개만 사용하므로 스택도 하나이다. 이후 스레드를 추가할 것인데 그러면 스택도 스레드 수 만큼 증가한다.&lt;/p&gt;
-
-&lt;p&gt;스레드를 만들 때에는 Thread클래스를 상속받는 방법과 Runnable 인터페이스를 구현하는 방법이 있다.&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;thread.start&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;HelloThread&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;currentThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;run()&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//현재 스레드를 출력&lt;/span&gt;
-
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;HelloThreadMain&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;currentThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;: main() start&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-        &lt;span class=&quot;nc&quot;&gt;HelloThread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;helloThread&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;HelloThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;currentThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;start 호출 전&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;helloThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;currentThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;start 호출 후&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;currentThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;: main() end&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;start() 메서드는 스레드가 실행하는 아주 특별한 메서드이다.
-    &lt;ul&gt;
-      &lt;li&gt;start를 호출하면 HelloThread 스레드가 run() 메서드를 실행한다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;run 메서드가 아니라 반드시 start method를 실행해야 한다. 그래야 별도의 스레드에서 run코드가 실행이 된다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;스레드-생성-전&quot;&gt;스레드 생성 전&lt;/h2&gt;
-
-&lt;p&gt;main() 메서드는 main()이라는 이름의 스레드가 실행하는 것을 확인할 수 있다.&lt;/p&gt;
-
-&lt;p&gt;프로세스가 작동하려면 스레드가 최소한 하나는 있어야 한다. 그래야 코드를 실행할 수 있다. 자바는 실행 시점에 main()이라는 이름의 스레드를 만들고 프로그램의 시작점인 main() 메서드를 실행한다.&lt;/p&gt;
-
-&lt;h2 id=&quot;스레드-생성-후&quot;&gt;스레드 생성 후&lt;/h2&gt;
-
-&lt;p&gt;helloThread 객체를 생성한 후 start()메서드를 호출하면 자바는 스레드를 위한 별도의 스택 공간을 할당한다.&lt;/p&gt;
-
-&lt;p&gt;스레드 객체를 생성한 후 반드시 start()를 해줘야 스택 공간을 할당 받고 스레드가 동작한다.&lt;/p&gt;
-
-&lt;p&gt;스레드에 이름을 부여하지 않는다면 Thread-0, Thread-1과 같은 임시의 이름을 부여받는다.&lt;/p&gt;
-
-&lt;h2 id=&quot;스레드-간-실행-순서는-보장하지-않는다&quot;&gt;&lt;strong&gt;스레드 간 실행 순서는 보장하지 않는다.&lt;/strong&gt;&lt;/h2&gt;
-&lt;p&gt;&lt;img width=&quot;618&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/b57fdfc5-a771-4e28-93b0-9ff9cce7ee19&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;호출 전하고 호출 후가 바로 나온 이유는 새로운 스레드에게 일을 지시만 한 다음에 코드를 빠져 나오기 때문이다.
-스레드는 동시에 실행이 되기 때문에 스레드 간에 실행 순서는 얼마든지 달라질 수 있다. 따라서 스레드 간의 실행 순서는 얼마든지 달라질 수 있다.
-CPU 코어가 2개여서 물리적으로 정말 동시에 실행이 될수도 있고, 하나의 CPU에 시간을 나누어 실행될 수도 있다.
-그리고 한 스레드가 얼마나 오랜기간 실행되는지도 보장하지 않는다. 한 스레드가 먼저 다 수행한 다음에 다른 스레드가 수행될 수도 있고, 둘이 완전히 번갈아 가면서 수행되는 경우도 있다.
-스레드는 순서와 실행 기간을 모두 보장하지 않는다. 이것이 바로 멀티스레드이다.&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;인프런 김영한님의 자바강좌 + 나의 뇌&lt;/p&gt;
-</description>
-        <pubDate>Sat, 21 Sep 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/language/2024/09/21/Java-Adv-01/</link>
-        <guid isPermaLink="true">http://localhost:4000/language/2024/09/21/Java-Adv-01/</guid>
         
         <category>java</category>
         
