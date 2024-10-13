@@ -6,12 +6,12 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 14 Oct 2024 01:18:50 +0900</pubDate>
-    <lastBuildDate>Mon, 14 Oct 2024 01:18:50 +0900</lastBuildDate>
+    <pubDate>Mon, 14 Oct 2024 01:40:17 +0900</pubDate>
+    <lastBuildDate>Mon, 14 Oct 2024 01:40:17 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
-        <title>Java Adv 07 - ReentrantLock</title>
+        <title>Java Adv 08 - ReentrantLock</title>
         <description>&lt;h2 id=&quot;locksupport의-한계&quot;&gt;LockSupport의 한계&lt;/h2&gt;
 
 &lt;p&gt;락(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lock&lt;/code&gt;)이라는 클래스를 만드는 것은 특정 스레드가 먼저 락을 얻으면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUNNABLE&lt;/code&gt; 상태로 실행하고, 락을 얻지 못하면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;park()&lt;/code&gt;를 사용하여 대기 상태로 만드는 것이다. 스레드가 임계 영역의 실행을 마치고 나면 락을 반납하고, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;unpark()&lt;/code&gt;를 사용하여 대기 중인 다른 스레드를 깨우는 방식으로 작동한다. 또한, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;parkNanos()&lt;/code&gt;를 사용하여 너무 오래 대기하면 스레드가 스스로 중간에 깨어나게 할 수 있다.
