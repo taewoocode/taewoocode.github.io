@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Spring Basic 13 - Dependency Injection 02" />
+<meta property="og:title" content="Java Adv - Synchronized Method" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,17 +52,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Spring Basic 13 - Dependency Injection 02 &middot; 일벌리는 개발자</title>
+<title>Java Adv - Synchronized Method &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="다양한 의존관계 주입방법
+        content="Thread Synchronized
 
 "
 />
 <meta
         property="og:description"
-        content="다양한 의존관계 주입방법
+        content="Thread Synchronized
 
 "
 />
@@ -72,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/framework/2024/09/27/Spring-basic-13/" />
-<meta property="og:url" content="http://localhost:4000/framework/2024/09/27/Spring-basic-13/" />
+<link rel="canonical" href="http://localhost:4000/language/2024/10/03/Java-Adv-06/" />
+<meta property="og:url" content="http://localhost:4000/language/2024/10/03/Java-Adv-06/" />
 
 <link
         rel="alternate"
@@ -83,10 +83,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/framework/2024/09/27/Spring-basic-12/" />
+<link rel="prev" href="http://localhost:4000/framework/2024/10/02/Spring-Data-jdbc-07/" />
  
-<link rel="next" href="http://localhost:4000/framework/2024/09/28/Spring-Data-jdbc-01/" />
-
 
 <link
         rel="apple-touch-icon"
@@ -183,16 +181,16 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-framework/2024/09/27/Spring-basic-13" class="post" role="article">
+<article id="post-language/2024/10/03/Java-Adv-06" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      Spring Basic 13 - Dependency Injection 02
+      Java Adv - Synchronized Method
       
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-09-27T00:00:00+09:00">27 Sep 2024</time>
+      <time datetime="2024-10-03T00:00:00+09:00">03 Oct 2024</time>
       
 
 
@@ -203,7 +201,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 
 
 
-in <a href="/category/framework/" data-flip="title">Framework</a>
+in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
 
       
 
@@ -215,7 +213,7 @@ in <a href="/category/framework/" data-flip="title">Framework</a>
 
 
 
-on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
+on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
 
     </p>
 
@@ -267,66 +265,68 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
     </style>
 
     <!--<br />-->
-    <h2 id="다양한-의존관계-주입방법">다양한 의존관계 주입방법</h2>
+    <h2 id="thread-synchronized">Thread Synchronized</h2>
 
-<h3 id="생성자-주입">생성자 주입</h3>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SyncTest1BadMain</span> <span class="o">{</span>
 
-<p><img width="685" alt="image" src="https://github.com/user-attachments/assets/74851915-6589-456c-acef-669f2117b4dc" />
-<img width="677" alt="image" src="https://github.com/user-attachments/assets/b3be400b-05b5-4845-9a22-b9b32de50bdc" /></p>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">InterruptedException</span> <span class="o">{</span>
+        <span class="nc">Counter</span> <span class="n">counter</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Counter</span><span class="o">();</span>
+        <span class="nc">Runnable</span> <span class="n">task</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Runnable</span><span class="o">()</span> <span class="o">{</span>
 
-<ul>
-  <li>생성자 주입은 생성자의 호출 시점에 1회 호출이 되는 것을 보장한다. 그렇기 때문에 주입받은 객체가 변하지 않거나, 반드시 객체의 주입이 필요한 경우에 <code class="language-plaintext highlighter-rouge">강제하기 위해</code> 사용할 수 있다.</li>
-  <li>Spring은 생성자 주입을 적극 추천하고 있기 때문에 생성자가 한개만 있을 경우엔 @Autowired를 생략해도 주입이 가능하도록 편의성을 제공한다. 따라서 위에 두 코드는 같은 기능을 하는 코드라고 볼 수 있다.</li>
-</ul>
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+                <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10000</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+                    <span class="n">counter</span><span class="o">.</span><span class="na">increment</span><span class="o">();</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">};</span>
+        <span class="nc">Thread</span> <span class="n">thread1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">(</span> <span class="n">task</span> <span class="o">);</span>
+        <span class="nc">Thread</span> <span class="n">thread2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">(</span> <span class="n">task</span> <span class="o">);</span>
 
-<h3 id="수정자-주입">수정자 주입</h3>
+        <span class="n">thread1</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+        <span class="n">thread2</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+        <span class="n">thread1</span><span class="o">.</span><span class="na">join</span><span class="o">();</span>
+        <span class="n">thread2</span><span class="o">.</span><span class="na">join</span><span class="o">();</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"결과: "</span> <span class="o">+</span> <span class="n">counter</span><span class="o">.</span><span class="na">getCount</span><span class="o">()</span> <span class="o">);</span>
+    <span class="o">}</span>
 
-<p><img width="668" alt="image" src="https://github.com/user-attachments/assets/c2686db3-93d7-4c90-ad88-9143f9f2e330" /></p>
+    <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Counter</span> <span class="o">{</span>
 
-<p>@Autowired로 주입할 대상이 없으면 오류가 발생한다.
-주입할 대상이 없어도 동작하도록 만드려면 @Autowired(required = false)를 통해 설정은 가능하다. 
-스프링 초기에는 수정자 주입이 자주 사용되었다고 한다. 당시에는 setXXX, getXXX들의 프로퍼티 기반으로 요구하는 자바의 기본 스펙 때문이었다고 한다. 하지만 시간이 지나면서 점차 수정자 주입이 아닌 생성자 주입으로 발전하게 되었다.</p>
+        <span class="kd">private</span> <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
 
-<h3 id="필드-주입">필드 주입</h3>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">increment</span><span class="o">()</span> <span class="o">{</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="o">}</span>
 
-<p><img width="688" alt="image" src="https://github.com/user-attachments/assets/6aecee58-3c65-4c95-a3c8-988e5b04eee8" /></p>
+        <span class="kd">private</span> <span class="kt">int</span> <span class="nf">getCount</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">count</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 
-<p>필드 주입을 사용하게 되면 코드가 간결해지고 보기는 좋아진다. 하지만 필드주입을 이용하게 되면, 추천하지 않는다는 문구가 뜬다. 
-이유는 외부에서 접근이 불가능하다는 단점이 존재하게 되는데, 테스트 코드의 중요성이 부각됨에 따라서 외부에서 사용할 수 없다는 이유로 지양하는 방식이 되었다.</p>
+</code></pre></div></div>
 
-<h2 id="생성자-주입이-가장-권장되는-방식이다">생성자 주입이 가장 권장되는 방식이다.</h2>
+<p><img width="690" alt="image" src="https://github.com/user-attachments/assets/fd14e49d-fdc9-4f3a-812d-84a12f6ce7bb" /></p>
 
-<ul>
-  <li>이유는 객체의 불변성을 확보하고, 테스트 코드의 작성이 용이하며, final 키워드 작성 및 Lombok과의 결합 순환 참조 에러 방지가 이유가 될 수 있다.</li>
-  <li>실제로 개발을 하다 보면 의존 관계의 변경이 필요한 상황은 거의 없다. 하지만 수정자 주입이나 일반 메소드 주입을 이용하면 불필요하게 수정의 가능성을 열어두어 유지보수성을 떨어뜨린다. 그러므로 생성자 주입을 통해 변경의 가능성을 배제하고 불변성을 보장하는 것이 좋다.</li>
-</ul>
+<p>기대한 값은 20000인데 왜 저런 값이 나올까?</p>
 
-<h3 id="테스트가-특정-프레임워크에-의존적이다">테스트가 특정 프레임워크에 의존적이다.</h3>
+<p><img width="629" alt="image" src="https://github.com/user-attachments/assets/e7c6a201-44c3-4811-be90-b73b9f8e2bcc" />
+<img width="656" alt="image" src="https://github.com/user-attachments/assets/65f5bce6-a4f1-48fe-be1d-0cb7f420fe90" />
+<img width="687" alt="image" src="https://github.com/user-attachments/assets/89385db4-eded-4730-880f-be5f4cc9c344" /></p>
 
-<p><img width="652" alt="image" src="https://github.com/user-attachments/assets/9fa5fa43-b3d7-4c48-b59b-63b6430791e3" /></p>
-
-<p>테스트가 특정 프레임워크에 의존하는 것은 침투적이므로 좋지 못하다. 
-그러므로 가능한 순수 자바로 테스트를 작성하는 것이 가장 좋은데, 생성자 주입이 아닌 다른 주입으로 작성된 코드는 순수한 자바 코드로 단위 테스트를 작성하는 것이 어렵다.</p>
-
-<h3 id="순수한-자바로-테스트-코드를-작성하는-것이-가장-좋다">순수한 자바로 테스트 코드를 작성하는 것이 가장 좋다.</h3>
-
-<p><img width="698" alt="image" src="https://github.com/user-attachments/assets/5e508862-b799-4ff2-9464-f71ef4f0114a" /></p>
-
-<p>자바 스프링에서 의존성 주입 방식을 선택할 때 각 방식마다 장단점이 존재한다. 
-우선, Setter 주입을 사용하면 객체 생성 후에 의존성을 주입할 수 있는 유연함이 있지만, 이는 객체의 상태를 변경 가능하게 열어두는 단점이 있다. 
-즉, 외부에서 객체의 상태를 변경할 수 있어 코드의 불변성이 깨질 위험이 있다.
-반면, @Autowired를 통해 의존성을 주입하면 스프링이 자동으로 의존성을 처리해주므로 편리하지만, 이 방식으로 테스트 코드를 작성할 경우 <code class="language-plaintext highlighter-rouge">스프링 컨텍스트를 로드</code>해야 한다. 
-이로 인해 단순한 <code class="language-plaintext highlighter-rouge">단위 테스트가 아닌 통합 테스트</code>로 변하게 되며, 스프링이 컴포넌트를 등록하고 초기화하는 데 시간이 소요되어 <code class="language-plaintext highlighter-rouge">테스트 비용이 증가</code>하는 단점이 있다.
-또한, 리플렉션을 사용하면 객체의 메타 정보를 동적으로 수정할 수 있는 유연함이 있지만, 이는 테스트 코드가 깨지기 쉬운 구조가 되어 코드 안정성을 해칠 수 있다. 
-리플렉션은 코드가 변경될 때 의도치 않게 테스트가 실패할 가능성을 내포하고 있다.
-이와 대조적으로, 생성자 주입을 사용하면 객체가 생성될 때 <code class="language-plaintext highlighter-rouge">필요한 의존성을 명시적으로 주입</code>받을 수 있으며, 주입해야 할 의존성이 누락된 경우 <code class="language-plaintext highlighter-rouge">컴파일 시점에서 오류를 발견할 수 있는 장점</code>이 있다. 
-또한, 테스트 코드 작성 시에는 의존성을 생성자 파라미터로 직접 전달할 수 있어, 스프링 컨텍스트를 로드하지 않고도 테스트를 수행할 수 있다. 
-이를 통해 테스트가 더 빠르고 안정적으로 이루어질 수 있다.
-따라서 생성자 주입 방식은 컴파일 시점에 안정성을 보장하고, 테스트의 효율성과 편리함을 높이는 선택이 될 수 있다.</p>
+<p>스레드 2개가 <code class="language-plaintext highlighter-rouge">increment()</code> 를 호출하기 때문에 기대하는 <code class="language-plaintext highlighter-rouge">count</code> 의 결과는 2가 되어야 한다. 하지만 둘이 동시에 실행되기 때문에, 처음에 둘다 <code class="language-plaintext highlighter-rouge">count</code> 의 값을 0으로 읽었다.
+여기서 잘 보면 <code class="language-plaintext highlighter-rouge">count</code> 의 값을 읽어서 계산하는 부분과 그 결과를 <code class="language-plaintext highlighter-rouge">count</code> 에 다시 넣는 부분으로 나누어져 있다. 따라서 여러 스레드가 동시에 실행되면 지금과 같은 문제가 발생할 수 있다.
+따라서 <code class="language-plaintext highlighter-rouge">synchronized</code> 키워드를 사용해서 한 번에 하나의 스레드만 실행할 수 있도록, 안전한 임계 영역을 만들어야 한다. (syncronized는 임계영역)
+<strong><code class="language-plaintext highlighter-rouge">synchronized</code></strong>를 붙임으로써 임계영역을 한 번에 걸어잠글 수 있는 락(lock)을 제공한다. 
+이제 여러 스레드 중 하나의 스레드가 먼저 임계영역 안으로 들어오면 락이 걸리고, 나머지 스레드들은 먼저 들어간 스레드가 작업을 마치고 임계영역 밖으로 나오기 전까지 대기하게 된다.
+참고로 지역변수 localValue는 다른 스레드와 절대 공유하지 않는다. thread1, thread2의 각각의 메모리 영역에서 생성되는 값이다.</p>
 
 <h2 id="reference">Reference</h2>
 
-<p><a href="https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-collaborators.html">https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-collaborators.html</a></p>
+<p>김영한님의 자바 강의</p>
+
+<p><a href="https://stackoverflow.com/questions/20906548/why-is-synchronized-block-better-than-synchronized-method">https://stackoverflow.com/questions/20906548/why-is-synchronized-block-better-than-synchronized-method</a></p>
+
 
     <br />
     <br />
@@ -340,12 +340,12 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=Spring Basic 13 - Dependency Injection 02&amp;url=http://localhost:4000/framework/2024/09/27/Spring-basic-13/"
+    <a href="http://twitter.com/share?text=Java Adv - Synchronized Method&amp;url=http://localhost:4000/language/2024/10/03/Java-Adv-06/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/framework/2024/09/27/Spring-basic-13/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/10/03/Java-Adv-06/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -367,16 +367,19 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
       
       
         
+          
+          
+        
         
           
 
 
 <li class="h4">
-  <a href="/framework/2024/10/02/Spring-Data-jdbc-07/" data-flip="title">
-    <span>Spring JDBC 07 - Transaction 추상화</span>
+  <a href="/language/2024/09/28/Java-Adv-05/" data-flip="title">
+    <span>Java Adv  - Synchronized Method</span>
   </a>
-  <small><time datetime="2024-10-02T00:00:00+09:00">
-    02 Oct 2024
+  <small><time datetime="2024-09-28T00:00:00+09:00">
+    28 Sep 2024
   </time></small>
 </li>
 
@@ -388,11 +391,11 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
 
 
 <li class="h4">
-  <a href="/framework/2024/10/01/Spring-Data-jdbc-06/" data-flip="title">
-    <span>Spring JDBC 06 - JDBC Transaction commit, rollback</span>
+  <a href="/language/2024/09/22/Java-Adv-04/" data-flip="title">
+    <span>Java Adv  - Thread 4</span>
   </a>
-  <small><time datetime="2024-10-01T00:00:00+09:00">
-    01 Oct 2024
+  <small><time datetime="2024-09-22T00:00:00+09:00">
+    22 Sep 2024
   </time></small>
 </li>
 
@@ -404,17 +407,14 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
 
 
 <li class="h4">
-  <a href="/framework/2024/09/30/Spring-Data-jdbc-05/" data-flip="title">
-    <span>Spring JDBC 05 - JDBC Transaction</span>
+  <a href="/language/2024/09/22/Java-Adv-03/" data-flip="title">
+    <span>Java Adv  - Thread 3</span>
   </a>
-  <small><time datetime="2024-09-30T00:00:00+09:00">
-    30 Sep 2024
+  <small><time datetime="2024-09-22T00:00:00+09:00">
+    22 Sep 2024
   </time></small>
 </li>
 
-        
-      
-        
         
       
     

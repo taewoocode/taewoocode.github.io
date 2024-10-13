@@ -85,6 +85,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 
 <link rel="prev" href="http://localhost:4000/framework/2024/10/01/Spring-Data-jdbc-06/" />
  
+<link rel="next" href="http://localhost:4000/language/2024/10/03/Java-Adv-06/" />
+
 
 <link
         rel="apple-touch-icon"
@@ -330,11 +332,11 @@ DI(Dependency Injection)를 사용하여 서비스 계층이 어떤 구현체를
 </ul>
 
 <ol>
-  <li><strong>OCP 원칙 준수</strong>:
+  <li><strong>OCP 원칙 준수</strong>
 OCP 원칙은 ‘확장에는 열려 있으나 수정에는 닫혀 있어야 한다’는 원칙이다. 서비스가 <code class="language-plaintext highlighter-rouge">TxManager</code> 인터페이스에 의존하기 때문에, 새로운 트랜잭션 관리 기술이 추가되더라도 서비스 코드는 수정하지 않고 새로운 구현체를 추가하기만 하면 된다. 이로써 서비스 계층의 코드가 변경되지 않고도 트랜잭션 기술을 유연하게 변경할 수 있다.</li>
 </ol>
 
-<h3 id="장점">장점:</h3>
+<h3 id="장점">장점</h3>
 
 <ul>
   <li><strong>기술 변화의 용이성</strong>: 서비스 계층의 코드를 변경하지 않고도 트랜잭션 기술을 교체할 수 있다.</li>

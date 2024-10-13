@@ -6,9 +6,85 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 13 Oct 2024 01:23:35 +0900</pubDate>
-    <lastBuildDate>Sun, 13 Oct 2024 01:23:35 +0900</lastBuildDate>
+    <pubDate>Sun, 13 Oct 2024 22:47:15 +0900</pubDate>
+    <lastBuildDate>Sun, 13 Oct 2024 22:47:15 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
+    
+      <item>
+        <title>Java Adv - Synchronized Method</title>
+        <description>&lt;h2 id=&quot;thread-synchronized&quot;&gt;Thread Synchronized&lt;/h2&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SyncTest1BadMain&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;InterruptedException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nc&quot;&gt;Counter&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;counter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Counter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;nc&quot;&gt;Runnable&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;task&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Runnable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+            &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+            &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10000&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;counter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;increment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;};&lt;/span&gt;
+        &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;thread1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;task&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;thread2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;task&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+        &lt;span class=&quot;n&quot;&gt;thread1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;thread2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;thread1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;thread2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;결과: &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;counter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getCount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Counter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+        &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;increment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+        &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getCount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img width=&quot;690&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/fd14e49d-fdc9-4f3a-812d-84a12f6ce7bb&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;기대한 값은 20000인데 왜 저런 값이 나올까?&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;629&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/e7c6a201-44c3-4811-be90-b73b9f8e2bcc&quot; /&gt;
+&lt;img width=&quot;656&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/65f5bce6-a4f1-48fe-be1d-0cb7f420fe90&quot; /&gt;
+&lt;img width=&quot;687&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/89385db4-eded-4730-880f-be5f4cc9c344&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;스레드 2개가 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;increment()&lt;/code&gt; 를 호출하기 때문에 기대하는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;count&lt;/code&gt; 의 결과는 2가 되어야 한다. 하지만 둘이 동시에 실행되기 때문에, 처음에 둘다 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;count&lt;/code&gt; 의 값을 0으로 읽었다.
+여기서 잘 보면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;count&lt;/code&gt; 의 값을 읽어서 계산하는 부분과 그 결과를 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;count&lt;/code&gt; 에 다시 넣는 부분으로 나누어져 있다. 따라서 여러 스레드가 동시에 실행되면 지금과 같은 문제가 발생할 수 있다.
+따라서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt; 키워드를 사용해서 한 번에 하나의 스레드만 실행할 수 있도록, 안전한 임계 영역을 만들어야 한다. (syncronized는 임계영역)
+&lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt;&lt;/strong&gt;를 붙임으로써 임계영역을 한 번에 걸어잠글 수 있는 락(lock)을 제공한다. 
+이제 여러 스레드 중 하나의 스레드가 먼저 임계영역 안으로 들어오면 락이 걸리고, 나머지 스레드들은 먼저 들어간 스레드가 작업을 마치고 임계영역 밖으로 나오기 전까지 대기하게 된다.
+참고로 지역변수 localValue는 다른 스레드와 절대 공유하지 않는다. thread1, thread2의 각각의 메모리 영역에서 생성되는 값이다.&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;김영한님의 자바 강의&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://stackoverflow.com/questions/20906548/why-is-synchronized-block-better-than-synchronized-method&quot;&gt;https://stackoverflow.com/questions/20906548/why-is-synchronized-block-better-than-synchronized-method&lt;/a&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Thu, 03 Oct 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/language/2024/10/03/Java-Adv-06/</link>
+        <guid isPermaLink="true">http://localhost:4000/language/2024/10/03/Java-Adv-06/</guid>
+        
+        <category>java</category>
+        
+        
+        <category>language</category>
+        
+      </item>
     
       <item>
         <title>Spring JDBC 07 - Transaction 추상화</title>
@@ -77,11 +153,11 @@ DI(Dependency Injection)를 사용하여 서비스 계층이 어떤 구현체를
 &lt;/ul&gt;
 
 &lt;ol&gt;
-  &lt;li&gt;&lt;strong&gt;OCP 원칙 준수&lt;/strong&gt;:
+  &lt;li&gt;&lt;strong&gt;OCP 원칙 준수&lt;/strong&gt;
 OCP 원칙은 ‘확장에는 열려 있으나 수정에는 닫혀 있어야 한다’는 원칙이다. 서비스가 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TxManager&lt;/code&gt; 인터페이스에 의존하기 때문에, 새로운 트랜잭션 관리 기술이 추가되더라도 서비스 코드는 수정하지 않고 새로운 구현체를 추가하기만 하면 된다. 이로써 서비스 계층의 코드가 변경되지 않고도 트랜잭션 기술을 유연하게 변경할 수 있다.&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h3 id=&quot;장점&quot;&gt;장점:&lt;/h3&gt;
+&lt;h3 id=&quot;장점&quot;&gt;장점&lt;/h3&gt;
 
 &lt;ul&gt;
   &lt;li&gt;&lt;strong&gt;기술 변화의 용이성&lt;/strong&gt;: 서비스 계층의 코드를 변경하지 않고도 트랜잭션 기술을 교체할 수 있다.&lt;/li&gt;
@@ -596,6 +672,76 @@ ex) f(1) → f(2) → f(3)으로 호출을 했다면 f(3) → f(2) → f(1) 순�
       </item>
     
       <item>
+        <title>Java Adv  - Synchronized Method</title>
+        <description>&lt;h2 id=&quot;synchronized로-동시성-제어하기&quot;&gt;Synchronized로 동시성 제어하기&lt;/h2&gt;
+
+&lt;p&gt;&lt;img width=&quot;502&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/9920b377-48b6-4d10-a2c6-c1d6d49cc752&quot; /&gt;
+&lt;img width=&quot;448&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/da0e146d-ad3a-40d8-9b63-855af1171660&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;우선 코드의 결과부터 보면 t1의 작업이 모두 수행이 되고(검증, 결과) 이 후에 t2의 작업이 수행이 된다.&lt;/li&gt;
+  &lt;li&gt;따라서 t1,t2가 동시에 출금하지 않아서 클라이언트는 동시성 오류를 피할 수 있게 되었다.&lt;/li&gt;
+  &lt;li&gt;synchronized는 도대체 뭘까?&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;모든-객체인스턴스는-내부에-자신만의-락lock-을-가지고-있다&quot;&gt;&lt;strong&gt;모든&lt;/strong&gt; &lt;strong&gt;객체&lt;/strong&gt;(&lt;strong&gt;인스턴스&lt;/strong&gt;)&lt;strong&gt;는&lt;/strong&gt; &lt;strong&gt;내부에&lt;/strong&gt; &lt;strong&gt;자신만의&lt;/strong&gt; &lt;strong&gt;락&lt;/strong&gt;(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lock&lt;/code&gt; )&lt;strong&gt;을&lt;/strong&gt; &lt;strong&gt;가지고&lt;/strong&gt; &lt;strong&gt;있다&lt;/strong&gt;.&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;모니터 락(monitor lock)이라도고 부른다.&lt;/li&gt;
+  &lt;li&gt;객체 내부에 있고 우리가 확인하기는 어렵다.&lt;/li&gt;
+  &lt;li&gt;스레드가 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt; 키워드가 있는 메서드에 진입하려면 반드시 해당 인스턴스의 락이 있어야 한다!&lt;/li&gt;
+  &lt;li&gt;여기서는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BankAccount(x001)&lt;/code&gt; 인스턴스의 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized withdraw()&lt;/code&gt; 메서드를 호출하므로 이 인스턴스의 락이 필요하다. 스레드 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;t1&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;t2&lt;/code&gt; 는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;withdraw()&lt;/code&gt; 를 실행하기 직전이다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;synchronized-키워드의-동작&quot;&gt;Synchronized 키워드의 동작&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;t1이 먼저 실행된다고 가정한다.&lt;/li&gt;
+  &lt;li&gt;스레드 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;t1&lt;/code&gt; 이 먼저 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt; 키워드가 있는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;withdraw()&lt;/code&gt; 메서드를 호출한다.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt; 메서드를 호출하려면 먼저 해당 인스턴스의 락이 필요하다.&lt;/li&gt;
+  &lt;li&gt;락이 있으므로 스레드 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;t1&lt;/code&gt; 은 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BankAccount(x001)&lt;/code&gt; 인스턴스에 있는 락을 획득한다.&lt;/li&gt;
+  &lt;li&gt;스레드 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;t1&lt;/code&gt; 은 해당 인스턴스의 락을 획득했기 때문에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;withdraw()&lt;/code&gt; 메서드에 진입할 수 있다.&lt;/li&gt;
+  &lt;li&gt;스레드 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;t2&lt;/code&gt;도&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;withdraw()&lt;/code&gt; 메서드 호출을 시도한다. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt; 메서드를 호출하려면 먼저 해당 인스턴스의 락이 필요하다.(언젠가는 락이 오겠지..)&lt;/li&gt;
+  &lt;li&gt;스레드 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;t2&lt;/code&gt; 는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BankAccount(x001)&lt;/code&gt; 인스턴스에 있는 락 획득을 시도한다. 하지만 락이 없다.&lt;/li&gt;
+  &lt;li&gt;락이 없으면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;t2&lt;/code&gt; 스레드는 락을 획득할 때 까지 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BLOCKED&lt;/code&gt; 상태로 대기한다. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;t2&lt;/code&gt; 스레드의 상태는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUNNABLE&lt;/code&gt; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BLOCKED&lt;/code&gt; 상태로 변하고, 락을 획득할 때 까지 무한정 대기한다. 참고로 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BLOCKED&lt;/code&gt; 상태가 되면 락을 다시 획득하기 전까지는 계속 대기하고, CPU 실행 스케줄링에 들어가지 않는다.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;t1&lt;/code&gt; : 메서드 호출이 끝나면 락을 반납한다.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;t2&lt;/code&gt; : 인스턴스에 락이 반납되면 &lt;strong&gt;**락&lt;/strong&gt; &lt;strong&gt;획득을&lt;/strong&gt; &lt;strong&gt;대기하는&lt;/strong&gt; &lt;strong&gt;스레드는&lt;/strong&gt; &lt;strong&gt;자동으로&lt;/strong&gt; &lt;strong&gt;락을&lt;/strong&gt; &lt;strong&gt;획득&lt;/strong&gt;**한다.
+    &lt;ul&gt;
+      &lt;li&gt;이때 락을 획득한 스레드는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BLOCKED&lt;/code&gt; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUNNABLE&lt;/code&gt; 상태가 되고, 다시 코드를 실행한다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;락은-순서를-보장해주지는-않는다&quot;&gt;락은 순서를 보장해주지는 않는다.&lt;/h2&gt;
+
+&lt;p&gt;만약 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BankAccount(x001)&lt;/code&gt; 인스턴스의 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;withdraw()&lt;/code&gt; 를 수 많은 스레드가 동시에 호출한다면, 1개의 스레드만 락을 획득하고 나머지는 모두 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BLOCKED&lt;/code&gt; 상태가 된다. 
+그리고 이후에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BankAccount(x001)&lt;/code&gt; 인스턴스에 락을 반납하면, 해당 인스턴스의 락을 기다리는 수 많은 스레드 중에 하나의 스레드만 락을 획득하고, 락을 획득한 스레드만&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BLOCKED&lt;/code&gt; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUNNABLE&lt;/code&gt; 상태가 된다. 이때 어떤 순서로 락을 획득하는지는 자바 표준에 정의되어 있지 않다. 따라서 순서를 보장하지 않고, 환경에 따라서 순서가 달라질 수 있다.&lt;/p&gt;
+
+&lt;h2 id=&quot;실무에서는-어떻게-적용해야-할까&quot;&gt;실무에서는 어떻게 적용해야 할까?&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt; 의 가장 큰 장점이자 단점은 한 번에 하나의 스레드만 실행할 수 있다는 점이다. 
+여러 스레드가 동시에실행하지 못하기 때문에, 전체로 보면 성능이 떨어질 수 있다. 따라서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt; 를 통해 여러 스레드를 동시에 실행할 수 없는 코드 구간은 꼭! 필요한 곳으로 한정해서 설정해야 한다.
+그래도 성능을 고려한 설계 보다는 상대적으로 검증이 중요한 비즈니스 로직에서는 synchronized를 고려해볼만 한다.&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;김영한님의 자바 강의&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://stackoverflow.com/questions/20906548/why-is-synchronized-block-better-than-synchronized-method&quot;&gt;https://stackoverflow.com/questions/20906548/why-is-synchronized-block-better-than-synchronized-method&lt;/a&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Sat, 28 Sep 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/language/2024/09/28/Java-Adv-05/</link>
+        <guid isPermaLink="true">http://localhost:4000/language/2024/09/28/Java-Adv-05/</guid>
+        
+        <category>java</category>
+        
+        
+        <category>language</category>
+        
+      </item>
+    
+      <item>
         <title>Spring JDBC 02 - JDBC Connection</title>
         <description>&lt;h2 id=&quot;jdbc는-connection-정보를-어떻게-넘겨줄까&quot;&gt;JDBC는 Connection 정보를 어떻게 넘겨줄까&lt;/h2&gt;
 
@@ -688,76 +834,6 @@ JDBC 드라이버는 JDBC 인터페이스를 구현한 구현체라고 생각할
         
         
         <category>framework</category>
-        
-      </item>
-    
-      <item>
-        <title>Java Adv - Synchronized Method</title>
-        <description>&lt;h2 id=&quot;synchronized로-동시성-제어하기&quot;&gt;Synchronized로 동시성 제어하기&lt;/h2&gt;
-
-&lt;p&gt;&lt;img width=&quot;502&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/9920b377-48b6-4d10-a2c6-c1d6d49cc752&quot; /&gt;
-&lt;img width=&quot;448&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/da0e146d-ad3a-40d8-9b63-855af1171660&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;우선 코드의 결과부터 보면 t1의 작업이 모두 수행이 되고(검증, 결과) 이 후에 t2의 작업이 수행이 된다.&lt;/li&gt;
-  &lt;li&gt;따라서 t1,t2가 동시에 출금하지 않아서 클라이언트는 동시성 오류를 피할 수 있게 되었다.&lt;/li&gt;
-  &lt;li&gt;synchronized는 도대체 뭘까?&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;모든-객체인스턴스는-내부에-자신만의-락lock-을-가지고-있다&quot;&gt;&lt;strong&gt;모든&lt;/strong&gt; &lt;strong&gt;객체&lt;/strong&gt;(&lt;strong&gt;인스턴스&lt;/strong&gt;)&lt;strong&gt;는&lt;/strong&gt; &lt;strong&gt;내부에&lt;/strong&gt; &lt;strong&gt;자신만의&lt;/strong&gt; &lt;strong&gt;락&lt;/strong&gt;(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lock&lt;/code&gt; )&lt;strong&gt;을&lt;/strong&gt; &lt;strong&gt;가지고&lt;/strong&gt; &lt;strong&gt;있다&lt;/strong&gt;.&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;모니터 락(monitor lock)이라도고 부른다.&lt;/li&gt;
-  &lt;li&gt;객체 내부에 있고 우리가 확인하기는 어렵다.&lt;/li&gt;
-  &lt;li&gt;스레드가 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt; 키워드가 있는 메서드에 진입하려면 반드시 해당 인스턴스의 락이 있어야 한다!&lt;/li&gt;
-  &lt;li&gt;여기서는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BankAccount(x001)&lt;/code&gt; 인스턴스의 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized withdraw()&lt;/code&gt; 메서드를 호출하므로 이 인스턴스의 락이 필요하다. 스레드 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;t1&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;t2&lt;/code&gt; 는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;withdraw()&lt;/code&gt; 를 실행하기 직전이다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;synchronized-키워드의-동작&quot;&gt;Synchronized 키워드의 동작&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;t1이 먼저 실행된다고 가정한다.&lt;/li&gt;
-  &lt;li&gt;스레드 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;t1&lt;/code&gt; 이 먼저 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt; 키워드가 있는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;withdraw()&lt;/code&gt; 메서드를 호출한다.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt; 메서드를 호출하려면 먼저 해당 인스턴스의 락이 필요하다.&lt;/li&gt;
-  &lt;li&gt;락이 있으므로 스레드 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;t1&lt;/code&gt; 은 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BankAccount(x001)&lt;/code&gt; 인스턴스에 있는 락을 획득한다.&lt;/li&gt;
-  &lt;li&gt;스레드 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;t1&lt;/code&gt; 은 해당 인스턴스의 락을 획득했기 때문에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;withdraw()&lt;/code&gt; 메서드에 진입할 수 있다.&lt;/li&gt;
-  &lt;li&gt;스레드 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;t2&lt;/code&gt;도&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;withdraw()&lt;/code&gt; 메서드 호출을 시도한다. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt; 메서드를 호출하려면 먼저 해당 인스턴스의 락이 필요하다.(언젠가는 락이 오겠지..)&lt;/li&gt;
-  &lt;li&gt;스레드 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;t2&lt;/code&gt; 는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BankAccount(x001)&lt;/code&gt; 인스턴스에 있는 락 획득을 시도한다. 하지만 락이 없다.&lt;/li&gt;
-  &lt;li&gt;락이 없으면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;t2&lt;/code&gt; 스레드는 락을 획득할 때 까지 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BLOCKED&lt;/code&gt; 상태로 대기한다. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;t2&lt;/code&gt; 스레드의 상태는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUNNABLE&lt;/code&gt; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BLOCKED&lt;/code&gt; 상태로 변하고, 락을 획득할 때 까지 무한정 대기한다. 참고로 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BLOCKED&lt;/code&gt; 상태가 되면 락을 다시 획득하기 전까지는 계속 대기하고, CPU 실행 스케줄링에 들어가지 않는다.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;t1&lt;/code&gt; : 메서드 호출이 끝나면 락을 반납한다.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;t2&lt;/code&gt; : 인스턴스에 락이 반납되면 &lt;strong&gt;**락&lt;/strong&gt; &lt;strong&gt;획득을&lt;/strong&gt; &lt;strong&gt;대기하는&lt;/strong&gt; &lt;strong&gt;스레드는&lt;/strong&gt; &lt;strong&gt;자동으로&lt;/strong&gt; &lt;strong&gt;락을&lt;/strong&gt; &lt;strong&gt;획득&lt;/strong&gt;**한다.
-    &lt;ul&gt;
-      &lt;li&gt;이때 락을 획득한 스레드는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BLOCKED&lt;/code&gt; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUNNABLE&lt;/code&gt; 상태가 되고, 다시 코드를 실행한다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;락은-순서를-보장해주지는-않는다&quot;&gt;락은 순서를 보장해주지는 않는다.&lt;/h2&gt;
-
-&lt;p&gt;만약 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BankAccount(x001)&lt;/code&gt; 인스턴스의 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;withdraw()&lt;/code&gt; 를 수 많은 스레드가 동시에 호출한다면, 1개의 스레드만 락을 획득하고 나머지는 모두 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BLOCKED&lt;/code&gt; 상태가 된다. 
-그리고 이후에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BankAccount(x001)&lt;/code&gt; 인스턴스에 락을 반납하면, 해당 인스턴스의 락을 기다리는 수 많은 스레드 중에 하나의 스레드만 락을 획득하고, 락을 획득한 스레드만&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BLOCKED&lt;/code&gt; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUNNABLE&lt;/code&gt; 상태가 된다. 이때 어떤 순서로 락을 획득하는지는 자바 표준에 정의되어 있지 않다. 따라서 순서를 보장하지 않고, 환경에 따라서 순서가 달라질 수 있다.&lt;/p&gt;
-
-&lt;h2 id=&quot;실무에서는-어떻게-적용해야-할까&quot;&gt;실무에서는 어떻게 적용해야 할까?&lt;/h2&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt; 의 가장 큰 장점이자 단점은 한 번에 하나의 스레드만 실행할 수 있다는 점이다. 
-여러 스레드가 동시에실행하지 못하기 때문에, 전체로 보면 성능이 떨어질 수 있다. 따라서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt; 를 통해 여러 스레드를 동시에 실행할 수 없는 코드 구간은 꼭! 필요한 곳으로 한정해서 설정해야 한다.
-그래도 성능을 고려한 설계 보다는 상대적으로 검증이 중요한 비즈니스 로직에서는 synchronized를 고려해볼만 한다.&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;김영한님의 자바 강의&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://stackoverflow.com/questions/20906548/why-is-synchronized-block-better-than-synchronized-method&quot;&gt;https://stackoverflow.com/questions/20906548/why-is-synchronized-block-better-than-synchronized-method&lt;/a&gt;&lt;/p&gt;
-
-</description>
-        <pubDate>Sat, 28 Sep 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/language/2024/09/28/Java-Adv-05/</link>
-        <guid isPermaLink="true">http://localhost:4000/language/2024/09/28/Java-Adv-05/</guid>
-        
-        <category>java</category>
-        
-        
-        <category>language</category>
         
       </item>
     
@@ -1912,182 +1988,7 @@ count값이 1이 된다.&lt;/li&gt;
       </item>
     
       <item>
-        <title>쉽게 배우는 쿠버네티스 - 02</title>
-        <description>&lt;h2 id=&quot;k8s-master&quot;&gt;K8s Master&lt;/h2&gt;
-
-&lt;p&gt;전체 클러스터의 관리를 책임지는 컨트롤 플레인으로, 모든 노드와 파드의 상태를 모니터링하고 제어한다. 클러스터에 대한 모든 API 요청을 처리하며, 클러스터의 상태를 일관되게 유지하도록 한다.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;API Server&lt;/p&gt;
-
-    &lt;p&gt;쿠버네티스 클러스터와의 모든 통신을 담당하는 엔드포인트이다. 사용자가 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;kubectl&lt;/code&gt; 명령어를 통해 클러스터에 요청을 보내면, API Server가 이를 처리하여 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;etcd&lt;/code&gt;에 반영하거나, 다른 컨트롤러와 통신하여 작업을 수행하게 한다. 클러스터의 모든 리소스(파드, 서비스, 설정 등)에 대한 CRUD(Create, Read, Update, Delete) 작업을 처리한다.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;etcd&lt;/p&gt;
-
-    &lt;p&gt;분산 키-값 저장소로, 쿠버네티스 클러스터의 모든 상태 정보(파드, 서비스, 컨피그맵 등)를 저장하고 관리한다. 쿠버네티스의 백업 및 복구 시 중요한 역할을 하며, 클러스터의 상태를 지속적으로 동기화하여 여러 마스터 노드 간의 일관성을 유지한다. 고가용성을 보장하기 위해 여러 노드에 걸쳐 복제될 수 있다.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Scheduler&lt;/p&gt;
-
-    &lt;p&gt;각 파드의 배포 위치(노드)를 결정한다. 스케줄러는 파드의 요구사항(리소스, 노드 선택 기준 등)과 각 노드의 상태(가용 리소스, 부하 등)를 고려하여 최적의 노드를 선택해 파드를 할당한다. 만약 특정 노드에 할당할 수 없는 경우, 다른 노드로 배포하여 클러스터의 효율성을 극대화한다.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;ControllerManager&lt;/p&gt;
-
-    &lt;p&gt;여러 컨트롤러들을 하나로 묶어 관리하는 역할을 한다. 컨트롤러들은 클러스터 상태를 지속적으로 모니터링하고, 사용자가 정의한 상태(desired state)와 실제 상태(actual state) 간의 차이를 감지하여, 이를 일치시키기 위한 작업을 수행한다. 주요 컨트롤러로는 노드 컨트롤러, 레플리케이션 컨트롤러, 엔드포인트 컨트롤러 등이 있다.&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;컨트롤러-종류&quot;&gt;컨트롤러 종류&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;노드 컨트롤러&lt;/p&gt;
-
-    &lt;p&gt;클러스터의 모든 노드를 감시하며, 노드가 정상적으로 작동하고 있는지 확인한다. 노드가 장애를 일으키거나 응답하지 않을 때 이를 감지하고, 해당 노드에서 실행 중이던 파드를 다른 노드로 이동시키거나 재시작한다. 이를 통해 클러스터의 가용성과 신뢰성을 높인다.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;엔드포인트 컨트롤러&lt;/p&gt;
-
-    &lt;p&gt;서비스와 파드를 연결하는 역할을 한다. 서비스가 요청을 받으면, 해당 서비스가 참조하는 파드의 IP 주소 목록을 관리하고, 클러스터 내에서 올바른 파드로 트래픽을 전달하도록 한다. 파드가 추가되거나 삭제될 때마다 엔드포인트 정보를 갱신한다.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;레플리케이션 컨트롤러&lt;/p&gt;
-
-    &lt;p&gt;클러스터 내에서 특정 수의 파드가 항상 실행 중임을 보장한다. 예를 들어, 사용자가 3개의 파드를 원한다고 정의하면, 실제 실행 중인 파드 수가 3개가 되도록 관리한다. 만약 파드가 삭제되거나 장애가 발생하면 새로운 파드를 생성하여 원하는 수를 유지한다. 레플리카셋이나 디플로이먼트와 함께 사용된다.&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;쿠버네티스-워커&quot;&gt;쿠버네티스 워커&lt;/h2&gt;
-
-&lt;p&gt;워커 노드는 클러스터에서 애플리케이션 파드를 실제로 실행하는 노드이다. 각 워커 노드는 여러 파드를 실행할 수 있으며, 마스터 노드로부터 명령을 받아 파드를 관리한다.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;kubelet&lt;/p&gt;
-
-    &lt;p&gt;각 노드에서 실행되며, 노드 내에서 파드와 컨테이너의 상태를 관리한다. API Server로부터 받은 파드 스펙(spec)을 기반으로 컨테이너를 생성하고, 컨테이너가 정상적으로 실행되고 있는지 모니터링한다. 또한, 노드의 상태를 API Server에 보고한다.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;kube-proxy&lt;/p&gt;
-
-    &lt;p&gt;쿠버네티스 서비스 네트워킹을 관리하는 컴포넌트이다. 각 노드에서 실행되며, 클러스터 내 모든 파드 간 통신이 가능하도록 네트워크 규칙을 설정하고 유지한다. iptables 또는 ipvs를 사용하여 로드밸런싱 및 네트워크 프록시 역할을 수행한다. 이를 통해 클러스터 내 서비스 간의 통신이 원활하게 이루어진다.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;파드&lt;/p&gt;
-
-    &lt;p&gt;쿠버네티스에서 배포 가능한 최소 단위이다. 일반적으로 하나의 파드는 하나의 컨테이너를 포함하지만, 상호 의존적인 여러 컨테이너를 하나의 파드로 묶어 배포할 수도 있다. 파드 내의 컨테이너들은 동일한 네트워크 네임스페이스를 공유하여 localhost로 서로 통신할 수 있다. 파드는 일시적인 존재로, 삭제되거나 장애가 발생하면 새로운 파드가 생성될 수 있다.&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;컨테이너-레지스트리&quot;&gt;컨테이너 레지스트리&lt;/h2&gt;
-
-&lt;p&gt;컨테이너 이미지를 저장하고 배포할 수 있는 중앙 저장소이다. 개발자는 로컬에서 빌드한 컨테이너 이미지를 레지스트리에 푸시(push)하고, 이를 클러스터에서 사용할 수 있다. 쿠버네티스 클러스터에서는 레지스트리로부터 이미지를 풀(pull)하여 파드를 생성한다. 주요 컨테이너 레지스트리로는 다음과 같은 것들이 있다.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;Docker Hub&lt;/p&gt;
-
-    &lt;p&gt;가장 널리 사용되는 퍼블릭 컨테이너 레지스트리이다. 누구나 이미지를 업로드하고 다운로드할 수 있으며, 퍼블릭 또는 프라이빗 저장소를 제공한다.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Google Container Registry (GCR)&lt;/p&gt;
-
-    &lt;p&gt;Google Cloud Platform(GCP)에서 제공하는 컨테이너 레지스트리로, GCP 프로젝트와 통합되어 쉽게 컨테이너 이미지를 관리하고 배포할 수 있다.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Amazon Elastic Container Registry (ECR)&lt;/p&gt;
-
-    &lt;p&gt;AWS에서 제공하는 컨테이너 레지스트리로, IAM 권한 관리와 통합되어 보안성을 높이고, AWS 서비스와의 통합을 통해 손쉽게 이미지를 배포할 수 있다.&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.redhat.com/ko/topics/containers/what-is-kubernetes&quot;&gt;https://www.redhat.com/ko/topics/containers/what-is-kubernetes&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://cloud.google.com/kubernetes-engine?hl=ko&quot;&gt;https://cloud.google.com/kubernetes-engine?hl=ko&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&amp;lt;&lt;a href=&quot;https://www.openmaru.io/%ea%b5%ac%ea%b8%80%ea%b3%bc-%ec%bf%a0%eb%b2%84%eb%84%a4%ed%8b%b0%ec%8a%a4/&quot;&gt;https://www.openmaru.io/구글과-쿠버네티스/&lt;/a&gt;&amp;gt;&lt;/p&gt;
-</description>
-        <pubDate>Sun, 22 Sep 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/devops/2024/09/22/Kubernetes-basic-02/</link>
-        <guid isPermaLink="true">http://localhost:4000/devops/2024/09/22/Kubernetes-basic-02/</guid>
-        
-        <category>k8s</category>
-        
-        
-        <category>devops</category>
-        
-      </item>
-    
-      <item>
-        <title>쉽게 배우는 쿠버네티스 - 01</title>
-        <description>&lt;h2 id=&quot;학습의-계기&quot;&gt;학습의 계기&lt;/h2&gt;
-
-&lt;p&gt;카카오 클라우드 부트캠프에서 k8s를 다뤘지만 실습을 따라가는 것만으로는 내용이 전반적으로 깊고 어려워서 추가적인 공부의 필요성을 느끼게 되었다.&lt;/p&gt;
-
-&lt;p&gt;Devops쪽은 사실 어느정도 깊이로 공부를 해둬야하는건지 애매했었는데 이번 기회를 통해 어느정도 깊이있는 학습을 할 수 있지 않을까 기대하고 있다.&lt;/p&gt;
-
-&lt;p&gt;공부는 아래의 주소인 쿠버네티스의 강사 조훈님의 강의를 통해서 공부를 시작하게 되었다.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.inflearn.com/course/%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4-%EC%89%BD%EA%B2%8C%EC%8B%9C%EC%9E%91/dashboard&quot;&gt;https://www.inflearn.com/course/%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4-%EC%89%BD%EA%B2%8C%EC%8B%9C%EC%9E%91/dashboard&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;쿠버네티스의-역할-그리고-무엇을-하는지&quot;&gt;쿠버네티스의 역할, 그리고 무엇을 하는지?&lt;/h2&gt;
-
-&lt;h3 id=&quot;1-오케스트레이션&quot;&gt;1) 오케스트레이션&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;오늘날의 개발에서 애플리케이션은 더 이상 하나의 통일체가 아니라, 특정 &lt;strong&gt;애플리케이션&lt;/strong&gt;이 설계된 대로 기능하도록 함께 작동해야 하는 &lt;strong&gt;수십 또는 수백 개의 느슨하게 결합된 컨테이너로 구성&lt;/strong&gt;된다.&lt;/li&gt;
-  &lt;li&gt;하지만 수백 개의 컨테이너를 끊임없이 배포하고 관리하는 일은 굉장한 리소스를 요구로 한다. 이러한 어려움을 해결하기 위해 오케스트레이션이 등장했다. &lt;strong&gt;오케스트레이션이란 컨테이너화된 애플리케이션의 자동화 및 최적화&lt;/strong&gt;를 뜻하며, 컨테이너 오케스트레이션이란 용어로 쓰인다.&lt;/li&gt;
-  &lt;li&gt;즉 정리하자면, 컨테이너 오케스트레이션의 목적은 &lt;strong&gt;여러 컨테이너의 배포 프로세스를 최적화&lt;/strong&gt; 하는데 있으며, 이것은 컨테이너와 호스트의 수가 증가함에 따라 점점 더 가치가 있게 된다는 것이다.&lt;/li&gt;
-  &lt;li&gt;대표적인 Docker기반 컨테이너 오케스트레이션 툴로는 Docker Swarm, Kubernetes, Apache Mesos가 있으며, 우리가 알아보고 사용하고자 하는 것은 Kubernetes이다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;2-쿠버네티스&quot;&gt;2) 쿠버네티스&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Kubernetes는 컨테이너화된 애플리케이션의 배포, 확장 및 관리를 자동화하는 오픈 소스 시스템, 즉 컨테이너 오케스트레이션 도구이다.&lt;/li&gt;
-  &lt;li&gt;Kubernetes를 사용하면 컨테이너화된 애플리케이션을 배포 및 확장하는 데 수반되는 수동 프로세스의 많은 부분을 자동화 할 수 있다.&lt;/li&gt;
-  &lt;li&gt;즉, 여러 Linux 호스트들을 클러스터링 할 수 있으며 이러한 클러스터를 쉽고 효율적으로 관리할 수 있다. 또한 Kubernetes는 On-premise, Private Cloud, Public Cloud 등 다양한 환경에서 적용이 가능하다.&lt;/li&gt;
-  &lt;li&gt;쿠버네티스로 인하여 각각의 컨테이너를 직접 하나씩 관리하지 않아도 된다. 개발자는 여러 컨테이너에 걸친 애플리케이션의 배치도를 작성하는데, 여기에는 각 컨테이너가 네트워킹과 스토리지를 사용하는 방식 등의 세부 정보가 담겨 있다. 쿠버네티스는 런타임에서 나머지 부분을 처리한다. 또한 기밀이나 앱 환경 구성 같은 성가신 세부 관리도 맡는다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;그래서-쿠버네티스를-왜-쓰는데-&quot;&gt;그래서 쿠버네티스를 왜 쓰는데 ?&lt;/h2&gt;
-
-&lt;p&gt;이유는 몇 년 전만 해도 대부분의 소프트웨어 애플리케이션은 하나의 프로세스 또는 몇 개의 서버에 분산된 프로세스로 실행되었다.&lt;/p&gt;
-
-&lt;p&gt;이런 레거시 시스템은 릴리즈 주기가 느리고 비교적 업데이트가 자주 되지 않는다. 급변하는 현대 비즈니스의 요구사항을 충족시키려면 자주, 그리고 니즈에 맞춰서 빠르게 구성 요소를 변경할 수 있어야 한다.&lt;/p&gt;
-
-&lt;p&gt;그래서 마이크로서비스 개념이 등장했으며 이는 시스템을 독립적으로 실행되는 더 작은 구성 요소로 세분화 할 수 있다.&lt;/p&gt;
-
-&lt;p&gt;하지만 점차 배포 가능한 구성 요소의 수가 많아지고 데이터 센터의 규모가 커지면서 전체 시스템을 원활하게 구성, 관리할 수 있는 자동화가 필요해졌는데, 이것이 바로 쿠버네티스가 등장한 이유다.&lt;/p&gt;
-
-&lt;p&gt;쿠버네티스는 하드웨어 인프라를 추상화하고 데이터 센터 전체를 하나의 거대한 컴퓨팅 리소스로 제공한다.&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.redhat.com/ko/topics/containers/what-is-kubernetes&quot;&gt;https://www.redhat.com/ko/topics/containers/what-is-kubernetes&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://cloud.google.com/kubernetes-engine?hl=ko&quot;&gt;https://cloud.google.com/kubernetes-engine?hl=ko&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&amp;lt;&lt;a href=&quot;https://www.openmaru.io/%ea%b5%ac%ea%b8%80%ea%b3%bc-%ec%bf%a0%eb%b2%84%eb%84%a4%ed%8b%b0%ec%8a%a4/&quot;&gt;https://www.openmaru.io/구글과-쿠버네티스/&lt;/a&gt;&amp;gt;&lt;/p&gt;
-</description>
-        <pubDate>Sun, 22 Sep 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/devops/2024/09/22/Kubernetes-basic-01/</link>
-        <guid isPermaLink="true">http://localhost:4000/devops/2024/09/22/Kubernetes-basic-01/</guid>
-        
-        <category>k8s</category>
-        
-        
-        <category>devops</category>
-        
-      </item>
-    
-      <item>
-        <title>Java Adv - Thread 4</title>
+        <title>Java Adv  - Thread 4</title>
         <description>&lt;h2 id=&quot;join&quot;&gt;Join&lt;/h2&gt;
 
 &lt;ul&gt;
@@ -2280,7 +2181,7 @@ count값이 1이 된다.&lt;/li&gt;
       </item>
     
       <item>
-        <title>Java Adv - Thread 3</title>
+        <title>Java Adv  - Thread 3</title>
         <description>&lt;h2 id=&quot;채크-예외-재정의&quot;&gt;채크 예외 재정의&lt;/h2&gt;
 
 &lt;ul&gt;
@@ -2377,148 +2278,177 @@ count값이 1이 된다.&lt;/li&gt;
       </item>
     
       <item>
-        <title>Java Adv - Thread 2</title>
-        <description>&lt;h2 id=&quot;스레드-기본정보&quot;&gt;스레드 기본정보&lt;/h2&gt;
+        <title>쉽게 배우는 쿠버네티스 - 02</title>
+        <description>&lt;h2 id=&quot;k8s-master&quot;&gt;K8s Master&lt;/h2&gt;
 
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;thread.control&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;util&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;MyLogger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ThreadInfoMain&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//mainThread&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mainThread&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;currentThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;mainThread() = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mainThread&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;mainThread.thread() = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mainThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;threadId&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;mainThread.getName() = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mainThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;mainThread.getPriority() = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mainThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getPriority&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;mainThread.getThreadGroup() = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mainThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getThreadGroup&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;mainThread.getState() = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mainThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        
-        &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;myThread&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;HelloRunnable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;myThread() = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;myThread&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;myThread.thread() = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;myThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;threadId&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;myThread.getName() = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;myThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;myThread.getPriority() = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;myThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getPriority&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//기본값이 5&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;myThread.getThreadGroup() = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;myThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getThreadGroup&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;myThread.getState() = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;myThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//NEW&lt;/span&gt;
-		
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;img width=&quot;653&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/d8b4693f-1b4f-4945-aeaf-81665977d2ce&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;스레드-생성&quot;&gt;스레드 생성&lt;/h3&gt;
-
-&lt;p&gt;스레드를 생성할 때는 실행할 Runnable 인터페이스의 구현체와, 스레드의 이름을 전달할 수 있다.&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;myThread&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;HelloRunnable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;myThread&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;전체 클러스터의 관리를 책임지는 컨트롤 플레인으로, 모든 노드와 파드의 상태를 모니터링하고 제어한다. 클러스터에 대한 모든 API 요청을 처리하며, 클러스터의 상태를 일관되게 유지하도록 한다.&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;Runnable 인터페이스 : 실행할 작업을 포함하는 인터페이스이다.
-    &lt;ul&gt;
-      &lt;li&gt;HelloRunnable 클래스는 Runnable 인터페이스를 구현한 클래스이다.&lt;/li&gt;
-    &lt;/ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;API Server&lt;/p&gt;
+
+    &lt;p&gt;쿠버네티스 클러스터와의 모든 통신을 담당하는 엔드포인트이다. 사용자가 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;kubectl&lt;/code&gt; 명령어를 통해 클러스터에 요청을 보내면, API Server가 이를 처리하여 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;etcd&lt;/code&gt;에 반영하거나, 다른 컨트롤러와 통신하여 작업을 수행하게 한다. 클러스터의 모든 리소스(파드, 서비스, 설정 등)에 대한 CRUD(Create, Read, Update, Delete) 작업을 처리한다.&lt;/p&gt;
   &lt;/li&gt;
-  &lt;li&gt;Thread() 스레드 아이디는 중복이 허용되지 않는다. 유일한 식별자 이기 때문이다. 이 ID는 JVM내에서 각 스레드에 대해서 유일하다. ID는 스레드가 생성될 때 할당되며, 직접 지정할 수는 없다.&lt;/li&gt;
-  &lt;li&gt;getName() 스레드 이름을 반환하는 메서드이다. “myThread”라는 이름을 지정하면 이 값이 반한된다. 스레드 ID는 중복을 허용하지 않지만, 이름은 중복을 허용한다.&lt;/li&gt;
-  &lt;li&gt;스레드 우선순위 : 우선순위를 반환하는 메서드이다 → CPU스케줄링에서 먼저처리해야 할 부분들에 대해서 우선순위를 지정할 수 있다. → 우선순위는 가장 낮음 1과 가장 높음 10으로 설정되는데 지정해주지 않으면 기본 값인 5가 지정된다. → 1과 10의 사이인 5가 기본값으로 설정되는듯 하다.
-    &lt;ul&gt;
-      &lt;li&gt;우선순위는 스레드 스케줄러가 어떤 스레드를 우선 실행할지 결정하는 데 사용한다. 하지만 실제 실행 순서는 JVM구현과 운영체제에 따라서 달라질 수 있다.&lt;/li&gt;
-    &lt;/ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;etcd&lt;/p&gt;
+
+    &lt;p&gt;분산 키-값 저장소로, 쿠버네티스 클러스터의 모든 상태 정보(파드, 서비스, 컨피그맵 등)를 저장하고 관리한다. 쿠버네티스의 백업 및 복구 시 중요한 역할을 하며, 클러스터의 상태를 지속적으로 동기화하여 여러 마스터 노드 간의 일관성을 유지한다. 고가용성을 보장하기 위해 여러 노드에 걸쳐 복제될 수 있다.&lt;/p&gt;
   &lt;/li&gt;
-  &lt;li&gt;스레드 그룹 → 스레드는 그룹으로 소속된다. 기본적으로 모든 스레드는 부모 스레드와 동일한 그룹으로 설정된다.
-    &lt;ul&gt;
-      &lt;li&gt;부모 스레드 : 새로운 스레드를 생성하는 스레드를 의미한다. 예를들어 myThread는 mainThread에 의해서 생성되었으므로 mainThread가 부모스레드이며, myThread도 mainThread에 소속하게 된다.&lt;/li&gt;
-    &lt;/ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Scheduler&lt;/p&gt;
+
+    &lt;p&gt;각 파드의 배포 위치(노드)를 결정한다. 스케줄러는 파드의 요구사항(리소스, 노드 선택 기준 등)과 각 노드의 상태(가용 리소스, 부하 등)를 고려하여 최적의 노드를 선택해 파드를 할당한다. 만약 특정 노드에 할당할 수 없는 경우, 다른 노드로 배포하여 클러스터의 효율성을 극대화한다.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;ControllerManager&lt;/p&gt;
+
+    &lt;p&gt;여러 컨트롤러들을 하나로 묶어 관리하는 역할을 한다. 컨트롤러들은 클러스터 상태를 지속적으로 모니터링하고, 사용자가 정의한 상태(desired state)와 실제 상태(actual state) 간의 차이를 감지하여, 이를 일치시키기 위한 작업을 수행한다. 주요 컨트롤러로는 노드 컨트롤러, 레플리케이션 컨트롤러, 엔드포인트 컨트롤러 등이 있다.&lt;/p&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&quot;스레드의-상태&quot;&gt;스레드의 상태&lt;/h2&gt;
+&lt;h2 id=&quot;컨트롤러-종류&quot;&gt;컨트롤러 종류&lt;/h2&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;NEW&lt;/li&gt;
-  &lt;li&gt;Runnable : 실행 중이거나 실행될 준비가 된 상태&lt;/li&gt;
-  &lt;li&gt;일시 중지 상태
-    &lt;ul&gt;
-      &lt;li&gt;Blocked&lt;/li&gt;
-      &lt;li&gt;Waiting&lt;/li&gt;
-      &lt;li&gt;Timed Waiting&lt;/li&gt;
-    &lt;/ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;노드 컨트롤러&lt;/p&gt;
+
+    &lt;p&gt;클러스터의 모든 노드를 감시하며, 노드가 정상적으로 작동하고 있는지 확인한다. 노드가 장애를 일으키거나 응답하지 않을 때 이를 감지하고, 해당 노드에서 실행 중이던 파드를 다른 노드로 이동시키거나 재시작한다. 이를 통해 클러스터의 가용성과 신뢰성을 높인다.&lt;/p&gt;
   &lt;/li&gt;
-  &lt;li&gt;Terminated(종료상태)&lt;/li&gt;
-&lt;/ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;엔드포인트 컨트롤러&lt;/p&gt;
 
-&lt;h3 id=&quot;new새로운-상태&quot;&gt;new(새로운 상태)&lt;/h3&gt;
+    &lt;p&gt;서비스와 파드를 연결하는 역할을 한다. 서비스가 요청을 받으면, 해당 서비스가 참조하는 파드의 IP 주소 목록을 관리하고, 클러스터 내에서 올바른 파드로 트래픽을 전달하도록 한다. 파드가 추가되거나 삭제될 때마다 엔드포인트 정보를 갱신한다.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;레플리케이션 컨트롤러&lt;/p&gt;
 
-&lt;ul&gt;
-  &lt;li&gt;스레드가 생성되고 아직 시작되지 않은 상태&lt;/li&gt;
-  &lt;li&gt;이 상태에서는 Thread객체가 생성되지만 start()메서드는 호출되지 않은 상태이다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;runnable실행-가능-상태&quot;&gt;Runnable(실행 가능 상태)&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;스레드가 실행될 준비가 된 상태 이 상태에서는 스레드는 실제로 CPU에서 실행될 수 있다.&lt;/li&gt;
-  &lt;li&gt;start()메서드가 호출되면 스레드는 이 상태로 들어간다.&lt;/li&gt;
-  &lt;li&gt;Runnable상태에 있는 모든 스레드가 동시에 실행되는 것은 아니다. 운영체제의 각 스레드에 CPU 시간을 할당하여 실행하기 때문에 스레드는 스케줄러의 실행 대기열에 포함되어 있다가 차례로 CPU에서 실행된다.&lt;/li&gt;
-  &lt;li&gt;스케줄러의 실행 대기열에 있든, CPU에서 실제 실행이 되고 있든 모두 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Runnable&lt;/code&gt; 상태이다.
-    &lt;ul&gt;
-      &lt;li&gt;보통 실행 상태라고 부른다.&lt;/li&gt;
-    &lt;/ul&gt;
+    &lt;p&gt;클러스터 내에서 특정 수의 파드가 항상 실행 중임을 보장한다. 예를 들어, 사용자가 3개의 파드를 원한다고 정의하면, 실제 실행 중인 파드 수가 3개가 되도록 관리한다. 만약 파드가 삭제되거나 장애가 발생하면 새로운 파드를 생성하여 원하는 수를 유지한다. 레플리카셋이나 디플로이먼트와 함께 사용된다.&lt;/p&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&quot;blocked차단-상태&quot;&gt;Blocked(차단 상태)&lt;/h3&gt;
+&lt;h2 id=&quot;쿠버네티스-워커&quot;&gt;쿠버네티스 워커&lt;/h2&gt;
+
+&lt;p&gt;워커 노드는 클러스터에서 애플리케이션 파드를 실제로 실행하는 노드이다. 각 워커 노드는 여러 파드를 실행할 수 있으며, 마스터 노드로부터 명령을 받아 파드를 관리한다.&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;스레드가 다른 스레드에 의해 동기화 락을 얻기 위해 기다리는 상태이다.&lt;/li&gt;
-  &lt;li&gt;synchronized 블록에 진입하기 위해 락을 얻어야 하는 경우 이 상태에 들어간다.&lt;/li&gt;
-  &lt;li&gt;다른 스레드가 lock을 가지고 있으면 다시 lock이 돌아올 때 까지 기다려야 한다.&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;kubelet&lt;/p&gt;
+
+    &lt;p&gt;각 노드에서 실행되며, 노드 내에서 파드와 컨테이너의 상태를 관리한다. API Server로부터 받은 파드 스펙(spec)을 기반으로 컨테이너를 생성하고, 컨테이너가 정상적으로 실행되고 있는지 모니터링한다. 또한, 노드의 상태를 API Server에 보고한다.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;kube-proxy&lt;/p&gt;
+
+    &lt;p&gt;쿠버네티스 서비스 네트워킹을 관리하는 컴포넌트이다. 각 노드에서 실행되며, 클러스터 내 모든 파드 간 통신이 가능하도록 네트워크 규칙을 설정하고 유지한다. iptables 또는 ipvs를 사용하여 로드밸런싱 및 네트워크 프록시 역할을 수행한다. 이를 통해 클러스터 내 서비스 간의 통신이 원활하게 이루어진다.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;파드&lt;/p&gt;
+
+    &lt;p&gt;쿠버네티스에서 배포 가능한 최소 단위이다. 일반적으로 하나의 파드는 하나의 컨테이너를 포함하지만, 상호 의존적인 여러 컨테이너를 하나의 파드로 묶어 배포할 수도 있다. 파드 내의 컨테이너들은 동일한 네트워크 네임스페이스를 공유하여 localhost로 서로 통신할 수 있다. 파드는 일시적인 존재로, 삭제되거나 장애가 발생하면 새로운 파드가 생성될 수 있다.&lt;/p&gt;
+  &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&quot;waiting대기-상태&quot;&gt;Waiting(대기 상태)&lt;/h3&gt;
+&lt;h2 id=&quot;컨테이너-레지스트리&quot;&gt;컨테이너 레지스트리&lt;/h2&gt;
+
+&lt;p&gt;컨테이너 이미지를 저장하고 배포할 수 있는 중앙 저장소이다. 개발자는 로컬에서 빌드한 컨테이너 이미지를 레지스트리에 푸시(push)하고, 이를 클러스터에서 사용할 수 있다. 쿠버네티스 클러스터에서는 레지스트리로부터 이미지를 풀(pull)하여 파드를 생성한다. 주요 컨테이너 레지스트리로는 다음과 같은 것들이 있다.&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;스레드가 다른 스레드의 특정 작업이 완료되그를 무기한 기다리는 상태이다.&lt;/li&gt;
-  &lt;li&gt;wain(), join() 메서드가 호출될 때 이상태가 된다.&lt;/li&gt;
-  &lt;li&gt;스레드는 다른 스레드가 notify(), or notifyAll() 메서드를 호출하거나, join()이 완료될 때까지 기다린다.&lt;/li&gt;
-&lt;/ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Docker Hub&lt;/p&gt;
 
-&lt;h3 id=&quot;timed-waiting시간-제한-대기-상태&quot;&gt;Timed Waiting(시간 제한 대기 상태)&lt;/h3&gt;
+    &lt;p&gt;가장 널리 사용되는 퍼블릭 컨테이너 레지스트리이다. 누구나 이미지를 업로드하고 다운로드할 수 있으며, 퍼블릭 또는 프라이빗 저장소를 제공한다.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Google Container Registry (GCR)&lt;/p&gt;
 
-&lt;ul&gt;
-  &lt;li&gt;스레드가 특정 시간 동안 다른 스레드의 작업이 완료되기를 기다리는 상태이다.&lt;/li&gt;
-  &lt;li&gt;sleep(long millis), wait()long timeout), join(long milis) 메서드가 호출될 때 이상태가 된다.&lt;/li&gt;
-  &lt;li&gt;주어진 시간이 경과하거나, 다른 스레드가 해당 스레드를 깨우면 이 상태에서 벗어난다.&lt;/li&gt;
-  &lt;li&gt;Thread.sleep(1000)&lt;/li&gt;
-&lt;/ul&gt;
+    &lt;p&gt;Google Cloud Platform(GCP)에서 제공하는 컨테이너 레지스트리로, GCP 프로젝트와 통합되어 쉽게 컨테이너 이미지를 관리하고 배포할 수 있다.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Amazon Elastic Container Registry (ECR)&lt;/p&gt;
 
-&lt;h3 id=&quot;terminated종료-상태&quot;&gt;Terminated(종료 상태)&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;스레드가 실행이 완료된 상태이다.&lt;/li&gt;
-  &lt;li&gt;스레드가 정상적으로 종료되거나, 예외가 발생하여 종료된 경우 이 상태로 돌아간다.&lt;/li&gt;
-  &lt;li&gt;스레드는 한 번 종료되면 다시 시작할 수 없다.&lt;/li&gt;
-  &lt;li&gt;Sleep을 하면 체크예외가 터진다.&lt;/li&gt;
+    &lt;p&gt;AWS에서 제공하는 컨테이너 레지스트리로, IAM 권한 관리와 통합되어 보안성을 높이고, AWS 서비스와의 통합을 통해 손쉽게 이미지를 배포할 수 있다.&lt;/p&gt;
+  &lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
 
-&lt;p&gt;인프런 김영한님의 자바강좌 + 나의 뇌&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://www.redhat.com/ko/topics/containers/what-is-kubernetes&quot;&gt;https://www.redhat.com/ko/topics/containers/what-is-kubernetes&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://cloud.google.com/kubernetes-engine?hl=ko&quot;&gt;https://cloud.google.com/kubernetes-engine?hl=ko&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&amp;lt;&lt;a href=&quot;https://www.openmaru.io/%ea%b5%ac%ea%b8%80%ea%b3%bc-%ec%bf%a0%eb%b2%84%eb%84%a4%ed%8b%b0%ec%8a%a4/&quot;&gt;https://www.openmaru.io/구글과-쿠버네티스/&lt;/a&gt;&amp;gt;&lt;/p&gt;
 </description>
-        <pubDate>Sat, 21 Sep 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/language/2024/09/21/Java-Adv-02/</link>
-        <guid isPermaLink="true">http://localhost:4000/language/2024/09/21/Java-Adv-02/</guid>
+        <pubDate>Sun, 22 Sep 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/devops/2024/09/22/Kubernetes-basic-02/</link>
+        <guid isPermaLink="true">http://localhost:4000/devops/2024/09/22/Kubernetes-basic-02/</guid>
         
-        <category>java</category>
+        <category>k8s</category>
         
         
-        <category>language</category>
+        <category>devops</category>
+        
+      </item>
+    
+      <item>
+        <title>쉽게 배우는 쿠버네티스 - 01</title>
+        <description>&lt;h2 id=&quot;학습의-계기&quot;&gt;학습의 계기&lt;/h2&gt;
+
+&lt;p&gt;카카오 클라우드 부트캠프에서 k8s를 다뤘지만 실습을 따라가는 것만으로는 내용이 전반적으로 깊고 어려워서 추가적인 공부의 필요성을 느끼게 되었다.&lt;/p&gt;
+
+&lt;p&gt;Devops쪽은 사실 어느정도 깊이로 공부를 해둬야하는건지 애매했었는데 이번 기회를 통해 어느정도 깊이있는 학습을 할 수 있지 않을까 기대하고 있다.&lt;/p&gt;
+
+&lt;p&gt;공부는 아래의 주소인 쿠버네티스의 강사 조훈님의 강의를 통해서 공부를 시작하게 되었다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.inflearn.com/course/%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4-%EC%89%BD%EA%B2%8C%EC%8B%9C%EC%9E%91/dashboard&quot;&gt;https://www.inflearn.com/course/%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4-%EC%89%BD%EA%B2%8C%EC%8B%9C%EC%9E%91/dashboard&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;쿠버네티스의-역할-그리고-무엇을-하는지&quot;&gt;쿠버네티스의 역할, 그리고 무엇을 하는지?&lt;/h2&gt;
+
+&lt;h3 id=&quot;1-오케스트레이션&quot;&gt;1) 오케스트레이션&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;오늘날의 개발에서 애플리케이션은 더 이상 하나의 통일체가 아니라, 특정 &lt;strong&gt;애플리케이션&lt;/strong&gt;이 설계된 대로 기능하도록 함께 작동해야 하는 &lt;strong&gt;수십 또는 수백 개의 느슨하게 결합된 컨테이너로 구성&lt;/strong&gt;된다.&lt;/li&gt;
+  &lt;li&gt;하지만 수백 개의 컨테이너를 끊임없이 배포하고 관리하는 일은 굉장한 리소스를 요구로 한다. 이러한 어려움을 해결하기 위해 오케스트레이션이 등장했다. &lt;strong&gt;오케스트레이션이란 컨테이너화된 애플리케이션의 자동화 및 최적화&lt;/strong&gt;를 뜻하며, 컨테이너 오케스트레이션이란 용어로 쓰인다.&lt;/li&gt;
+  &lt;li&gt;즉 정리하자면, 컨테이너 오케스트레이션의 목적은 &lt;strong&gt;여러 컨테이너의 배포 프로세스를 최적화&lt;/strong&gt; 하는데 있으며, 이것은 컨테이너와 호스트의 수가 증가함에 따라 점점 더 가치가 있게 된다는 것이다.&lt;/li&gt;
+  &lt;li&gt;대표적인 Docker기반 컨테이너 오케스트레이션 툴로는 Docker Swarm, Kubernetes, Apache Mesos가 있으며, 우리가 알아보고 사용하고자 하는 것은 Kubernetes이다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;2-쿠버네티스&quot;&gt;2) 쿠버네티스&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Kubernetes는 컨테이너화된 애플리케이션의 배포, 확장 및 관리를 자동화하는 오픈 소스 시스템, 즉 컨테이너 오케스트레이션 도구이다.&lt;/li&gt;
+  &lt;li&gt;Kubernetes를 사용하면 컨테이너화된 애플리케이션을 배포 및 확장하는 데 수반되는 수동 프로세스의 많은 부분을 자동화 할 수 있다.&lt;/li&gt;
+  &lt;li&gt;즉, 여러 Linux 호스트들을 클러스터링 할 수 있으며 이러한 클러스터를 쉽고 효율적으로 관리할 수 있다. 또한 Kubernetes는 On-premise, Private Cloud, Public Cloud 등 다양한 환경에서 적용이 가능하다.&lt;/li&gt;
+  &lt;li&gt;쿠버네티스로 인하여 각각의 컨테이너를 직접 하나씩 관리하지 않아도 된다. 개발자는 여러 컨테이너에 걸친 애플리케이션의 배치도를 작성하는데, 여기에는 각 컨테이너가 네트워킹과 스토리지를 사용하는 방식 등의 세부 정보가 담겨 있다. 쿠버네티스는 런타임에서 나머지 부분을 처리한다. 또한 기밀이나 앱 환경 구성 같은 성가신 세부 관리도 맡는다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;그래서-쿠버네티스를-왜-쓰는데-&quot;&gt;그래서 쿠버네티스를 왜 쓰는데 ?&lt;/h2&gt;
+
+&lt;p&gt;이유는 몇 년 전만 해도 대부분의 소프트웨어 애플리케이션은 하나의 프로세스 또는 몇 개의 서버에 분산된 프로세스로 실행되었다.&lt;/p&gt;
+
+&lt;p&gt;이런 레거시 시스템은 릴리즈 주기가 느리고 비교적 업데이트가 자주 되지 않는다. 급변하는 현대 비즈니스의 요구사항을 충족시키려면 자주, 그리고 니즈에 맞춰서 빠르게 구성 요소를 변경할 수 있어야 한다.&lt;/p&gt;
+
+&lt;p&gt;그래서 마이크로서비스 개념이 등장했으며 이는 시스템을 독립적으로 실행되는 더 작은 구성 요소로 세분화 할 수 있다.&lt;/p&gt;
+
+&lt;p&gt;하지만 점차 배포 가능한 구성 요소의 수가 많아지고 데이터 센터의 규모가 커지면서 전체 시스템을 원활하게 구성, 관리할 수 있는 자동화가 필요해졌는데, 이것이 바로 쿠버네티스가 등장한 이유다.&lt;/p&gt;
+
+&lt;p&gt;쿠버네티스는 하드웨어 인프라를 추상화하고 데이터 센터 전체를 하나의 거대한 컴퓨팅 리소스로 제공한다.&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.redhat.com/ko/topics/containers/what-is-kubernetes&quot;&gt;https://www.redhat.com/ko/topics/containers/what-is-kubernetes&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://cloud.google.com/kubernetes-engine?hl=ko&quot;&gt;https://cloud.google.com/kubernetes-engine?hl=ko&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&amp;lt;&lt;a href=&quot;https://www.openmaru.io/%ea%b5%ac%ea%b8%80%ea%b3%bc-%ec%bf%a0%eb%b2%84%eb%84%a4%ed%8b%b0%ec%8a%a4/&quot;&gt;https://www.openmaru.io/구글과-쿠버네티스/&lt;/a&gt;&amp;gt;&lt;/p&gt;
+</description>
+        <pubDate>Sun, 22 Sep 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/devops/2024/09/22/Kubernetes-basic-01/</link>
+        <guid isPermaLink="true">http://localhost:4000/devops/2024/09/22/Kubernetes-basic-01/</guid>
+        
+        <category>k8s</category>
+        
+        
+        <category>devops</category>
         
       </item>
     
