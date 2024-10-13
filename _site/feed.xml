@@ -6,12 +6,107 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 13 Oct 2024 22:47:15 +0900</pubDate>
-    <lastBuildDate>Sun, 13 Oct 2024 22:47:15 +0900</lastBuildDate>
+    <pubDate>Sun, 13 Oct 2024 23:18:36 +0900</pubDate>
+    <lastBuildDate>Sun, 13 Oct 2024 23:18:36 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
-        <title>Java Adv - Synchronized Method</title>
+        <title>Java Adv 07 - LockSupport</title>
+        <description>&lt;h2 id=&quot;locksupport&quot;&gt;LockSupport&lt;/h2&gt;
+
+&lt;h3 id=&quot;synchronized의-단점&quot;&gt;Synchronized의 단점&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt;는 자바 1.0부터 제공되는 매우 편리한 기능이다. 그러나 몇 가지 단점이 있다.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;무한 대기&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BLOCKED&lt;/code&gt; 상태의 스레드는 락이 풀릴 때까지 무한히 대기하게 된다.&lt;/li&gt;
+      &lt;li&gt;특정 시간까지만 대기하는 타임아웃이 없으며, 중간에 인터럽트가 불가능하다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;공정성&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;락이 풀릴 때 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BLOCKED&lt;/code&gt; 상태의 여러 스레드 중 어떤 스레드가 락을 획득할지 알 수 없다.&lt;/li&gt;
+      &lt;li&gt;최악의 경우 특정 스레드가 매우 오랜 시간 동안 락을 획득하지 못할 수 있다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;이러한 문제를 해결하기 위해 자바 1.5부터 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;java.util.concurrent&lt;/code&gt; 패키지가 추가되었다. 이 패키지는 다양한 동시성 문제를 해결할 수 있는 클래스들을 포함하고 있다.&lt;/p&gt;
+
+&lt;h2 id=&quot;locksupport-1&quot;&gt;LockSupport&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;LockSupport&lt;/code&gt;는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt;의 가장 큰 단점인 무한 대기 문제를 해결할 수 있는 도구이다.&lt;/p&gt;
+
+&lt;h3 id=&quot;주요-기능&quot;&gt;주요 기능&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;스레드 상태 변경&lt;/strong&gt; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;LockSupport&lt;/code&gt;는 스레드를 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;WAITING&lt;/code&gt; 상태로 변경한다. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;WAITING&lt;/code&gt; 상태의 스레드는 누군가가 깨워주기 전까지 대기하며, CPU 실행 스케줄링에 들어가지 않는다.
+    &lt;ol&gt;
+      &lt;li&gt;&lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;park()&lt;/code&gt;&lt;/strong&gt;&lt;/li&gt;
+    &lt;/ol&gt;
+    &lt;ul&gt;
+      &lt;li&gt;스레드를 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;WAITING&lt;/code&gt; 상태로 변경한다 (주차하다, 두다의 의미)
+        &lt;ol&gt;
+          &lt;li&gt;&lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;parkNanos(nanos)&lt;/code&gt;&lt;/strong&gt;&lt;/li&gt;
+        &lt;/ol&gt;
+      &lt;/li&gt;
+      &lt;li&gt;스레드를 지정한 나노초 동안만 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TIMED_WAITING&lt;/code&gt; 상태로 변경한다.&lt;/li&gt;
+      &lt;li&gt;지정한 시간이 지나면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TIMED_WAITING&lt;/code&gt; 상태에서 빠져나와 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUNNABLE&lt;/code&gt; 상태로 변경된다.
+        &lt;ol&gt;
+          &lt;li&gt;&lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;unpark(thread)&lt;/code&gt;&lt;/strong&gt;&lt;/li&gt;
+        &lt;/ol&gt;
+      &lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;WAITING&lt;/code&gt; 상태의 대상 스레드를 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUNNABLE&lt;/code&gt; 상태로 변경한다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;이러한 기능들을 통해 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;LockSupport&lt;/code&gt;는 더 유연하고 세밀한 스레드 제어를 가능하게 한다.&lt;/p&gt;
+
+&lt;h2 id=&quot;thread-park&quot;&gt;Thread Park&lt;/h2&gt;
+
+&lt;p&gt;&lt;img width=&quot;643&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/1b368b5e-3e30-437b-9232-829a39d43ed3&quot; /&gt;
+&lt;img width=&quot;639&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/ea81ed79-9845-4682-b62b-0d92ab359b65&quot; /&gt;
+재밌는 점은 대기 상태로 바꾸는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;LockSupport.park()&lt;/code&gt; 는 매개변수가 없는데, 실행 가능 상태로 바꾸는
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;LockSupport.unpark(thread1)&lt;/code&gt; 는 왜 특정 스레드를 지정하는 매개변수가 있을까?
+왜냐하면 실행 중인 스레드는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;LockSupport.park()&lt;/code&gt; 를 호출해서 스스로 대기 상태에 빠질 수 있지만, 대기 상태의 스레드는 자신의 코드를 실행할 수 없기 때문이다. 따라서 외부 스레드의 도움을 받아야 깨어날 수 있다.&lt;/p&gt;
+
+&lt;h2 id=&quot;시간-대기&quot;&gt;&lt;strong&gt;시간&lt;/strong&gt; &lt;strong&gt;대기&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;img width=&quot;642&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/d2d917a4-3e62-4664-bfea-cffe8fc8a18e&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;parkNanos(nanos)&lt;/code&gt; : 스레드를 나노초 동안만 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TIMED_WAITING&lt;/code&gt; 상태로 변경한다. 지정한 나노초가 지나면
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TIMED_WAITING&lt;/code&gt;상태에서 빠져나와서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUNNABLE&lt;/code&gt; 상태로 변경된다.
+참고로 밀리초 동안만 대기하는 메서드는 없다. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;parkUntil(밀리초)&lt;/code&gt; 라는 메서드가 있는데, 이 메서드는 특정
+에포크(Epoch) 시간에 맞추어 깨어나는 메서드이다. 정확한 미래의 에포크 시점을 지정해야 한다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;608&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/346016de-2d8a-4d9d-bc60-490e0769f186&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;parkNanos(시간)&lt;/code&gt; 를 사용하면 지정한 시간 이후에 스레드가 깨어난다.
+1초 = 1000밀리초(ms) 2초 = 2,000,000,000나노초(ns) 2초의 간격으로 thread가 깨어나는 것을 확인할 수 있다.&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;김영한님의 자바 강의&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://stackoverflow.com/questions/20906548/why-is-synchronized-block-better-than-synchronized-method&quot;&gt;https://stackoverflow.com/questions/20906548/why-is-synchronized-block-better-than-synchronized-method&lt;/a&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Thu, 03 Oct 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/language/2024/10/03/Java-Adv-07/</link>
+        <guid isPermaLink="true">http://localhost:4000/language/2024/10/03/Java-Adv-07/</guid>
+        
+        <category>java</category>
+        
+        
+        <category>language</category>
+        
+      </item>
+    
+      <item>
+        <title>Java Adv 06 - Synchronized Ex</title>
         <description>&lt;h2 id=&quot;thread-synchronized&quot;&gt;Thread Synchronized&lt;/h2&gt;
 
 &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SyncTest1BadMain&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
@@ -672,7 +767,7 @@ ex) f(1) → f(2) → f(3)으로 호출을 했다면 f(3) → f(2) → f(1) 순�
       </item>
     
       <item>
-        <title>Java Adv  - Synchronized Method</title>
+        <title>Java Adv 05 - Synchronized Method</title>
         <description>&lt;h2 id=&quot;synchronized로-동시성-제어하기&quot;&gt;Synchronized로 동시성 제어하기&lt;/h2&gt;
 
 &lt;p&gt;&lt;img width=&quot;502&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/9920b377-48b6-4d10-a2c6-c1d6d49cc752&quot; /&gt;
@@ -1988,7 +2083,7 @@ count값이 1이 된다.&lt;/li&gt;
       </item>
     
       <item>
-        <title>Java Adv  - Thread 4</title>
+        <title>Java Adv 04 - Thread 4</title>
         <description>&lt;h2 id=&quot;join&quot;&gt;Join&lt;/h2&gt;
 
 &lt;ul&gt;
@@ -2181,7 +2276,7 @@ count값이 1이 된다.&lt;/li&gt;
       </item>
     
       <item>
-        <title>Java Adv  - Thread 3</title>
+        <title>Java Adv 03 - Thread 3</title>
         <description>&lt;h2 id=&quot;채크-예외-재정의&quot;&gt;채크 예외 재정의&lt;/h2&gt;
 
 &lt;ul&gt;
@@ -2381,69 +2476,6 @@ count값이 1이 된다.&lt;/li&gt;
         <pubDate>Sun, 22 Sep 2024 00:00:00 +0900</pubDate>
         <link>http://localhost:4000/devops/2024/09/22/Kubernetes-basic-02/</link>
         <guid isPermaLink="true">http://localhost:4000/devops/2024/09/22/Kubernetes-basic-02/</guid>
-        
-        <category>k8s</category>
-        
-        
-        <category>devops</category>
-        
-      </item>
-    
-      <item>
-        <title>쉽게 배우는 쿠버네티스 - 01</title>
-        <description>&lt;h2 id=&quot;학습의-계기&quot;&gt;학습의 계기&lt;/h2&gt;
-
-&lt;p&gt;카카오 클라우드 부트캠프에서 k8s를 다뤘지만 실습을 따라가는 것만으로는 내용이 전반적으로 깊고 어려워서 추가적인 공부의 필요성을 느끼게 되었다.&lt;/p&gt;
-
-&lt;p&gt;Devops쪽은 사실 어느정도 깊이로 공부를 해둬야하는건지 애매했었는데 이번 기회를 통해 어느정도 깊이있는 학습을 할 수 있지 않을까 기대하고 있다.&lt;/p&gt;
-
-&lt;p&gt;공부는 아래의 주소인 쿠버네티스의 강사 조훈님의 강의를 통해서 공부를 시작하게 되었다.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.inflearn.com/course/%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4-%EC%89%BD%EA%B2%8C%EC%8B%9C%EC%9E%91/dashboard&quot;&gt;https://www.inflearn.com/course/%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4-%EC%89%BD%EA%B2%8C%EC%8B%9C%EC%9E%91/dashboard&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;쿠버네티스의-역할-그리고-무엇을-하는지&quot;&gt;쿠버네티스의 역할, 그리고 무엇을 하는지?&lt;/h2&gt;
-
-&lt;h3 id=&quot;1-오케스트레이션&quot;&gt;1) 오케스트레이션&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;오늘날의 개발에서 애플리케이션은 더 이상 하나의 통일체가 아니라, 특정 &lt;strong&gt;애플리케이션&lt;/strong&gt;이 설계된 대로 기능하도록 함께 작동해야 하는 &lt;strong&gt;수십 또는 수백 개의 느슨하게 결합된 컨테이너로 구성&lt;/strong&gt;된다.&lt;/li&gt;
-  &lt;li&gt;하지만 수백 개의 컨테이너를 끊임없이 배포하고 관리하는 일은 굉장한 리소스를 요구로 한다. 이러한 어려움을 해결하기 위해 오케스트레이션이 등장했다. &lt;strong&gt;오케스트레이션이란 컨테이너화된 애플리케이션의 자동화 및 최적화&lt;/strong&gt;를 뜻하며, 컨테이너 오케스트레이션이란 용어로 쓰인다.&lt;/li&gt;
-  &lt;li&gt;즉 정리하자면, 컨테이너 오케스트레이션의 목적은 &lt;strong&gt;여러 컨테이너의 배포 프로세스를 최적화&lt;/strong&gt; 하는데 있으며, 이것은 컨테이너와 호스트의 수가 증가함에 따라 점점 더 가치가 있게 된다는 것이다.&lt;/li&gt;
-  &lt;li&gt;대표적인 Docker기반 컨테이너 오케스트레이션 툴로는 Docker Swarm, Kubernetes, Apache Mesos가 있으며, 우리가 알아보고 사용하고자 하는 것은 Kubernetes이다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;2-쿠버네티스&quot;&gt;2) 쿠버네티스&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Kubernetes는 컨테이너화된 애플리케이션의 배포, 확장 및 관리를 자동화하는 오픈 소스 시스템, 즉 컨테이너 오케스트레이션 도구이다.&lt;/li&gt;
-  &lt;li&gt;Kubernetes를 사용하면 컨테이너화된 애플리케이션을 배포 및 확장하는 데 수반되는 수동 프로세스의 많은 부분을 자동화 할 수 있다.&lt;/li&gt;
-  &lt;li&gt;즉, 여러 Linux 호스트들을 클러스터링 할 수 있으며 이러한 클러스터를 쉽고 효율적으로 관리할 수 있다. 또한 Kubernetes는 On-premise, Private Cloud, Public Cloud 등 다양한 환경에서 적용이 가능하다.&lt;/li&gt;
-  &lt;li&gt;쿠버네티스로 인하여 각각의 컨테이너를 직접 하나씩 관리하지 않아도 된다. 개발자는 여러 컨테이너에 걸친 애플리케이션의 배치도를 작성하는데, 여기에는 각 컨테이너가 네트워킹과 스토리지를 사용하는 방식 등의 세부 정보가 담겨 있다. 쿠버네티스는 런타임에서 나머지 부분을 처리한다. 또한 기밀이나 앱 환경 구성 같은 성가신 세부 관리도 맡는다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;그래서-쿠버네티스를-왜-쓰는데-&quot;&gt;그래서 쿠버네티스를 왜 쓰는데 ?&lt;/h2&gt;
-
-&lt;p&gt;이유는 몇 년 전만 해도 대부분의 소프트웨어 애플리케이션은 하나의 프로세스 또는 몇 개의 서버에 분산된 프로세스로 실행되었다.&lt;/p&gt;
-
-&lt;p&gt;이런 레거시 시스템은 릴리즈 주기가 느리고 비교적 업데이트가 자주 되지 않는다. 급변하는 현대 비즈니스의 요구사항을 충족시키려면 자주, 그리고 니즈에 맞춰서 빠르게 구성 요소를 변경할 수 있어야 한다.&lt;/p&gt;
-
-&lt;p&gt;그래서 마이크로서비스 개념이 등장했으며 이는 시스템을 독립적으로 실행되는 더 작은 구성 요소로 세분화 할 수 있다.&lt;/p&gt;
-
-&lt;p&gt;하지만 점차 배포 가능한 구성 요소의 수가 많아지고 데이터 센터의 규모가 커지면서 전체 시스템을 원활하게 구성, 관리할 수 있는 자동화가 필요해졌는데, 이것이 바로 쿠버네티스가 등장한 이유다.&lt;/p&gt;
-
-&lt;p&gt;쿠버네티스는 하드웨어 인프라를 추상화하고 데이터 센터 전체를 하나의 거대한 컴퓨팅 리소스로 제공한다.&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.redhat.com/ko/topics/containers/what-is-kubernetes&quot;&gt;https://www.redhat.com/ko/topics/containers/what-is-kubernetes&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://cloud.google.com/kubernetes-engine?hl=ko&quot;&gt;https://cloud.google.com/kubernetes-engine?hl=ko&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&amp;lt;&lt;a href=&quot;https://www.openmaru.io/%ea%b5%ac%ea%b8%80%ea%b3%bc-%ec%bf%a0%eb%b2%84%eb%84%a4%ed%8b%b0%ec%8a%a4/&quot;&gt;https://www.openmaru.io/구글과-쿠버네티스/&lt;/a&gt;&amp;gt;&lt;/p&gt;
-</description>
-        <pubDate>Sun, 22 Sep 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/devops/2024/09/22/Kubernetes-basic-01/</link>
-        <guid isPermaLink="true">http://localhost:4000/devops/2024/09/22/Kubernetes-basic-01/</guid>
         
         <category>k8s</category>
         
