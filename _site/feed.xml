@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 14 Oct 2024 01:55:25 +0900</pubDate>
-    <lastBuildDate>Mon, 14 Oct 2024 01:55:25 +0900</lastBuildDate>
+    <pubDate>Mon, 14 Oct 2024 02:23:02 +0900</pubDate>
+    <lastBuildDate>Mon, 14 Oct 2024 02:23:02 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
@@ -2139,118 +2139,146 @@ count값이 1이 된다.&lt;/li&gt;
       </item>
     
       <item>
-        <title>쉽게 배우는 쿠버네티스 - 03</title>
-        <description>&lt;h2 id=&quot;디플로이먼트란&quot;&gt;디플로이먼트란?&lt;/h2&gt;
-
-&lt;p&gt;Kubernetes(줄여서 K8S)의 디플로이먼트(Deployment)는 애플리케이션을 컨테이너화하여 Kubernetes 클러스터에 배포하고 관리하는 데 사용되는 주요 오브젝트 중 하나이다. 디플로이먼트를 사용하면 컨테이너화된 애플리케이션의 배포, 업데이트, 롤백, 확장 및 자가 치유(self-healing) 기능을 간편하게 관리할 수 있다.&lt;/p&gt;
-
-&lt;h3 id=&quot;주요-기능&quot;&gt;주요 기능&lt;/h3&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;&lt;strong&gt;배포 및 업데이트 관리&lt;/strong&gt;: 디플로이먼트를 통해 애플리케이션의 새로운 버전을 손쉽게 배포하고, 지속적인 배포 전략(예: 롤링 업데이트)을 사용할 수 있다. 이를 통해 서비스 중단 없이 새로운 버전으로 업데이트할 수 있다.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;롤백&lt;/strong&gt;: 만약 새로운 버전의 애플리케이션에 문제가 발생하면, 이전 버전으로 손쉽게 롤백할 수 있다.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;확장(Scaling)&lt;/strong&gt;: 애플리케이션의 트래픽이 증가하면 디플로이먼트를 통해 손쉽게 파드의 개수를 늘릴 수 있습니다. 반대로, 트래픽이 줄어들면 파드의 개수를 줄일 수 있다.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;자가 치유(Self-Healing)&lt;/strong&gt;: 디플로이먼트는 실행 중인 파드가 장애가 발생하거나 문제가 생길 경우, 이를 감지하고 자동으로 새로운 파드를 생성해 정상 상태를 유지한다.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;Pod 템플릿 관리&lt;/strong&gt;: 디플로이먼트는 파드를 정의하는 템플릿을 포함하며, 이를 통해 파드의 컨테이너 이미지, 환경 변수, 볼륨, 네트워크 설정 등을 관리한다.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;디플로이먼트-노출하려면-노드포트-사용&quot;&gt;디플로이먼트 노출하려면 노드포트 사용&lt;/h2&gt;
+        <title>쉽게 배우는 쿠버네티스 - 05</title>
+        <description>&lt;h2 id=&quot;파드에-문제가-생겼다면&quot;&gt;파드에 문제가 생겼다면?&lt;/h2&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;노드 포트로 노출&lt;/li&gt;
+  &lt;li&gt;파드를 실수로 지웠다면?
+    &lt;ul&gt;
+      &lt;li&gt;파드만 배포된 경우
+        &lt;ul&gt;
+          &lt;li&gt;난감하다. 그냥 지워진거다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;디플로이먼트 형태라면 ?
+        &lt;ul&gt;
+          &lt;li&gt;파드는 디플로이먼트 형태로 파드를 유지하기 때문에 문제가 생기지 않는다.&lt;/li&gt;
+          &lt;li&gt;파드는 단일객체이지만 디플로이먼트는 파드를 감싸고 있는 객체이다.&lt;/li&gt;
+          &lt;li&gt;파드가 지워지게 되면 다시 만들게 된다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;expose&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;deployment&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nginx&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;--&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;NodePort&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;--&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;port&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;80&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;service&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nginx&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;exposed&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; 
-&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; 
-&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; 
-&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;svc&lt;/span&gt;
-&lt;span class=&quot;no&quot;&gt;NAME&lt;/span&gt;           &lt;span class=&quot;no&quot;&gt;TYPE&lt;/span&gt;        &lt;span class=&quot;no&quot;&gt;CLUSTER&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;IP&lt;/span&gt;      &lt;span class=&quot;no&quot;&gt;EXTERNAL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;IP&lt;/span&gt;   &lt;span class=&quot;nf&quot;&gt;PORT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;S&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;        &lt;span class=&quot;no&quot;&gt;AGE&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nginx&lt;/span&gt;   &lt;span class=&quot;nc&quot;&gt;NodePort&lt;/span&gt;    &lt;span class=&quot;mf&quot;&gt;10.103&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;27.106&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;none&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;        &lt;span class=&quot;mi&quot;&gt;80&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;31743&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;TCP&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;kubernetes&lt;/span&gt;     &lt;span class=&quot;nc&quot;&gt;ClusterIP&lt;/span&gt;   &lt;span class=&quot;mf&quot;&gt;10.96&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.1&lt;/span&gt;       &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;none&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;        &lt;span class=&quot;mi&quot;&gt;443&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;TCP&lt;/span&gt;        &lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;h&lt;/span&gt;
+&lt;h2 id=&quot;쿠버네티스가-파드를-대하는-자세애완동물과-가축&quot;&gt;쿠버네티스가 파드를 대하는 자세(애완동물과 가축)&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;파드는 항상 다시 생성되는 경우가 많다
+    &lt;ul&gt;
+      &lt;li&gt;예를들면 업데이트를 한다거나, 노드가 이상해서 노드에 있는 파드를 옮겨야 한다는다든가&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;파드 배포&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@cp-k8s:~# k apply -f ~/_Lecture_k8s_starter.kit/ch5/5.1/del-
+del-deploy.yaml  del-pod.yaml
+root@cp-k8s:~# k apply -f ~/_Lecture_k8s_starter.kit/ch5/5.1
+deployment.apps/del-deploy created
+pod/del-pod created
+
+root@cp-k8s:~# k get pods
+NAME                         READY   STATUS    RESTARTS   AGE
+del-deploy-d6c48dfbf-6crl4   1/1     Running   0          49s
+del-deploy-d6c48dfbf-pxvnq   1/1     Running   0          49s
+del-deploy-d6c48dfbf-qktx9   1/1     Running   0          49s
+del-pod                      1/1     Running   0          49s
+
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;뭐가 되었든 로드벨런서 타입으로 노출시키는 것이 유리하다.&lt;/li&gt;
+  &lt;li&gt;디렉토리 형태로 배포를 지정해주면&lt;/li&gt;
+  &lt;li&gt;디렉토리에 있는 yaml을 읽어서 바로 생성한다.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&quot;노드포트보다-로드벨런서가-좋은점&quot;&gt;노드포트보다 로드벨런서가 좋은점&lt;/h2&gt;
+&lt;p&gt;pod로 배포한 것 delete&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;delete&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pod&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;del&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pod&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;pod&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;del-pod&quot;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;deleted&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; 
+&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; 
+&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; 
+&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; 
+&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; 
+&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; 
+&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pods&lt;/span&gt;
+&lt;span class=&quot;no&quot;&gt;NAME&lt;/span&gt;                         &lt;span class=&quot;no&quot;&gt;READY&lt;/span&gt;   &lt;span class=&quot;no&quot;&gt;STATUS&lt;/span&gt;    &lt;span class=&quot;no&quot;&gt;RESTARTS&lt;/span&gt;   &lt;span class=&quot;no&quot;&gt;AGE&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;del&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d6c48dfbf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;crl4&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;     &lt;span class=&quot;nc&quot;&gt;Running&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;          &lt;span class=&quot;mi&quot;&gt;96&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;del&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d6c48dfbf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pxvnq&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;     &lt;span class=&quot;nc&quot;&gt;Running&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;          &lt;span class=&quot;mi&quot;&gt;96&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;del&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d6c48dfbf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;qktx9&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;     &lt;span class=&quot;nc&quot;&gt;Running&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;          &lt;span class=&quot;mi&quot;&gt;96&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;노드포트는 노드의 아이피를 알려줘야한다. → 보안상 좋지 않다.&lt;/li&gt;
-  &lt;li&gt;로드벨런서는 버츄얼 IP처럼 대표하는 IP를 만들어서 알려줄 수 있다
-    &lt;ul&gt;
-      &lt;li&gt;노드포트를 공개하는 부담이 없다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;로드벨런서는 가야되는 경로를 최적화해준다.&lt;/li&gt;
+  &lt;li&gt;pod로 배포하게 되면 쉽게 delete가 된다.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&quot;디플로이먼트를-로드벨런서로-배포&quot;&gt;디플로이먼트를 로드벨런서로 배포&lt;/h2&gt;
+&lt;p&gt;디플로이먼트로 배포한 것을 지우면?&lt;/p&gt;
 
-&lt;ul&gt;
-  &lt;li&gt;로드벨런서를 사용하면 노드포트를 외부에 노출시킬 필요가 없다.&lt;/li&gt;
-  &lt;li&gt;로드벨런서가 최선의 방법이다.&lt;/li&gt;
-  &lt;li&gt;디플로이먼트는 레플리카셋은 이용해서 파드의 수를 조정한다.
-    &lt;ul&gt;
-      &lt;li&gt;기본적으로는 하나가 배포가 되지만 스캐일을 이용해서 그 갯수를 정할 수 있다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;쿠버네티스에서-서비스란-svc&quot;&gt;쿠버네티스에서 서비스란? SVC&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;집구조를 생각해보면 안방,서재,책방 이런 곳에 갈라면 거실을 거쳐야 한다.
-    &lt;ul&gt;
-      &lt;li&gt;거실같은 곳이 서비스라고 생각하면 된다.&lt;/li&gt;
-      &lt;li&gt;다른 어떤곳을 넘어가기 위해 항상 거쳐야 하는 곳이다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;배포된-파드-삭제하기&quot;&gt;배포된 파드 삭제하기&lt;/h2&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@cp-k8s:~# k delete svc chk-hn
-service &quot;chk-hn&quot; deleted
-root@cp-k8s:~#
-root@cp-k8s:~#
-root@cp-k8s:~# k get svc
-NAME           TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)        AGE
-deploy-nginx   NodePort    10.99.97.20           80:32473/TCP   70m
-kubernetes     ClusterIP   10.96.0.1             443/TCP        91m
-root@cp-k8s:~# k delete svc deploy-nginx
-service &quot;deploy-nginx&quot; deleted
-root@cp-k8s:~# k get svc
-NAME         TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
-kubernetes   ClusterIP   10.96.0.1            443/TCP   91m
-
-root@cp-k8s:~# k delete deployment chk-hn 
-deployment.apps &quot;chk-hn&quot; deleted
-root@cp-k8s:~# k delete deployment deploy-nginx 
-deployment.apps &quot;deploy-nginx&quot; deleted
-root@cp-k8s:~# k delete pod nginx
-
-root@cp-k8s:~# k delete -f ~/_Lecture_k8s_starter.kit/ch3/3.4/metallb.yaml 
-namespace &quot;metallb-system&quot; deleted
-serviceaccount &quot;controller&quot; deleted
-serviceaccount &quot;speaker&quot; deleted
-clusterrole.rbac.authorization.k8s.io &quot;metallb-system:controller&quot; deleted
-clusterrole.rbac.authorization.k8s.io &quot;metallb-system:speaker&quot; deleted
-role.rbac.authorization.k8s.io &quot;config-watcher&quot; deleted
-role.rbac.authorization.k8s.io &quot;pod-lister&quot; deleted
-role.rbac.authorization.k8s.io &quot;controller&quot; deleted
-clusterrolebinding.rbac.authorization.k8s.io &quot;metallb-system:controller&quot; deleted
-clusterrolebinding.rbac.authorization.k8s.io &quot;metallb-system:speaker&quot; deleted
-rolebinding.rbac.authorization.k8s.io &quot;config-watcher&quot; deleted
-rolebinding.rbac.authorization.k8s.io &quot;pod-lister&quot; deleted
-rolebinding.rbac.authorization.k8s.io &quot;controller&quot; deleted
-daemonset.apps &quot;speaker&quot; deleted
-deployment.apps &quot;controller&quot; deleted
-configmap &quot;config&quot; deleted
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pods&lt;/span&gt;
+&lt;span class=&quot;no&quot;&gt;NAME&lt;/span&gt;                         &lt;span class=&quot;no&quot;&gt;READY&lt;/span&gt;   &lt;span class=&quot;no&quot;&gt;STATUS&lt;/span&gt;    &lt;span class=&quot;no&quot;&gt;RESTARTS&lt;/span&gt;   &lt;span class=&quot;no&quot;&gt;AGE&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;del&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d6c48dfbf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;crl4&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;     &lt;span class=&quot;nc&quot;&gt;Running&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;          &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;m22s&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;del&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d6c48dfbf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pxvnq&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;     &lt;span class=&quot;nc&quot;&gt;Running&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;          &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;m22s&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;del&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d6c48dfbf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;qktx9&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;     &lt;span class=&quot;nc&quot;&gt;Running&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;          &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;m22s&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;delete&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pod&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;del&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d6c48dfbf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;qktx9&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;pod&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;del-deploy-d6c48dfbf-qktx9&quot;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;deleted&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; 
+&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; 
+&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pods&lt;/span&gt;
+&lt;span class=&quot;no&quot;&gt;NAME&lt;/span&gt;                         &lt;span class=&quot;no&quot;&gt;READY&lt;/span&gt;   &lt;span class=&quot;no&quot;&gt;STATUS&lt;/span&gt;              &lt;span class=&quot;no&quot;&gt;RESTARTS&lt;/span&gt;   &lt;span class=&quot;no&quot;&gt;AGE&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;del&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d6c48dfbf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;crl4&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;     &lt;span class=&quot;nc&quot;&gt;Running&lt;/span&gt;             &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;          &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;m58s&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;del&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d6c48dfbf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pxvnq&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;     &lt;span class=&quot;nc&quot;&gt;Running&lt;/span&gt;             &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;          &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;m58s&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;del&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d6c48dfbf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;wqhhk&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;     &lt;span class=&quot;nc&quot;&gt;ContainerCreating&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;          &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; 
+&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;delete&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;deployment&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;del&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deploy&lt;/span&gt; 
+&lt;span class=&quot;n&quot;&gt;deployment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;apps&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;del-deploy&quot;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;deleted&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; 
+&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; 
+&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pods&lt;/span&gt;
+&lt;span class=&quot;nc&quot;&gt;No&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;resources&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;found&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;default&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;namespace&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; 
 
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;기존의 파드가 사라지고 새로운 파드가 생성되는 것을 볼 수 있다.&lt;/li&gt;
+  &lt;li&gt;이것은 deployment가 세 개를 유지해야 된다는 게 이미 규정되어 있기 때문이다.&lt;/li&gt;
+  &lt;li&gt;지워지자마자 새로운 것을 다시 생성한다.&lt;/li&gt;
+  &lt;li&gt;그래서 deployment를 지우려면 디플로이먼트를 삭제해야 한다.&lt;/li&gt;
+  &lt;li&gt;즉 파드는 실수를 하면 날아가는 존재이지만 디플로이먼트는 파드의 숫자를 유지하는 존재이다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;쿠버네티스-구성-요소에-문제가-생긴다면&quot;&gt;쿠버네티스 구성 요소에 문제가 생긴다면?&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;대부분의 구성요소들은 문제가 생겨도 대부분 복구가 빠르게 일어난다.&lt;/li&gt;
+  &lt;li&gt;통신하는 방식이 선언적으로 API에 선언한 것을 그대로 가져가는 것이 아닌 존재가 있다.&lt;/li&gt;
+  &lt;li&gt;쿠버렛
+    &lt;ul&gt;
+      &lt;li&gt;쿠버렛에 문제가 생기면 API서버와 문제가 직접적으로 선언한 것을 가져가는 방식이 아니다.&lt;/li&gt;
+      &lt;li&gt;그리고 선언적인 방식과 쿠버렛이 런타임으로 보내주는 방식이 아니다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;kubelet종료하기&quot;&gt;kubelet종료하기&lt;/h2&gt;
+
+&lt;p&gt;&lt;img width=&quot;680&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/9397579f-6cdc-4c18-879a-dfa13653eee1&quot; /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pods&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;o&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;wide&lt;/span&gt;
+&lt;span class=&quot;no&quot;&gt;NAME&lt;/span&gt;                         &lt;span class=&quot;no&quot;&gt;READY&lt;/span&gt;   &lt;span class=&quot;no&quot;&gt;STATUS&lt;/span&gt;    &lt;span class=&quot;no&quot;&gt;RESTARTS&lt;/span&gt;   &lt;span class=&quot;no&quot;&gt;AGE&lt;/span&gt;   &lt;span class=&quot;no&quot;&gt;IP&lt;/span&gt;               &lt;span class=&quot;no&quot;&gt;NODE&lt;/span&gt;     &lt;span class=&quot;no&quot;&gt;NOMINATED&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;NODE&lt;/span&gt;   &lt;span class=&quot;no&quot;&gt;READINESS&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;GATES&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;del&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d6c48dfbf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;692&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dh&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;     &lt;span class=&quot;nc&quot;&gt;Running&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;          &lt;span class=&quot;mi&quot;&gt;13&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;   &lt;span class=&quot;mf&quot;&gt;172.16&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;132.4&lt;/span&gt;     &lt;span class=&quot;n&quot;&gt;w3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k8s&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;none&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;           &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;none&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;del&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d6c48dfbf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hwtvx&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;     &lt;span class=&quot;nc&quot;&gt;Running&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;          &lt;span class=&quot;mi&quot;&gt;13&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;   &lt;span class=&quot;mf&quot;&gt;172.16&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;103.134&lt;/span&gt;   &lt;span class=&quot;n&quot;&gt;w2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k8s&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;none&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;           &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;none&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;del&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d6c48dfbf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;zp28f&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;     &lt;span class=&quot;nc&quot;&gt;Running&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;          &lt;span class=&quot;mi&quot;&gt;13&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;   &lt;span class=&quot;mf&quot;&gt;172.16&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;132.5&lt;/span&gt;     &lt;span class=&quot;n&quot;&gt;w3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k8s&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;none&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;           &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;none&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;w1k8s에는 배포가 되지 않았다.&lt;/li&gt;
+  &lt;li&gt;워커노드단에 kubelet에 문제가 생기면 배포가 제대로 이뤄지지 않는다.&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
 
@@ -2261,8 +2289,8 @@ configmap &quot;config&quot; deleted
 &lt;p&gt;&amp;lt;&lt;a href=&quot;https://www.openmaru.io/%ea%b5%ac%ea%b8%80%ea%b3%bc-%ec%bf%a0%eb%b2%84%eb%84%a4%ed%8b%b0%ec%8a%a4/&quot;&gt;https://www.openmaru.io/구글과-쿠버네티스/&lt;/a&gt;&amp;gt;&lt;/p&gt;
 </description>
         <pubDate>Mon, 23 Sep 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/devops/2024/09/23/Kubernetes-basic-03/</link>
-        <guid isPermaLink="true">http://localhost:4000/devops/2024/09/23/Kubernetes-basic-03/</guid>
+        <link>http://localhost:4000/devops/2024/09/23/Kubernetes-basic-05/</link>
+        <guid isPermaLink="true">http://localhost:4000/devops/2024/09/23/Kubernetes-basic-05/</guid>
         
         <category>k8s</category>
         
@@ -2272,195 +2300,111 @@ configmap &quot;config&quot; deleted
       </item>
     
       <item>
-        <title>Java Adv 04 - Thread 4</title>
-        <description>&lt;h2 id=&quot;join&quot;&gt;Join&lt;/h2&gt;
+        <title>쉽게 배우는 쿠버네티스 - 04</title>
+        <description>&lt;h2 id=&quot;파드-배포-시에-쿠버네티스-구성들이-하는-일&quot;&gt;파드 배포 시에 쿠버네티스 구성들이 하는 일&lt;/h2&gt;
+
+&lt;h3 id=&quot;쿠버네티스의-기본-철학&quot;&gt;쿠버네티스의 기본 철학&lt;/h3&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;앞서 Thread.sleep() 메서드를 통해 TIMED_WAITING 상태를 알아보았다. 이번에는 Join()메서드를 통해 WAITNG(대기 상태)가 무엇인지 왜 필요한지 알아보자&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;waiting대기-상태&quot;&gt;waiting(대기 상태)&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;스레드가 다른 스레드의 특정 작업이  완료되기를 무기한 기다리는 상태이다.
+  &lt;li&gt;마이크로서비스 아키텍처
     &lt;ul&gt;
-      &lt;li&gt;TIMED_WAITING은 특정시간만 기다리는 상태이다.&lt;/li&gt;
+      &lt;li&gt;하는 일들이 다 분업이 되어있다.&lt;/li&gt;
+      &lt;li&gt;나는 나의 일을 열심히 한다.&lt;/li&gt;
+      &lt;li&gt;반대되는 개념은 모놀리식 아키텍처이다.&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;thread.control.join&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;util&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;MyLogger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;util&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;ThreadUtils&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;sleep&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;JoinMainV0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Start&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;thread1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Job&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Thread- 1&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;thread2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Job&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Thread- 2&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;thread1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;thread2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;End&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Job&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Runnable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;작업 시작&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;sleep&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2000&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//2초간 대기&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;작업 완료&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h3 id=&quot;동작방식&quot;&gt;동작방식&lt;/h3&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;참고 : 스레드의 실행 순서는 보장되지 않는다. 실행 결과는 다를 수 있다.&lt;/li&gt;
+  &lt;li&gt;사용자가 파드 생성 요청을 하면 API 서버  &amp;amp; etcd 쪽으로 넘어간다.
+    &lt;ul&gt;
+      &lt;li&gt;API서버가 컨트롤러 매니저가 일을 잘하고 있는지 감시한다.&lt;/li&gt;
+      &lt;li&gt;API서버가 선언해 놓은 값을 보고 컨트롤 매니저가 그걸 보고 파드를 생성한다.&lt;/li&gt;
+      &lt;li&gt;API 서버가 모든 상태의 중심에 있다.&lt;/li&gt;
+      &lt;li&gt;스케줄러가 각 파드들을 배포하도록 담당을 하는데&lt;/li&gt;
+      &lt;li&gt;새로운 파드가 워커 노드에 들어갔는지 API서버가 감시를 한다.&lt;/li&gt;
+      &lt;li&gt;새로운 파드를 워커 노드에 넣도록 스케줄한다.&lt;/li&gt;
+      &lt;li&gt;파드 실제 생성은 kubelet이 한다.&lt;/li&gt;
+      &lt;li&gt;API 서버는 또 강요하지 않고 새로운 파드가 노드에 잘 소속되어 있는지 감시를 한다.&lt;/li&gt;
+      &lt;li&gt;쿠버네티스는 컨테이너 런타임을 통해서 파드의 동작이나 생성을 하도록 만든다. 사실 직접 또 kubelet 생성을 하지는 않는다.&lt;/li&gt;
+      &lt;li&gt;생성된 정보나 뭐 파드 상태나 이런 것들은 쿠버네티스 API서버에 알려주는 구조이다.&lt;/li&gt;
+      &lt;li&gt;API 서버는 선언된 상태값만을 가지고 있고 그 상태값을 기반으로 매니저, 스케줄러, 큐브렛등이 그 선언된 값에 값을 맞춰 넣으려는 방식으로 동작을 한다. 그런 방식을 통해서 파드가 사용가능한 상태가 되고 그것을 우리는 알게 된다.&lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;h2 id=&quot;선언적인-시스템&quot;&gt;선언적인 시스템&lt;/h2&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;추구하는 상태와 현재상태가 있다.&lt;/li&gt;
+      &lt;li&gt;추구하는 상태는 API서버에 kubectl로 선언해놓은 상태이고 현재 상태는 각각의 스케줄러, 쿠버 컨트롤, 쿠버네티스 이런 현재 상태들을 가지고 있는 것이다.&lt;/li&gt;
+      &lt;li&gt;이것을 계속 보면서 맞추려고 하는 것이 쿠버네티스의 기본적인 알고리즘이다.&lt;/li&gt;
+      &lt;li&gt;API가 추구하는 값을 선언하고 다른 역할을 하는 매니저, 컨트롤들이 일을 잘하고 있는지 감시를 하는 형태라고 볼 수있다.&lt;/li&gt;
+      &lt;li&gt;추구하는 상태와 현재 상태를 맞추려고 하는 것&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&quot;join이-필요한-상황&quot;&gt;Join이 필요한 상황&lt;/h2&gt;
+&lt;h2 id=&quot;api-서버와-etcd는-다르다&quot;&gt;API 서버와 Etcd는 다르다&lt;/h2&gt;
 
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;thread.control.join&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;util&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;MyLogger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;util&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;ThreadUtils&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;sleep&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;JoinMainV1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Start&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;SumTask&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;task1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SumTask&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;50&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;SumTask&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;task2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SumTask&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;51&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;thread1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;task1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;thread1&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;thread2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;task2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;thread2&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-        &lt;span class=&quot;n&quot;&gt;thread1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;thread2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-
-        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;task1.result = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;task1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;task2.result = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;task2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sumAll&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;task1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;task2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;task1 + task2 = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sumAll&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;End&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SumTask&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Runnable&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;startValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//0&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;endValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//0&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;SumTask&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;startValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;endValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;startValue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;startValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;endValue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;endValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-        &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;작업 시작&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;sleep&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2000&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-            &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;startValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;endValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;작업 완료 + result = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;&lt;img width=&quot;631&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/3fd2a6c1-e2a5-4428-8572-d210db92382a&quot; /&gt;&lt;/p&gt;
 &lt;ul&gt;
-  &lt;li&gt;0이 나온 이유는 main이 Thread1, Thread2에게 작업을 지시했지만 2초라는 sleep시간 동안 main이 이미 값을 조회하고 main을 종료시킨다. 그래서 계산값이 반환되기전에 결과값이 나와버린다.&lt;/li&gt;
-  &lt;li&gt;여기서 핵심은 main 스레드가 thread1, thread2의 계산이 끝날 때 까지 기다려야 한다는 점이다. 그럼 어떻게 해야 main 스레드가 기다릴 수 있을까?&lt;/li&gt;
+  &lt;li&gt;API서버는 가지고 있는 현재 상태 그리고 현재 추구하는 값들을 가지고 있는데 이 값은 휘발될 수 있으니 이 값에 대해서 지금 DB에 저장하는 것처럼 어떤 (구성)정보를 etcd라는 곳에 저장을 하게 되고 즉 kubernetes 클러스터에 업데이트 된 정보가 있다면 API 서버는 항상 etcd에게 저장을 하는 구조가 아닌 API서버가 etcd에 넣는 방식이다.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&quot;join-join&quot;&gt;Join-join&lt;/h2&gt;
+&lt;h3 id=&quot;마스터노드&quot;&gt;마스터노드&lt;/h3&gt;
 
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;thread.control.join&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;ul&gt;
+  &lt;li&gt;API 서버&lt;/li&gt;
+  &lt;li&gt;컨트롤러 매니저&lt;/li&gt;
+  &lt;li&gt;스케줄러&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;util&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;MyLogger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;util&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;ThreadUtils&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;sleep&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;h2 id=&quot;실제-쿠버네티스의-파드-배포-흐름&quot;&gt;실제 쿠버네티스의 파드 배포 흐름&lt;/h2&gt;
 
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;JoinMainV3&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+&lt;p&gt;&lt;img width=&quot;702&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/ffbae762-abc8-4bf2-a92a-eda209c1a0b3&quot; /&gt;&lt;/p&gt;
 
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;InterruptedException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Start&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;SumTask&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;task1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SumTask&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;50&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;SumTask&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;task2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SumTask&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;51&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;thread1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;task1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;thread1&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;thread2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;task2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;thread2&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-        &lt;span class=&quot;n&quot;&gt;thread1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;thread2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-
-        &lt;span class=&quot;c1&quot;&gt;//스레드가 종료될 때 까지 대기&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//thread1, thread2의 작업이 종료되면 main thread의 작업이 종료된다.&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;join() - main 스레드가 thread1, therad2 종료까지 대기&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;thread1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;thread2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-
-        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;task1.result = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;task1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;task2.result = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;task2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sumAll&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;task1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;task2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;task1 + task2 = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sumAll&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;End&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SumTask&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Runnable&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;startValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//0&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;endValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//0&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;SumTask&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;startValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;endValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;startValue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;startValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;endValue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;endValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-        &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;작업 시작&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;sleep&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2000&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-            &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;startValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;endValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;작업 완료 + result = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;&lt;img width=&quot;658&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/fadc029c-1acb-4162-b777-1d7f9d275ad2&quot; /&gt;
-실행 결과를 보면 정확하게 5050 이 계산된 것을 확인할 수 있다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;606&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/cb632b23-17cc-429d-8960-32604841715e&quot; /&gt;
-예를 들어서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;thread-1&lt;/code&gt; 이 아직 종료되지 않았다면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;main&lt;/code&gt; 스레드는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;thread1.join()&lt;/code&gt; 코드 안에서 더는 진행하지않고 멈추어 기다린다. 
-이후에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;thread-1&lt;/code&gt; 이 종료되면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;main&lt;/code&gt; 스레드는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUNNABLE&lt;/code&gt; 상태가 되고 다음 코드로 이동한다.
-이때 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;thread-2&lt;/code&gt; 이 아직 종료되지 않았다면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;main&lt;/code&gt; 스레드는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;thread2.join()&lt;/code&gt; 코드 안에서 진행하지 않고 멈추어 기다린다. 
-이후에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;thread-2&lt;/code&gt; 이 종료되면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;main&lt;/code&gt; 스레드는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUNNABLE&lt;/code&gt; 상태가 되고 다음 코드로 이동한다. 이 경우 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;thread-1&lt;/code&gt; 이 종료되는 시점에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;thread-2&lt;/code&gt; 도 거의 같이 종료되기 때문에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;thread2.join()&lt;/code&gt; 은 대기하지 않고 바로 빠져나온다.
-이렇듯 특정 스레드가 완료될 때 까지 기다려야 하는 상황이라면 join() 을 사용하면 된다.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;쿠브컨트롤 명령을 통해서 API 서버에 명령이 들어간다.
+    &lt;ul&gt;
+      &lt;li&gt;파드를 생성하거나 디플로이먼트를 생성하거나 서비스를 생성하고 삭제하는 것들을 API서버에 명령을 내린다.&lt;/li&gt;
+      &lt;li&gt;그럼 API서버는 etcd에 해당 정보를 업데이트 한다.&lt;/li&gt;
+      &lt;li&gt;API 서버는 etcd와 1대1로 거의 동기화를 한다.&lt;/li&gt;
+      &lt;li&gt;문제가 생기면 etcd에 있는 정보를 복원하면 된다.&lt;/li&gt;
+      &lt;li&gt;하물며 버전까지도 맞춰낸다.&lt;/li&gt;
+      &lt;li&gt;그 다음으로 통신하는 곳은 컨트롤 매니저이다.&lt;/li&gt;
+      &lt;li&gt;API 서버의 값을 컨트롤 매니저가 사실 보고 그거에 맞게 자기 값을 바꾸고 API 서버에도 업데이트를 진행한다.&lt;/li&gt;
+      &lt;li&gt;그 다음에는 스케줄러는 워커노드에 파드를 할당하고 각각의 워커노드에  밸런스되게 들어가도록한다. 실제로 파드가 생성되야 하니까 API 서버를 보고 쿠버렛이 파드를 생성해야 겠다는 생각을 한다.&lt;/li&gt;
+      &lt;li&gt;그러면 쿠버랫이 컨테이너 런타임에게 파드를 생성해 달라고 요청하고&lt;/li&gt;
+      &lt;li&gt;그러면 컨테이너 런타임이 파드를 생성하는 구조이다.&lt;/li&gt;
+      &lt;li&gt;이렇게 생성된 파드들은 사용자와 통신하기 위해서 상단에 보이는 쿠버프록시를 통해서 실제로 통신한다.&lt;/li&gt;
+      &lt;li&gt;쿠버프록시를 통해서 사용자가 통신을 하게 되고 이러한 네트워크들은 쿠버네티스에서 기본 제공을 한다기 보단 쿠버네티스에서 사용자에서 직접 선택하도록 되어 있는 영역이다. 그걸 컨테이너 네트워크 인터페이스라고 부르고 Calico를 보통사용한다.&lt;/li&gt;
+      &lt;li&gt;API 서버는 쿠버네티스의 클러스터를 이루는 집합체이고 모든 것의 시작이자 끝이다.
+        &lt;ul&gt;
+          &lt;li&gt;보통 게이트웨이 역할을 하고 있다&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;파드를 배포하거나 디플로이먼트를 배포하면 IP는 쿠버네티스가 제공을 한다.&lt;/li&gt;
+  &lt;li&gt;어떤 IP가 제공되는지 우리는 알 수 없다.&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
 
-&lt;p&gt;인프런 김영한님의 자바강좌 + 나의 뇌&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://www.redhat.com/ko/topics/containers/what-is-kubernetes&quot;&gt;https://www.redhat.com/ko/topics/containers/what-is-kubernetes&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://cloud.google.com/kubernetes-engine?hl=ko&quot;&gt;https://cloud.google.com/kubernetes-engine?hl=ko&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&amp;lt;&lt;a href=&quot;https://www.openmaru.io/%ea%b5%ac%ea%b8%80%ea%b3%bc-%ec%bf%a0%eb%b2%84%eb%84%a4%ed%8b%b0%ec%8a%a4/&quot;&gt;https://www.openmaru.io/구글과-쿠버네티스/&lt;/a&gt;&amp;gt;&lt;/p&gt;
 </description>
-        <pubDate>Sun, 22 Sep 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/language/2024/09/22/Java-Adv-04/</link>
-        <guid isPermaLink="true">http://localhost:4000/language/2024/09/22/Java-Adv-04/</guid>
+        <pubDate>Mon, 23 Sep 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/devops/2024/09/23/Kubernetes-basic-04/</link>
+        <guid isPermaLink="true">http://localhost:4000/devops/2024/09/23/Kubernetes-basic-04/</guid>
         
-        <category>java</category>
+        <category>k8s</category>
         
         
-        <category>language</category>
+        <category>devops</category>
         
       </item>
     
