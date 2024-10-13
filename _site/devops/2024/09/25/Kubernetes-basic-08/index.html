@@ -358,21 +358,21 @@ on <a href="/tag/devops-k8s/" data-flip="title">Kubernetes</a>
 
 <p>배포한 파드의 정보는 원하는 옵션으로 확인이 가능함</p>
 
-<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">root@cp-k8s:~# k get pods \</span>
-<span class="pi">&gt;</span> <span class="err">-o=custom-columns=NAME:.metadata.name,IP:.status.podIP,STATUS:.status.phase,NODE:.spec.nodeName</span>
-<span class="err">N</span><span class="s">AME                             IP               STATUS    NODE</span>
-<span class="err">r</span><span class="s">ollout-nginx-554dbf8b76-j9xb8   172.16.103.142   Running   w2-k8s</span>
-<span class="err">r</span><span class="s">ollout-nginx-554dbf8b76-l7cr5   172.16.221.141   Running   w1-k8s</span>
-<span class="err">r</span><span class="s">ollout-nginx-554dbf8b76-qrc4m   172.16.132.11    Running   w3-k8s</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">root</span><span class="nd">@cp</span><span class="o">-</span><span class="nl">k8s:</span><span class="o">~</span><span class="err">#</span> <span class="n">k</span> <span class="n">get</span> <span class="n">pods</span> <span class="err">\</span>
+<span class="o">&gt;</span> <span class="o">-</span><span class="n">o</span><span class="o">=</span><span class="n">custom</span><span class="o">-</span><span class="n">columns</span><span class="o">=</span><span class="nl">NAME:</span><span class="o">.</span><span class="na">metadata</span><span class="o">.</span><span class="na">name</span><span class="o">,</span><span class="nl">IP:</span><span class="o">.</span><span class="na">status</span><span class="o">.</span><span class="na">podIP</span><span class="o">,</span><span class="nl">STATUS:</span><span class="o">.</span><span class="na">status</span><span class="o">.</span><span class="na">phase</span><span class="o">,</span><span class="nl">NODE:</span><span class="o">.</span><span class="na">spec</span><span class="o">.</span><span class="na">nodeName</span>
+<span class="no">NAME</span>                             <span class="no">IP</span>               <span class="no">STATUS</span>    <span class="no">NODE</span>
+<span class="n">rollout</span><span class="o">-</span><span class="n">nginx</span><span class="o">-</span><span class="mi">554</span><span class="n">dbf8b76</span><span class="o">-</span><span class="n">j9xb8</span>   <span class="mf">172.16</span><span class="o">.</span><span class="mf">103.142</span>   <span class="nc">Running</span>   <span class="n">w2</span><span class="o">-</span><span class="n">k8s</span>
+<span class="n">rollout</span><span class="o">-</span><span class="n">nginx</span><span class="o">-</span><span class="mi">554</span><span class="n">dbf8b76</span><span class="o">-</span><span class="n">l7cr5</span>   <span class="mf">172.16</span><span class="o">.</span><span class="mf">221.141</span>   <span class="nc">Running</span>   <span class="n">w1</span><span class="o">-</span><span class="n">k8s</span>
+<span class="n">rollout</span><span class="o">-</span><span class="n">nginx</span><span class="o">-</span><span class="mi">554</span><span class="n">dbf8b76</span><span class="o">-</span><span class="n">qrc4m</span>   <span class="mf">172.16</span><span class="o">.</span><span class="mf">132.11</span>    <span class="nc">Running</span>   <span class="n">w3</span><span class="o">-</span><span class="n">k8s</span>
 </code></pre></div></div>
 
 <p>rollout history</p>
 
-<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">root@cp-k8s:~# k rollout history deployment rollout-nginx</span> 
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">root</span><span class="nd">@cp</span><span class="o">-</span><span class="nl">k8s:</span><span class="o">~</span><span class="err">#</span> <span class="n">k</span> <span class="n">rollout</span> <span class="n">history</span> <span class="n">deployment</span> <span class="n">rollout</span><span class="o">-</span><span class="n">nginx</span> 
 
-<span class="s">deployment.apps/rollout-nginx</span> 
-<span class="s">REVISION  CHANGE-CAUSE</span>
-<span class="s">1         kubectl apply --filename=/root/_Book_k8sInfra/ch3/3.2.10/rollout-nginx.yaml --record=true</span>
+<span class="n">deployment</span><span class="o">.</span><span class="na">apps</span><span class="o">/</span><span class="n">rollout</span><span class="o">-</span><span class="n">nginx</span> 
+<span class="no">REVISION</span>  <span class="no">CHANGE</span><span class="o">-</span><span class="no">CAUSE</span>
+<span class="mi">1</span>         <span class="n">kubectl</span> <span class="n">apply</span> <span class="o">--</span><span class="n">filename</span><span class="o">=/</span><span class="n">root</span><span class="o">/</span><span class="n">_Book_k8sInfra</span><span class="o">/</span><span class="n">ch3</span><span class="o">/</span><span class="mf">3.2</span><span class="o">.</span><span class="mi">10</span><span class="o">/</span><span class="n">rollout</span><span class="o">-</span><span class="n">nginx</span><span class="o">.</span><span class="na">yaml</span> <span class="o">--</span><span class="n">record</span><span class="o">=</span><span class="kc">true</span>
 
 </code></pre></div></div>
 
@@ -382,26 +382,26 @@ on <a href="/tag/devops-k8s/" data-flip="title">Kubernetes</a>
 
 <p>nginx 컨테이너 버전 업데이트 해보기</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@cp-k8s:~# curl -I -silent 172.16.103.142 | grep Server
-Server: nginx/1.15.12
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">root</span><span class="nd">@cp</span><span class="o">-</span><span class="nl">k8s:</span><span class="o">~</span><span class="err">#</span> <span class="n">curl</span> <span class="o">-</span><span class="no">I</span> <span class="o">-</span><span class="n">silent</span> <span class="mf">172.16</span><span class="o">.</span><span class="mf">103.142</span> <span class="o">|</span> <span class="n">grep</span> <span class="nc">Server</span>
+<span class="nl">Server:</span> <span class="n">nginx</span><span class="o">/</span><span class="mf">1.15</span><span class="o">.</span><span class="mi">12</span>
 
 </code></pre></div></div>
 
 <p>nginx 컨테이너 버전을 1.16으로 업데이트한다.</p>
 
-<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">root@cp-k8s:~# k set image deployment rollout-nginx nginx=nginx:1.16.0 --record</span>
-<span class="s">Flag --record has been deprecated, --record will be removed in the future</span>
-<span class="s">deployment.apps/rollout-nginx image updated</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">root</span><span class="nd">@cp</span><span class="o">-</span><span class="nl">k8s:</span><span class="o">~</span><span class="err">#</span> <span class="n">k</span> <span class="n">set</span> <span class="n">image</span> <span class="n">deployment</span> <span class="n">rollout</span><span class="o">-</span><span class="n">nginx</span> <span class="n">nginx</span><span class="o">=</span><span class="nl">nginx:</span><span class="mf">1.16</span><span class="o">.</span><span class="mi">0</span> <span class="o">--</span><span class="n">record</span>
+<span class="nc">Flag</span> <span class="o">--</span><span class="n">record</span> <span class="n">has</span> <span class="n">been</span> <span class="n">deprecated</span><span class="o">,</span> <span class="o">--</span><span class="n">record</span> <span class="n">will</span> <span class="n">be</span> <span class="n">removed</span> <span class="n">in</span> <span class="n">the</span> <span class="n">future</span>
+<span class="n">deployment</span><span class="o">.</span><span class="na">apps</span><span class="o">/</span><span class="n">rollout</span><span class="o">-</span><span class="n">nginx</span> <span class="n">image</span> <span class="n">updated</span>
 </code></pre></div></div>
 
 <p>nginx컨테이너를 업데이트하니 파드의 IP정보가 변경됨을 확인할 수 있음</p>
 
-<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">root@cp-k8s:~# k get pods -o=custom-columns=NAME:.metadata.name,IP:.status.podIP,STATUS:.status.phase,NODE:.spec.nodeName</span>
-<span class="s">NAME                             IP               STATUS    NODE</span>
-<span class="s">rollout-nginx-554dbf8b76-l7cr5   172.16.221.141   Running   w1-k8s</span>
-<span class="s">rollout-nginx-6fc666844-4h7zq    172.16.132.12    Running   w3-k8s</span>
-<span class="s">rollout-nginx-6fc666844-4rrq8    172.16.103.143   Running   w2-k8s</span>
-<span class="s">rollout-nginx-6fc666844-f8np4    &lt;none&gt;           Pending   w1-k8s</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">root</span><span class="nd">@cp</span><span class="o">-</span><span class="nl">k8s:</span><span class="o">~</span><span class="err">#</span> <span class="n">k</span> <span class="n">get</span> <span class="n">pods</span> <span class="o">-</span><span class="n">o</span><span class="o">=</span><span class="n">custom</span><span class="o">-</span><span class="n">columns</span><span class="o">=</span><span class="nl">NAME:</span><span class="o">.</span><span class="na">metadata</span><span class="o">.</span><span class="na">name</span><span class="o">,</span><span class="nl">IP:</span><span class="o">.</span><span class="na">status</span><span class="o">.</span><span class="na">podIP</span><span class="o">,</span><span class="nl">STATUS:</span><span class="o">.</span><span class="na">status</span><span class="o">.</span><span class="na">phase</span><span class="o">,</span><span class="nl">NODE:</span><span class="o">.</span><span class="na">spec</span><span class="o">.</span><span class="na">nodeName</span>
+<span class="no">NAME</span>                             <span class="no">IP</span>               <span class="no">STATUS</span>    <span class="no">NODE</span>
+<span class="n">rollout</span><span class="o">-</span><span class="n">nginx</span><span class="o">-</span><span class="mi">554</span><span class="n">dbf8b76</span><span class="o">-</span><span class="n">l7cr5</span>   <span class="mf">172.16</span><span class="o">.</span><span class="mf">221.141</span>   <span class="nc">Running</span>   <span class="n">w1</span><span class="o">-</span><span class="n">k8s</span>
+<span class="n">rollout</span><span class="o">-</span><span class="n">nginx</span><span class="o">-</span><span class="mi">6</span><span class="n">fc666844</span><span class="o">-</span><span class="mi">4</span><span class="n">h7zq</span>    <span class="mf">172.16</span><span class="o">.</span><span class="mf">132.12</span>    <span class="nc">Running</span>   <span class="n">w3</span><span class="o">-</span><span class="n">k8s</span>
+<span class="n">rollout</span><span class="o">-</span><span class="n">nginx</span><span class="o">-</span><span class="mi">6</span><span class="n">fc666844</span><span class="o">-</span><span class="mi">4</span><span class="n">rrq8</span>    <span class="mf">172.16</span><span class="o">.</span><span class="mf">103.143</span>   <span class="nc">Running</span>   <span class="n">w2</span><span class="o">-</span><span class="n">k8s</span>
+<span class="n">rollout</span><span class="o">-</span><span class="n">nginx</span><span class="o">-</span><span class="mi">6</span><span class="n">fc666844</span><span class="o">-</span><span class="n">f8np4</span>    <span class="o">&lt;</span><span class="n">none</span><span class="o">&gt;</span>           <span class="nc">Pending</span>   <span class="n">w1</span><span class="o">-</span><span class="n">k8s</span>
 </code></pre></div></div>
 
 <ul>

@@ -83,7 +83,7 @@ spec:
         image: nginx:1.15.12
 ```
 
-```yaml
+```java
 root@cp-k8s:~# k apply -f  ~/_Book_k8sInfra/ch3/3.2.10/rollout-nginx.yaml --record
 Flag --record has been deprecated, --record will be removed in the future
 deployment.apps/rollout-nginx created
