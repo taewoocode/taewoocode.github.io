@@ -96,7 +96,7 @@ rollout-nginx-554dbf8b76-qrc4m   1/1     Running   0          3s
 
 배포한 파드의 정보는 원하는 옵션으로 확인이 가능함
 
-```yaml
+```java
 root@cp-k8s:~# k get pods \
 > -o=custom-columns=NAME:.metadata.name,IP:.status.podIP,STATUS:.status.phase,NODE:.spec.nodeName
 NAME                             IP               STATUS    NODE
@@ -107,7 +107,7 @@ rollout-nginx-554dbf8b76-qrc4m   172.16.132.11    Running   w3-k8s
 
 rollout history
 
-```yaml
+```java
 root@cp-k8s:~# k rollout history deployment rollout-nginx 
 
 deployment.apps/rollout-nginx 
@@ -120,7 +120,7 @@ REVISION  CHANGE-CAUSE
 
 nginx 컨테이너 버전 업데이트 해보기
 
-```
+```java
 root@cp-k8s:~# curl -I -silent 172.16.103.142 | grep Server
 Server: nginx/1.15.12
 
@@ -128,7 +128,7 @@ Server: nginx/1.15.12
 
 nginx 컨테이너 버전을 1.16으로 업데이트한다.
 
-```yaml
+```java
 root@cp-k8s:~# k set image deployment rollout-nginx nginx=nginx:1.16.0 --record
 Flag --record has been deprecated, --record will be removed in the future
 deployment.apps/rollout-nginx image updated
@@ -136,7 +136,7 @@ deployment.apps/rollout-nginx image updated
 
 nginx컨테이너를 업데이트하니 파드의 IP정보가 변경됨을 확인할 수 있음
 
-```yaml
+```java
 root@cp-k8s:~# k get pods -o=custom-columns=NAME:.metadata.name,IP:.status.podIP,STATUS:.status.phase,NODE:.spec.nodeName
 NAME                             IP               STATUS    NODE
 rollout-nginx-554dbf8b76-l7cr5   172.16.221.141   Running   w1-k8s
