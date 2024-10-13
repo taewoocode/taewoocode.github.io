@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 14 Oct 2024 01:40:17 +0900</pubDate>
-    <lastBuildDate>Mon, 14 Oct 2024 01:40:17 +0900</lastBuildDate>
+    <pubDate>Mon, 14 Oct 2024 01:55:25 +0900</pubDate>
+    <lastBuildDate>Mon, 14 Oct 2024 01:55:25 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
@@ -2139,6 +2139,139 @@ count값이 1이 된다.&lt;/li&gt;
       </item>
     
       <item>
+        <title>쉽게 배우는 쿠버네티스 - 03</title>
+        <description>&lt;h2 id=&quot;디플로이먼트란&quot;&gt;디플로이먼트란?&lt;/h2&gt;
+
+&lt;p&gt;Kubernetes(줄여서 K8S)의 디플로이먼트(Deployment)는 애플리케이션을 컨테이너화하여 Kubernetes 클러스터에 배포하고 관리하는 데 사용되는 주요 오브젝트 중 하나이다. 디플로이먼트를 사용하면 컨테이너화된 애플리케이션의 배포, 업데이트, 롤백, 확장 및 자가 치유(self-healing) 기능을 간편하게 관리할 수 있다.&lt;/p&gt;
+
+&lt;h3 id=&quot;주요-기능&quot;&gt;주요 기능&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;배포 및 업데이트 관리&lt;/strong&gt;: 디플로이먼트를 통해 애플리케이션의 새로운 버전을 손쉽게 배포하고, 지속적인 배포 전략(예: 롤링 업데이트)을 사용할 수 있다. 이를 통해 서비스 중단 없이 새로운 버전으로 업데이트할 수 있다.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;롤백&lt;/strong&gt;: 만약 새로운 버전의 애플리케이션에 문제가 발생하면, 이전 버전으로 손쉽게 롤백할 수 있다.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;확장(Scaling)&lt;/strong&gt;: 애플리케이션의 트래픽이 증가하면 디플로이먼트를 통해 손쉽게 파드의 개수를 늘릴 수 있습니다. 반대로, 트래픽이 줄어들면 파드의 개수를 줄일 수 있다.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;자가 치유(Self-Healing)&lt;/strong&gt;: 디플로이먼트는 실행 중인 파드가 장애가 발생하거나 문제가 생길 경우, 이를 감지하고 자동으로 새로운 파드를 생성해 정상 상태를 유지한다.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Pod 템플릿 관리&lt;/strong&gt;: 디플로이먼트는 파드를 정의하는 템플릿을 포함하며, 이를 통해 파드의 컨테이너 이미지, 환경 변수, 볼륨, 네트워크 설정 등을 관리한다.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;디플로이먼트-노출하려면-노드포트-사용&quot;&gt;디플로이먼트 노출하려면 노드포트 사용&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;노드 포트로 노출&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;expose&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;deployment&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nginx&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;--&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;NodePort&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;--&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;port&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;80&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;service&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nginx&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;exposed&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; 
+&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; 
+&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; 
+&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;svc&lt;/span&gt;
+&lt;span class=&quot;no&quot;&gt;NAME&lt;/span&gt;           &lt;span class=&quot;no&quot;&gt;TYPE&lt;/span&gt;        &lt;span class=&quot;no&quot;&gt;CLUSTER&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;IP&lt;/span&gt;      &lt;span class=&quot;no&quot;&gt;EXTERNAL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;IP&lt;/span&gt;   &lt;span class=&quot;nf&quot;&gt;PORT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;S&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;        &lt;span class=&quot;no&quot;&gt;AGE&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nginx&lt;/span&gt;   &lt;span class=&quot;nc&quot;&gt;NodePort&lt;/span&gt;    &lt;span class=&quot;mf&quot;&gt;10.103&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;27.106&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;none&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;        &lt;span class=&quot;mi&quot;&gt;80&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;31743&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;TCP&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;kubernetes&lt;/span&gt;     &lt;span class=&quot;nc&quot;&gt;ClusterIP&lt;/span&gt;   &lt;span class=&quot;mf&quot;&gt;10.96&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.1&lt;/span&gt;       &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;none&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;        &lt;span class=&quot;mi&quot;&gt;443&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;TCP&lt;/span&gt;        &lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;h&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;뭐가 되었든 로드벨런서 타입으로 노출시키는 것이 유리하다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;노드포트보다-로드벨런서가-좋은점&quot;&gt;노드포트보다 로드벨런서가 좋은점&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;노드포트는 노드의 아이피를 알려줘야한다. → 보안상 좋지 않다.&lt;/li&gt;
+  &lt;li&gt;로드벨런서는 버츄얼 IP처럼 대표하는 IP를 만들어서 알려줄 수 있다
+    &lt;ul&gt;
+      &lt;li&gt;노드포트를 공개하는 부담이 없다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;로드벨런서는 가야되는 경로를 최적화해준다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;디플로이먼트를-로드벨런서로-배포&quot;&gt;디플로이먼트를 로드벨런서로 배포&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;로드벨런서를 사용하면 노드포트를 외부에 노출시킬 필요가 없다.&lt;/li&gt;
+  &lt;li&gt;로드벨런서가 최선의 방법이다.&lt;/li&gt;
+  &lt;li&gt;디플로이먼트는 레플리카셋은 이용해서 파드의 수를 조정한다.
+    &lt;ul&gt;
+      &lt;li&gt;기본적으로는 하나가 배포가 되지만 스캐일을 이용해서 그 갯수를 정할 수 있다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;쿠버네티스에서-서비스란-svc&quot;&gt;쿠버네티스에서 서비스란? SVC&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;집구조를 생각해보면 안방,서재,책방 이런 곳에 갈라면 거실을 거쳐야 한다.
+    &lt;ul&gt;
+      &lt;li&gt;거실같은 곳이 서비스라고 생각하면 된다.&lt;/li&gt;
+      &lt;li&gt;다른 어떤곳을 넘어가기 위해 항상 거쳐야 하는 곳이다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;배포된-파드-삭제하기&quot;&gt;배포된 파드 삭제하기&lt;/h2&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@cp-k8s:~# k delete svc chk-hn
+service &quot;chk-hn&quot; deleted
+root@cp-k8s:~#
+root@cp-k8s:~#
+root@cp-k8s:~# k get svc
+NAME           TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)        AGE
+deploy-nginx   NodePort    10.99.97.20           80:32473/TCP   70m
+kubernetes     ClusterIP   10.96.0.1             443/TCP        91m
+root@cp-k8s:~# k delete svc deploy-nginx
+service &quot;deploy-nginx&quot; deleted
+root@cp-k8s:~# k get svc
+NAME         TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+kubernetes   ClusterIP   10.96.0.1            443/TCP   91m
+
+root@cp-k8s:~# k delete deployment chk-hn 
+deployment.apps &quot;chk-hn&quot; deleted
+root@cp-k8s:~# k delete deployment deploy-nginx 
+deployment.apps &quot;deploy-nginx&quot; deleted
+root@cp-k8s:~# k delete pod nginx
+
+root@cp-k8s:~# k delete -f ~/_Lecture_k8s_starter.kit/ch3/3.4/metallb.yaml 
+namespace &quot;metallb-system&quot; deleted
+serviceaccount &quot;controller&quot; deleted
+serviceaccount &quot;speaker&quot; deleted
+clusterrole.rbac.authorization.k8s.io &quot;metallb-system:controller&quot; deleted
+clusterrole.rbac.authorization.k8s.io &quot;metallb-system:speaker&quot; deleted
+role.rbac.authorization.k8s.io &quot;config-watcher&quot; deleted
+role.rbac.authorization.k8s.io &quot;pod-lister&quot; deleted
+role.rbac.authorization.k8s.io &quot;controller&quot; deleted
+clusterrolebinding.rbac.authorization.k8s.io &quot;metallb-system:controller&quot; deleted
+clusterrolebinding.rbac.authorization.k8s.io &quot;metallb-system:speaker&quot; deleted
+rolebinding.rbac.authorization.k8s.io &quot;config-watcher&quot; deleted
+rolebinding.rbac.authorization.k8s.io &quot;pod-lister&quot; deleted
+rolebinding.rbac.authorization.k8s.io &quot;controller&quot; deleted
+daemonset.apps &quot;speaker&quot; deleted
+deployment.apps &quot;controller&quot; deleted
+configmap &quot;config&quot; deleted
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.redhat.com/ko/topics/containers/what-is-kubernetes&quot;&gt;https://www.redhat.com/ko/topics/containers/what-is-kubernetes&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://cloud.google.com/kubernetes-engine?hl=ko&quot;&gt;https://cloud.google.com/kubernetes-engine?hl=ko&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&amp;lt;&lt;a href=&quot;https://www.openmaru.io/%ea%b5%ac%ea%b8%80%ea%b3%bc-%ec%bf%a0%eb%b2%84%eb%84%a4%ed%8b%b0%ec%8a%a4/&quot;&gt;https://www.openmaru.io/구글과-쿠버네티스/&lt;/a&gt;&amp;gt;&lt;/p&gt;
+</description>
+        <pubDate>Mon, 23 Sep 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/devops/2024/09/23/Kubernetes-basic-03/</link>
+        <guid isPermaLink="true">http://localhost:4000/devops/2024/09/23/Kubernetes-basic-03/</guid>
+        
+        <category>k8s</category>
+        
+        
+        <category>devops</category>
+        
+      </item>
+    
+      <item>
         <title>Java Adv 04 - Thread 4</title>
         <description>&lt;h2 id=&quot;join&quot;&gt;Join&lt;/h2&gt;
 
@@ -2323,103 +2456,6 @@ count값이 1이 된다.&lt;/li&gt;
         <pubDate>Sun, 22 Sep 2024 00:00:00 +0900</pubDate>
         <link>http://localhost:4000/language/2024/09/22/Java-Adv-04/</link>
         <guid isPermaLink="true">http://localhost:4000/language/2024/09/22/Java-Adv-04/</guid>
-        
-        <category>java</category>
-        
-        
-        <category>language</category>
-        
-      </item>
-    
-      <item>
-        <title>Java Adv 03 - Thread 3</title>
-        <description>&lt;h2 id=&quot;채크-예외-재정의&quot;&gt;채크 예외 재정의&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Runnable 인터페이스의 run() 메서드를 구현할 때 InterruptionException 체크 예외를 밖으로 던질 수 없는 이유를 알아보자&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;thread.control&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CheckedExceptionMain&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Exception&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CheckedRunnable&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Runnable&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-        &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Exception&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;자바에서 메서드를 재정의 할 때, 재정의 메서드가 지켜야할 예와와 관련 규칙이 있다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;체크예외&quot;&gt;체크예외&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;부모 메서드가 체크 예외를 던지지 않는 경우, 재정의된 자식 메서드도 체크예외를 던질 수 없다.&lt;/li&gt;
-  &lt;li&gt;자식 메서드는 부모 메서드가 던질 수 있는 체크 예외의 하위 타입만 던질 수 있다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;언체크-예외&quot;&gt;언체크 예외&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;예외 처리를 강제하지 않으므로 상관없이 던질 수 있다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;자바는-왜-이런-제약을-두는-걸까&quot;&gt;자바는 왜 이런 제약을 두는 걸까?&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;부모 클래스의 메서드를 호출하는 클라이언트 코드는 부모 메서드가 던지는 특정 예외만을 처리하도록 작성한다. 자식 클래스가 더 넓은 예외의 범위를 던지면 해당 코드는 모든 예외를 제대로 처리하지 못할 수 있다.&lt;/li&gt;
-  &lt;li&gt;예외 처리의 일관성을 해치고, 예상하지 못한 런타임 오류가 발생할 수 있다.&lt;/li&gt;
-  &lt;li&gt;ex) 예를 들어서 만약 부모가 InteruptException을 던지면 자식은 Exception을 던질 수 없다. 왜냐?
-    &lt;ul&gt;
-      &lt;li&gt;InteruptException은 Exception의 자식이기 때문이다. 예외도 부모와 자식관의 범주를 정해놓고 그 해당 범위 내에서만 예외가 적용됨을 알 수 있다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;예시코드&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
-		&lt;span class=&quot;nc&quot;&gt;Parent&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Child&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//인스턴스는 자식이지만 참조는 Parent이다.&lt;/span&gt;
-		&lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-			&lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;method&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-			&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;InterruptedException&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-			&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-		&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-	&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;자식 클래스의 재정의된 메서드는 부모 메서드가 던질 수 있는 체크 예외의 하위 타입만 던질 수 있다.&lt;/li&gt;
-  &lt;li&gt;원래 메서드가 체크 예외를 던지지 않는 경우, 재정의된 메서드도 체크 예외를 던질 수 없다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;안전한-예외처리&quot;&gt;안전한 예외처리&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;체크 예외를 run() 메서드에서 던질 수 없도록 강제함으로써, 개발자는 반드시 체크 예외를 try-catch 블록 내에서 처리하게 된다.&lt;/li&gt;
-  &lt;li&gt;프로그램이 비정상으로 종료되는 상황을 방지할 수 있다.&lt;/li&gt;
-  &lt;li&gt;멀티스레딩 환경에서는 예외 처리를 강제함으로써 스레드의 안정성과 일관성을 유지할 수 있다.&lt;/li&gt;
-  &lt;li&gt;최근에는 체크예외 보다는 언체크(런타임) 예외를 선호한다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;인프런 김영한님의 자바강좌 + 나의 뇌&lt;/p&gt;
-</description>
-        <pubDate>Sun, 22 Sep 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/language/2024/09/22/Java-Adv-03/</link>
-        <guid isPermaLink="true">http://localhost:4000/language/2024/09/22/Java-Adv-03/</guid>
         
         <category>java</category>
         
