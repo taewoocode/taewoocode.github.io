@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 14 Oct 2024 02:23:02 +0900</pubDate>
-    <lastBuildDate>Mon, 14 Oct 2024 02:23:02 +0900</lastBuildDate>
+    <pubDate>Mon, 14 Oct 2024 02:49:17 +0900</pubDate>
+    <lastBuildDate>Mon, 14 Oct 2024 02:49:17 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
@@ -1986,6 +1986,27 @@ count값이 1이 된다.&lt;/li&gt;
       </item>
     
       <item>
+        <title>쉽게 배우는 쿠버네티스 - 08</title>
+        <description>&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.redhat.com/ko/topics/containers/what-is-kubernetes&quot;&gt;https://www.redhat.com/ko/topics/containers/what-is-kubernetes&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://cloud.google.com/kubernetes-engine?hl=ko&quot;&gt;https://cloud.google.com/kubernetes-engine?hl=ko&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&amp;lt;&lt;a href=&quot;https://www.openmaru.io/%ea%b5%ac%ea%b8%80%ea%b3%bc-%ec%bf%a0%eb%b2%84%eb%84%a4%ed%8b%b0%ec%8a%a4/&quot;&gt;https://www.openmaru.io/구글과-쿠버네티스/&lt;/a&gt;&amp;gt;&lt;/p&gt;
+</description>
+        <pubDate>Wed, 25 Sep 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/devops/2024/09/25/Kubernetes-basic-08/</link>
+        <guid isPermaLink="true">http://localhost:4000/devops/2024/09/25/Kubernetes-basic-08/</guid>
+        
+        <category>k8s</category>
+        
+        
+        <category>devops</category>
+        
+      </item>
+    
+      <item>
         <title>Spring Basic 03 - 생성자 주입을 선택하라</title>
         <description>&lt;h2 id=&quot;불변&quot;&gt;불변&lt;/h2&gt;
 
@@ -2139,145 +2160,74 @@ count값이 1이 된다.&lt;/li&gt;
       </item>
     
       <item>
-        <title>쉽게 배우는 쿠버네티스 - 05</title>
-        <description>&lt;h2 id=&quot;파드에-문제가-생겼다면&quot;&gt;파드에 문제가 생겼다면?&lt;/h2&gt;
+        <title>쉽게 배우는 쿠버네티스 - 07</title>
+        <description>&lt;h2 id=&quot;쿠버네티스에-오브젝트란&quot;&gt;쿠버네티스에 오브젝트란?&lt;/h2&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;파드를 실수로 지웠다면?
+  &lt;li&gt;쿠버네티스에선 상태를 가지고 있는 것을 오브젝트라고 한다.&lt;/li&gt;
+  &lt;li&gt;상태라고 하면 보통 추구하는 상태, 현재 상태를 얘기한다.&lt;/li&gt;
+  &lt;li&gt;오브젝트는 원하는 상태가 기술된 것을 의미한다.&lt;/li&gt;
+  &lt;li&gt;감시 → 차이발견 → 상태발견 (싸이클 반복)&lt;/li&gt;
+  &lt;li&gt;추구하는 상태 = 오브젝트 상태&lt;/li&gt;
+  &lt;li&gt;추구하는 상태 = 현재 상태 → 오브젝트가 원하는 상태&lt;/li&gt;
+  &lt;li&gt;오브젝트란 선언적으로 어떤 것을 추구하는 방향을 기술해 놓은 상태라고 정의한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;기본적인-오브젝트&quot;&gt;기본적인 오브젝트&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;1차적으로는 Pod
     &lt;ul&gt;
-      &lt;li&gt;파드만 배포된 경우
+      &lt;li&gt;api, etcd,c-m,sched,k-proxy&lt;/li&gt;
+      &lt;li&gt;상태값을 가지고 있다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;svc
+    &lt;ul&gt;
+      &lt;li&gt;이것도 오브젝트임&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;namespace
+    &lt;ul&gt;
+      &lt;li&gt;네임스페이스는 추가에 따라서 더 많이 생성가능&lt;/li&gt;
+      &lt;li&gt;default namespace
         &lt;ul&gt;
-          &lt;li&gt;난감하다. 그냥 지워진거다.&lt;/li&gt;
+          &lt;li&gt;pod, svc, deploy&lt;/li&gt;
+          &lt;li&gt;그외에 굉장히 많은 오브젝트들을 default에 배포할 수 있다.&lt;/li&gt;
         &lt;/ul&gt;
       &lt;/li&gt;
-      &lt;li&gt;디플로이먼트 형태라면 ?
+      &lt;li&gt;kube-system
         &lt;ul&gt;
-          &lt;li&gt;파드는 디플로이먼트 형태로 파드를 유지하기 때문에 문제가 생기지 않는다.&lt;/li&gt;
-          &lt;li&gt;파드는 단일객체이지만 디플로이먼트는 파드를 감싸고 있는 객체이다.&lt;/li&gt;
-          &lt;li&gt;파드가 지워지게 되면 다시 만들게 된다.&lt;/li&gt;
+          &lt;li&gt;pod, svc, deploy&lt;/li&gt;
         &lt;/ul&gt;
       &lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;쿠버네티스가-파드를-대하는-자세애완동물과-가축&quot;&gt;쿠버네티스가 파드를 대하는 자세(애완동물과 가축)&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;파드는 항상 다시 생성되는 경우가 많다
+  &lt;li&gt;vol
     &lt;ul&gt;
-      &lt;li&gt;예를들면 업데이트를 한다거나, 노드가 이상해서 노드에 있는 파드를 옮겨야 한다는다든가&lt;/li&gt;
+      &lt;li&gt;영속적인 데이터를 보존하기 위해&lt;/li&gt;
+      &lt;li&gt;pod는 가축같은 존재라 언제든 삭제하고 생성한다.&lt;/li&gt;
+      &lt;li&gt;pod를 만들 때 volume을 붙여서 만들어야 한다.
+        &lt;ul&gt;
+          &lt;li&gt;이유는 데이터를 추가한다고 했을 때 파드가 이곳 저곳으로 돌아다니면 안되기 때문이다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;볼륨을 쓴다는 얘기는 워커노드가 3개가 모두 같이 바라보는 공간이 필요하다
+    &lt;ul&gt;
+      &lt;li&gt;NFS서버 네트워크 파일 시스템을 만들면 모두가 같이 쓸수 있는 볼륨을 만들 수 있다.&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;파드 배포&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@cp-k8s:~# k apply -f ~/_Lecture_k8s_starter.kit/ch5/5.1/del-
-del-deploy.yaml  del-pod.yaml
-root@cp-k8s:~# k apply -f ~/_Lecture_k8s_starter.kit/ch5/5.1
-deployment.apps/del-deploy created
-pod/del-pod created
-
-root@cp-k8s:~# k get pods
-NAME                         READY   STATUS    RESTARTS   AGE
-del-deploy-d6c48dfbf-6crl4   1/1     Running   0          49s
-del-deploy-d6c48dfbf-pxvnq   1/1     Running   0          49s
-del-deploy-d6c48dfbf-qktx9   1/1     Running   0          49s
-del-pod                      1/1     Running   0          49s
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;&lt;img width=&quot;697&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/0f43ec27-4908-4a78-af0a-de435cd3e8b3&quot; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;디렉토리 형태로 배포를 지정해주면&lt;/li&gt;
-  &lt;li&gt;디렉토리에 있는 yaml을 읽어서 바로 생성한다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;pod로 배포한 것 delete&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;delete&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pod&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;del&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pod&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;pod&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;del-pod&quot;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;deleted&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; 
-&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; 
-&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; 
-&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; 
-&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; 
-&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; 
-&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pods&lt;/span&gt;
-&lt;span class=&quot;no&quot;&gt;NAME&lt;/span&gt;                         &lt;span class=&quot;no&quot;&gt;READY&lt;/span&gt;   &lt;span class=&quot;no&quot;&gt;STATUS&lt;/span&gt;    &lt;span class=&quot;no&quot;&gt;RESTARTS&lt;/span&gt;   &lt;span class=&quot;no&quot;&gt;AGE&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;del&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d6c48dfbf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;crl4&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;     &lt;span class=&quot;nc&quot;&gt;Running&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;          &lt;span class=&quot;mi&quot;&gt;96&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;del&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d6c48dfbf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pxvnq&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;     &lt;span class=&quot;nc&quot;&gt;Running&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;          &lt;span class=&quot;mi&quot;&gt;96&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;del&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d6c48dfbf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;qktx9&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;     &lt;span class=&quot;nc&quot;&gt;Running&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;          &lt;span class=&quot;mi&quot;&gt;96&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;pod로 배포하게 되면 쉽게 delete가 된다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;디플로이먼트로 배포한 것을 지우면?&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pods&lt;/span&gt;
-&lt;span class=&quot;no&quot;&gt;NAME&lt;/span&gt;                         &lt;span class=&quot;no&quot;&gt;READY&lt;/span&gt;   &lt;span class=&quot;no&quot;&gt;STATUS&lt;/span&gt;    &lt;span class=&quot;no&quot;&gt;RESTARTS&lt;/span&gt;   &lt;span class=&quot;no&quot;&gt;AGE&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;del&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d6c48dfbf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;crl4&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;     &lt;span class=&quot;nc&quot;&gt;Running&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;          &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;m22s&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;del&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d6c48dfbf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pxvnq&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;     &lt;span class=&quot;nc&quot;&gt;Running&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;          &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;m22s&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;del&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d6c48dfbf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;qktx9&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;     &lt;span class=&quot;nc&quot;&gt;Running&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;          &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;m22s&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;delete&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pod&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;del&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d6c48dfbf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;qktx9&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;pod&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;del-deploy-d6c48dfbf-qktx9&quot;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;deleted&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; 
-&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; 
-&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pods&lt;/span&gt;
-&lt;span class=&quot;no&quot;&gt;NAME&lt;/span&gt;                         &lt;span class=&quot;no&quot;&gt;READY&lt;/span&gt;   &lt;span class=&quot;no&quot;&gt;STATUS&lt;/span&gt;              &lt;span class=&quot;no&quot;&gt;RESTARTS&lt;/span&gt;   &lt;span class=&quot;no&quot;&gt;AGE&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;del&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d6c48dfbf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;crl4&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;     &lt;span class=&quot;nc&quot;&gt;Running&lt;/span&gt;             &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;          &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;m58s&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;del&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d6c48dfbf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pxvnq&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;     &lt;span class=&quot;nc&quot;&gt;Running&lt;/span&gt;             &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;          &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;m58s&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;del&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d6c48dfbf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;wqhhk&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;     &lt;span class=&quot;nc&quot;&gt;ContainerCreating&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;          &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; 
-&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;delete&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;deployment&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;del&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deploy&lt;/span&gt; 
-&lt;span class=&quot;n&quot;&gt;deployment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;apps&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;del-deploy&quot;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;deleted&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; 
-&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; 
-&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pods&lt;/span&gt;
-&lt;span class=&quot;nc&quot;&gt;No&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;resources&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;found&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;default&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;namespace&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; 
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;기존의 파드가 사라지고 새로운 파드가 생성되는 것을 볼 수 있다.&lt;/li&gt;
-  &lt;li&gt;이것은 deployment가 세 개를 유지해야 된다는 게 이미 규정되어 있기 때문이다.&lt;/li&gt;
-  &lt;li&gt;지워지자마자 새로운 것을 다시 생성한다.&lt;/li&gt;
-  &lt;li&gt;그래서 deployment를 지우려면 디플로이먼트를 삭제해야 한다.&lt;/li&gt;
-  &lt;li&gt;즉 파드는 실수를 하면 날아가는 존재이지만 디플로이먼트는 파드의 숫자를 유지하는 존재이다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;쿠버네티스-구성-요소에-문제가-생긴다면&quot;&gt;쿠버네티스 구성 요소에 문제가 생긴다면?&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;대부분의 구성요소들은 문제가 생겨도 대부분 복구가 빠르게 일어난다.&lt;/li&gt;
-  &lt;li&gt;통신하는 방식이 선언적으로 API에 선언한 것을 그대로 가져가는 것이 아닌 존재가 있다.&lt;/li&gt;
-  &lt;li&gt;쿠버렛
-    &lt;ul&gt;
-      &lt;li&gt;쿠버렛에 문제가 생기면 API서버와 문제가 직접적으로 선언한 것을 가져가는 방식이 아니다.&lt;/li&gt;
-      &lt;li&gt;그리고 선언적인 방식과 쿠버렛이 런타임으로 보내주는 방식이 아니다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;kubelet종료하기&quot;&gt;kubelet종료하기&lt;/h2&gt;
-
-&lt;p&gt;&lt;img width=&quot;680&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/9397579f-6cdc-4c18-879a-dfa13653eee1&quot; /&gt;&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@cp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;k8s:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pods&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;o&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;wide&lt;/span&gt;
-&lt;span class=&quot;no&quot;&gt;NAME&lt;/span&gt;                         &lt;span class=&quot;no&quot;&gt;READY&lt;/span&gt;   &lt;span class=&quot;no&quot;&gt;STATUS&lt;/span&gt;    &lt;span class=&quot;no&quot;&gt;RESTARTS&lt;/span&gt;   &lt;span class=&quot;no&quot;&gt;AGE&lt;/span&gt;   &lt;span class=&quot;no&quot;&gt;IP&lt;/span&gt;               &lt;span class=&quot;no&quot;&gt;NODE&lt;/span&gt;     &lt;span class=&quot;no&quot;&gt;NOMINATED&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;NODE&lt;/span&gt;   &lt;span class=&quot;no&quot;&gt;READINESS&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;GATES&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;del&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d6c48dfbf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;692&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dh&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;     &lt;span class=&quot;nc&quot;&gt;Running&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;          &lt;span class=&quot;mi&quot;&gt;13&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;   &lt;span class=&quot;mf&quot;&gt;172.16&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;132.4&lt;/span&gt;     &lt;span class=&quot;n&quot;&gt;w3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k8s&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;none&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;           &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;none&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;del&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d6c48dfbf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hwtvx&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;     &lt;span class=&quot;nc&quot;&gt;Running&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;          &lt;span class=&quot;mi&quot;&gt;13&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;   &lt;span class=&quot;mf&quot;&gt;172.16&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;103.134&lt;/span&gt;   &lt;span class=&quot;n&quot;&gt;w2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k8s&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;none&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;           &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;none&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;del&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d6c48dfbf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;zp28f&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;     &lt;span class=&quot;nc&quot;&gt;Running&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;          &lt;span class=&quot;mi&quot;&gt;13&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;   &lt;span class=&quot;mf&quot;&gt;172.16&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;132.5&lt;/span&gt;     &lt;span class=&quot;n&quot;&gt;w3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k8s&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;none&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;           &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;none&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;w1k8s에는 배포가 되지 않았다.&lt;/li&gt;
-  &lt;li&gt;워커노드단에 kubelet에 문제가 생기면 배포가 제대로 이뤄지지 않는다.&lt;/li&gt;
+  &lt;li&gt;설정파일을 보면 volume이라는 옵션을 볼 수 있다.&lt;/li&gt;
+  &lt;li&gt;볼륨을 구성하면 파드를 생성하면 그 컨테이너 안에 오딧이라는 곳에 마운트를 해준다.&lt;/li&gt;
+  &lt;li&gt;그리고 레플리카를 3개를 만든다.&lt;/li&gt;
+  &lt;li&gt;dpy—check 야믈은 접속을 하면 기록을 저장을 하는 역할을 한다.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
@@ -2289,117 +2239,8 @@ del-pod                      1/1     Running   0          49s
 &lt;p&gt;&amp;lt;&lt;a href=&quot;https://www.openmaru.io/%ea%b5%ac%ea%b8%80%ea%b3%bc-%ec%bf%a0%eb%b2%84%eb%84%a4%ed%8b%b0%ec%8a%a4/&quot;&gt;https://www.openmaru.io/구글과-쿠버네티스/&lt;/a&gt;&amp;gt;&lt;/p&gt;
 </description>
         <pubDate>Mon, 23 Sep 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/devops/2024/09/23/Kubernetes-basic-05/</link>
-        <guid isPermaLink="true">http://localhost:4000/devops/2024/09/23/Kubernetes-basic-05/</guid>
-        
-        <category>k8s</category>
-        
-        
-        <category>devops</category>
-        
-      </item>
-    
-      <item>
-        <title>쉽게 배우는 쿠버네티스 - 04</title>
-        <description>&lt;h2 id=&quot;파드-배포-시에-쿠버네티스-구성들이-하는-일&quot;&gt;파드 배포 시에 쿠버네티스 구성들이 하는 일&lt;/h2&gt;
-
-&lt;h3 id=&quot;쿠버네티스의-기본-철학&quot;&gt;쿠버네티스의 기본 철학&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;마이크로서비스 아키텍처
-    &lt;ul&gt;
-      &lt;li&gt;하는 일들이 다 분업이 되어있다.&lt;/li&gt;
-      &lt;li&gt;나는 나의 일을 열심히 한다.&lt;/li&gt;
-      &lt;li&gt;반대되는 개념은 모놀리식 아키텍처이다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;동작방식&quot;&gt;동작방식&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;사용자가 파드 생성 요청을 하면 API 서버  &amp;amp; etcd 쪽으로 넘어간다.
-    &lt;ul&gt;
-      &lt;li&gt;API서버가 컨트롤러 매니저가 일을 잘하고 있는지 감시한다.&lt;/li&gt;
-      &lt;li&gt;API서버가 선언해 놓은 값을 보고 컨트롤 매니저가 그걸 보고 파드를 생성한다.&lt;/li&gt;
-      &lt;li&gt;API 서버가 모든 상태의 중심에 있다.&lt;/li&gt;
-      &lt;li&gt;스케줄러가 각 파드들을 배포하도록 담당을 하는데&lt;/li&gt;
-      &lt;li&gt;새로운 파드가 워커 노드에 들어갔는지 API서버가 감시를 한다.&lt;/li&gt;
-      &lt;li&gt;새로운 파드를 워커 노드에 넣도록 스케줄한다.&lt;/li&gt;
-      &lt;li&gt;파드 실제 생성은 kubelet이 한다.&lt;/li&gt;
-      &lt;li&gt;API 서버는 또 강요하지 않고 새로운 파드가 노드에 잘 소속되어 있는지 감시를 한다.&lt;/li&gt;
-      &lt;li&gt;쿠버네티스는 컨테이너 런타임을 통해서 파드의 동작이나 생성을 하도록 만든다. 사실 직접 또 kubelet 생성을 하지는 않는다.&lt;/li&gt;
-      &lt;li&gt;생성된 정보나 뭐 파드 상태나 이런 것들은 쿠버네티스 API서버에 알려주는 구조이다.&lt;/li&gt;
-      &lt;li&gt;API 서버는 선언된 상태값만을 가지고 있고 그 상태값을 기반으로 매니저, 스케줄러, 큐브렛등이 그 선언된 값에 값을 맞춰 넣으려는 방식으로 동작을 한다. 그런 방식을 통해서 파드가 사용가능한 상태가 되고 그것을 우리는 알게 된다.&lt;/li&gt;
-    &lt;/ul&gt;
-
-    &lt;h2 id=&quot;선언적인-시스템&quot;&gt;선언적인 시스템&lt;/h2&gt;
-
-    &lt;ul&gt;
-      &lt;li&gt;추구하는 상태와 현재상태가 있다.&lt;/li&gt;
-      &lt;li&gt;추구하는 상태는 API서버에 kubectl로 선언해놓은 상태이고 현재 상태는 각각의 스케줄러, 쿠버 컨트롤, 쿠버네티스 이런 현재 상태들을 가지고 있는 것이다.&lt;/li&gt;
-      &lt;li&gt;이것을 계속 보면서 맞추려고 하는 것이 쿠버네티스의 기본적인 알고리즘이다.&lt;/li&gt;
-      &lt;li&gt;API가 추구하는 값을 선언하고 다른 역할을 하는 매니저, 컨트롤들이 일을 잘하고 있는지 감시를 하는 형태라고 볼 수있다.&lt;/li&gt;
-      &lt;li&gt;추구하는 상태와 현재 상태를 맞추려고 하는 것&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;api-서버와-etcd는-다르다&quot;&gt;API 서버와 Etcd는 다르다&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;API서버는 가지고 있는 현재 상태 그리고 현재 추구하는 값들을 가지고 있는데 이 값은 휘발될 수 있으니 이 값에 대해서 지금 DB에 저장하는 것처럼 어떤 (구성)정보를 etcd라는 곳에 저장을 하게 되고 즉 kubernetes 클러스터에 업데이트 된 정보가 있다면 API 서버는 항상 etcd에게 저장을 하는 구조가 아닌 API서버가 etcd에 넣는 방식이다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;마스터노드&quot;&gt;마스터노드&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;API 서버&lt;/li&gt;
-  &lt;li&gt;컨트롤러 매니저&lt;/li&gt;
-  &lt;li&gt;스케줄러&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;실제-쿠버네티스의-파드-배포-흐름&quot;&gt;실제 쿠버네티스의 파드 배포 흐름&lt;/h2&gt;
-
-&lt;p&gt;&lt;img width=&quot;702&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/ffbae762-abc8-4bf2-a92a-eda209c1a0b3&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;쿠브컨트롤 명령을 통해서 API 서버에 명령이 들어간다.
-    &lt;ul&gt;
-      &lt;li&gt;파드를 생성하거나 디플로이먼트를 생성하거나 서비스를 생성하고 삭제하는 것들을 API서버에 명령을 내린다.&lt;/li&gt;
-      &lt;li&gt;그럼 API서버는 etcd에 해당 정보를 업데이트 한다.&lt;/li&gt;
-      &lt;li&gt;API 서버는 etcd와 1대1로 거의 동기화를 한다.&lt;/li&gt;
-      &lt;li&gt;문제가 생기면 etcd에 있는 정보를 복원하면 된다.&lt;/li&gt;
-      &lt;li&gt;하물며 버전까지도 맞춰낸다.&lt;/li&gt;
-      &lt;li&gt;그 다음으로 통신하는 곳은 컨트롤 매니저이다.&lt;/li&gt;
-      &lt;li&gt;API 서버의 값을 컨트롤 매니저가 사실 보고 그거에 맞게 자기 값을 바꾸고 API 서버에도 업데이트를 진행한다.&lt;/li&gt;
-      &lt;li&gt;그 다음에는 스케줄러는 워커노드에 파드를 할당하고 각각의 워커노드에  밸런스되게 들어가도록한다. 실제로 파드가 생성되야 하니까 API 서버를 보고 쿠버렛이 파드를 생성해야 겠다는 생각을 한다.&lt;/li&gt;
-      &lt;li&gt;그러면 쿠버랫이 컨테이너 런타임에게 파드를 생성해 달라고 요청하고&lt;/li&gt;
-      &lt;li&gt;그러면 컨테이너 런타임이 파드를 생성하는 구조이다.&lt;/li&gt;
-      &lt;li&gt;이렇게 생성된 파드들은 사용자와 통신하기 위해서 상단에 보이는 쿠버프록시를 통해서 실제로 통신한다.&lt;/li&gt;
-      &lt;li&gt;쿠버프록시를 통해서 사용자가 통신을 하게 되고 이러한 네트워크들은 쿠버네티스에서 기본 제공을 한다기 보단 쿠버네티스에서 사용자에서 직접 선택하도록 되어 있는 영역이다. 그걸 컨테이너 네트워크 인터페이스라고 부르고 Calico를 보통사용한다.&lt;/li&gt;
-      &lt;li&gt;API 서버는 쿠버네티스의 클러스터를 이루는 집합체이고 모든 것의 시작이자 끝이다.
-        &lt;ul&gt;
-          &lt;li&gt;보통 게이트웨이 역할을 하고 있다&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;파드를 배포하거나 디플로이먼트를 배포하면 IP는 쿠버네티스가 제공을 한다.&lt;/li&gt;
-  &lt;li&gt;어떤 IP가 제공되는지 우리는 알 수 없다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.redhat.com/ko/topics/containers/what-is-kubernetes&quot;&gt;https://www.redhat.com/ko/topics/containers/what-is-kubernetes&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://cloud.google.com/kubernetes-engine?hl=ko&quot;&gt;https://cloud.google.com/kubernetes-engine?hl=ko&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&amp;lt;&lt;a href=&quot;https://www.openmaru.io/%ea%b5%ac%ea%b8%80%ea%b3%bc-%ec%bf%a0%eb%b2%84%eb%84%a4%ed%8b%b0%ec%8a%a4/&quot;&gt;https://www.openmaru.io/구글과-쿠버네티스/&lt;/a&gt;&amp;gt;&lt;/p&gt;
-</description>
-        <pubDate>Mon, 23 Sep 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/devops/2024/09/23/Kubernetes-basic-04/</link>
-        <guid isPermaLink="true">http://localhost:4000/devops/2024/09/23/Kubernetes-basic-04/</guid>
+        <link>http://localhost:4000/devops/2024/09/23/Kubernetes-basic-07/</link>
+        <guid isPermaLink="true">http://localhost:4000/devops/2024/09/23/Kubernetes-basic-07/</guid>
         
         <category>k8s</category>
         
