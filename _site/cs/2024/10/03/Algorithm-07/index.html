@@ -277,6 +277,57 @@ on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
 
 <p><img width="696" alt="image" src="https://github.com/user-attachments/assets/3e3d4bf5-8162-420f-847f-8620b291a10b" /></p>
 
+<p>어렵게 생각할 필요없이 이 그림 하나로 쉽게 이해할 수 있다. 그림의 좌표는 (y,x)로 기준을 잡았다.</p>
+
+<p>졸라맨 캐릭터가 있는 좌표의 위치를 (1,1)이라고 가정을 했을 때 각 위치를 표현을 했고, 주황색의 좌표는 변화율을 나타낸다. ex) 1,1 → 0,1은 y가 -1만큼 줄었음을 나타낸다.</p>
+
+<h2 id="문제">문제</h2>
+
+<p>그러면 3 * 3 맵을 입력받아야 하는데 맵은 1과 0으로 이루어져 있고, {0,0}은 무조건 1임을 보장한다. {0,0} 부터 4방향을 기준으로 한칸씩 탐색해나가며 방문한 정점은 다시 방문하지 않으며 방문하는 좌표를 출력하는 코드. 0은 갈수 없는 지역, 1은 갈 수 있는 지역을 구현한다.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span><span class="cpf">&lt;bits/stdc++.h&gt;</span><span class="cp">
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">n</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">visited</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">n</span><span class="p">];</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">dy</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">};</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">dx</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">};</span>
+<span class="kt">int</span> <span class="n">go</span><span class="p">(</span><span class="kt">int</span> <span class="n">y</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x</span><span class="p">){</span>
+    <span class="n">visited</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">//방문한 정점은 색칠</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">y</span> <span class="o">&lt;&lt;</span> <span class="s">" : "</span> <span class="o">&lt;&lt;</span> <span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+        <span class="kt">int</span> <span class="n">ny</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">dy</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="kt">int</span> <span class="n">nx</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">dx</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">ny</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">ny</span> <span class="o">&gt;=</span> <span class="n">n</span> <span class="o">||</span> <span class="n">nx</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">nx</span> <span class="o">&gt;=</span> <span class="n">n</span><span class="p">){</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">ny</span><span class="p">][</span><span class="n">nx</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">){</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">visited</span><span class="p">[</span><span class="n">ny</span><span class="p">][</span><span class="n">nx</span><span class="p">]){</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">go</span><span class="p">(</span><span class="n">ny</span><span class="p">,</span><span class="n">nx</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">(){</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">){</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">go</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>방문한 정점이라는 배열은 visited 배열을 통해서 방문을 확인한다.
+방문한 배열을 1로 체크를 해두고, 방문하지 않은 배열을 0으로 표기한다.
+그러므로 <code class="language-plaintext highlighter-rouge">for(int i = 0; i &lt; n; i++)</code> 반복문에서 <code class="language-plaintext highlighter-rouge">dy[i]</code>와 <code class="language-plaintext highlighter-rouge">dx[i]</code> 값을 이용하여 현재 좌표 <code class="language-plaintext highlighter-rouge">(y, x)</code>에서 새로운 좌표 <code class="language-plaintext highlighter-rouge">(ny, nx)</code>를 구하게 된다.
+그리고 각 검증에서 좌표의 범위를 벗어나거나, <strong>0인 좌표는 이동할 수 없거나 탐색하지 않을 필요가 있는 경우이다.</strong> 그리고 이미 방문했던 좌표는 방문할 필요가 없으므로 건너뛴다.
+그리고 다음의 if의 검증들을 다 넘어가면 재귀호출을 통해 다음 반복을 이어간다.</p>
+
 <h2 id="reference">Reference</h2>
 
 <p>나의 뇌</p>
