@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 14 Oct 2024 20:10:15 +0900</pubDate>
-    <lastBuildDate>Mon, 14 Oct 2024 20:10:15 +0900</lastBuildDate>
+    <pubDate>Mon, 14 Oct 2024 20:11:32 +0900</pubDate>
+    <lastBuildDate>Mon, 14 Oct 2024 20:11:32 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
@@ -241,7 +241,7 @@ ex) 맛집에 줄을 서지만 특정 시간 만큼만 기다린다. 특정 시�
         <title>Map, Direction</title>
         <description>&lt;h2 id=&quot;맵과-방향벡터&quot;&gt;맵과 방향벡터&lt;/h2&gt;
 
-&lt;p&gt;&lt;img width=&quot;696&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/3e3d4bf5-8162-420f-847f-8620b291a10b&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img width=&quot;702&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/dac2b00e-53af-4623-ba83-739a6919ec41&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;어렵게 생각할 필요없이 이 그림 하나로 쉽게 이해할 수 있다. 그림의 좌표는 (y,x)로 기준을 잡았다.&lt;/p&gt;
 
