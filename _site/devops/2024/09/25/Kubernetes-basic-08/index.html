@@ -346,14 +346,14 @@ on <a href="/tag/devops-k8s/" data-flip="title">Kubernetes</a>
         <span class="na">image</span><span class="pi">:</span> <span class="s">nginx:1.15.12</span>
 </code></pre></div></div>
 
-<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">root@cp-k8s:~# k apply -f  ~/_Book_k8sInfra/ch3/3.2.10/rollout-nginx.yaml --record</span>
-<span class="s">Flag --record has been deprecated, --record will be removed in the future</span>
-<span class="s">deployment.apps/rollout-nginx created</span>
-<span class="s">root@cp-k8s:~# k get pods</span>
-<span class="s">NAME                             READY   STATUS    RESTARTS   AGE</span>
-<span class="s">rollout-nginx-554dbf8b76-j9xb8   1/1     Running   0          3s</span>
-<span class="s">rollout-nginx-554dbf8b76-l7cr5   1/1     Running   0          3s</span>
-<span class="s">rollout-nginx-554dbf8b76-qrc4m   1/1     Running   0          3s</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">root</span><span class="nd">@cp</span><span class="o">-</span><span class="nl">k8s:</span><span class="o">~</span><span class="err">#</span> <span class="n">k</span> <span class="n">apply</span> <span class="o">-</span><span class="n">f</span>  <span class="o">~/</span><span class="n">_Book_k8sInfra</span><span class="o">/</span><span class="n">ch3</span><span class="o">/</span><span class="mf">3.2</span><span class="o">.</span><span class="mi">10</span><span class="o">/</span><span class="n">rollout</span><span class="o">-</span><span class="n">nginx</span><span class="o">.</span><span class="na">yaml</span> <span class="o">--</span><span class="n">record</span>
+<span class="nc">Flag</span> <span class="o">--</span><span class="n">record</span> <span class="n">has</span> <span class="n">been</span> <span class="n">deprecated</span><span class="o">,</span> <span class="o">--</span><span class="n">record</span> <span class="n">will</span> <span class="n">be</span> <span class="n">removed</span> <span class="n">in</span> <span class="n">the</span> <span class="n">future</span>
+<span class="n">deployment</span><span class="o">.</span><span class="na">apps</span><span class="o">/</span><span class="n">rollout</span><span class="o">-</span><span class="n">nginx</span> <span class="n">created</span>
+<span class="n">root</span><span class="nd">@cp</span><span class="o">-</span><span class="nl">k8s:</span><span class="o">~</span><span class="err">#</span> <span class="n">k</span> <span class="n">get</span> <span class="n">pods</span>
+<span class="no">NAME</span>                             <span class="no">READY</span>   <span class="no">STATUS</span>    <span class="no">RESTARTS</span>   <span class="no">AGE</span>
+<span class="n">rollout</span><span class="o">-</span><span class="n">nginx</span><span class="o">-</span><span class="mi">554</span><span class="n">dbf8b76</span><span class="o">-</span><span class="n">j9xb8</span>   <span class="mi">1</span><span class="o">/</span><span class="mi">1</span>     <span class="nc">Running</span>   <span class="mi">0</span>          <span class="mi">3</span><span class="n">s</span>
+<span class="n">rollout</span><span class="o">-</span><span class="n">nginx</span><span class="o">-</span><span class="mi">554</span><span class="n">dbf8b76</span><span class="o">-</span><span class="n">l7cr5</span>   <span class="mi">1</span><span class="o">/</span><span class="mi">1</span>     <span class="nc">Running</span>   <span class="mi">0</span>          <span class="mi">3</span><span class="n">s</span>
+<span class="n">rollout</span><span class="o">-</span><span class="n">nginx</span><span class="o">-</span><span class="mi">554</span><span class="n">dbf8b76</span><span class="o">-</span><span class="n">qrc4m</span>   <span class="mi">1</span><span class="o">/</span><span class="mi">1</span>     <span class="nc">Running</span>   <span class="mi">0</span>          <span class="mi">3</span><span class="n">s</span>
 </code></pre></div></div>
 
 <p>배포한 파드의 정보는 원하는 옵션으로 확인이 가능함</p>
