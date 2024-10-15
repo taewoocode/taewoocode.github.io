@@ -315,6 +315,23 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
 <p>생산자 먼저인 <code class="language-plaintext highlighter-rouge">producerFirst</code> 를 호출하면 <code class="language-plaintext highlighter-rouge">producer1</code> → <code class="language-plaintext highlighter-rouge">producer2</code> → <code class="language-plaintext highlighter-rouge">producer3</code> → <code class="language-plaintext highlighter-rouge">consumer1</code> → <code class="language-plaintext highlighter-rouge">consumer2</code> → <code class="language-plaintext highlighter-rouge">consumer3</code> 순서로 실행된다.
 소비자 먼저인 <code class="language-plaintext highlighter-rouge">consumerFirst</code> 를 호출하면<code class="language-plaintext highlighter-rouge">consumer1</code> → <code class="language-plaintext highlighter-rouge">consumer2</code> → <code class="language-plaintext highlighter-rouge">consumer3</code> → <code class="language-plaintext highlighter-rouge">producer1</code> → <code class="language-plaintext highlighter-rouge">producer2</code> → <code class="language-plaintext highlighter-rouge">producer3</code> 순서로 실행된다. 참고로 여기서는 이해를 돕기 위해 이렇게 순서대로 실행했다. 실제로는 동시에 실행될 것이다.</p>
 
+<h2 id="하지만-이-코드는-문제가-많다">하지만 이 코드는 문제가 많다.</h2>
+
+<p>편의상 Consumer를 c, Producer를 p라고 말하겠다.
+<strong>생산자 스레드 먼저 실행</strong>의 경우 <code class="language-plaintext highlighter-rouge">p3</code> 가 보관하는 <code class="language-plaintext highlighter-rouge">data3</code> 은 버려지고, <code class="language-plaintext highlighter-rouge">c3</code> 는 데이터를 받지 못한다. 
+(<code class="language-plaintext highlighter-rouge">null</code> 을 받는다.)
+<strong>소비자 스레드 먼저 실행</strong>의 경우 <code class="language-plaintext highlighter-rouge">c1</code> , <code class="language-plaintext highlighter-rouge">c2</code> , <code class="language-plaintext highlighter-rouge">c3</code> 는 데이터를 받지 못한다.(<code class="language-plaintext highlighter-rouge">null</code> 을 받는다.) 
+그리고 <code class="language-plaintext highlighter-rouge">p3</code> 가 보관하는 <code class="language-plaintext highlighter-rouge">data3</code> 은 버려진다.
+예제는 단순하게 설명하기 위해 생산자 스레드 3개, 소비자 스레드 3개를 한 번만 실행했지만, 실제로 이런 생산자 소비
+자 구조는 보통 계속해서 실행된다. 
+레스토랑에 손님은 계속 찾아오고, 음료 공장은 계속해서 음료를 만들어낸다. 
+쇼핑몰이라면 고객은 계속해서 주문을 한다.
+<strong>버퍼가 가득 찬 경우</strong>: 생산자 입장에서 버퍼에 여유가 생길 때 까지 조금만 기다리면 되는데, 기다리지 못하고, 데
+이터를 버리는 것은 아쉽다.
+<strong>버퍼가 빈 경우</strong>: 소비자 입장에서 버퍼에 데이터가 채워질 때 까지 조금만 기다리면 되는데, 기다리지 못하고,
+<code class="language-plaintext highlighter-rouge">null</code> 데이터를 얻는 것은 아쉽다.
+문제의 해결 방안은 단순하다. 앞서 설명한 것 처럼 스레드가 기다리면 되는 것, 그럼 스레드가 기다리도록 구현해보자.</p>
+
 <h2 id="reference">Reference</h2>
 
 <p>김영한님의 자바 강의</p>
