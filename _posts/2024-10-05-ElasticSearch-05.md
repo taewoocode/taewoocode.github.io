@@ -116,7 +116,6 @@ output {
 
 ### /bin/ogstash -f config/logstash-test.conf
 
-<img width="678" alt="image" src="https://github.com/user-attachments/assets/3499c769-5ed8-48dd-b1c2-243be1e3f129">
 <img width="625" alt="image" src="https://github.com/user-attachments/assets/206197d1-0fb2-44fa-9623-565385baed6f">
 
 ## 필터 적용

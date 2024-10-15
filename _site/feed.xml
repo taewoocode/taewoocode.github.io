@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 15 Oct 2024 21:09:41 +0900</pubDate>
-    <lastBuildDate>Tue, 15 Oct 2024 21:09:41 +0900</lastBuildDate>
+    <pubDate>Tue, 15 Oct 2024 21:11:36 +0900</pubDate>
+    <lastBuildDate>Tue, 15 Oct 2024 21:11:36 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
@@ -102,12 +102,12 @@ output &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
   &lt;li&gt;실습을 위한 conf 파일 설정&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;err&quot;&gt;vi&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;config/logstash-test.conf&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; 
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vi config/logstash-test.conf 
 
-&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;sudo&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;./bin/logstash&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;-f&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;config/logstash-test.conf&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;span class=&quot;nb&quot;&gt;sudo&lt;/span&gt; ./bin/logstash &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; config/logstash-test.conf
 
-&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;touch&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;config/fillter-example.log&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;span class=&quot;nb&quot;&gt;touch &lt;/span&gt;config/fillter-example.log
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;실습을 위해 logstash-test.conf 파일을 생성하고 파일에 파일입력 플러그인을 적용한다.&lt;/p&gt;
 
@@ -137,8 +137,7 @@ output &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
 
 &lt;h3 id=&quot;binogstash--f-configlogstash-testconf&quot;&gt;/bin/ogstash -f config/logstash-test.conf&lt;/h3&gt;
 
-&lt;p&gt;&lt;img width=&quot;678&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/3499c769-5ed8-48dd-b1c2-243be1e3f129&quot; /&gt;
-&lt;img width=&quot;625&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/206197d1-0fb2-44fa-9623-565385baed6f&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img width=&quot;625&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/206197d1-0fb2-44fa-9623-565385baed6f&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;필터-적용&quot;&gt;필터 적용&lt;/h2&gt;
 

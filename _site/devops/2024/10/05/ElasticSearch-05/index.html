@@ -355,12 +355,12 @@ output <span class="o">{</span>
   <li>실습을 위한 conf 파일 설정</li>
 </ul>
 
-<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">vi</span><span class="w"> </span><span class="err">config/logstash-test.conf</span><span class="w"> 
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vi config/logstash-test.conf 
 
-</span><span class="err">sudo</span><span class="w"> </span><span class="err">./bin/logstash</span><span class="w"> </span><span class="err">-f</span><span class="w"> </span><span class="err">config/logstash-test.conf</span><span class="w">
+<span class="nb">sudo</span> ./bin/logstash <span class="nt">-f</span> config/logstash-test.conf
 
-</span><span class="err">touch</span><span class="w"> </span><span class="err">config/fillter-example.log</span><span class="w">
-</span></code></pre></div></div>
+<span class="nb">touch </span>config/fillter-example.log
+</code></pre></div></div>
 
 <p>실습을 위해 logstash-test.conf 파일을 생성하고 파일에 파일입력 플러그인을 적용한다.</p>
 
@@ -390,8 +390,7 @@ output <span class="o">{</span>
 
 <h3 id="binogstash--f-configlogstash-testconf">/bin/ogstash -f config/logstash-test.conf</h3>
 
-<p><img width="678" alt="image" src="https://github.com/user-attachments/assets/3499c769-5ed8-48dd-b1c2-243be1e3f129" />
-<img width="625" alt="image" src="https://github.com/user-attachments/assets/206197d1-0fb2-44fa-9623-565385baed6f" /></p>
+<p><img width="625" alt="image" src="https://github.com/user-attachments/assets/206197d1-0fb2-44fa-9623-565385baed6f" /></p>
 
 <h2 id="필터-적용">필터 적용</h2>
 
