@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Devops" />
+<meta property="og:title" content="Elasticsearch Analyzer" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,16 +52,18 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Devops &middot; 일벌리는 개발자</title>
+<title>Elasticsearch Analyzer &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="소프트웨어의 안정적인 운영을 위해 반드시 알아야할 Devops
+        content="Analyzer
+
 "
 />
 <meta
         property="og:description"
-        content="소프트웨어의 안정적인 운영을 위해 반드시 알아야할 Devops
+        content="Analyzer
+
 "
 />
 
@@ -70,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/category/devops/" />
-<meta property="og:url" content="http://localhost:4000/category/devops/" />
+<link rel="canonical" href="http://localhost:4000/devops/2024/10/05/ElasticSearch-03/" />
+<meta property="og:url" content="http://localhost:4000/devops/2024/10/05/ElasticSearch-03/" />
 
 <link
         rel="alternate"
@@ -81,9 +83,9 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/category/development/" />
+<link rel="prev" href="http://localhost:4000/devops/2024/10/05/ElasticSearch-02/" />
  
-<link rel="next" href="http://localhost:4000/category/framework/" />
+<link rel="next" href="http://localhost:4000/devops/2024/10/05/ElasticSearch-04/" />
 
 
 <link
@@ -181,31 +183,380 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-
-
+<article id="post-devops/2024/10/05/ElasticSearch-03" class="post" role="article">
   <header>
-    <h1 class="page-title">Devops</h1>
+    <h1 class="post-title">
+      
+      Elasticsearch Analyzer
+      
+    </h1>
+
+    <p class="post-date heading">
+      <time datetime="2024-10-05T00:00:00+09:00">05 Oct 2024</time>
+      
+
+
+
+
+
+
+
+
+
+in <a href="/category/devops/" data-flip="title">Devops</a>
+
+      
+
+
+
+
+
+
+
+
+
+on <a href="/tag/devops-es/" data-flip="title">Elasticsearch</a>
+
+    </p>
+
     
-  
-  
-<p class="message">소프트웨어의 안정적인 운영을 위해 반드시 알아야할 Devops</p>
-
-
+  <div class="hr" style="padding-bottom:0"></div>
 
 
   </header>
-  <hr class="sr-only"/>
-
+  
 
 
   
+  <div class="markdown-body">
+
+    <!--  -->
+    <style>
+      .myAd1190 {
+        width: 48%;
+        height: 280px;
+      }
+
+      .myAd1290 {
+        width: 48%;
+        height: 280px;
+      }
+
+      @media(max-width: 800px) {
+        .myAd1190 {
+          display: none;
+        }
+
+        .myAd1290 {
+          width: 98%;
+        }
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 300px;
+      }
+
+      .row-center {
+        display: flex;
+        justify-content: center;
+        height: 258px;
+      }
+    </style>
+
+    <!--<br />-->
+    <h2 id="analyzer">Analyzer</h2>
+
+<p>엘라스틱서치에서 <strong>분석기(Analyzer)</strong>는 텍스트 데이터를 처리하여 검색 성능을 높이는 데 필수적인 역할을 한다. 
+분석기는 문서를 인덱싱하기 전에 데이터를 가공하여 유용한 형태로 변환한다. 
+이 과정에서 사용되는 주요 구성 요소는 <strong>캐릭터 필터(Character Filter)</strong>, <strong>토크나이저(Tokenizer)</strong>, 그리고 <strong>토큰 필터(Token Filter)</strong>이다.</p>
+
+<h2 id="분석기의-구성-요소">분석기의 구성 요소</h2>
+
+<p><img width="981" alt="image" src="https://github.com/user-attachments/assets/772dd9f6-4fe1-494d-9ddf-ad43ac293eb4" /></p>
+
+<h3 id="캐릭터-필터-character-filter">캐릭터 필터 (Character Filter)</h3>
+
+<ul>
+  <li><strong>역할</strong>: 캐릭터 필터는 텍스트 데이터를 분석하기 전에 불필요한 문자나 정보를 사전에 처리하는 데 사용된다.</li>
+  <li><strong>예시</strong>: HTML 문서에서 <code class="language-plaintext highlighter-rouge">&lt;html&gt;</code>, <code class="language-plaintext highlighter-rouge">&lt;body&gt;</code>와 같은 태그는 인덱싱할 필요가 없으므로, 캐릭터 필터를 통해 이러한 태그를 제거할 수 있다.</li>
+  <li><strong>사용 목적</strong>: 데이터의 노이즈를 줄이고, 텍스트를 보다 깔끔한 형태로 변환하여 다음 단계인 토크나이징을 준비한다.</li>
+</ul>
+
+<h3 id="토크나이저-tokenizer">토크나이저 (Tokenizer)</h3>
+
+<ul>
+  <li><strong>역할</strong>: 토크나이저는 텍스트를 분리하여 <strong>토큰</strong>이라고 불리는 작은 단위로 변환한다. 분석기에는 반드시 하나의 토크나이저가 포함되어야 한다.</li>
+  <li><strong>예시</strong>:
+    <ul>
+      <li><strong>Standard Tokenizer</strong>: 기본적으로 사용하는 토크나이저로, 쉼표나 마침표와 같은 기호를 제거하여 단어를 분리한다.</li>
+      <li><strong>Lowercase Tokenizer</strong>: 모든 문자를 소문자로 변환한 후 토큰화한다.</li>
+      <li><strong>Ngram Tokenizer</strong>: N 개의 연속된 글자 단위를 모두 토큰화한다. 예를 들어, “엘라스틱서치”라는 문자열을 입력하면 (엘라, 라스, 스틱, 틱서, 서치)와 같은 연속된 두 글자를 모두 추출한다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="토큰-필터-token-filter">토큰 필터 (Token Filter)</h3>
+
+<ul>
+  <li><strong>역할</strong>: 토큰 필터는 생성된 토큰에 추가적인 처리를 하여 최종적으로 인덱싱할 수 있는 형태로 변환한다.</li>
+  <li><strong>예시</strong>:
+    <ul>
+      <li><strong>소문자 필터</strong>: 모든 대문자를 소문자로 변환한다. 예를 들어, “HELLO”는 “hello”로 변환된다.</li>
+      <li><strong>형태소 분석기</strong>: “loving”, “loved”, “love”, “loves”와 같은 다양한 형태를 분석하여 “love”라는 기본형으로 변환한다.</li>
+    </ul>
+  </li>
+  <li><strong>작동 과정</strong>: 토큰이 이 필터를 거치면서 최종 용어로 변환된 후 인덱싱된다.</li>
+</ul>
+
+<h3 id="토크나이저-테스트">토크나이저 테스트</h3>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">POST</span><span class="w"> </span><span class="err">_analyze</span><span class="w">
+</span><span class="p">{</span><span class="w">
+  </span><span class="nl">"analyzer"</span><span class="p">:</span><span class="w"> </span><span class="s2">"standard"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Hello, my name is gildong hong. She loves him. I am 22 years old"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>이 요청은 <strong>standard</strong> 분석기를 사용하여 주어진 텍스트를 분석하는 테스트이다. 결과로 각 단어가 토큰화되고, 각 토큰에 대한 정보(위치, 유형 등)가 포함된다. 예를 들어, “Hello”는 “hello”로 변환되며, 숫자 “22”는 <code class="language-plaintext highlighter-rouge">&lt;NUM&gt;</code> 유형으로 인식된다. 이를 통해 검색을 최적화하고 텍스트의 의미를 파악할 수 있다.</p>
+
+<h3 id="쿼리-실습">쿼리 실습</h3>
+
+<h3 id="인덱스-생성-및-문서-추가">인덱스 생성 및 문서 추가</h3>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">PUT</span><span class="w"> </span><span class="err">text_index</span><span class="w">
+</span><span class="p">{</span><span class="w">
+  </span><span class="nl">"mappings"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"writer"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nl">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"keyword"</span><span class="p">},</span><span class="w">
+      </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"text"</span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>위 코드는 <code class="language-plaintext highlighter-rouge">text_index</code>라는 인덱스를 생성하며, <code class="language-plaintext highlighter-rouge">writer</code> 필드는 <strong>keyword</strong> 타입, <code class="language-plaintext highlighter-rouge">title</code> 필드는 <strong>text</strong> 타입으로 정의된다.</p>
+
+<p>문서를 추가하는 예시</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">PUT</span><span class="w"> </span><span class="err">text_index/_doc/</span><span class="mi">1</span><span class="w">
+</span><span class="p">{</span><span class="w">
+  </span><span class="nl">"wirter"</span><span class="p">:</span><span class="w"> </span><span class="s2">"gildong"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The Cloud Computing Rules"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span><span class="err">PUT</span><span class="w"> </span><span class="err">text_index/_doc/</span><span class="mi">2</span><span class="w">
+</span><span class="p">{</span><span class="w">
+  </span><span class="nl">"writer"</span><span class="p">:</span><span class="w"> </span><span class="s2">"chulsoo"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"My Cloud Bread"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>첫 번째 문서에서 <code class="language-plaintext highlighter-rouge">writer</code> 필드의 오타(“wirter”)가 있으므로, 인덱싱에 문제가 발생할 수 있다.</p>
+
+<h3 id="검색-쿼리">검색 쿼리</h3>
+
+<p><strong>전체 검색</strong></p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">GET</span><span class="w"> </span><span class="err">text_index/_search</span><span class="w">
+</span><span class="p">{</span><span class="w">
+  </span><span class="nl">"query"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"match"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Cloud Computing"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>이 쿼리는 <code class="language-plaintext highlighter-rouge">title</code> 필드에서 “Cloud Computing”과 일치하는 문서를 찾는다.</p>
+
+<p><strong>작가 검색</strong></p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">GET</span><span class="w"> </span><span class="err">text_index/_search</span><span class="w">
+</span><span class="p">{</span><span class="w">
+  </span><span class="nl">"query"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"match"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"writer"</span><span class="p">:</span><span class="w"> </span><span class="s2">"gildong"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">writer</code> 필드에서 “gildong”을 찾는 쿼리이다.</p>
+
+<p><strong>제목 검색</strong></p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">GET</span><span class="w"> </span><span class="err">text_index/_search</span><span class="w">
+</span><span class="p">{</span><span class="w">
+  </span><span class="nl">"query"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"match"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Cloud"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">title</code> 필드에서 “Cloud”와 일치하는 문서를 찾는다.</p>
+
+<h3 id="인덱스-템플릿">인덱스 템플릿</h3>
+
+<p>인덱스 템플릿은 새로운 인덱스가 생성될 때 적용되는 설정과 매핑을 정의한다.</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">PUT</span><span class="w"> </span><span class="err">_index_template/mysql_</span><span class="mi">2024</span><span class="err">_template</span><span class="w">
+</span><span class="p">{</span><span class="w">
+  </span><span class="nl">"index_patterns"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"mysql_2024_*"</span><span class="p">],</span><span class="w">
+  </span><span class="nl">"priority"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"template"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"settings"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"number_of_shards"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"number_of_replicas"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"mappings"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"keyword"</span><span class="p">},</span><span class="w">
+        </span><span class="nl">"time"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"date"</span><span class="p">},</span><span class="w">
+        </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"text"</span><span class="p">}</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>위 코드는 인덱스 이름이 <code class="language-plaintext highlighter-rouge">mysql_2024_*</code> 패턴에 맞는 경우, 자동으로 해당 설정과 매핑이 적용된다. 
+예를 들어, <code class="language-plaintext highlighter-rouge">mysql_2024_02</code>라는 인덱스를 생성하면, 설정된 샤드 수, 복제본 수, 그리고 필드 타입이 자동으로 적용된다.</p>
+
+<h3 id="다양한-토크나이저-테스트">다양한 토크나이저 테스트</h3>
+
+<h3 id="표준-토크나이저">표준 토크나이저</h3>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">POST</span><span class="w"> </span><span class="err">_analyze</span><span class="w">
+</span><span class="p">{</span><span class="w">
+  </span><span class="nl">"tokenizer"</span><span class="p">:</span><span class="w"> </span><span class="s2">"standard"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"email: test@test.com"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>표준 토크나이저를 사용하여 주어진 텍스트를 분석하고, 각 토큰을 추출한다.</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"tokens"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"token"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"email"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"start_offset"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"end_offset"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;ALPHANUM&gt;"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"position"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"token"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"test"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"start_offset"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"end_offset"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;ALPHANUM&gt;"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"position"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"token"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"test.com"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"start_offset"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"end_offset"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;ALPHANUM&gt;"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"position"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>여기서 “email”과 “test”는 일반 알파벳으로 처리되며, “test.com”은 하나의 토큰으로 처리된다.</p>
+
+<h3 id="소문자-토크나이저">소문자 토크나이저</h3>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">POST</span><span class="w"> </span><span class="err">_analyze</span><span class="w">
+</span><span class="p">{</span><span class="w">
+  </span><span class="nl">"tokenizer"</span><span class="p">:</span><span class="w"> </span><span class="s2">"lowercase"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"email: test@test.com"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>이 토크나이저는 모든 문자를 소문자로 변환한다. 결과는 아래와 같다.</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="w">
+</span><span class="p">{</span><span class="w">
+  </span><span class="nl">"tokens"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"token"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"email"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"start_offset"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"end_offset"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;ALPHANUM&gt;"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"position"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"token"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"test@test.com"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"start_offset"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"end_offset"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;EMAIL&gt;"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"position"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>이 결과에서 “test@test.com”은 이메일로 인식되어 하나의 토큰으로 처리된다.
+엘라스틱서치에서의 실습을 진행해 보며 쿼리, 인덱스 템플릿, 그리고 토크나이저의 사용은 검색 성능을 극대화하는 데 매우 중요하다는 것을 배울 수 있었다. 
+적절한 분석기와 토크나이저를 선택하면, 검색 결과의 품질을 높이고, 데이터의 의미를 보다 정확하게 파악할 수 있다. 
+각 요소를 신중하게 구성하고 실험함으로써, 원하는 검색 결과를 얻을 수 있다.</p>
+
+<h2 id="reference">Reference</h2>
+
+<p><a href="https://www.elastic.co/kr/blog/what-is-an-elasticsearch-index">https://www.elastic.co/kr/blog/what-is-an-elasticsearch-index</a></p>
+
+<p><a href="https://www.elastic.co/kr/elasticsearch">https://www.elastic.co/kr/elasticsearch</a></p>
+
+<p><a href="https://aws.amazon.com/ko/what-is/elasticsearch/">https://aws.amazon.com/ko/what-is/elasticsearch/</a></p>
+
+<p><a href="https://victorydntmd.tistory.com/308">https://victorydntmd.tistory.com/308</a></p>
+
+    <br />
+    <br />
+  </div>
   
+
+</article>
+
+<!--<hr class="dingbat" />-->
+<!--
+<div class="share">
+  <h2>Share this post</h2>
+  <div class="share-body">
+    <a href="http://twitter.com/share?text=Elasticsearch Analyzer&amp;url=http://localhost:4000/devops/2024/10/05/ElasticSearch-03/"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="icon-twitter">
+      </span>
+    </a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/devops/2024/10/05/ElasticSearch-03/"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="icon-facebook">
+      </span>
+    </a>
+  </div>
+</div>
+-->
+<br />
+
+
+
+
+<aside class="related" role="complementary">
+  <h2 class="hr">Related Posts</h2>
+
+  <ul class="related-posts">
     
-    <h2 id="y2024" class="hr">2024</h2>
-    <ul class="related-posts">
-    
-  
-  
+      
+      
+      
+        
+        
+          
 
 
 <li class="h4">
@@ -213,15 +564,15 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     <span>Elasticsearch Logstash</span>
   </a>
   <small><time datetime="2024-10-05T00:00:00+09:00">
-    05 Oct
+    05 Oct 2024
   </time></small>
 </li>
 
-  
-
-  
-  
-  
+        
+      
+        
+        
+          
 
 
 <li class="h4">
@@ -229,31 +580,18 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     <span>Elasticsearch Aggregation</span>
   </a>
   <small><time datetime="2024-10-05T00:00:00+09:00">
-    05 Oct
+    05 Oct 2024
   </time></small>
 </li>
 
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/devops/2024/10/05/ElasticSearch-03/" data-flip="title">
-    <span>Elasticsearch Analyzer</span>
-  </a>
-  <small><time datetime="2024-10-05T00:00:00+09:00">
-    05 Oct
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
+        
+      
+        
+          
+          
+        
+        
+          
 
 
 <li class="h4">
@@ -261,205 +599,31 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     <span>Elasticsearch Index</span>
   </a>
   <small><time datetime="2024-10-05T00:00:00+09:00">
-    05 Oct
+    05 Oct 2024
   </time></small>
 </li>
 
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/devops/2024/10/04/ElasticSearch-01/" data-flip="title">
-    <span>Elasticsearch란?</span>
-  </a>
-  <small><time datetime="2024-10-04T00:00:00+09:00">
-    04 Oct
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/devops/2024/09/25/Kubernetes-basic-08/" data-flip="title">
-    <span>쉽게 배우는 쿠버네티스 - 08</span>
-  </a>
-  <small><time datetime="2024-09-25T00:00:00+09:00">
-    25 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/devops/2024/09/23/Kubernetes-basic-07/" data-flip="title">
-    <span>쉽게 배우는 쿠버네티스 - 07</span>
-  </a>
-  <small><time datetime="2024-09-23T00:00:00+09:00">
-    23 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/devops/2024/09/23/Kubernetes-basic-06/" data-flip="title">
-    <span>쉽게 배우는 쿠버네티스 - 06</span>
-  </a>
-  <small><time datetime="2024-09-23T00:00:00+09:00">
-    23 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/devops/2024/09/23/Kubernetes-basic-05/" data-flip="title">
-    <span>쉽게 배우는 쿠버네티스 - 05</span>
-  </a>
-  <small><time datetime="2024-09-23T00:00:00+09:00">
-    23 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/devops/2024/09/23/Kubernetes-basic-04/" data-flip="title">
-    <span>쉽게 배우는 쿠버네티스 - 04</span>
-  </a>
-  <small><time datetime="2024-09-23T00:00:00+09:00">
-    23 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/devops/2024/09/23/Kubernetes-basic-03/" data-flip="title">
-    <span>쉽게 배우는 쿠버네티스 - 03</span>
-  </a>
-  <small><time datetime="2024-09-23T00:00:00+09:00">
-    23 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/devops/2024/09/22/Kubernetes-basic-02/" data-flip="title">
-    <span>쉽게 배우는 쿠버네티스 - 02</span>
-  </a>
-  <small><time datetime="2024-09-22T00:00:00+09:00">
-    22 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/devops/2024/09/22/Kubernetes-basic-01/" data-flip="title">
-    <span>쉽게 배우는 쿠버네티스 - 01</span>
-  </a>
-  <small><time datetime="2024-09-22T00:00:00+09:00">
-    22 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/devops/2024/09/21/Devops-Docker-02/" data-flip="title">
-    <span>DockerFile로 Spring Image 만들기</span>
-  </a>
-  <small><time datetime="2024-09-21T00:00:00+09:00">
-    21 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/devops/2024/09/21/Devops-Docker-01/" data-flip="title">
-    <span>Docker swarm을 이용한 사이드 프로젝트</span>
-  </a>
-  <small><time datetime="2024-09-21T00:00:00+09:00">
-    21 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/devops/2024/09/17/Infra-01/" data-flip="title">
-    <span>꼭 CPU를 지표로 스케일링해야 할까?</span>
-  </a>
-  <small><time datetime="2024-09-17T00:00:00+09:00">
-    17 Sep
-  </time></small>
-</li>
-
+        
+      
+    
   </ul>
+</aside>
+  <aside class="comments" role="complementary">
+  <h2>Comments</h2>
+  <hr/>
 
-  <footer>
+  <script src="https://utteranc.es/client.js"
+          repo="taewoocode/taewoocode.github.io"
+          issue-term="title"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+</aside>
+
+
+       <footer>
   <hr/>
   
     <p>© 2022. by taewoo</p>
@@ -966,7 +1130,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     <li>
       <input type="checkbox" id="list-item-7"/>
       <div  class="list-wrapper">
-      <a class="sidebar-nav-item active" href="/category/devops/">Devops</a>
+      <a class="sidebar-nav-item" href="/category/devops/">Devops</a>
        <label class="folder" for="list-item-7">▾</label>
     </div>
      <ul class="list-body">
