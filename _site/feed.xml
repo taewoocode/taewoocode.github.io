@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 15 Oct 2024 19:43:41 +0900</pubDate>
-    <lastBuildDate>Tue, 15 Oct 2024 19:43:41 +0900</lastBuildDate>
+    <pubDate>Tue, 15 Oct 2024 19:47:59 +0900</pubDate>
+    <lastBuildDate>Tue, 15 Oct 2024 19:47:59 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
@@ -65,6 +65,130 @@ ex) 맛집에 줄을 서지만 특정 시간 만큼만 기다린다. 특정 시�
         
         
         <category>language</category>
+        
+      </item>
+    
+      <item>
+        <title>http의 동작방식과 spring이 http를 지원해주는 방식</title>
+        <description>&lt;h2 id=&quot;http의-동작-방식&quot;&gt;HTTP의 동작 방식&lt;/h2&gt;
+
+&lt;p&gt;HTTP(Hypertext Transfer Protocol)는 클라이언트와 서버 간 데이터를 주고받기 위한 프로토콜이다. 기본적으로 요청(request)과 응답(response) 구조로 동작한다. 이 동작 방식을 단계별로 설명하면 다음과 같다.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;클라이언트 요청&lt;/strong&gt;: 웹 브라우저나 HTTP 클라이언트가 특정 리소스(URL)를 요청한다. 이 요청은 HTTP 메서드(GET, POST, PUT, DELETE 등)와 함께 전송된다.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;서버 처리&lt;/strong&gt;: 서버는 요청을 받아, 해당 요청을 처리할 수 있는 서버 애플리케이션이 요청을 해석하고 처리한다.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;응답 반환&lt;/strong&gt;: 서버가 요청을 처리한 후, 클라이언트에게 응답을 돌려준다. 응답에는 상태 코드(200 OK, 404 Not Found, 500 Internal Server Error 등), 헤더(header), 그리고 필요한 경우 데이터(body)가 포함된다.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;클라이언트 처리&lt;/strong&gt;: 클라이언트는 서버로부터 받은 응답을 처리하여 웹 페이지를 렌더링하거나 데이터를 사용한다.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;http-메서드&quot;&gt;HTTP 메서드&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;GET&lt;/strong&gt;: 리소스를 조회하기 위한 요청을 보낸다.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;POST&lt;/strong&gt;: 리소스를 생성하거나 데이터를 서버로 전송하기 위한 요청을 보낸다.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;PUT&lt;/strong&gt;: 기존 리소스를 수정하기 위한 요청을 보낸다.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;DELETE&lt;/strong&gt;: 리소스를 삭제하기 위한 요청을 보낸다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;http-상태-코드&quot;&gt;HTTP 상태 코드&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;2xx (성공)&lt;/strong&gt;: 요청이 성공적으로 처리되었음을 나타낸다 (ex: 200 OK).&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;4xx (클라이언트 오류)&lt;/strong&gt;: 클라이언트의 잘못된 요청을 나타낸다 (ex: 404 Not Found).&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;5xx (서버 오류)&lt;/strong&gt;: 서버에서 처리할 수 없는 오류가 발생했음을 나타낸다 (ex: 500 Internal Server Error).&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;spring이-http를-지원하는-방식&quot;&gt;Spring이 HTTP를 지원하는 방식&lt;/h2&gt;
+
+&lt;p&gt;Spring은 Spring MVC를 통해 HTTP 요청과 응답을 처리할 수 있도록 지원한다. Spring MVC는 웹 애플리케이션에서 HTTP 프로토콜을 간단하게 다룰 수 있는 다양한 편의 기능을 제공한다.&lt;/p&gt;
+
+&lt;h3 id=&quot;dispatcherservlet&quot;&gt;DispatcherServlet&lt;/h3&gt;
+
+&lt;p&gt;Spring의 HTTP 요청 처리는 &lt;strong&gt;DispatcherServlet&lt;/strong&gt;을 통해 이루어진다. DispatcherServlet은 클라이언트로부터 들어오는 모든 HTTP 요청을 받아 이를 처리할 컨트롤러로 전달한다.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;클라이언트가 HTTP 요청을 보낸다.&lt;/li&gt;
+  &lt;li&gt;DispatcherServlet이 요청을 가로채고, 알맞은 컨트롤러를 찾아 해당 요청을 전달한다.&lt;/li&gt;
+  &lt;li&gt;컨트롤러는 비즈니스 로직을 처리한 후, View 또는 데이터를 반환한다.&lt;/li&gt;
+  &lt;li&gt;DispatcherServlet이 클라이언트에게 응답을 반환한다.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;controller와-request-mapping&quot;&gt;Controller와 Request Mapping&lt;/h3&gt;
+
+&lt;p&gt;Spring에서는 &lt;strong&gt;@Controller&lt;/strong&gt;와 &lt;strong&gt;@RequestMapping&lt;/strong&gt; 어노테이션을 사용하여 특정 HTTP 요청을 처리하는 메서드를 정의한다.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Controller&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@GetMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/hello&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;hello&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;hello&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@PostMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/data&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ResponseEntity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;postData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@RequestBody&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ResponseEntity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;ok&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Data received: &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/hello&lt;/code&gt; 경로로 GET 요청이 들어오면 &lt;strong&gt;hello()&lt;/strong&gt; 메서드가 호출된다.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/data&lt;/code&gt; 경로로 POST 요청이 들어오면 &lt;strong&gt;postData()&lt;/strong&gt; 메서드가 호출되어 데이터를 처리한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;http-요청-파라미터-처리&quot;&gt;HTTP 요청 파라미터 처리&lt;/h3&gt;
+
+&lt;p&gt;Spring은 HTTP 요청의 파라미터, 헤더, 본문 등을 쉽게 가져올 수 있는 어노테이션을 제공한다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;@RequestParam&lt;/strong&gt;: 쿼리 파라미터를 받아온다.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;@PathVariable&lt;/strong&gt;: URL 경로에 포함된 변수를 받아온다.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;@RequestBody&lt;/strong&gt;: HTTP 본문에 포함된 데이터를 객체로 변환하여 받아온다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;restcontroller와-rest-api&quot;&gt;RestController와 REST API&lt;/h3&gt;
+
+&lt;p&gt;Spring에서는 &lt;strong&gt;@RestController&lt;/strong&gt;를 사용하여 RESTful 웹 서비스를 쉽게 구축한다. &lt;strong&gt;@RestController&lt;/strong&gt;는 JSON 또는 XML 형식의 데이터를 반환하는 HTTP 엔드포인트를 만드는 데 사용된다.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@RestController&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ApiController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@GetMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/api/hello&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;apiHello&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Hello from API&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@PostMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/api/data&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ResponseEntity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;apiData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@RequestBody&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ResponseEntity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;ok&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Received: &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;http-상태-코드-및-예외-처리&quot;&gt;HTTP 상태 코드 및 예외 처리&lt;/h3&gt;
+
+&lt;p&gt;Spring은 &lt;strong&gt;ResponseEntity&lt;/strong&gt;를 사용하여 HTTP 응답 코드, 헤더, 바디를 명시적으로 설정할 수 있다.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&lt;span class=&quot;nd&quot;&gt;@GetMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/api/error&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ResponseEntity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ResponseEntity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Error Occurred&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;HttpStatus&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;BAD_REQUEST&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;또한, Spring은 &lt;strong&gt;@ExceptionHandler&lt;/strong&gt;를 사용하여 전역 또는 특정 컨트롤러 내에서 발생하는 예외를 처리한다.&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://velog.io/@18k7102dy/Docker-Spring-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EB%A5%BC-Docker%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%B4%EC%84%9C-%EB%B0%B0%ED%8F%AC%ED%95%B4%EB%B4%85%EC%8B%9C%EB%8B%A4&quot;&gt;https://velog.io/@18k7102dy/Docker-Spring-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EB%A5%BC-Docker%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%B4%EC%84%9C-%EB%B0%B0%ED%8F%AC%ED%95%B4%EB%B4%85%EC%8B%9C%EB%8B%A4&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Fri, 04 Oct 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/framework/2024/10/04/Spring-03/</link>
+        <guid isPermaLink="true">http://localhost:4000/framework/2024/10/04/Spring-03/</guid>
+        
+        <category>spring</category>
+        
+        
+        <category>framework</category>
         
       </item>
     
@@ -2291,88 +2415,6 @@ count값이 1이 된다.&lt;/li&gt;
         
         
         <category>framework</category>
-        
-      </item>
-    
-      <item>
-        <title>KPT 회고의 시작</title>
-        <description>&lt;h2 id=&quot;글을-시작하기에-앞서-회고를-시작하게-된-이유&quot;&gt;글을 시작하기에 앞서 회고를 시작하게 된 이유&lt;/h2&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;#티끌모아 태산&lt;/p&gt;
-
-&lt;/blockquote&gt;
-
-&lt;p&gt;주기적으로 회고를 하다보면, 지금 보기에는 별 것 아니고 늘 같아 보이는 내용들이 나중에 돌아보았을 때 나에게 정말 소중한 자산이 되어있다. 나의 회고 기록들을 미래에 들춰보았을 때 잊고 있던 나의 방향성을 다시 잡게 될 수도 있었다.&lt;/p&gt;
-
-&lt;p&gt;만약 이전의 회고에서 지금과 별다를 것 없는 나를 보게 되더라도 상관없다고 생각한다.회고를 쓰지 않았으면 인지하지도 못했을 것이 틀림없기 때문이다. 인지하고 못하고는 아주 큰 차이가 있다고 생각하며, 회고를 통해 인지하고 한 걸음이라도 더 나아갈 수 있는 계기가 된다면 그 자체로도 충분한 가치가 있지 않을까 생각한다.&lt;/p&gt;
-
-&lt;h2 id=&quot;효율적으로-성장하려면&quot;&gt;효율적으로 성장하려면?&lt;/h2&gt;
-
-&lt;p&gt;은연중에 했던 생각이지만 어떤 분야든 간에 늘 새로운 기술의 습득이나, 배움을 늘 안고 살아가는 (특히 엔지니어, 개발자) 라면? 어떻게 조금 더 빠르게 효율적으로 성장할 수 있을지에 대한 고민을 해봐야 한다.&lt;/p&gt;
-
-&lt;p&gt;성장에 목이 마른 사람이라면 피할 수 없는 질문이기도 하다.&lt;/p&gt;
-
-&lt;h2 id=&quot;회고-그-중에서도-kpt-회고를-선택하게-된-이유&quot;&gt;회고 그 중에서도 KPT 회고를 선택하게 된 이유&lt;/h2&gt;
-
-&lt;p&gt;KPT를 선택하게 된 이유는 회고의 방식이 평소에 내가 적는 기록의 방식과 비슷하다고 느껴서이다.&lt;/p&gt;
-
-&lt;p&gt;또한 가장 직관적으로 나의 현 상황을 볼 수 있기에 선택했다.&lt;/p&gt;
-
-&lt;h2 id=&quot;kpt-회고란&quot;&gt;KPT 회고란?&lt;/h2&gt;
-&lt;p&gt;&lt;img width=&quot;680&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/8bac6806-3be7-41ec-9e9a-6fcefd88a159&quot; /&gt;
-간단하게 설명하자면 Keep(유지)하고, Problem(문제)를 명확히 정의하고, 이를 배움으로 Try(시도)할 것들을 정리하는 방식이 KPT 회고이다.&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Keep : 지속하다.&lt;/p&gt;
-
-  &lt;p&gt;Problem : 느낀 문제점&lt;/p&gt;
-
-  &lt;p&gt;Try : 문제를 바탕으로 시도할 것&lt;/p&gt;
-
-&lt;/blockquote&gt;
-
-&lt;h2 id=&quot;회고를-하며-얻고-싶은-인사이트는&quot;&gt;회고를 하며 얻고 싶은 인사이트는?&lt;/h2&gt;
-
-&lt;p&gt;프로젝트를 진행하며 느낀 것은 ‘이 프로젝트를 우리가 하는 이유, 어떻게 진행하는지, 프로젝트를 하고나서 얻을 수 있는 것은 무엇인지?’ 회고 과정을 통해 얼마나 성장할 수 있는지 느껴보고 싶기도 했다.&lt;/p&gt;
-
-&lt;h2 id=&quot;회고의-적용&quot;&gt;회고의 적용&lt;/h2&gt;
-&lt;p&gt;&lt;img width=&quot;694&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/585d2c94-2d21-446d-9e6d-2ea940e53c30&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;카카오 클라우드 교육생인 태균님, 원우님, 태교님과 토이프로젝트를 진행하게 되었다.&lt;/p&gt;
-
-&lt;p&gt;프로젝트의 개요를 간단하게 설명하자면 분산 시스템에서 발생하는 로그 및 메트릭 데이터를 효율적으로 수집, 저장하고 시각화하는 시스템을 구축하는 것을 목표로 한다. Docker Swarm을 기반으로 하여 ELK Stack와 MariaDB를 통합하여 구성된다.&lt;/p&gt;
-
-&lt;p&gt;프로젝트의 구성은 간단했지만 초반의 기획에서 힘을 많이 빼게 되었고, 데이터의 수집과, 설계, 배포 시 Replica에 값이 들어오지 않는 것까지 기초적인 부분에 많은 부족함이 있었음을 알게 되었다.&lt;/p&gt;
-
-&lt;p&gt;이 프로젝트를 진행해오며 배운 것들은 정말 많았고, 부족한 점을 많이 매꿔나갈 수 있었던 프로젝트였다.&lt;/p&gt;
-
-&lt;h2 id=&quot;kpt-작성-시-유의할-점project-혹은-개인-일상에서의&quot;&gt;KPT 작성 시 유의할 점(Project 혹은 개인 일상에서의)&lt;/h2&gt;
-
-&lt;p&gt;KPT를 작성하다 보면 Problem만 한 사발 적고 있는 나를 발견하게 되었었는데, 스스로를 너무 몰아붙이지 않는 것이 좋다고 생각했다. 과거를 돌아봤을 때 스스로의 노고를 너무나도 당연하게 생각한 나머지 스스로에게 너무 잔인하게 굴었던 모습들을 볼 수 있었다.&lt;/p&gt;
-
-&lt;p&gt;먼 거리 매일 교육을 들으며 성장해 나가는 모습이며, 친구들 교육생들과 좋은 시간을 보낼 수 있는 것이며, 가족들과의 저녁식사, 감사하게 되는 일들은 너무나도 많다. Problem에서의 메타인지로 자기 객관화도 물론 중요한 일이지만 무엇보다도 칭찬(Keep)을 충실히 작성해야 나에대해 더 잘 알 수 있었으며, 번아웃을 방지할 수 있다고 생각한다. 무엇보다도 현실적인 다짐(Try)를 이끌어내기 좋지 않을까.&lt;/p&gt;
-
-&lt;h2 id=&quot;그래서-kpt회고의-최종목적지는-뭘까&quot;&gt;그래서 KPT회고의 최종목적지는 뭘까?&lt;/h2&gt;
-
-&lt;p&gt;회고의 최종 목적지는 다음 행동(Project, Event)들에 대한 설계에 대비하는 일이라고 생각한다.&lt;/p&gt;
-
-&lt;p&gt;충분히 곱씹고나면 다음 프로젝트든, 일상생활속에서 발견했던 문제점이든 앞으로 나아가기 위해서는 응축된 에너지가 필요하다. 무언가를 결심하고 실행하는데는 많은 생각과 말이 필요하지 않다. 충분히 곱씹었다면 잘 설계한 문장 한마디이면 된다.&lt;/p&gt;
-
-&lt;h2 id=&quot;마지막으로&quot;&gt;마지막으로&lt;/h2&gt;
-
-&lt;p&gt;KPT회고를 통해 문제점을 자각하는 것 만으로도 큰 성과이고, ‘잘한 점’ 이라고 할 수 있게지만, 배움을 토대로 삶에 적용했을 때 KPT 회고가 빛을 발하는 것이 아닐까 생각한다. 앎의 영역과 실천의 영역은 구분되어져야 하는 것이고 두 영역이 이어지고 균형을 이루어야 한다.&lt;/p&gt;
-
-&lt;p&gt;단순한 지식의 습득이 아닌 목표와 동기를 가진 효율적인 회고는 반드시 방정식을 요하고 내가 가지고 있는 한계를 확장할 수 있는 것 같다.&lt;/p&gt;
-</description>
-        <pubDate>Mon, 23 Sep 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/life/2024/09/23/daily-02/</link>
-        <guid isPermaLink="true">http://localhost:4000/life/2024/09/23/daily-02/</guid>
-        
-        <category>daily</category>
-        
-        
-        <category>life</category>
         
       </item>
     
