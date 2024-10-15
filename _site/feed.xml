@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 14 Oct 2024 20:11:32 +0900</pubDate>
-    <lastBuildDate>Mon, 14 Oct 2024 20:11:32 +0900</lastBuildDate>
+    <pubDate>Tue, 15 Oct 2024 19:43:41 +0900</pubDate>
+    <lastBuildDate>Tue, 15 Oct 2024 19:43:41 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
@@ -243,9 +243,8 @@ ex) 맛집에 줄을 서지만 특정 시간 만큼만 기다린다. 특정 시�
 
 &lt;p&gt;&lt;img width=&quot;702&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/dac2b00e-53af-4623-ba83-739a6919ec41&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;어렵게 생각할 필요없이 이 그림 하나로 쉽게 이해할 수 있다. 그림의 좌표는 (y,x)로 기준을 잡았다.&lt;/p&gt;
-
-&lt;p&gt;졸라맨 캐릭터가 있는 좌표의 위치를 (1,1)이라고 가정을 했을 때 각 위치를 표현을 했고, 주황색의 좌표는 변화율을 나타낸다. ex) 1,1 → 0,1은 y가 -1만큼 줄었음을 나타낸다.&lt;/p&gt;
+&lt;p&gt;어렵게 생각할 필요없이 이 그림 하나로 쉽게 이해할 수 있다. 그림의 좌표는 (y,x)로 기준을 잡았다.
+졸라맨 캐릭터가 있는 좌표의 위치를 (1,1)이라고 가정을 했을 때 각 위치를 표현을 했고, 주황색의 좌표는 변화율을 나타낸다. ex) 1,1 → 0,1은 y가 -1만큼 줄었음을 나타낸다.&lt;/p&gt;
 
 &lt;h2 id=&quot;문제&quot;&gt;문제&lt;/h2&gt;
 
