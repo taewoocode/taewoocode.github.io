@@ -192,6 +192,8 @@ output {
 sudo ./bin/logstash -f config/logstash-test2.conf --log.level error
 ```
 
+어렵구나 어려워
+
 ## Reference
 
 <https://www.elastic.co/kr/blog/what-is-an-elasticsearch-index>
