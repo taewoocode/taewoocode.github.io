@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Home" />
+<meta property="og:title" content="백준 2178 문제풀이" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -46,22 +46,28 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 ></script>
 
  
-<meta property="og:image" content="http://localhost:4000/assets/img/logo.png" />
+<meta
+        property="og:image"
+        content="http://localhost:4000/assets//img/algorithm-logo.png"
+/>
+<br />
 
 
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Home &middot; 일벌리는 개발자</title>
+<title>백준 2178 문제풀이 &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="일을 벌여놔야 주워 담을 수 있습니다.
+        content="문제 링크
+
 "
 />
 <meta
         property="og:description"
-        content="일을 벌여놔야 주워 담을 수 있습니다.
+        content="문제 링크
+
 "
 />
 
@@ -70,8 +76,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/page-8/" />
-<meta property="og:url" content="http://localhost:4000/page-8/" />
+<link rel="canonical" href="http://localhost:4000/cs/2024/10/06/Algorithm-09/" />
+<meta property="og:url" content="http://localhost:4000/cs/2024/10/06/Algorithm-09/" />
 
 <link
         rel="alternate"
@@ -80,6 +86,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         href="http://localhost:4000/feed.xml"
 />
 
+
+<link rel="prev" href="http://localhost:4000/cs/2024/10/06/Algorithm-08/" />
  
 
 <link
@@ -176,18 +184,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
             data-image="/assets/img/dp.jpeg"
     >
       
-  
 
-<article id="post-language/2024/09/18/Java-Mid-17" class="post mb6" role="article">
+<article id="post-cs/2024/10/06/Algorithm-09" class="post" role="article">
   <header>
     <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-17/" data-flip="title">
-      Java Mid 17 - Collection List 추상화하기
-      </a>
+      
+      백준 2178 문제풀이
+      
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
+      <time datetime="2024-10-06T00:00:00+09:00">06 Oct 2024</time>
       
 
 
@@ -198,7 +205,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 
 
 
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
+in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
 
       
 
@@ -210,7 +217,7 @@ in <a href="/category/programming-language/" data-flip="title">Programming Langu
 
 
 
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
+on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
 
     </p>
 
@@ -223,434 +230,229 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
 
 
   
-  <h2 id="인터페이스-도입">인터페이스 도입</h2>
+  <div class="markdown-body">
 
+    <!-- 
+    <div class="head-image"><img src="http://localhost:4000/assets//img/algorithm-logo.png" /></div>
+    <br /> -->
+    <style>
+      .myAd1190 {
+        width: 48%;
+        height: 280px;
+      }
 
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-17/" data-flip="title">Continue reading </a>
-  </p>
+      .myAd1290 {
+        width: 48%;
+        height: 280px;
+      }
+
+      @media(max-width: 800px) {
+        .myAd1190 {
+          display: none;
+        }
+
+        .myAd1290 {
+          width: 98%;
+        }
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 300px;
+      }
+
+      .row-center {
+        display: flex;
+        justify-content: center;
+        height: 258px;
+      }
+    </style>
+
+    <!--<br />-->
+    <h2 id="문제-링크">문제 링크</h2>
+
+<p><a href="https://www.acmicpc.net/problem/2178">https://www.acmicpc.net/problem/2178</a></p>
+
+<h2 id="문제-설명">문제 설명</h2>
+
+<p><img width="261" alt="image" src="https://github.com/user-attachments/assets/c861f811-e8be-4671-9c70-5913b43d012f" /></p>
+
+<p>N×M크기의 배열로 표현되는 미로가 있다.
+미로에서 1은 이동할 수 있는 칸을 나타내고, 0은 이동할 수 없는 칸을 나타낸다. 이러한 미로가 주어졌을 때, (1, 1)에서 출발하여 (N, M)의 위치로 이동할 때 지나야 하는 최소의 칸 수를 구하는 프로그램을 작성하시오. 
+한 칸에서 다른 칸으로 이동할 때, 서로 인접한 칸으로만 이동할 수 있다.
+위의 예에서는 15칸을 지나야 (N, M)의 위치로 이동할 수 있다. 칸을 셀 때에는 시작 위치와 도착 위치도 포함한다.</p>
+
+<h2 id="문제-분석">문제 분석</h2>
+
+<p>문제는 최단 경로를 구하는 것이기 때문에 너비 우선 탐색(BFS)을 사용을 해야겠다고 생각했다. 
+BFS는 각 단계에서 모든 인접한 칸을 한 번씩 탐색하고, 가장 먼저 목표 지점에 도달한 경로가 최단 경로가 되는 특징이 있다.
+그리고 마침 가중치도 같으니 BFS가 적합하다. 만약 가중치의 값이 다 달랐다면 벨만포드, 다익스트라를 고려했을 거 같다.</p>
+
+<h2 id="코드">코드</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span><span class="cpf">&lt;bits/stdc++.h&gt;</span><span class="cp">
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">max_n</span> <span class="o">=</span> <span class="mi">104</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">dy</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">};</span>
+<span class="kt">int</span> <span class="n">dx</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">};</span>
+<span class="kt">int</span> <span class="n">n</span><span class="p">,</span><span class="n">m</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="n">max_n</span><span class="p">][</span><span class="n">max_n</span><span class="p">],</span> <span class="n">visited</span><span class="p">[</span><span class="n">max_n</span><span class="p">][</span><span class="n">max_n</span><span class="p">],</span> <span class="n">y</span><span class="p">,</span><span class="n">x</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">main</span><span class="p">(){</span>
+    <span class="n">scanf</span><span class="p">(</span><span class="s">"%d %d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">n</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">m</span><span class="p">);</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">){</span>
+            <span class="n">scanf</span><span class="p">(</span><span class="s">"%1d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">queue</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">q</span><span class="p">;</span>
+    <span class="n">visited</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">({</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">});</span>
+    <span class="k">while</span><span class="p">(</span><span class="n">q</span><span class="p">.</span><span class="n">size</span><span class="p">()){</span>
+        <span class="n">tie</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="n">x</span><span class="p">)</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+        <span class="n">q</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+            <span class="kt">int</span> <span class="n">ny</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">dy</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="kt">int</span> <span class="n">nx</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">dx</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">ny</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">ny</span> <span class="o">&gt;=</span> <span class="n">n</span> <span class="o">||</span> <span class="n">nx</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">nx</span> <span class="o">&gt;=</span> <span class="n">m</span> <span class="o">||</span> <span class="n">a</span><span class="p">[</span><span class="n">ny</span><span class="p">][</span><span class="n">nx</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">){</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">visited</span><span class="p">[</span><span class="n">ny</span><span class="p">][</span><span class="n">nx</span><span class="p">]){</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">visited</span><span class="p">[</span><span class="n">ny</span><span class="p">][</span><span class="n">nx</span><span class="p">]</span> <span class="o">=</span> <span class="n">visited</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">x</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">({</span><span class="n">ny</span><span class="p">,</span><span class="n">nx</span><span class="p">});</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span> <span class="n">visited</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>이 코드는 너비 우선 탐색(BFS)을 사용하여 2차원 배열 형태의 미로에서 시작점 0,0 에서 끝점 n-1, m-1 까지의 최단 경로를 찾는 프로그램이다. 
+미로의 각 칸은 1로 표시된 길과 0으로 표시된 벽으로 이루어져 있으며, BFS를 통해 최소 이동 거리를 계산한다.
+우선, n과 m으로 미로의 크기를 입력받고, 2차원 배열 a에 미로의 정보를 저장한다. 
+각 칸은 한 자리 숫자(%1d)로 입력받아 길(1)과 벽(0)을 나타낸다. 
+이후 탐색을 위해 큐를 생성하고, 시작점인 {0,0}을 큐에 넣은 후 방문 배열인 visited 에 방문 여부와 해당 위치까지의 이동 거리를 기록한다.
+BFS 알고리즘은 큐에서 하나씩 좌표를 꺼내 네 방향(상, 우, 하, 좌)으로 이동 가능한지를 확인한다. 
+이때, 배열 범위를 벗어나거나 벽이 있는 경우, 또는 이미 방문한 경우는 건너뛴다. 
+방문하지 않은 칸이면 해당 칸의 이동 거리를 이전 칸의 이동 거리에서 1을 더한 값으로 기록하고 큐에 삽입한다.
+모든 탐색이 끝난 후 목표 지점인 n-1, m-1에 기록된 이동 거리를 출력하여 최단 경로의 길이를 구한다.</p>
+
+<p><img width="697" alt="image" src="https://github.com/user-attachments/assets/217d4fa7-2d1c-4fd2-9d9d-b5575b15adfe" /></p>
+
+<h2 id="reference">Reference</h2>
+
+<p>나의 뇌</p>
+
+    <br />
+    <br />
+  </div>
   
 
 </article>
 
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-16" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-16/" data-flip="title">
-      Java Mid 16 - Collection LinkedList 구현하기
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
+<!--<hr class="dingbat" />-->
+<!--
+<div class="share">
+  <h2>Share this post</h2>
+  <div class="share-body">
+    <a href="http://twitter.com/share?text=백준 2178 문제풀이&amp;url=http://localhost:4000/cs/2024/10/06/Algorithm-09/"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="icon-twitter">
+      </span>
+    </a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/cs/2024/10/06/Algorithm-09/"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="icon-facebook">
+      </span>
+    </a>
+  </div>
+</div>
+-->
+<br />
 
 
 
 
+<aside class="related" role="complementary">
+  <h2 class="hr">Related Posts</h2>
 
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
+  <ul class="related-posts">
     
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="linkedlist">LinkedList</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-16/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-15" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-15/" data-flip="title">
-      Java Mid 15 - Collection ArrayList 구현하기
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
       
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
       
+      
+        
+          
+          
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/cs/2024/10/06/Algorithm-08/" data-flip="title">
+    <span>BFS - Breadth First Search</span>
+  </a>
+  <small><time datetime="2024-10-06T00:00:00+09:00">
+    06 Oct 2024
+  </time></small>
+</li>
+
+        
+      
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/cs/2024/10/03/Algorithm-07/" data-flip="title">
+    <span>Map, Direction</span>
+  </a>
+  <small><time datetime="2024-10-03T00:00:00+09:00">
+    03 Oct 2024
+  </time></small>
+</li>
+
+        
+      
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/cs/2024/09/29/Algorithm-06/" data-flip="title">
+    <span>DFS - Depth First Search</span>
+  </a>
+  <small><time datetime="2024-09-29T00:00:00+09:00">
+    29 Sep 2024
+  </time></small>
+</li>
 
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
+        
+      
     
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="배열의-불편함">배열의 불편함</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-15/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-14" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-14/" data-flip="title">
-      Java Mid 14 - Collection Array
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="배열array-개념-정리">배열(Array) 개념 정리</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-14/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-13" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-13/" data-flip="title">
-      Java Mid 13 - Generic 2
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="제네릭-활용예제">제네릭 활용예제</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-13/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-12" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-12/" data-flip="title">
-      Java Mid 12 - Generic 1
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="제네릭이란">제네릭이란</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-12/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-11" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-11/" data-flip="title">
-      Java Mid 11 - Exception 2
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="예외처리를-더-세밀하게-하자">예외처리를 더 세밀하게 하자</h2>
-<p><img width="698" alt="image" src="https://github.com/user-attachments/assets/d8cb3884-ce71-4552-b5d6-dc4891c9bd3f" /></p>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-11/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-10" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-10/" data-flip="title">
-      Java Mid 10 - Exception 1
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="예외-처리가-필요한-이유">예외 처리가 필요한 이유</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-10/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-
-<h2 class="sr-only">Pagination</h2>
-<nav class="pagination heading" role="navigation">
-  <ul>
-    <li class="pagination-item older" >
-      
-        <a rel="next" href="/page-9/">Older</a>
-      
-    </li>
-    <li class="pagination-item newer" >
-      
-        <a rel="prev" href="/page-7/">Newer</a>
-      
-    </li>
   </ul>
-</nav>
+</aside>
+  <aside class="comments" role="complementary">
+  <h2>Comments</h2>
+  <hr/>
 
-  <footer>
+  <script src="https://utteranc.es/client.js"
+          repo="taewoocode/taewoocode.github.io"
+          issue-term="title"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+</aside>
+
+
+       <footer>
   <hr/>
   
     <p>© 2022. by taewoo</p>
