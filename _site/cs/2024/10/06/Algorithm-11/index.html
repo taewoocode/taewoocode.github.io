@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Map, Direction" />
+<meta property="og:title" content="백준 2468 문제풀이" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -56,17 +56,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Map, Direction &middot; 일벌리는 개발자</title>
+<title>백준 2468 문제풀이 &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="맵과 방향벡터
+        content="문제 링크
 
 "
 />
 <meta
         property="og:description"
-        content="맵과 방향벡터
+        content="문제 링크
 
 "
 />
@@ -76,8 +76,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/cs/2024/10/03/Algorithm-07/" />
-<meta property="og:url" content="http://localhost:4000/cs/2024/10/03/Algorithm-07/" />
+<link rel="canonical" href="http://localhost:4000/cs/2024/10/06/Algorithm-11/" />
+<meta property="og:url" content="http://localhost:4000/cs/2024/10/06/Algorithm-11/" />
 
 <link
         rel="alternate"
@@ -87,10 +87,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/framework/2024/10/02/Spring-Data-jdbc-07/" />
+<link rel="prev" href="http://localhost:4000/cs/2024/10/06/Algorithm-10/" />
  
-<link rel="next" href="http://localhost:4000/language/2024/10/03/Java-Adv-06/" />
-
 
 <link
         rel="apple-touch-icon"
@@ -187,16 +185,16 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-cs/2024/10/03/Algorithm-07" class="post" role="article">
+<article id="post-cs/2024/10/06/Algorithm-11" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      Map, Direction
+      백준 2468 문제풀이
       
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-10-03T00:00:00+09:00">03 Oct 2024</time>
+      <time datetime="2024-10-06T00:00:00+09:00">06 Oct 2024</time>
       
 
 
@@ -273,59 +271,93 @@ on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
     </style>
 
     <!--<br />-->
-    <h2 id="맵과-방향벡터">맵과 방향벡터</h2>
+    <h2 id="문제-링크">문제 링크</h2>
 
-<p><img width="702" alt="image" src="https://github.com/user-attachments/assets/dac2b00e-53af-4623-ba83-739a6919ec41" /></p>
+<p><a href="https://www.acmicpc.net/problem/2468">https://www.acmicpc.net/problem/2468</a></p>
 
-<p>어렵게 생각할 필요없이 이 그림 하나로 쉽게 이해할 수 있다. 그림의 좌표는 (y,x)로 기준을 잡았다.
-졸라맨 캐릭터가 있는 좌표의 위치를 (1,1)이라고 가정을 했을 때 각 위치를 표현을 했고, 주황색의 좌표는 변화율을 나타낸다. ex) 1,1 → 0,1은 y가 -1만큼 줄었음을 나타낸다.</p>
+<h2 id="문제-설명">문제 설명</h2>
 
-<h2 id="문제">문제</h2>
+<p><img width="248" alt="image" src="https://github.com/user-attachments/assets/25f26cdc-d0a9-48c5-a7ae-aa81cfba4859" /></p>
 
-<p>그러면 3 * 3 맵을 입력받아야 하는데 맵은 1과 0으로 이루어져 있고, {0,0}은 무조건 1임을 보장한다. {0,0} 부터 4방향을 기준으로 한칸씩 탐색해나가며 방문한 정점은 다시 방문하지 않으며 방문하는 좌표를 출력하는 코드. 0은 갈수 없는 지역, 1은 갈 수 있는 지역을 구현한다.</p>
+<p>재난방재청에서는 많은 비가 내리는 장마철에 대비해서 다음과 같은 일을 계획하고 있다. 
+먼저 어떤 지역의 높이 정보를 파악한다. 
+그 다음에 그 지역에 많은 비가 내렸을 때 물에 잠기지 않는 안전한 영역이 최대로 몇 개가 만들어 지는 지를 조사하려고 한다. 
+이때, 문제를 간단하게 하기 위하여, 장마철에 내리는 비의 양에 따라 일정한 높이 이하의 모든 지점은 물에 잠긴다고 가정한다.
+어떤 지역의 높이 정보는 행과 열의 크기가 각각 N인 2차원 배열 형태로 주어지며 배열의 각 원소는 해당 지점의 높이를 표시하는 자연수이다. 
+예를 들어, 다음은 N=5인 지역의 높이 정보이다.
+이제 위와 같은 지역에 많은 비가 내려서 높이가 4 이하인 모든 지점이 물에 잠겼다고 하자. 
+이 경우에 물에 잠기는 지점을 회색으로 표시하면 다음과 같다.
+물에 잠기지 않는 안전한 영역이라 함은 물에 잠기지 않는 지점들이 위, 아래, 오른쪽 혹은 왼쪽으로 인접해 있으며 그 크기가 최대인 영역을 말한다. 
+위의 경우에서 물에 잠기지 않는 안전한 영역은 5개가 된다(꼭짓점으로만 붙어 있는 두 지점은 인접하지 않는다고 취급한다).
+또한 위와 같은 지역에서 높이가 6이하인 지점을 모두 잠기게 만드는 많은 비가 내리면 물에 잠기지 않는 안전한 영역은 아래 그림에서와 같이 네 개가 됨을 확인할 수 있다.
+이와 같이 장마철에 내리는 비의 양에 따라서 물에 잠기지 않는 안전한 영역의 개수는 다르게 된다. 
+위의 예와 같은 지역에서 내리는 비의 양에 따른 모든 경우를 다 조사해 보면 물에 잠기지 않는 안전한 영역의 개수 중에서 최대인 경우는 5임을 알 수 있다.
+어떤 지역의 높이 정보가 주어졌을 때, 장마철에 물에 잠기지 않는 안전한 영역의 최대 개수를 계산하는 프로그램을 작성하시오.</p>
+
+<h2 id="문제-분석">문제 분석</h2>
+
+<p>미로가 나왔다? BFS, DFS중에 하나로 푼다.
+하지만 문제를 보면 Connected Component 문제 이므로 DFS를 이용해서 문제를 푼다.
+그리고 문제가 길다. 겁먹지 말고 최대한 심플하고 단순하게 생각하면 된다.
+위에 긴 문단을 한 문장으로 요약해 보면 그냥 주어지는 입력값 보다 작은 부분들을 회색으로 칠하고 결과값을 받아서 출력하면 된다.</p>
+
+<h2 id="코드">코드</h2>
 
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span><span class="cpf">&lt;bits/stdc++.h&gt;</span><span class="cp">
 </span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
-<span class="k">const</span> <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
-<span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">n</span><span class="p">];</span>
-<span class="kt">int</span> <span class="n">visited</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">n</span><span class="p">];</span>
-<span class="k">const</span> <span class="kt">int</span> <span class="n">dy</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">};</span>
-<span class="k">const</span> <span class="kt">int</span> <span class="n">dx</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">};</span>
-<span class="kt">int</span> <span class="n">go</span><span class="p">(</span><span class="kt">int</span> <span class="n">y</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x</span><span class="p">){</span>
-    <span class="n">visited</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">//방문한 정점은 색칠</span>
-    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">y</span> <span class="o">&lt;&lt;</span> <span class="s">" : "</span> <span class="o">&lt;&lt;</span> <span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
-        <span class="kt">int</span> <span class="n">ny</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">dy</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-        <span class="kt">int</span> <span class="n">nx</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">dx</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-        <span class="k">if</span><span class="p">(</span><span class="n">ny</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">ny</span> <span class="o">&gt;=</span> <span class="n">n</span> <span class="o">||</span> <span class="n">nx</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">nx</span> <span class="o">&gt;=</span> <span class="n">n</span><span class="p">){</span>
-            <span class="k">continue</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">visited</span><span class="p">[</span><span class="mi">101</span><span class="p">][</span><span class="mi">101</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="mi">101</span><span class="p">][</span><span class="mi">101</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">dy</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">};</span>
+<span class="kt">int</span> <span class="n">dx</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">};</span>
+<span class="kt">int</span> <span class="n">ny</span><span class="p">,</span><span class="n">nx</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">ret</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="n">temp</span><span class="p">;</span>
+<span class="kt">void</span> <span class="n">dfs</span><span class="p">(</span><span class="kt">int</span> <span class="n">y</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">d</span><span class="p">){</span>
+    <span class="n">visited</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+        <span class="n">ny</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">dy</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="n">nx</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">dx</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">ny</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">ny</span> <span class="o">&gt;=</span> <span class="n">n</span> <span class="o">||</span> <span class="n">nx</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">nx</span> <span class="o">&gt;=</span> <span class="n">n</span><span class="p">)</span>
+        <span class="k">continue</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">visited</span><span class="p">[</span><span class="n">ny</span><span class="p">][</span><span class="n">nx</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">a</span><span class="p">[</span><span class="n">ny</span><span class="p">][</span><span class="n">nx</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">d</span><span class="p">){</span>
+            <span class="n">dfs</span><span class="p">(</span><span class="n">ny</span><span class="p">,</span><span class="n">nx</span><span class="p">,</span><span class="n">d</span><span class="p">);</span>
         <span class="p">}</span>
-        <span class="k">if</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">ny</span><span class="p">][</span><span class="n">nx</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">){</span>
-            <span class="k">continue</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">if</span><span class="p">(</span><span class="n">visited</span><span class="p">[</span><span class="n">ny</span><span class="p">][</span><span class="n">nx</span><span class="p">]){</span>
-            <span class="k">continue</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="n">go</span><span class="p">(</span><span class="n">ny</span><span class="p">,</span><span class="n">nx</span><span class="p">);</span>
     <span class="p">}</span>
 <span class="p">}</span>
 
 <span class="kt">int</span> <span class="n">main</span><span class="p">(){</span>
+    <span class="n">ios_base</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
     <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
         <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">){</span>
             <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
         <span class="p">}</span>
     <span class="p">}</span>
-    <span class="n">go</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="mi">101</span><span class="p">;</span> <span class="n">d</span><span class="o">++</span><span class="p">){</span>
+        <span class="c1">//testcase</span>
+        <span class="n">fill</span><span class="p">(</span><span class="o">&amp;</span><span class="n">visited</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">visited</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">101</span> <span class="o">*</span> <span class="mi">101</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+            <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">){</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">d</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">visited</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]){</span>
+                    <span class="n">dfs</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">d</span><span class="p">);</span>
+                    <span class="n">cnt</span><span class="o">++</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span><span class="n">cnt</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">ret</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>방문한 정점이라는 배열은 visited 배열을 통해서 방문을 확인한다.
-방문한 배열을 1로 체크를 해두고, 방문하지 않은 배열을 0으로 표기한다.
-그러므로 <code class="language-plaintext highlighter-rouge">for(int i = 0; i &lt; n; i++)</code> 반복문에서 <code class="language-plaintext highlighter-rouge">dy[i]</code>와 <code class="language-plaintext highlighter-rouge">dx[i]</code> 값을 이용하여 현재 좌표 <code class="language-plaintext highlighter-rouge">(y, x)</code>에서 새로운 좌표 <code class="language-plaintext highlighter-rouge">(ny, nx)</code>를 구하게 된다.
-그리고 각 검증에서 좌표의 범위를 벗어나거나, <strong>0인 좌표는 이동할 수 없거나 탐색하지 않을 필요가 있는 경우이다.</strong> 그리고 이미 방문했던 좌표는 방문할 필요가 없으므로 건너뛴다.
-그리고 다음의 if의 검증들을 다 넘어가면 재귀호출을 통해 다음 반복을 이어간다.</p>
+<p>이 문제가 다른 문제들에 비해서 조금 어려웠던 점은 if(!visited[ny][nx] &amp;&amp; a[ny][nx] &gt; d) dfs(ny,nx,d); 이 부분인데
+방문하지 않았거나, 주어지는 값보다 크다면 dfs를 재귀적으로 호출하여 탐색하는 방식이다.</p>
+
+<p><img width="1151" alt="image" src="https://github.com/user-attachments/assets/aea6e3d2-bfd3-4219-a367-4e5732a3d5dd" /></p>
+
+<p>입력을 제대로 읽지 않아서 계속 틀렸던 문제, 입력에 m을 입력받는 조건이 없는데 오버플로우 조건에 m을 입력했었다.
+그래도 이제 dfs에 대해서 어느정도 알 거 같다.</p>
 
 <h2 id="reference">Reference</h2>
 
@@ -343,12 +375,12 @@ on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=Map, Direction&amp;url=http://localhost:4000/cs/2024/10/03/Algorithm-07/"
+    <a href="http://twitter.com/share?text=백준 2468 문제풀이&amp;url=http://localhost:4000/cs/2024/10/06/Algorithm-11/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/cs/2024/10/03/Algorithm-07/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/cs/2024/10/06/Algorithm-11/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -370,21 +402,8 @@ on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
       
       
         
-        
           
-
-
-<li class="h4">
-  <a href="/cs/2024/10/06/Algorithm-11/" data-flip="title">
-    <span>백준 2468 문제풀이</span>
-  </a>
-  <small><time datetime="2024-10-06T00:00:00+09:00">
-    06 Oct 2024
-  </time></small>
-</li>
-
-        
-      
+          
         
         
           
@@ -418,6 +437,19 @@ on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
         
       
         
+        
+          
+
+
+<li class="h4">
+  <a href="/cs/2024/10/06/Algorithm-08/" data-flip="title">
+    <span>BFS - Breadth First Search</span>
+  </a>
+  <small><time datetime="2024-10-06T00:00:00+09:00">
+    06 Oct 2024
+  </time></small>
+</li>
+
         
       
     
