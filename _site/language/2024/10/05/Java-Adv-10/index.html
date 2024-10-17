@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Java Mid 04 - String 클래스" />
+<meta property="og:title" content="Java Adv 10 - wait, notify" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,17 +52,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Java Mid 04 - String 클래스 &middot; 일벌리는 개발자</title>
+<title>Java Adv 10 - wait, notify &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="String 클래스
+        content="Java MultiTherad
 
 "
 />
 <meta
         property="og:description"
-        content="String 클래스
+        content="Java MultiTherad
 
 "
 />
@@ -72,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/language/2024/09/18/Java-Mid-04/" />
-<meta property="og:url" content="http://localhost:4000/language/2024/09/18/Java-Mid-04/" />
+<link rel="canonical" href="http://localhost:4000/language/2024/10/05/Java-Adv-10/" />
+<meta property="og:url" content="http://localhost:4000/language/2024/10/05/Java-Adv-10/" />
 
 <link
         rel="alternate"
@@ -83,9 +83,9 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/language/2024/09/18/Java-Mid-03/" />
+<link rel="prev" href="http://localhost:4000/language/2024/10/05/Java-Adv-09/" />
  
-<link rel="next" href="http://localhost:4000/language/2024/09/18/Java-Mid-05/" />
+<link rel="next" href="http://localhost:4000/cs/2024/10/06/Algorithm-08/" />
 
 
 <link
@@ -183,16 +183,16 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-language/2024/09/18/Java-Mid-04" class="post" role="article">
+<article id="post-language/2024/10/05/Java-Adv-10" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      Java Mid 04 - String 클래스
+      Java Adv 10 - wait, notify
       
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
+      <time datetime="2024-10-05T00:00:00+09:00">05 Oct 2024</time>
       
 
 
@@ -267,75 +267,66 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
     </style>
 
     <!--<br />-->
-    <h2 id="string-클래스">String 클래스</h2>
+    <h2 id="java-multitherad">Java MultiTherad</h2>
 
-<p><code class="language-plaintext highlighter-rouge">String</code>은 자바에서 객체로 다뤄지며, 클래스이다. <code class="language-plaintext highlighter-rouge">int</code>, <code class="language-plaintext highlighter-rouge">boolean</code> 같은 기본형이 아닌 참조형으로, <code class="language-plaintext highlighter-rouge">String</code> 변수가 실제 문자열 값을 직접 저장하는 것이 아니라, 문자열 객체에 대한 참조를 저장된다.</p>
+<p>자바는 처음부터 멀티스레드를 고려하며 탄생한 언어다.<br />
+<code class="language-plaintext highlighter-rouge">synchronized</code> 를 사용한 임계 영역 안에서 락을 가지고 무한 대기하는 문제는 흥미롭게도 <code class="language-plaintext highlighter-rouge">Object</code> 클래스에 해결 방안이 있다. 
+<code class="language-plaintext highlighter-rouge">Object</code> 클래스는 이런 문제를 해결할 수 있는 <code class="language-plaintext highlighter-rouge">wait()</code> , <code class="language-plaintext highlighter-rouge">notify()</code> 라는 메서드를 제공한다. 
+<code class="language-plaintext highlighter-rouge">Object</code> 는 모든 자바 객체의 부모이기 때문에, 여기 있는 기능들은 모두 자바 언어의 기본 기능이라 생각하면 된다.</p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="nc">String</span> <span class="n">str1</span> <span class="o">=</span> <span class="s">"Hello"</span><span class="o">;</span>   <span class="c1">// 기존 방식</span>
-<span class="nc">String</span> <span class="n">str2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">String</span><span class="o">(</span><span class="s">"hello"</span><span class="o">);</span>   <span class="c1">// 객체를 명시적으로 생성하는 방식</span>
-</code></pre></div></div>
+<h2 id="wait-notify">wait(), notify()</h2>
 
-<p><code class="language-plaintext highlighter-rouge">String str1 = "hello";</code>와 같은 코드는 자바 언어에서 <code class="language-plaintext highlighter-rouge">new String("hello")</code>로 변환되어 처리한다.</p>
-
-<p>이는 자바가 문자열을 쉽게 다룰 수 있도록 제공하는 편의 기능이며 문자열을 생성할 때, 객체를 직접 생성하지 않더라도 편리하게 사용할 수 있다.</p>
-
-<h3 id="string-의-내부-구조">String 의 내부 구조</h3>
-
-<p>문자열 데이터는 내부적으로 <code class="language-plaintext highlighter-rouge">char[]</code> 배열에 저장되었으나, <strong>자바 9</strong>부터는 메모리 효율성을 높이기 위해 <code class="language-plaintext highlighter-rouge">char[]</code> 대신 <code class="language-plaintext highlighter-rouge">byte[]</code>를 사용하게 된다. 자바에서 <code class="language-plaintext highlighter-rouge">char</code> 타입은 2바이트를 지원하지만, 영어와 숫자 같은 단순한 문자는 1바이트로 표현이 가능하다. 자바 9 이후, 문자열은 <strong>Latin-1 인코딩</strong>의 경우 1바이트를 사용하고, 그 외의 문자들은 <strong>UTF-16 인코딩</strong>으로 2바이트를 사용하여 메모리를 절약할 수 있게 변경된다.</p>
-
-<h3 id="string-의-주요-메서드">String 의 주요 메서드</h3>
+<p><img width="559" alt="image" src="https://github.com/user-attachments/assets/f4590213-463c-472c-8c2a-54646e5d6b81" /></p>
 
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">length()</code>: 문자열의 길이를 반환한다</li>
-  <li><code class="language-plaintext highlighter-rouge">charAt(int index)</code>: 특정 인덱스에 위치한 문자를 반환한다.</li>
-  <li><code class="language-plaintext highlighter-rouge">substring(int beginIndex, int endIndex)</code>: 부분 문자열을 반환한다.</li>
-  <li><code class="language-plaintext highlighter-rouge">indexOf(String str)</code>: 특정 문자열이 처음 나타나는 인덱스를 반환한다.</li>
-  <li><code class="language-plaintext highlighter-rouge">toLowerCase()</code>, <code class="language-plaintext highlighter-rouge">toUpperCase()</code>: 문자열을 각각 소문자 또는 대문자로 변환한다.</li>
-  <li><code class="language-plaintext highlighter-rouge">trim()</code>: 문자열의 양쪽 끝에 있는 공백을 제거한다.</li>
-  <li><code class="language-plaintext highlighter-rouge">concat(String str)</code>: 문자열을 이어 붙인다.</li>
+  <li><code class="language-plaintext highlighter-rouge">Object.wait()</code>
+    <ul>
+      <li>현재 스레드가 가진 락을 반납하고 대기(<code class="language-plaintext highlighter-rouge">WAITING</code> )한다.</li>
+      <li>현재 스레드를 대기(<code class="language-plaintext highlighter-rouge">WAITING</code>) 상태로 전환한다.</li>
+      <li>이 메서드는 현재 스레드가 <code class="language-plaintext highlighter-rouge">synchronized</code> 블록이나메서드에서 락을 소유하고 있을 때만 호출할 수 있다.</li>
+      <li>호출한 스레드는 락을 반납하고, 다른 스레드가 해당 락을 획득할 수 있도록 한다.</li>
+      <li>이렇게 대기 상태로 전환된 스레드는 다른 스레드가 <code class="language-plaintext highlighter-rouge">notify()</code> 또는<code class="language-plaintext highlighter-rouge">notifyAll()</code> 을 호출할 때까지 대기 상태를 유지한다.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">Object.notify()</code>
+    <ul>
+      <li>대기 중인 스레드 중 하나를 깨운다. 이 메서드는 <code class="language-plaintext highlighter-rouge">synchronized</code> 블록이나 메서드에서 호출되어야 한다.</li>
+      <li>깨운 스레드는 락을 다시 획득할 기회를 얻게 된다. 만약 대기 중인 스레드가 여러 개라면, 그 중 하나만이 깨워지게 된다.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">Object.notifyAll()</code>
+    <ul>
+      <li>대기 중인 모든 스레드를 깨운다.</li>
+      <li>이 메서드 역시 <code class="language-plaintext highlighter-rouge">synchronized</code> 블록이나 메서드에서 호출되어야 하며, 모든 대기 중인 스레드가 락을 획득할 수 있는 기회를 얻게 된다.</li>
+      <li>이 방법은 모든 스레드를 깨워야 할 필요가 있는 경우에 유용하다.</li>
+    </ul>
+  </li>
 </ul>
 
-<h3 id="문자열-더하기">문자열 더하기</h3>
+<h3 id="달라진-점은">달라진 점은?</h3>
 
-<p>문자열을 더할 때 <code class="language-plaintext highlighter-rouge">String</code>의 <code class="language-plaintext highlighter-rouge">concat()</code> 메서드를 사용할 수 있다. 그러나 자바는 편의상 <code class="language-plaintext highlighter-rouge">+</code> 연산자를 통해 문자열을 이어 붙이는 기능도 제공한다. 이는 문자열이 자주 사용되기 때문에 자바에서 특별히 지원하는 문법이다.</p>
+<p>앞서 작성한 코드는 <code class="language-plaintext highlighter-rouge">sleep()</code> 코드는 제거하고 대신에 <code class="language-plaintext highlighter-rouge">Object.wait()</code> 를 사용하자. <code class="language-plaintext highlighter-rouge">Object</code> 는 모든 클래스의 부모이므로 자바의 모든 객체는 해당 기능을 사용할 수 있다.
+<code class="language-plaintext highlighter-rouge">synchronized</code> 를 통해 임계 영역을 설정한다. 생산자 스레드는 락 획득을 시도한다.
+락을 획득한 생산자 스레드는 반복문을 사용해서 큐에 빈 공간이 생기는지 주기적으로 체크한다. 만약 빈 공간이
+없다면 <code class="language-plaintext highlighter-rouge">Object.wait()</code> 을 사용해서 대기한다. 참고로 <strong>**대기할</strong> <strong>때</strong> <strong>락을</strong> <strong>반납하고</strong> <strong>대기</strong>**한다. 그리고 대기 상태에서 깨어나면, 다시 반복문에서 큐의 빈 공간을 체크한다.
+<code class="language-plaintext highlighter-rouge">wait()</code> 를 호출해서 대기하는 경우 <code class="language-plaintext highlighter-rouge">RUNNABLE</code> <code class="language-plaintext highlighter-rouge">WAITING</code> 상태가 된다.
+생산자가 데이터를 큐에 저장하고 나면 <code class="language-plaintext highlighter-rouge">notify()</code> 를 통해 저장된 데이터가 있다고 대기하는 스레드에 알려주어야 한다. 
+예를 들어서 큐에 데이터가 없어서 대기하는 소비자 스레드가 있다고 가정하자. 
+이때 <code class="language-plaintext highlighter-rouge">notify()</code> 를 호출하면 소비자 스레드는 깨어나서 저장된 데이터를 획득할 수 있다.</p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">StringConcatMain</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">String</span> <span class="n">a</span> <span class="o">=</span> <span class="s">"hello"</span><span class="o">;</span>
-        <span class="nc">String</span> <span class="n">b</span> <span class="o">=</span> <span class="s">" java"</span><span class="o">;</span>
+<h2 id="wait-notify의-한계">wait, notify의 한계</h2>
 
-        <span class="c1">// concat() 메서드를 사용하여 문자열을 결합</span>
-        <span class="nc">String</span> <span class="n">result1</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="na">concat</span><span class="o">(</span><span class="n">b</span><span class="o">);</span>
-        <span class="c1">// + 연산자를 사용하여 문자열을 결합</span>
-        <span class="nc">String</span> <span class="n">result2</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="o">;</span>
-
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">result1</span><span class="o">);</span>  <span class="c1">// 출력: hello java</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">result2</span><span class="o">);</span>  <span class="c1">// 출력: hello java</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-
-</code></pre></div></div>
-
-<p>이처럼 <code class="language-plaintext highlighter-rouge">concat()</code> 메서드와 <code class="language-plaintext highlighter-rouge">+</code> 연산자는 모두 문자열을 이어 붙이지만, <code class="language-plaintext highlighter-rouge">+</code>는 자바에서 특별하게 제공하는 기능이다.</p>
-
-<h2 id="string또한-불변객체이다">String또한 불변객체이다.</h2>
-
-<p><code class="language-plaintext highlighter-rouge">String</code>은 불변 객체(immutable object)이다. 한 번 생성된 <code class="language-plaintext highlighter-rouge">String</code> 객체의 값은 변경할 수 없다. 예를 들어, 문자열에 대해 어떤 연산을 수행할 때, 기존 문자열이 수정되는 것이 아니라 새로운 <code class="language-plaintext highlighter-rouge">String</code> 객체가 생성된다.</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">StringImmutableExample</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">String</span> <span class="n">str</span> <span class="o">=</span> <span class="s">"hello"</span><span class="o">;</span>
-        <span class="n">str</span> <span class="o">=</span> <span class="n">str</span><span class="o">.</span><span class="na">concat</span><span class="o">(</span><span class="s">" world"</span><span class="o">);</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">str</span><span class="o">);</span>  <span class="c1">// 출력: hello world</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-
-</code></pre></div></div>
+<p>Object.wait(), Object.notify() 방식은 스레드 대기 집학 하나에 생산자, 소비자 스레드를 모두 관리한다. 그리고 <code class="language-plaintext highlighter-rouge">notify()</code> 를 호출할 때 임의의 스레드가 선택된다. 따라서 앞서 살펴본 것 처럼 큐에 데이터가 없는 상황에 소비자가 같은 소비자를 깨우는 비효율이 발생할 수 있다. 
+또는 큐에 데이터가 가득 차있는데 생산자가 같은 생산자를 깨우는 비효율도 발생할 수 있다.
+같은 종류의 스레드를 깨울 때 비효율이 발생하고 있다. 만약 생산자가 소비자를 깨우고, 소비자가 생산자를 깨운다면 비효율이 발생하지 않는다.</p>
 
 <h2 id="reference">Reference</h2>
 
-<p>인프런 김영한님의 실전 자바 강좌</p>
+<p>김영한님의 자바 강의</p>
+
+<p><a href="https://stackoverflow.com/questions/50001353/java-one-producer-and-two-consumers">https://stackoverflow.com/questions/50001353/java-one-producer-and-two-consumers</a></p>
+
+<p><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Thread.html">https://docs.oracle.com/javase/8/docs/api/java/lang/Thread.html</a></p>
 
     <br />
     <br />
@@ -349,12 +340,12 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=Java Mid 04 - String 클래스&amp;url=http://localhost:4000/language/2024/09/18/Java-Mid-04/"
+    <a href="http://twitter.com/share?text=Java Adv 10 - wait, notify&amp;url=http://localhost:4000/language/2024/10/05/Java-Adv-10/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/09/18/Java-Mid-04/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/10/05/Java-Adv-10/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -376,21 +367,8 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
       
       
         
-        
           
-
-
-<li class="h4">
-  <a href="/language/2024/10/05/Java-Adv-10/" data-flip="title">
-    <span>Java Adv 10 - wait, notify</span>
-  </a>
-  <small><time datetime="2024-10-05T00:00:00+09:00">
-    05 Oct 2024
-  </time></small>
-</li>
-
-        
-      
+          
         
         
           
@@ -424,6 +402,19 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
         
       
         
+        
+          
+
+
+<li class="h4">
+  <a href="/language/2024/10/03/Java-Adv-07/" data-flip="title">
+    <span>Java Adv 07 - LockSupport</span>
+  </a>
+  <small><time datetime="2024-10-03T00:00:00+09:00">
+    03 Oct 2024
+  </time></small>
+</li>
+
         
       
     
