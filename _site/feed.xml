@@ -6,9 +6,95 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 19 Oct 2024 19:30:35 +0900</pubDate>
-    <lastBuildDate>Sat, 19 Oct 2024 19:30:35 +0900</lastBuildDate>
+    <pubDate>Sat, 19 Oct 2024 22:02:52 +0900</pubDate>
+    <lastBuildDate>Sat, 19 Oct 2024 22:02:52 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
+    
+      <item>
+        <title>백준 2910 문제풀이</title>
+        <description>&lt;h2 id=&quot;문제-링크&quot;&gt;문제 링크&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.acmicpc.net/problem/2910&quot;&gt;https://www.acmicpc.net/problem/2910&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;문제-설명&quot;&gt;문제 설명&lt;/h2&gt;
+
+&lt;p&gt;위대한 해커 창영이는 모든 암호를 깨는 방법을 발견했다. 
+그 방법은 빈도를 조사하는 것이다.
+창영이는 말할 수 없는 방법을 이용해서 현우가 강산이에게 보내는 메시지를 획득했다.
+이 메시지는 숫자 N개로 이루어진 수열이고, 숫자는 모두 C보다 작거나 같다. 
+창영이는 이 숫자를 자주 등장하는 빈도순대로 정렬하려고 한다.
+만약, 수열의 두 수 X와 Y가 있을 때, X가 Y보다 수열에서 많이 등장하는 경우에는 X가 Y보다 앞에 있어야 한다. 
+만약, 등장하는 횟수가 같다면, 먼저 나온 것이 앞에 있어야 한다.
+이렇게 정렬하는 방법을 빈도 정렬이라고 한다.
+수열이 주어졌을 때, 빈도 정렬을 하는 프로그램을 작성하시오.&lt;/p&gt;
+
+&lt;h2 id=&quot;문제-분석&quot;&gt;문제 분석&lt;/h2&gt;
+
+&lt;p&gt;문제에서 바로 힌트가 주어진다. x,y가 있을 때 많이 등장하는 수가 앞으로 오는 순서로 정렬을 시도한다.
+pair&amp;lt;int,int&amp;gt; pv를 활용하여 pair&amp;lt;숫자, 빈도수&amp;gt; 를 기준으로 정렬을 하는 것으로 기준점을 잡았다.
+따라서 정렬을 할 수 있는 cmp함수를 만드는 것으로 문제를 해결한다.&lt;/p&gt;
+
+&lt;h2 id=&quot;코드&quot;&gt;코드&lt;/h2&gt;
+
+&lt;div class=&quot;language-cpp highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#include&lt;/span&gt;&lt;span class=&quot;cpf&quot;&gt;&amp;lt;bits/stdc++.h&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;namespace&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1004&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mp_first&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;vector&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pair&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;bool&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;cmp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pair&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pair&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;second&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;second&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mp_first&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;first&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mp_first&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;first&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;second&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;second&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;ios_base&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sync_with_stdio&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;cin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tie&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tie&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;cin&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;cin&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;mp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mp_first&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;mp_first&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;auto&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;pv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;push_back&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;first&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;second&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;sort&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;begin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cmp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;auto&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;second&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;first&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&apos; &apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;a.second == b.second를 보면 빈도수를 기준으로 빈도수가 같다면 첫 번째 등장 위치를 기반으로 정렬을 한다.
+아니라면 빈도수가 큰 것을 기준으로 정렬을 한다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;1148&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/f5951668-d1fb-4185-a4dc-7301857690c2&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Quadtree&quot;&gt;https://en.wikipedia.org/wiki/Quadtree&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Mon, 07 Oct 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/cs/2024/10/07/Algorithm-15/</link>
+        <guid isPermaLink="true">http://localhost:4000/cs/2024/10/07/Algorithm-15/</guid>
+        
+        <category>Algorithm</category>
+        
+        
+        <category>cs</category>
+        
+      </item>
     
       <item>
         <title>백준 1992 문제풀이</title>
@@ -98,9 +184,9 @@ quard 함수는 재귀적으로 호출되며, 이 과정에서 각 사각형이 
 
 &lt;p&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Quadtree&quot;&gt;https://en.wikipedia.org/wiki/Quadtree&lt;/a&gt;&lt;/p&gt;
 </description>
-        <pubDate>Sun, 06 Oct 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/cs/2024/10/06/Algorithm-14/</link>
-        <guid isPermaLink="true">http://localhost:4000/cs/2024/10/06/Algorithm-14/</guid>
+        <pubDate>Mon, 07 Oct 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/cs/2024/10/07/Algorithm-14/</link>
+        <guid isPermaLink="true">http://localhost:4000/cs/2024/10/07/Algorithm-14/</guid>
         
         <category>Algorithm</category>
         
@@ -2975,80 +3061,6 @@ JDBC 드라이버는 JDBC 인터페이스를 구현한 구현체라고 생각할
         <guid isPermaLink="true">http://localhost:4000/framework/2024/09/28/Spring-Data-jdbc-01/</guid>
         
         <category>jpa</category>
-        
-        
-        <category>framework</category>
-        
-      </item>
-    
-      <item>
-        <title>Spring Basic 13 - Dependency Injection 02</title>
-        <description>&lt;h2 id=&quot;다양한-의존관계-주입방법&quot;&gt;다양한 의존관계 주입방법&lt;/h2&gt;
-
-&lt;h3 id=&quot;생성자-주입&quot;&gt;생성자 주입&lt;/h3&gt;
-
-&lt;p&gt;&lt;img width=&quot;685&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/74851915-6589-456c-acef-669f2117b4dc&quot; /&gt;
-&lt;img width=&quot;677&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/b3be400b-05b5-4845-9a22-b9b32de50bdc&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;생성자 주입은 생성자의 호출 시점에 1회 호출이 되는 것을 보장한다. 그렇기 때문에 주입받은 객체가 변하지 않거나, 반드시 객체의 주입이 필요한 경우에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;강제하기 위해&lt;/code&gt; 사용할 수 있다.&lt;/li&gt;
-  &lt;li&gt;Spring은 생성자 주입을 적극 추천하고 있기 때문에 생성자가 한개만 있을 경우엔 @Autowired를 생략해도 주입이 가능하도록 편의성을 제공한다. 따라서 위에 두 코드는 같은 기능을 하는 코드라고 볼 수 있다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;수정자-주입&quot;&gt;수정자 주입&lt;/h3&gt;
-
-&lt;p&gt;&lt;img width=&quot;668&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/c2686db3-93d7-4c90-ad88-9143f9f2e330&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;@Autowired로 주입할 대상이 없으면 오류가 발생한다.
-주입할 대상이 없어도 동작하도록 만드려면 @Autowired(required = false)를 통해 설정은 가능하다. 
-스프링 초기에는 수정자 주입이 자주 사용되었다고 한다. 당시에는 setXXX, getXXX들의 프로퍼티 기반으로 요구하는 자바의 기본 스펙 때문이었다고 한다. 하지만 시간이 지나면서 점차 수정자 주입이 아닌 생성자 주입으로 발전하게 되었다.&lt;/p&gt;
-
-&lt;h3 id=&quot;필드-주입&quot;&gt;필드 주입&lt;/h3&gt;
-
-&lt;p&gt;&lt;img width=&quot;688&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/6aecee58-3c65-4c95-a3c8-988e5b04eee8&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;필드 주입을 사용하게 되면 코드가 간결해지고 보기는 좋아진다. 하지만 필드주입을 이용하게 되면, 추천하지 않는다는 문구가 뜬다. 
-이유는 외부에서 접근이 불가능하다는 단점이 존재하게 되는데, 테스트 코드의 중요성이 부각됨에 따라서 외부에서 사용할 수 없다는 이유로 지양하는 방식이 되었다.&lt;/p&gt;
-
-&lt;h2 id=&quot;생성자-주입이-가장-권장되는-방식이다&quot;&gt;생성자 주입이 가장 권장되는 방식이다.&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;이유는 객체의 불변성을 확보하고, 테스트 코드의 작성이 용이하며, final 키워드 작성 및 Lombok과의 결합 순환 참조 에러 방지가 이유가 될 수 있다.&lt;/li&gt;
-  &lt;li&gt;실제로 개발을 하다 보면 의존 관계의 변경이 필요한 상황은 거의 없다. 하지만 수정자 주입이나 일반 메소드 주입을 이용하면 불필요하게 수정의 가능성을 열어두어 유지보수성을 떨어뜨린다. 그러므로 생성자 주입을 통해 변경의 가능성을 배제하고 불변성을 보장하는 것이 좋다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;테스트가-특정-프레임워크에-의존적이다&quot;&gt;테스트가 특정 프레임워크에 의존적이다.&lt;/h3&gt;
-
-&lt;p&gt;&lt;img width=&quot;652&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/9fa5fa43-b3d7-4c48-b59b-63b6430791e3&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;테스트가 특정 프레임워크에 의존하는 것은 침투적이므로 좋지 못하다. 
-그러므로 가능한 순수 자바로 테스트를 작성하는 것이 가장 좋은데, 생성자 주입이 아닌 다른 주입으로 작성된 코드는 순수한 자바 코드로 단위 테스트를 작성하는 것이 어렵다.&lt;/p&gt;
-
-&lt;h3 id=&quot;순수한-자바로-테스트-코드를-작성하는-것이-가장-좋다&quot;&gt;순수한 자바로 테스트 코드를 작성하는 것이 가장 좋다.&lt;/h3&gt;
-
-&lt;p&gt;&lt;img width=&quot;698&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/5e508862-b799-4ff2-9464-f71ef4f0114a&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;자바 스프링에서 의존성 주입 방식을 선택할 때 각 방식마다 장단점이 존재한다. 
-우선, Setter 주입을 사용하면 객체 생성 후에 의존성을 주입할 수 있는 유연함이 있지만, 이는 객체의 상태를 변경 가능하게 열어두는 단점이 있다. 
-즉, 외부에서 객체의 상태를 변경할 수 있어 코드의 불변성이 깨질 위험이 있다.
-반면, @Autowired를 통해 의존성을 주입하면 스프링이 자동으로 의존성을 처리해주므로 편리하지만, 이 방식으로 테스트 코드를 작성할 경우 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;스프링 컨텍스트를 로드&lt;/code&gt;해야 한다. 
-이로 인해 단순한 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;단위 테스트가 아닌 통합 테스트&lt;/code&gt;로 변하게 되며, 스프링이 컴포넌트를 등록하고 초기화하는 데 시간이 소요되어 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;테스트 비용이 증가&lt;/code&gt;하는 단점이 있다.
-또한, 리플렉션을 사용하면 객체의 메타 정보를 동적으로 수정할 수 있는 유연함이 있지만, 이는 테스트 코드가 깨지기 쉬운 구조가 되어 코드 안정성을 해칠 수 있다. 
-리플렉션은 코드가 변경될 때 의도치 않게 테스트가 실패할 가능성을 내포하고 있다.
-이와 대조적으로, 생성자 주입을 사용하면 객체가 생성될 때 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;필요한 의존성을 명시적으로 주입&lt;/code&gt;받을 수 있으며, 주입해야 할 의존성이 누락된 경우 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;컴파일 시점에서 오류를 발견할 수 있는 장점&lt;/code&gt;이 있다. 
-또한, 테스트 코드 작성 시에는 의존성을 생성자 파라미터로 직접 전달할 수 있어, 스프링 컨텍스트를 로드하지 않고도 테스트를 수행할 수 있다. 
-이를 통해 테스트가 더 빠르고 안정적으로 이루어질 수 있다.
-따라서 생성자 주입 방식은 컴파일 시점에 안정성을 보장하고, 테스트의 효율성과 편리함을 높이는 선택이 될 수 있다.&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-collaborators.html&quot;&gt;https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-collaborators.html&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Fri, 27 Sep 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/framework/2024/09/27/Spring-basic-13/</link>
-        <guid isPermaLink="true">http://localhost:4000/framework/2024/09/27/Spring-basic-13/</guid>
-        
-        <category>spring</category>
         
         
         <category>framework</category>

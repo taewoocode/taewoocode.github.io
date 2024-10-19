@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="백준 2583 문제풀이" />
+<meta property="og:title" content="백준 1992 문제풀이" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -56,19 +56,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>백준 2583 문제풀이 &middot; 일벌리는 개발자</title>
+<title>백준 1992 문제풀이 &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
         content="문제 링크
-ㅋhttps://www.acmicpc.net/problem/2583
 
 "
 />
 <meta
         property="og:description"
         content="문제 링크
-ㅋhttps://www.acmicpc.net/problem/2583
 
 "
 />
@@ -78,8 +76,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/cs/2024/10/06/Algorithm-12/" />
-<meta property="og:url" content="http://localhost:4000/cs/2024/10/06/Algorithm-12/" />
+<link rel="canonical" href="http://localhost:4000/cs/2024/10/07/Algorithm-14/" />
+<meta property="og:url" content="http://localhost:4000/cs/2024/10/07/Algorithm-14/" />
 
 <link
         rel="alternate"
@@ -89,9 +87,9 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/cs/2024/10/06/Algorithm-11/" />
+<link rel="prev" href="http://localhost:4000/cs/2024/10/06/Algorithm-13/" />
  
-<link rel="next" href="http://localhost:4000/cs/2024/10/06/Algorithm-13/" />
+<link rel="next" href="http://localhost:4000/cs/2024/10/07/Algorithm-15/" />
 
 
 <link
@@ -189,16 +187,16 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-cs/2024/10/06/Algorithm-12" class="post" role="article">
+<article id="post-cs/2024/10/07/Algorithm-14" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      백준 2583 문제풀이
+      백준 1992 문제풀이
       
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-10-06T00:00:00+09:00">06 Oct 2024</time>
+      <time datetime="2024-10-07T00:00:00+09:00">07 Oct 2024</time>
       
 
 
@@ -276,108 +274,90 @@ on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
 
     <!--<br />-->
     <h2 id="문제-링크">문제 링크</h2>
-<p>ㅋ<a href="https://www.acmicpc.net/problem/2583">https://www.acmicpc.net/problem/2583</a></p>
+
+<p><a href="https://www.acmicpc.net/problem/1992">https://www.acmicpc.net/problem/1992</a></p>
 
 <h2 id="문제-설명">문제 설명</h2>
 
-<p>눈금의 간격이 1인 M×N(M,N≤100)크기의 모눈종이가 있다. 
-이 모눈종이 위에 눈금에 맞추어 K개의 직사각형을 그릴 때, 이들 K개의 직사각형의 내부를 제외한 나머지 부분이 몇 개의 분리된 영역으로 나누어진다.
-예를 들어 M=5, N=7 인 모눈종이 위에 &lt;그림 1&gt;과 같이 직사각형 3개를 그렸다면, 그 나머지 영역은 &lt;그림 2&gt;와 같이 3개의 분리된 영역으로 나누어지게 된다.
-&lt;그림 2&gt;와 같이 분리된 세 영역의 넓이는 각각 1, 7, 13이 된다.
-M, N과 K 그리고 K개의 직사각형의 좌표가 주어질 때, K개의 직사각형 내부를 제외한 나머지 부분이 몇 개의 분리된 영역으로 나누어지는지, 그리고 분리된 각 영역의 넓이가 얼마인지를 구하여 이를 출력하는 프로그램을 작성하시오.</p>
+<p><img width="475" alt="image" src="https://github.com/user-attachments/assets/b858fe82-ad70-45c0-b3a2-8957f7b008b4" /></p>
+
+<p>흑백 영상을 압축하여 표현하는 데이터 구조로 쿼드 트리(Quad Tree)라는 방법이 있다. 
+흰 점을 나타내는 0과 검은 점을 나타내는 1로만 이루어진 영상(2차원 배열)에서 같은 숫자의 점들이 한 곳에 많이 몰려있으면, 쿼드 트리에서는 이를 압축하여 간단히 표현할 수 있다.
+주어진 영상이 모두 0으로만 되어 있으면 압축 결과는 “0”이 되고, 모두 1로만 되어 있으면 압축 결과는 “1”이 된다. 만약 0과 1이 섞여 있으면 전체를 한 번에 나타내지를 못하고
+, 왼쪽 위, 오른쪽 위, 왼쪽 아래, 오른쪽 아래, 이렇게 4개의 영상으로 나누어 압축하게 되며, 이 4개의 영역을 압축한 결과를 차례대로 괄호 안에 묶어서 표현한다.</p>
 
 <h2 id="문제-분석">문제 분석</h2>
 
-<p><img width="688" alt="image" src="https://github.com/user-attachments/assets/e0d46565-dbcb-4133-907b-360c012cee56" /></p>
+<p>이 문제는 Divide, Conquer이라는 알고리즘의 개념을 사용해서 재귀적인 호출을 통해서 문제를 해결한다.
+Divide, Conquer이라는 개념을 쉽게 설명하자면 큰 문제(상위 문제)를 작은 문제(하위 문제)라는 개념으로 나누어서 작은 문제를
+해결하는 목적으로 큰 문제를 해결한다.
+아래에는 문제를 그림으로 나타내었다.</p>
 
-<p>문제에서 주어진 K개의 직사각형이 겹치는 부분을 처리할 때, 색칠된 부분(직사각형 내부)은 방문하지 않고, 
-나머지 영역(겹치지 않는 부분)을 탐색하여 분리된 영역(컴포넌트)을 구하는 방식으로 해결할 수 있다.
-문제를 보자마자 DFS로 탐색하면 된다고 생각했다.</p>
+<p><img width="695" alt="image" src="https://github.com/user-attachments/assets/c7628b99-e797-4164-b298-5c382e02bd2c" /></p>
+
+<p>4개의 숫자가 주어지고 4개의 숫자가 모두 0이면 0, 1이면 1인데 1과 0이 섞여 있으면 Z를 그리며 상하좌우 탐색을 시작한다.
+만약 16개의 숫자가 나온다면 4개의 구역으로 분할해서 4개의 분할된 구역을 상하좌우로 탐색한다.</p>
 
 <h2 id="코드">코드</h2>
 
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;bits/stdc++.h&gt;</span><span class="cp">
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span><span class="cpf">&lt;bits/stdc++.h&gt;</span><span class="cp">
 </span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
+<span class="n">string</span> <span class="n">s</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">ll</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="mi">104</span><span class="p">][</span><span class="mi">104</span><span class="p">];</span>
 
-<span class="kt">int</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">;</span>
-<span class="cp">#define y1 aaaa
-</span><span class="kt">int</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">y1</span><span class="p">;</span>
-<span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="mi">104</span><span class="p">][</span><span class="mi">104</span><span class="p">],</span> <span class="n">visited</span><span class="p">[</span><span class="mi">104</span><span class="p">][</span><span class="mi">104</span><span class="p">];</span>
-<span class="kt">int</span> <span class="n">dy</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">};</span>
-<span class="kt">int</span> <span class="n">dx</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">};</span>
-<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ret</span><span class="p">;</span>
-
-<span class="kt">int</span> <span class="n">dfs</span><span class="p">(</span><span class="kt">int</span> <span class="n">y</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">visited</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kt">int</span> <span class="n">ny</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">dy</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-        <span class="kt">int</span> <span class="n">nx</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">dx</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">ny</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">nx</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">nx</span> <span class="o">&gt;=</span> <span class="n">n</span> <span class="o">||</span> <span class="n">ny</span> <span class="o">&gt;=</span> <span class="n">m</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">continue</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">visited</span><span class="p">[</span><span class="n">ny</span><span class="p">][</span><span class="n">nx</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">||</span> <span class="n">a</span><span class="p">[</span><span class="n">ny</span><span class="p">][</span><span class="n">nx</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">continue</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="n">count</span> <span class="o">+=</span> <span class="n">dfs</span><span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">);</span>
+<span class="n">string</span> <span class="nf">quard</span><span class="p">(</span><span class="kt">int</span> <span class="n">y</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">size</span><span class="p">){</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span><span class="p">){</span>
+        <span class="k">return</span> <span class="n">string</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">a</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">x</span><span class="p">]);</span>
     <span class="p">}</span>
-    <span class="k">return</span> <span class="n">count</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">x</span><span class="p">];</span>
+    <span class="n">string</span> <span class="n">ret</span> <span class="o">=</span> <span class="s">""</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="n">flag</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="c1">//y부터 size, x부터 size</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">y</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">y</span> <span class="o">+</span> <span class="n">size</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">x</span> <span class="o">+</span> <span class="n">size</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">){</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">b</span> <span class="o">!=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]){</span>
+                <span class="n">ret</span> <span class="o">+=</span> <span class="sc">'('</span><span class="p">;</span>
+                <span class="n">ret</span> <span class="o">+=</span> <span class="n">quard</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">size</span> <span class="o">/</span> <span class="mi">2</span><span class="p">);</span>
+                <span class="n">ret</span> <span class="o">+=</span> <span class="n">quard</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span> <span class="o">+</span> <span class="n">size</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">size</span> <span class="o">/</span> <span class="mi">2</span><span class="p">);</span>
+                <span class="n">ret</span> <span class="o">+=</span> <span class="n">quard</span><span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="n">size</span> <span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">size</span> <span class="o">/</span> <span class="mi">2</span><span class="p">);</span>
+                <span class="n">ret</span> <span class="o">+=</span> <span class="n">quard</span><span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="n">size</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">x</span> <span class="o">+</span> <span class="n">size</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">size</span> <span class="o">/</span> <span class="mi">2</span><span class="p">);</span>
+                <span class="n">ret</span> <span class="o">+=</span> <span class="sc">')'</span><span class="p">;</span>
+                <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">string</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">a</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">x</span><span class="p">]);</span>
+
 <span class="p">}</span>
 
-<span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="kt">int</span> <span class="n">main</span><span class="p">(){</span>
     <span class="n">ios_base</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
-    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
-    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
-    
-    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">m</span> <span class="o">&gt;&gt;</span> <span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="n">k</span><span class="p">;</span>
-    <span class="n">memset</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">a</span><span class="p">));</span>
-    <span class="n">memset</span><span class="p">(</span><span class="n">visited</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">visited</span><span class="p">));</span>
-    
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x1</span> <span class="o">&gt;&gt;</span> <span class="n">y1</span> <span class="o">&gt;&gt;</span> <span class="n">x2</span> <span class="o">&gt;&gt;</span> <span class="n">y2</span><span class="p">;</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">x1</span><span class="p">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">x2</span><span class="p">;</span> <span class="n">x</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="n">y1</span><span class="p">;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">y2</span><span class="p">;</span> <span class="n">y</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-                <span class="n">a</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-            <span class="p">}</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="nb">NULL</span><span class="p">),</span> <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">s</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">){</span>
+            <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
         <span class="p">}</span>
     <span class="p">}</span>
-    
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">visited</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-                <span class="n">ret</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">dfs</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">));</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    
-    <span class="n">sort</span><span class="p">(</span><span class="n">ret</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">ret</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
-    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">ret</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">i</span> <span class="o">:</span> <span class="n">ret</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="sc">' '</span><span class="p">;</span>
-    <span class="p">}</span>
-    
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">quard</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>문제는 남은 영역을 탐색하여 몇 개의 분리된 영역이 있는지와 각 영역의 크기를 계산하는 기능을 수행한다.
-프로그램은 먼저 M, N, K 값을 입력받고, a 배열을 사용하여 모눈종이를 초기화한다. 
-이 배열은 각 칸의 색칠 상태를 저장하며, 기본적으로 모든 값을 0으로 설정하여 빈 상태로 초기화한다. 
-그 후 K개의 직사각형의 좌표를 입력받고, 이 좌표에 해당하는 모눈종이의 부분을 1로 설정하여 색칠된 상태를 나타낸다.
-이후 dfs 함수를 통해 남은 영역을 탐색한다. 이 함수는 현재 위치를 방문 처리하고, 네 방향(위, 오른쪽, 아래, 왼쪽)으로 인접한 칸을 재귀적으로 탐색하여 색칠되지 않은 영역의 크기를 계산한다. 
-만약 탐색하려는 위치가 범위를 벗어나거나 이미 방문했거나 색칠된 칸이면 탐색을 중단하고, 유효한 경우에만 재귀 호출을 통해 연결된 영역의 크기를 계속해서 증가시킨다.
-모든 탐색이 끝난 후, 발견된 영역의 크기를 ret 벡터에 저장하고, 이를 정렬한 뒤, 총 영역의 개수와 각 영역의 크기를 출력한다.</p>
+<p>쿼드트리는 공간을 4개의 동일한 부분으로 나누는 방식으로 데이터를 표현하는데, 
+각 부분이 동일한 값을 가질 경우 더 이상 나누지 않고 하나의 값으로 표현할 수 있다.
+만약 사각형의 모든 값이 같다면, 그 값을 하나의 문자로 간단히 표현할 수 있다
+quard 함수는 재귀적으로 호출되며, 이 과정에서 각 사각형이 동일한 값을 갖는지 확인한다. 
+동일한 값을 가진 사각형은 더 이상 나누지 않고 반환하여 처리한다.</p>
 
-<p><img width="1146" alt="image" src="https://github.com/user-attachments/assets/08cc8876-1025-47d9-a21b-fefbaf2901ea" /></p>
-
-<p>문제를 풀면서 알게된 사실은 C++의 #include &lt;bits/stdc++.h&gt; 헤더를 사용할 때, 이 헤더 파일에 이미 y1이라는 변수가 정의되어 있다고 한다.
-따라서 이름을 바꿔주어야 했다. 왜 컴파일 에러가 계속 나는가 했다.</p>
+<p><img width="1166" alt="image" src="https://github.com/user-attachments/assets/94e0c1cd-e7e4-446c-836a-24ba726e35a6" /></p>
 
 <h2 id="reference">Reference</h2>
 
-<p>나의 뇌</p>
-
-<p><a href="https://stackoverflow.com/questions/70812043/algorithm-to-find-connected-components-in-a-graph-and-to-which-connected-compone">https://stackoverflow.com/questions/70812043/algorithm-to-find-connected-components-in-a-graph-and-to-which-connected-compone</a></p>
+<p><a href="https://en.wikipedia.org/wiki/Quadtree">https://en.wikipedia.org/wiki/Quadtree</a></p>
 
     <br />
     <br />
@@ -391,12 +371,12 @@ M, N과 K 그리고 K개의 직사각형의 좌표가 주어질 때, K개의 직
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=백준 2583 문제풀이&amp;url=http://localhost:4000/cs/2024/10/06/Algorithm-12/"
+    <a href="http://twitter.com/share?text=백준 1992 문제풀이&amp;url=http://localhost:4000/cs/2024/10/07/Algorithm-14/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/cs/2024/10/06/Algorithm-12/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/cs/2024/10/07/Algorithm-14/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -434,21 +414,8 @@ M, N과 K 그리고 K개의 직사각형의 좌표가 주어질 때, K개의 직
         
       
         
-        
           
-
-
-<li class="h4">
-  <a href="/cs/2024/10/07/Algorithm-14/" data-flip="title">
-    <span>백준 1992 문제풀이</span>
-  </a>
-  <small><time datetime="2024-10-07T00:00:00+09:00">
-    07 Oct 2024
-  </time></small>
-</li>
-
-        
-      
+          
         
         
           
@@ -466,8 +433,21 @@ M, N과 K 그리고 K개의 직사각형의 좌표가 주어질 때, K개의 직
         
       
         
+        
           
-          
+
+
+<li class="h4">
+  <a href="/cs/2024/10/06/Algorithm-12/" data-flip="title">
+    <span>백준 2583 문제풀이</span>
+  </a>
+  <small><time datetime="2024-10-06T00:00:00+09:00">
+    06 Oct 2024
+  </time></small>
+</li>
+
+        
+      
     
   </ul>
 </aside>
