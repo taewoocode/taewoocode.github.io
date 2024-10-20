@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Java Mid 02 - Primitive Type, Reference Type" />
+<meta property="og:title" content="Java Adv 11 - Thread Consumer, Producer" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,17 +52,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Java Mid 02 - Primitive Type, Reference Type &middot; 일벌리는 개발자</title>
+<title>Java Adv 11 - Thread Consumer, Producer &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="기본형과 참조형
+        content="생산자 소비자 대기 공간 분리
 
 "
 />
 <meta
         property="og:description"
-        content="기본형과 참조형
+        content="생산자 소비자 대기 공간 분리
 
 "
 />
@@ -72,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/language/2024/09/18/Java-Mid-02/" />
-<meta property="og:url" content="http://localhost:4000/language/2024/09/18/Java-Mid-02/" />
+<link rel="canonical" href="http://localhost:4000/language/2024/10/08/Java-Adv-11/" />
+<meta property="og:url" content="http://localhost:4000/language/2024/10/08/Java-Adv-11/" />
 
 <link
         rel="alternate"
@@ -83,10 +83,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/language/2024/09/18/Java-Mid-01/" />
+<link rel="prev" href="http://localhost:4000/cs/2024/10/07/Algorithm-15/" />
  
-<link rel="next" href="http://localhost:4000/language/2024/09/18/Java-Mid-03/" />
-
 
 <link
         rel="apple-touch-icon"
@@ -183,16 +181,16 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-language/2024/09/18/Java-Mid-02" class="post" role="article">
+<article id="post-language/2024/10/08/Java-Adv-11" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      Java Mid 02 - Primitive Type, Reference Type
+      Java Adv 11 - Thread Consumer, Producer
       
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
+      <time datetime="2024-10-08T00:00:00+09:00">08 Oct 2024</time>
       
 
 
@@ -267,83 +265,42 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
     </style>
 
     <!--<br />-->
-    <h2 id="기본형과-참조형">기본형과 참조형</h2>
+    <h2 id="생산자-소비자-대기-공간-분리">생산자 소비자 대기 공간 분리</h2>
 
-<p>자바의 데이터 타입은 크게 기본형(Primitive Type)과 참조형(Reference Type)으로 나눌 수 있다. 이 두 가지 타입은 메모리 할당 방식과 데이터 저장 방식에서 큰 차이가 있다.</p>
+<p><img width="621" alt="image" src="https://github.com/user-attachments/assets/18e0cc8d-e5c4-4d58-9a92-bab8c663e474" /></p>
 
-<h3 id="기본형-primitive-type">기본형 (Primitive Type)</h3>
+<p>생산자용 Condition과 소비자용 Condition을 나눠서 만든다.</p>
 
-<p>기본형 데이터 타입은 값 자체를 저장하며, 각 변수는 고유한 값을 가진다. 따라서 하나의 값을 여러 변수에서 절대로 공유하지 않는다. 기본형 데이터 타입에는 다음과 같은 종류가 있다.</p>
+<p><img width="519" alt="image" src="https://github.com/user-attachments/assets/f0b81a0b-f79b-4675-857b-00f3e46c17ea" /></p>
 
-<ul>
-  <li><strong>정수형 (Integer Types)</strong>: <code class="language-plaintext highlighter-rouge">byte</code>, <code class="language-plaintext highlighter-rouge">short</code>, <code class="language-plaintext highlighter-rouge">int</code>, <code class="language-plaintext highlighter-rouge">long</code></li>
-  <li><strong>실수형 (Floating Point Types)</strong>: <code class="language-plaintext highlighter-rouge">float</code>, <code class="language-plaintext highlighter-rouge">double</code></li>
-  <li><strong>문자형 (Character Type)</strong>: <code class="language-plaintext highlighter-rouge">char</code></li>
-  <li><strong>논리형 (Boolean Type)</strong>: <code class="language-plaintext highlighter-rouge">boolean</code></li>
-</ul>
+<p>lock.newCondition을 2번 호출해서 ReentrantLock을 사용하는 스레드 대기 공간을 2개 만들었다.
+이렇게 관리하면 생산자 스레드, 소비자 스레드를 정확하게 나누어 관리하고 깨울 수 있다.</p>
 
-<p>예시코드</p>
+<p><img width="523" alt="image" src="https://github.com/user-attachments/assets/8fcd96b9-8797-481e-b0c4-c455b686dca2" /></p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">java코드</span> <span class="n">복사</span>
-<span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">5</span><span class="o">;</span>
-<span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="o">;</span>  <span class="c1">// b는 a의 값을 복사. 이후 a와 b는 서로 독립적인 변수가 된다.</span>
-<span class="n">a</span> <span class="o">=</span> <span class="mi">10</span><span class="o">;</span>     <span class="c1">// a의 값을 변경해도 b의 값은 영향을 받지 않는다.</span>
+<p>생산자가 데이터를 생산하면 생산자용 대기에서 기다리고, 데이터를 생산하면 소비자를 깨운다.
+소비자는 소비자 대기소에서 기다리고, 소비자가 데이터를 소비하고 나면 생산자를 깨우게 된다.</p>
 
-</code></pre></div></div>
+<p><img width="682" alt="image" src="https://github.com/user-attachments/assets/15017864-a1eb-4fc0-9416-5a9973ed1ed7" /></p>
 
-<h3 id="참조형-reference-type">참조형 (Reference Type)</h3>
+<p>signal을 호출해서 대기중인 소비자를 깨우는 것을 확인할 수 있다.</p>
 
-<p>참조형 데이터 타입은 실제 데이터 값이 아닌 데이터가 저장된 메모리 주소(참조값)를 저장한다. 따라서 하나의 객체를 여러 변수에서 공유할 수 있다. 참조형 데이터 타입에는 다음과 같은 종류가 있다. → 참조값을 전달한다.</p>
+<h2 id="objectnotify-vs-conditionsignalobjectnotify"><strong>Object.notify() vs Condition.signal()Object.notify()</strong></h2>
 
-<ul>
-  <li><strong>클래스 (Classes)</strong></li>
-  <li><strong>인터페이스 (Interfaces)</strong></li>
-  <li><strong>배열 (Arrays)</strong></li>
-  <li><strong>열거형 (Enums)</strong></li>
-</ul>
-
-<p>예시코드</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">java코드</span> <span class="n">복사</span>
-<span class="kd">class</span> <span class="nc">MyObject</span> <span class="o">{</span>
-    <span class="kt">int</span> <span class="n">value</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="nc">MyObject</span> <span class="n">obj1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">MyObject</span><span class="o">();</span>
-<span class="n">obj1</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="mi">5</span><span class="o">;</span>
-
-<span class="nc">MyObject</span> <span class="n">obj2</span> <span class="o">=</span> <span class="n">obj1</span><span class="o">;</span>  <span class="c1">// obj1과 obj2는 같은 객체를 참조한다.</span>
-<span class="n">obj1</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="mi">10</span><span class="o">;</span>       <span class="c1">// obj1을 통해 객체의 값을 변경하면 obj2에서도 변경된 값을 볼 수 있습니다.</span>
-<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">obj2</span><span class="o">.</span><span class="na">value</span><span class="o">);</span>  <span class="c1">// 출력: 10</span>
-
-<span class="c1">// obj에 참조값 x001이 저장이 되었디고 한다면 obj1의 참조값을 obj2에도 저장하기 때문에 결국에는 같은 메모리 주소값을 참조하게 되는 매커니즘이다.</span>
-</code></pre></div></div>
-
-<h2 id="사이드-이펙트">사이드 이펙트</h2>
-
-<ul>
-  <li>프로그래밍에서 어떤 계산이 주된 작업 외에 추가적인 부수효과를 일으키는 것을 말한다.</li>
-  <li>공유 참조를 예시로 생각할 수 있는데 위에 코드처럼 obj1을 변경했는데 obj2까지 의도치 않게 변경됨을 말한다.
-    <ul>
-      <li>프로젝트나 코드가 복잡해지면 디버깅이 어려워지고 코드의 안정성이 저하된다.</li>
-    </ul>
-  </li>
-</ul>
-
-<h2 id="사이드-이펙트-해결-방안">사이드 이펙트 해결 방안</h2>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">MyObject</span> <span class="n">obj1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">MyObject</span><span class="o">();</span> <span class="c1">//x001</span>
-<span class="nc">MyObject</span> <span class="n">obj2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">MyObject</span><span class="o">();</span> <span class="c1">//x002</span>
-</code></pre></div></div>
-
-<ul>
-  <li>해결방안은 아주 단순하다. 처음부터 서로 다른 인스턴스를 참조하면 된다.</li>
-  <li>처음부터 서로 다른 인스턴스를 참조하기 때문에 ob2를 변경해도 obj1에 영향을 주지 않는다.</li>
-</ul>
+<p>대기 중인 스레드 중 임의의 하나를 선택해서 깨운다. 스레드가 깨어나는 순서는 정의되어 있지 않으며,
+JVM 구현에 따라 다르다. 보통은 먼저 들어온 스레드가 먼저 수행되지만 구현에 따라 다를 수 있다.
+<code class="language-plaintext highlighter-rouge">synchronized</code> 블록 내에서 모니터 락을 가지고 있는 스레드가 호출해야 한다. <strong>Condition.signal()</strong>
+대기 중인 스레드 중 하나를 깨우며, 일반적으로는 FIFO 순서로 깨운다. 이 부분은 자바 버전과 구현에 따
+라 달라질 수 있지만, 보통 <code class="language-plaintext highlighter-rouge">Condition</code> 의 구현은 <code class="language-plaintext highlighter-rouge">Queue</code> 구조를 사용하기 때문에 FIFO 순서로 깨운다.
+<code class="language-plaintext highlighter-rouge">ReentrantLock</code> 을 가지고 있는 스레드가 호출해야 한다.</p>
 
 <h2 id="reference">Reference</h2>
 
-<p>인프런 김영한님의 실전 자바 강좌</p>
+<p>김영한님의 자바 강의</p>
+
+<p><a href="https://stackoverflow.com/questions/50001353/java-one-producer-and-two-consumers">https://stackoverflow.com/questions/50001353/java-one-producer-and-two-consumers</a></p>
+
+<p><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Thread.html">https://docs.oracle.com/javase/8/docs/api/java/lang/Thread.html</a></p>
 
     <br />
     <br />
@@ -357,12 +314,12 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=Java Mid 02 - Primitive Type, Reference Type&amp;url=http://localhost:4000/language/2024/09/18/Java-Mid-02/"
+    <a href="http://twitter.com/share?text=Java Adv 11 - Thread Consumer, Producer&amp;url=http://localhost:4000/language/2024/10/08/Java-Adv-11/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/09/18/Java-Mid-02/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/10/08/Java-Adv-11/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -384,21 +341,8 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
       
       
         
-        
           
-
-
-<li class="h4">
-  <a href="/language/2024/10/08/Java-Adv-11/" data-flip="title">
-    <span>Java Adv 11 - Thread Consumer, Producer</span>
-  </a>
-  <small><time datetime="2024-10-08T00:00:00+09:00">
-    08 Oct 2024
-  </time></small>
-</li>
-
-        
-      
+          
         
         
           
@@ -432,6 +376,19 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
         
       
         
+        
+          
+
+
+<li class="h4">
+  <a href="/language/2024/10/04/Java-Adv-08/" data-flip="title">
+    <span>Java Adv 08 - ReentrantLock</span>
+  </a>
+  <small><time datetime="2024-10-04T00:00:00+09:00">
+    04 Oct 2024
+  </time></small>
+</li>
+
         
       
     
