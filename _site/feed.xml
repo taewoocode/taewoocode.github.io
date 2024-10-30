@@ -6,9 +6,60 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 31 Oct 2024 00:32:49 +0900</pubDate>
-    <lastBuildDate>Thu, 31 Oct 2024 00:32:49 +0900</lastBuildDate>
+    <pubDate>Thu, 31 Oct 2024 00:40:20 +0900</pubDate>
+    <lastBuildDate>Thu, 31 Oct 2024 00:40:20 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
+    
+      <item>
+        <title>Java Adv 11 - atomic operation - 1</title>
+        <description>&lt;h2 id=&quot;atomic-operation&quot;&gt;atomic operation&lt;/h2&gt;
+
+&lt;p&gt;원자적 연산이란 컴퓨터 과학에서 &lt;strong&gt;더 이상 나눌 수 없는 단위로 수행되는 연산&lt;/strong&gt;을 의미한다. 
+이 연산은 중단 없이 &lt;strong&gt;완전히 실행되거나 전혀 실행되지 않으며&lt;/strong&gt;, 다른 연산의 간섭 없이 독립적으로 처리된다. 
+즉, &lt;strong&gt;멀티스레드 환경에서도 안전하게 수행되는 연산&lt;/strong&gt;이다.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;어원: 과거 원자는 더 이상 나눌 수 없는 가장 작은 단위로 여겨졌다. 여기에서 유래하여, 컴퓨터 과학에서는 나눌 수 없는 연산을 “원자적 연산”이라 한다.&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;java&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;코드&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;복사&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;volatile&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;위 코드에서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i = 1&lt;/code&gt; 연산은 원자적 연산이다. 
+하나의 연산으로 값을 대입하는 단일 단계로 이루어지기 때문이다.
+반면, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i = i + 1&lt;/code&gt;은 원자적 연산이 아니다. 
+이 연산은 다음과 같이 여러 단계로 나뉘어 실행된다&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i&lt;/code&gt;의 값을 읽는다.&lt;/li&gt;
+  &lt;li&gt;1을 더한다.&lt;/li&gt;
+  &lt;li&gt;결과를 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i&lt;/code&gt;에 대입한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;이처럼 원자적이지 않은 연산은 다른 스레드의 간섭을 받을 수 있어 멀티스레드 환경에서 문제가 발생할 수 있다. 
+따라서, 원자적이지 않은 연산을 안전하게 처리하기 위해서는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt; 블록이나 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Lock&lt;/code&gt;을 사용하여 임계 영역을 보호해야 한다.&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;김영한님의 자바 강의&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://naveen-metta.medium.com/atomic-operations-in-java-mastering-thread-safety-and-concurrency-7c3360ec0bc5&quot;&gt;https://naveen-metta.medium.com/atomic-operations-in-java-mastering-thread-safety-and-concurrency-7c3360ec0bc5&lt;/a&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Mon, 14 Oct 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/language/2024/10/14/Java-Adv-12/</link>
+        <guid isPermaLink="true">http://localhost:4000/language/2024/10/14/Java-Adv-12/</guid>
+        
+        <category>java</category>
+        
+        
+        <category>language</category>
+        
+      </item>
     
       <item>
         <title>who is Doug Lea?</title>
@@ -3056,169 +3107,6 @@ ex) 맛집에 줄을 서지만 특정 시간 만큼만 기다린다. 특정 시�
         
         
         <category>cs</category>
-        
-      </item>
-    
-      <item>
-        <title>Spring JDBC 07 - Transaction 추상화</title>
-        <description>&lt;h2 id=&quot;트랜잭션-추상화&quot;&gt;트랜잭션 추상화&lt;/h2&gt;
-
-&lt;p&gt;트랜잭션 추상화의 개념은 서비스 계층이 특정 트랜잭션 기술에 의존하지 않도록 만들기 위한 것이다. 이를 통해 JDBC나 JPA 같은 기술을 변경할 때, 비즈니스 로직을 담고 있는 서비스 계층의 코드가 변경되지 않도록 설계한다. 이 방식은 OCP(Open-Closed Principle, 개방-폐쇄 원칙)에도 부합하며, 코드의 유연성과 확장성을 높인다.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;트랜잭션이란?&lt;/strong&gt;
-트랜잭션은 데이터베이스에 대한 하나의 논리적 작업 단위로, 여러 작업을 하나의 일관된 흐름으로 처리하는 방법이다. 트랜잭션은 크게 세 가지 동작으로 요약된다.
-    &lt;ul&gt;
-      &lt;li&gt;&lt;strong&gt;begin()&lt;/strong&gt;: 트랜잭션 시작&lt;/li&gt;
-      &lt;li&gt;&lt;strong&gt;commit()&lt;/strong&gt;: 모든 작업이 성공적으로 완료되었을 때 변경 내용을 확정&lt;/li&gt;
-      &lt;li&gt;&lt;strong&gt;rollback()&lt;/strong&gt;: 작업 중 오류가 발생했을 때 모든 작업을 취소하고 상태를 원래대로 복구&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;트랜잭션 추상화의 필요성&lt;/strong&gt;
-일반적으로 JDBC를 사용할 때는 해당 기술에 맞는 트랜잭션 제어 코드를 서비스 계층에 직접 넣어야 했다. 하지만 JPA 같은 다른 트랜잭션 기술로 전환할 경우, 해당 트랜잭션 제어 코드를 다시 수정해야 하는 문제가 발생한다. 이를 해결하기 위해 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TxManager&lt;/code&gt; 같은 트랜잭션 제어 인터페이스를 만들어 서비스 계층이 특정 기술에 의존하지 않고, 트랜잭션 처리만을 추상적으로 다루게 한다.&lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;TxManager 인터페이스&lt;/strong&gt;:
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TxManager&lt;/code&gt;는 트랜잭션을 추상화한 인터페이스다. 이 인터페이스는 트랜잭션의 시작, 커밋, 롤백과 같은 주요 메서드들을 제공한다.&lt;/p&gt;
-
-    &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    
-  &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TxManager&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-     &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;begin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-     &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;commit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-     &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;rollback&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-
-    &lt;p&gt;이를 구현하는 클래스들은 각 기술에 맞는 트랜잭션 처리를 담당한다.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;구체적 구현체: JdbcTxManager &amp;amp; JpaTxManager&lt;/strong&gt;:
-    &lt;ul&gt;
-      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;JdbcTxManager&lt;/code&gt;: JDBC 기반의 트랜잭션 처리 구현. JDBC 환경에서 트랜잭션을 시작하고, 커밋 또는 롤백하는 로직이 포함된다.&lt;/li&gt;
-      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;JpaTxManager&lt;/code&gt;: JPA 기반의 트랜잭션 처리 구현. JPA 환경에서 트랜잭션을 관리하는 방식으로 구현된다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;의존성 주입(DI)&lt;/strong&gt;:
-DI(Dependency Injection)를 사용하여 서비스 계층이 어떤 구현체를 사용할지 주입받게 한다. 이렇게 하면 서비스는 구체적인 트랜잭션 기술에 의존하지 않고, 필요에 따라 트랜잭션 관리 기술을 쉽게 변경할 수 있다.&lt;/p&gt;
-
-    &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    
-  &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SomeService&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-      &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TxManager&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;txManager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    
-      &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;SomeService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;TxManager&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;txManager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-          &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;txManager&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;txManager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    
-      &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;executeBusinessLogic&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-          &lt;span class=&quot;n&quot;&gt;txManager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;begin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-          &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-              &lt;span class=&quot;c1&quot;&gt;// 비즈니스 로직 수행&lt;/span&gt;
-              &lt;span class=&quot;n&quot;&gt;txManager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;commit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-          &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-              &lt;span class=&quot;n&quot;&gt;txManager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;rollback&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-              &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-          &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-
-    &lt;p&gt;여기서 트랜잭션 관리 객체가 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TxManager&lt;/code&gt; 인터페이스에 의존하고, 구체적인 구현체(JDBC 또는 JPA 트랜잭션 관리자)는 외부에서 주입된다.&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;&lt;strong&gt;OCP 원칙 준수&lt;/strong&gt;
-OCP 원칙은 ‘확장에는 열려 있으나 수정에는 닫혀 있어야 한다’는 원칙이다. 서비스가 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TxManager&lt;/code&gt; 인터페이스에 의존하기 때문에, 새로운 트랜잭션 관리 기술이 추가되더라도 서비스 코드는 수정하지 않고 새로운 구현체를 추가하기만 하면 된다. 이로써 서비스 계층의 코드가 변경되지 않고도 트랜잭션 기술을 유연하게 변경할 수 있다.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&quot;장점&quot;&gt;장점&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;기술 변화의 용이성&lt;/strong&gt;: 서비스 계층의 코드를 변경하지 않고도 트랜잭션 기술을 교체할 수 있다.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;유지보수성 향상&lt;/strong&gt;: 코드의 중복을 줄이고, 특정 기술에 종속적인 코드를 제거함으로써 유지보수가 쉬워진다.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;확장성&lt;/strong&gt;: 추가적인 트랜잭션 관리 기술(JDBC 외 다른 ORM 등)을 사용할 때도 코드 수정 없이 새로운 구현체를 추가하는 방식으로 확장할 수 있다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;이와 같은 트랜잭션 추상화를 통해, 다양한 트랜잭션 관리 기술을 유연하게 사용할 수 있는 아키텍처를 만들 수 있다.&lt;/p&gt;
-
-&lt;h2 id=&quot;외부에서-구체적인-구현체를-결정하는-방법&quot;&gt;외부에서 구체적인 구현체를 결정하는 방법&lt;/h2&gt;
-
-&lt;p&gt;서비스 코드에서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TxManager&lt;/code&gt;의 구현체가 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;JdbcTxManager&lt;/code&gt;인지 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;JpaTxManager&lt;/code&gt;인지 신경 쓰지 않아도 되는 이유는, &lt;strong&gt;외부에서&lt;/strong&gt; 그 구체적인 구현체가 주입되기 때문이다.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;Spring 같은 DI 컨테이너를 사용&lt;/strong&gt;
-    &lt;ul&gt;
-      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SomeService&lt;/code&gt;는 &lt;strong&gt;생성자 주입&lt;/strong&gt;을 통해 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TxManager&lt;/code&gt; 인터페이스를 받습니다. 이때 실제로는 외부에서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TxManager&lt;/code&gt;의 구현체(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;JdbcTxManager&lt;/code&gt; 또는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;JpaTxManager&lt;/code&gt;)가 주입된다.&lt;/li&gt;
-      &lt;li&gt;주입되는 구현체는 외부 설정, 환경에 따라 다르게 결정됩니다. 개발자가 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SomeService&lt;/code&gt; 클래스 내에서 직접적으로 구현체를 바꿀 필요가 없죠.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;spring을-사용하는-경우-di-컨테이너가-자동으로-주입할-트랜잭션-관리자를-결정&quot;&gt;Spring을 사용하는 경우 DI 컨테이너가 자동으로 주입할 트랜잭션 관리자를 결정&lt;/h3&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@Qualifier&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;jdbcTxManager&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;JdbcTxManager&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TxManager&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;begin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;cm&quot;&gt;/* JDBC 트랜잭션 시작 */&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;commit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;cm&quot;&gt;/* JDBC 커밋 */&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;rollback&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;cm&quot;&gt;/* JDBC 롤백 */&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@Qualifier&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;jpaTxManager&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;JpaTxManager&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TxManager&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;begin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;cm&quot;&gt;/* JPA 트랜잭션 시작 */&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;commit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;cm&quot;&gt;/* JPA 커밋 */&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;rollback&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;cm&quot;&gt;/* JPA 롤백 */&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Service&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SomeService&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TxManager&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;txManager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-    &lt;span class=&quot;nd&quot;&gt;@Autowired&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;SomeService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@Qualifier&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;jdbcTxManager&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TxManager&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;txManager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;txManager&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;txManager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;executeBusinessLogic&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;txManager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;begin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;// 비즈니스 로직 수행&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;txManager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;commit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;txManager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;rollback&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Service 클래스는 Spring이 TxManager의 구현체 중 하나를 알아서 주입해 주기 때문에 구체적인 트랜잭션 기술에 의존하지 않는다.&lt;/p&gt;
-
-&lt;h3 id=&quot;di를-통해-구현체를-주입하는-이유&quot;&gt;DI를 통해 구현체를 주입하는 이유&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;유연성&lt;/strong&gt;: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SomeService&lt;/code&gt; 클래스는 트랜잭션 관리가 필요하지만, 그게 JDBC인지 JPA인지는 신경 쓸 필요가 없다. 구체적인 구현은 외부에서 주입되므로, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SomeService&lt;/code&gt;는 항상 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TxManager&lt;/code&gt; 인터페이스만 사용하고 트랜잭션 기술에 따라 코드 변경을 하지 않아도 된다&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;OCP 원칙 준수&lt;/strong&gt;: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SomeService&lt;/code&gt;가 특정 트랜잭션 기술에 의존하지 않기 때문에, 코드 수정 없이 트랜잭션 기술을 변경할 수 있다. 이로써 OCP(Open-Closed Principle)를 따르게 됩니다. 새로운 트랜잭션 관리 기술을 추가해도 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SomeService&lt;/code&gt;는 수정되지 않는다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;따라서, &lt;strong&gt;외부에서 주입되므로&lt;/strong&gt; 실제 코드에서는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SomeService&lt;/code&gt; 내부에서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;JdbcTxManager&lt;/code&gt;나 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;JpaTxManager&lt;/code&gt;를 직접적으로 변경할 필요가 없다. &lt;strong&gt;외부에서 어떤 구현체를 주입할지 결정&lt;/strong&gt;하면 되는 것&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;김영한님의 스프링 강의 정리&lt;/p&gt;
-</description>
-        <pubDate>Wed, 02 Oct 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/framework/2024/10/02/Spring-Data-jdbc-07/</link>
-        <guid isPermaLink="true">http://localhost:4000/framework/2024/10/02/Spring-Data-jdbc-07/</guid>
-        
-        <category>jpa</category>
-        
-        
-        <category>framework</category>
         
       </item>
     

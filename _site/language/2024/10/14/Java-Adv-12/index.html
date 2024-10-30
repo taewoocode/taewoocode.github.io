@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Java Adv 06 - Synchronized Ex" />
+<meta property="og:title" content="Java Adv 11 - atomic operation - 1" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,17 +52,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Java Adv 06 - Synchronized Ex &middot; 일벌리는 개발자</title>
+<title>Java Adv 11 - atomic operation - 1 &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="Thread Synchronized
+        content="atomic operation
 
 "
 />
 <meta
         property="og:description"
-        content="Thread Synchronized
+        content="atomic operation
 
 "
 />
@@ -72,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/language/2024/10/03/Java-Adv-06/" />
-<meta property="og:url" content="http://localhost:4000/language/2024/10/03/Java-Adv-06/" />
+<link rel="canonical" href="http://localhost:4000/language/2024/10/14/Java-Adv-12/" />
+<meta property="og:url" content="http://localhost:4000/language/2024/10/14/Java-Adv-12/" />
 
 <link
         rel="alternate"
@@ -83,10 +83,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/cs/2024/10/03/Algorithm-07/" />
+<link rel="prev" href="http://localhost:4000/life/2024/10/13/daily-05/" />
  
-<link rel="next" href="http://localhost:4000/language/2024/10/03/Java-Adv-07/" />
-
 
 <link
         rel="apple-touch-icon"
@@ -183,16 +181,16 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-language/2024/10/03/Java-Adv-06" class="post" role="article">
+<article id="post-language/2024/10/14/Java-Adv-12" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      Java Adv 06 - Synchronized Ex
+      Java Adv 11 - atomic operation - 1
       
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-10-03T00:00:00+09:00">03 Oct 2024</time>
+      <time datetime="2024-10-14T00:00:00+09:00">14 Oct 2024</time>
       
 
 
@@ -267,67 +265,42 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
     </style>
 
     <!--<br />-->
-    <h2 id="thread-synchronized">Thread Synchronized</h2>
+    <h2 id="atomic-operation">atomic operation</h2>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SyncTest1BadMain</span> <span class="o">{</span>
+<p>원자적 연산이란 컴퓨터 과학에서 <strong>더 이상 나눌 수 없는 단위로 수행되는 연산</strong>을 의미한다. 
+이 연산은 중단 없이 <strong>완전히 실행되거나 전혀 실행되지 않으며</strong>, 다른 연산의 간섭 없이 독립적으로 처리된다. 
+즉, <strong>멀티스레드 환경에서도 안전하게 수행되는 연산</strong>이다.</p>
 
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">InterruptedException</span> <span class="o">{</span>
-        <span class="nc">Counter</span> <span class="n">counter</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Counter</span><span class="o">();</span>
-        <span class="nc">Runnable</span> <span class="n">task</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Runnable</span><span class="o">()</span> <span class="o">{</span>
+<blockquote>
+  <p>어원: 과거 원자는 더 이상 나눌 수 없는 가장 작은 단위로 여겨졌다. 여기에서 유래하여, 컴퓨터 과학에서는 나눌 수 없는 연산을 “원자적 연산”이라 한다.</p>
 
-            <span class="nd">@Override</span>
-            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
-                <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10000</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-                    <span class="n">counter</span><span class="o">.</span><span class="na">increment</span><span class="o">();</span>
-                <span class="o">}</span>
-            <span class="o">}</span>
-        <span class="o">};</span>
-        <span class="nc">Thread</span> <span class="n">thread1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">(</span> <span class="n">task</span> <span class="o">);</span>
-        <span class="nc">Thread</span> <span class="n">thread2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">(</span> <span class="n">task</span> <span class="o">);</span>
+</blockquote>
 
-        <span class="n">thread1</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
-        <span class="n">thread2</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
-        <span class="n">thread1</span><span class="o">.</span><span class="na">join</span><span class="o">();</span>
-        <span class="n">thread2</span><span class="o">.</span><span class="na">join</span><span class="o">();</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"결과: "</span> <span class="o">+</span> <span class="n">counter</span><span class="o">.</span><span class="na">getCount</span><span class="o">()</span> <span class="o">);</span>
-    <span class="o">}</span>
-
-    <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Counter</span> <span class="o">{</span>
-
-        <span class="kd">private</span> <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">increment</span><span class="o">()</span> <span class="o">{</span>
-            <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
-        <span class="o">}</span>
-
-        <span class="kd">private</span> <span class="kt">int</span> <span class="nf">getCount</span><span class="o">()</span> <span class="o">{</span>
-            <span class="k">return</span> <span class="n">count</span><span class="o">;</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">java</span>
+<span class="n">코드</span> <span class="n">복사</span>
+<span class="kd">volatile</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+<span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
 </code></pre></div></div>
 
-<p><img width="690" alt="image" src="https://github.com/user-attachments/assets/fd14e49d-fdc9-4f3a-812d-84a12f6ce7bb" /></p>
+<p>위 코드에서 <code class="language-plaintext highlighter-rouge">i = 1</code> 연산은 원자적 연산이다. 
+하나의 연산으로 값을 대입하는 단일 단계로 이루어지기 때문이다.
+반면, <code class="language-plaintext highlighter-rouge">i = i + 1</code>은 원자적 연산이 아니다. 
+이 연산은 다음과 같이 여러 단계로 나뉘어 실행된다</p>
 
-<p>기대한 값은 20000인데 왜 저런 값이 나올까?</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">i</code>의 값을 읽는다.</li>
+  <li>1을 더한다.</li>
+  <li>결과를 <code class="language-plaintext highlighter-rouge">i</code>에 대입한다.</li>
+</ul>
 
-<p><img width="629" alt="image" src="https://github.com/user-attachments/assets/e7c6a201-44c3-4811-be90-b73b9f8e2bcc" />
-<img width="656" alt="image" src="https://github.com/user-attachments/assets/65f5bce6-a4f1-48fe-be1d-0cb7f420fe90" />
-<img width="687" alt="image" src="https://github.com/user-attachments/assets/89385db4-eded-4730-880f-be5f4cc9c344" /></p>
-
-<p>스레드 2개가 <code class="language-plaintext highlighter-rouge">increment()</code> 를 호출하기 때문에 기대하는 <code class="language-plaintext highlighter-rouge">count</code> 의 결과는 2가 되어야 한다. 하지만 둘이 동시에 실행되기 때문에, 처음에 둘다 <code class="language-plaintext highlighter-rouge">count</code> 의 값을 0으로 읽었다.
-여기서 잘 보면 <code class="language-plaintext highlighter-rouge">count</code> 의 값을 읽어서 계산하는 부분과 그 결과를 <code class="language-plaintext highlighter-rouge">count</code> 에 다시 넣는 부분으로 나누어져 있다. 따라서 여러 스레드가 동시에 실행되면 지금과 같은 문제가 발생할 수 있다.
-따라서 <code class="language-plaintext highlighter-rouge">synchronized</code> 키워드를 사용해서 한 번에 하나의 스레드만 실행할 수 있도록, 안전한 임계 영역을 만들어야 한다. (syncronized는 임계영역)
-<strong><code class="language-plaintext highlighter-rouge">synchronized</code></strong>를 붙임으로써 임계영역을 한 번에 걸어잠글 수 있는 락(lock)을 제공한다. 
-이제 여러 스레드 중 하나의 스레드가 먼저 임계영역 안으로 들어오면 락이 걸리고, 나머지 스레드들은 먼저 들어간 스레드가 작업을 마치고 임계영역 밖으로 나오기 전까지 대기하게 된다.
-참고로 지역변수 localValue는 다른 스레드와 절대 공유하지 않는다. thread1, thread2의 각각의 메모리 영역에서 생성되는 값이다.</p>
+<p>이처럼 원자적이지 않은 연산은 다른 스레드의 간섭을 받을 수 있어 멀티스레드 환경에서 문제가 발생할 수 있다. 
+따라서, 원자적이지 않은 연산을 안전하게 처리하기 위해서는 <code class="language-plaintext highlighter-rouge">synchronized</code> 블록이나 <code class="language-plaintext highlighter-rouge">Lock</code>을 사용하여 임계 영역을 보호해야 한다.</p>
 
 <h2 id="reference">Reference</h2>
 
 <p>김영한님의 자바 강의</p>
 
-<p><a href="https://stackoverflow.com/questions/20906548/why-is-synchronized-block-better-than-synchronized-method">https://stackoverflow.com/questions/20906548/why-is-synchronized-block-better-than-synchronized-method</a></p>
+<p><a href="https://naveen-metta.medium.com/atomic-operations-in-java-mastering-thread-safety-and-concurrency-7c3360ec0bc5">https://naveen-metta.medium.com/atomic-operations-in-java-mastering-thread-safety-and-concurrency-7c3360ec0bc5</a></p>
 
 
     <br />
@@ -342,12 +315,12 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=Java Adv 06 - Synchronized Ex&amp;url=http://localhost:4000/language/2024/10/03/Java-Adv-06/"
+    <a href="http://twitter.com/share?text=Java Adv 11 - atomic operation - 1&amp;url=http://localhost:4000/language/2024/10/14/Java-Adv-12/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/10/03/Java-Adv-06/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/10/14/Java-Adv-12/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -369,21 +342,8 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
       
       
         
-        
           
-
-
-<li class="h4">
-  <a href="/language/2024/10/14/Java-Adv-12/" data-flip="title">
-    <span>Java Adv 11 - atomic operation - 1</span>
-  </a>
-  <small><time datetime="2024-10-14T00:00:00+09:00">
-    14 Oct 2024
-  </time></small>
-</li>
-
-        
-      
+          
         
         
           
@@ -417,6 +377,19 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
         
       
         
+        
+          
+
+
+<li class="h4">
+  <a href="/language/2024/10/05/Java-Adv-09/" data-flip="title">
+    <span>Java Adv 09 - Producer, Consumer</span>
+  </a>
+  <small><time datetime="2024-10-05T00:00:00+09:00">
+    05 Oct 2024
+  </time></small>
+</li>
+
         
       
     
