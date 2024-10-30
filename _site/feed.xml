@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 31 Oct 2024 00:28:14 +0900</pubDate>
-    <lastBuildDate>Thu, 31 Oct 2024 00:28:14 +0900</lastBuildDate>
+    <pubDate>Thu, 31 Oct 2024 00:29:41 +0900</pubDate>
+    <lastBuildDate>Thu, 31 Oct 2024 00:29:41 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
@@ -32,7 +32,8 @@ Doug Lea는 컴퓨터 과학 교수로 동시성 프로그래밍, 멀티스레�
 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;java.util.concurrent&lt;/code&gt; 패키지가 제공하는 동시성 라이브러리는 매우 견고하고, 높은 성능을 낼 수 있도록 최적화 되어 있다. 그리고 다양한 동시성 시나리오를 대응할 수 있고, 무엇보다 개발자가 쉽고 편리하게 복잡한 동시성 문제를 다룰 수 있게 해준다.
 그는 동시성 프로그래밍의 복잡한 개념들을 실용적이고 효율적인 구현으로 변환하는 데 큰 역할을 했다.
 결론적으로, Doug Lea의 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;java.util.concurrent&lt;/code&gt; 패키지에 대한 기여는 자바의 동시성 프로그래밍을 크게 발전시키고, 이는 현대 자바 프로그래밍의 핵심적인 부분이 되었다.
-수 많은 자바 동시성 라이브러리들 뿐만 아니라, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Queue&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Deque&lt;/code&gt; 같은 자료 구조의 코드를 열어 보면 Doug Lea의 이름을 발견할 수 있을 것이다.&lt;/p&gt;
+수 많은 자바 동시성 라이브러리들 뿐만 아니라, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Queue&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Deque&lt;/code&gt; 같은 자료 구조의 코드를 열어 보면 Doug Lea의 이름을 발견할 수 있을 것이다.
+Doug lea 형님의 사진을 보면 많은 내공이 느껴진다.&lt;/p&gt;
 
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
 
