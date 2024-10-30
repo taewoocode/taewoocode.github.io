@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Java Mid 10 - Exception 1" />
+<meta property="og:title" content="Java Adv 11 - atomic operation - 2" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,17 +52,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Java Mid 10 - Exception 1 &middot; 일벌리는 개발자</title>
+<title>Java Adv 11 - atomic operation - 2 &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="예외 처리가 필요한 이유
+        content="atomic operation Thread
 
 "
 />
 <meta
         property="og:description"
-        content="예외 처리가 필요한 이유
+        content="atomic operation Thread
 
 "
 />
@@ -72,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/language/2024/09/18/Java-Mid-10/" />
-<meta property="og:url" content="http://localhost:4000/language/2024/09/18/Java-Mid-10/" />
+<link rel="canonical" href="http://localhost:4000/language/2024/10/14/Java-Adv-13/" />
+<meta property="og:url" content="http://localhost:4000/language/2024/10/14/Java-Adv-13/" />
 
 <link
         rel="alternate"
@@ -83,10 +83,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/language/2024/09/18/Java-Mid-09/" />
+<link rel="prev" href="http://localhost:4000/language/2024/10/14/Java-Adv-12/" />
  
-<link rel="next" href="http://localhost:4000/language/2024/09/18/Java-Mid-11/" />
-
 
 <link
         rel="apple-touch-icon"
@@ -183,16 +181,16 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-language/2024/09/18/Java-Mid-10" class="post" role="article">
+<article id="post-language/2024/10/14/Java-Adv-13" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      Java Mid 10 - Exception 1
+      Java Adv 11 - atomic operation - 2
       
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
+      <time datetime="2024-10-14T00:00:00+09:00">14 Oct 2024</time>
       
 
 
@@ -267,133 +265,36 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
     </style>
 
     <!--<br />-->
-    <h2 id="예외-처리가-필요한-이유">예외 처리가 필요한 이유</h2>
+    <h2 id="atomic-operation-thread">atomic operation Thread</h2>
 
-<p>프로그램 실행 중에 발생할 수 있는 예상치 못한 상황, 즉 예외(Exception)을 처리하기 위해서 나온 메커니즘이 예외처리이다. 프로그램의 안정성과 신뢰성을 높이는 아주 중요한 역할을 한다.</p>
+<p><img width="695" alt="image" src="https://github.com/user-attachments/assets/507aaa1f-ab38-4715-b4a3-456996cbe944" /></p>
 
-<h3 id="자바-예외-키워드">자바 예외 키워드</h3>
+<p>원자적이지 않은 연산을 멀티스레드 환경에서 실행하면 어떤 문제가 발생하는지 코드로 알아보자.
+<code class="language-plaintext highlighter-rouge">IncrementInteger</code> 는 숫자 값을 하나씩 증가시키는 기능을 제공한다. 
+예를 들어서 지금까지 접속한 사용자의 수 등을 계산할 때 사용할 수 있다.</p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">try</span><span class="o">,</span> <span class="k">catch</span><span class="o">,</span> <span class="k">finally</span><span class="o">,</span> <span class="k">throw</span><span class="o">,</span> <span class="kd">throws</span>
-</code></pre></div></div>
-<p><img width="702" alt="image" src="https://github.com/user-attachments/assets/d86c5a4a-2159-4521-9680-6601c02f1d8b" /></p>
-<ul>
-  <li>Object: 자바에서 기본형을 제외한 모든 것은 객체이다. 예외도 객체
-    <ul>
-      <li>모든 객체의 어머니 아버지는 Object이므로 예외도 Objcet가 최상위 부모이다.</li>
-    </ul>
-  </li>
-  <li>Thorable: 최상위 예외이다. 하위에 Excepiton과 Error가 존재한다.</li>
-  <li>Error: 메모리 부족 및 심각한 시스템 오류와 같이 애플리케이션이 복구가 불가능한 시스템이다. 이 예외는 잡기가 힘들다.</li>
-  <li>Exception: 체크 예외: 컴파일러가 체크하는 체크예외이다.</li>
-  <li>RuntimeException: 언체크 예외, 런타임 예외, 컴파일러가 체크하지 않는 예외이다.
-    <ul>
-      <li>RuntimeException` 과 그 자식 예외는 모두 언체크 예외이다.</li>
-    </ul>
-  </li>
-</ul>
+<p><img width="695" alt="image" src="https://github.com/user-attachments/assets/aa6dfdb1-d4b9-418c-b6a2-986cde809cce" /></p>
 
-<h2 id="체크-예외-vs-언체크-예외런타임-예외">체크 예외 vs 언체크 예외(런타임 예외)</h2>
+<p>1000개의 스레드가 increment 메서드를 호출하여 IncrementInteger 객체의 값을 증가시키도록 한다. 
+모든 스레드가 종료된 후, 최종 증가된 값을 출력한다.
+대기 시간을 두는 이유는 모든 스레드가 동시에 increment()를 호출하면 각 스레드가 접근하는 타이밍이 거의 같아 경쟁 조건이 발생하지 않거나 최소한으로 발생할 수 있다.
+그러나 sleep(10)을 추가하면 스레드들이 순차적으로 약간의 시간 차이를 두고 메서드에 접근하게 되면서, 이미 increment() 
+연산을 진행 중인 다른 스레드와 동시에 겹쳐서 자원에 접근할 가능성이 높아진다.</p>
 
-<p>체크 예외는 발생한 예외를 개발자가 명시적으로 처리해야 한다. 그렇지 않으면 컴파일 오류가 발생한다. 언체크 예외는 개발자가 발생한 예외를 명시적으로 처리하지 않아도 된다.</p>
+<p><img width="695" alt="image" src="https://github.com/user-attachments/assets/5a976264-1bff-426e-82f9-840b1b9aca26" />
+<img width="695" alt="image" src="https://github.com/user-attachments/assets/842d7b2d-a758-4a12-ba28-074ad0398b95" /></p>
 
-<h3 id="체크-예외-checked-exception">체크 예외 (Checked Exception)</h3>
+<p>실행 결과를 보면 기대한 1000이 아니라 다른 숫자가 보인다. 아마도 실행 환경에 따라서 다르겠지만 1000이 아니라
+조금 더 적은 숫자가 보일 것이다. 물론 실행 환경에 따라서 1000이 보일 수도 있다.
+이 문제는 앞서 설명한 것 처럼 여러 스레드가 동시에 원자적이지 않은 <code class="language-plaintext highlighter-rouge">value++</code> 을 호출했기 때문에 발생한다.
+그럼 혹시 <code class="language-plaintext highlighter-rouge">volatile</code> 을 적용하면 될까?</p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.io.*</span><span class="o">;</span>
+<h2 id="reference">Reference</h2>
 
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CheckedExceptionExample</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">try</span> <span class="o">{</span>
-            <span class="c1">// 체크 예외: FileNotFoundException</span>
-            <span class="nc">FileReader</span> <span class="n">file</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">FileReader</span><span class="o">(</span><span class="s">"nonexistentfile.txt"</span><span class="o">);</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">FileNotFoundException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"파일을 찾을 수 없습니다: "</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+<p>김영한님의 자바 강의</p>
 
-</code></pre></div></div>
+<p><a href="https://naveen-metta.medium.com/atomic-operations-in-java-mastering-thread-safety-and-concurrency-7c3360ec0bc5">https://naveen-metta.medium.com/atomic-operations-in-java-mastering-thread-safety-and-concurrency-7c3360ec0bc5</a></p>
 
-<h3 id="언체크-예외-unchecked-exception">언체크 예외 (Unchecked Exception)</h3>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">UncheckedExceptionExample</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="c1">// 언체크 예외: ArithmeticException</span>
-        <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">/</span> <span class="mi">0</span><span class="o">;</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"결과: "</span> <span class="o">+</span> <span class="n">result</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-
-</code></pre></div></div>
-
-<ul>
-  <li><strong>체크 예외</strong>는 <code class="language-plaintext highlighter-rouge">FileNotFoundException</code>처럼 반드시 <code class="language-plaintext highlighter-rouge">try-catch</code>로 처리하거나 메서드 선언부에 <code class="language-plaintext highlighter-rouge">throws</code>로 명시해야 컴파일 오류가 발생하지 않는다.</li>
-  <li><strong>언체크 예외</strong>는 <code class="language-plaintext highlighter-rouge">ArithmeticException</code>처럼 처리하지 않아도 컴파일이 가능하지만, 실행 시 예외가 발생한다.</li>
-</ul>
-
-<h2 id="예외-기본-규칙">예외 기본 규칙</h2>
-
-<p>예외는 폭탄 돌리기랑 비슷하다. 잡아서 처리하거나 처리하지 못한다면 밖으로 던져야 한다. (여기서의 밖은 호출한 곳을 말한다.)</p>
-
-<p>예외를 잡으면 지정된 예외뿐만이 아닌 그 예외의 모든 자식들이 가진 예외도 잡을 수 있다. 예를 들어서 Exception을 catch로 잡으면 그 하위 예외들도 모두 잡을 수 있다. 또는 thorws로 던진다면 그 하위 예외들 또한 모두 잡을 수 있다.</p>
-
-<h2 id="thorw와-thorws의-차이까다로웠음">thorw와 thorws의 차이(까다로웠음)</h2>
-
-<h3 id="thorw">thorw</h3>
-
-<ul>
-  <li>프로그래머가 의도적으로 예외를 던질 때 사용</li>
-</ul>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ThrowExample</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="c1">// 직접 예외를 발생시킴</span>
-        <span class="k">throw</span> <span class="k">new</span> <span class="nf">NullPointerException</span><span class="o">(</span><span class="s">"예외가 발생했습니다!"</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<h3 id="thorws">thorws</h3>
-
-<ul>
-  <li>메서드가 체크 예외를 발생시킬 수 있음을 선언할 때 사용한다(예외 가능성이 있음).</li>
-</ul>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="kn">import</span> <span class="nn">java.io.*</span><span class="o">;</span>
-
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ThrowsExample</span> <span class="o">{</span>
-    <span class="c1">// 메서드가 FileNotFoundException을 던질 수 있음을 선언</span>
-    <span class="c1">// 예외가 발생할 수 있는 가능성을 적어둠</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">readFile</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">FileNotFoundException</span> <span class="o">{</span>
-        <span class="nc">FileReader</span> <span class="n">file</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">FileReader</span><span class="o">(</span><span class="s">"nonexistentfile.txt"</span><span class="o">);</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">try</span> <span class="o">{</span>
-            <span class="n">readFile</span><span class="o">();</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">FileNotFoundException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"파일을 찾을 수 없습니다: "</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-
-</code></pre></div></div>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">throw</code>는 <strong>직접 예외를 발생</strong>시키는 데 사용된다.</li>
-  <li><code class="language-plaintext highlighter-rouge">throws</code>는 <strong>메서드에서 예외가 발생할 수 있음을 선언</strong>하는 데 사용된다.</li>
-</ul>
-
-<h3 id="쉽게-설명하자면">쉽게 설명하자면</h3>
-
-<ul>
-  <li><em><code class="language-plaintext highlighter-rouge">throw</code></em>는 <strong>예외를 던지는</strong> 동작 자체를 의미해. 즉, 코드에서 “이 예외를 발생시켜라”라고 명령하는 것</li>
-  <li><em><code class="language-plaintext highlighter-rouge">throws</code></em>는 <strong>이 메서드에서 이런 예외가 발생할 수 있다</strong>고 미리 <strong>알려준다.</strong> 예외를 던질 수도 있으니까 호출한 쪽에서 준비하라는 뜻이다.</li>
-</ul>
-
-<h2 id="referrence">Referrence</h2>
-
-<p>인프런 김영한님의 자바 강의 + 나의 눈과 나의 뇌</p>
 
     <br />
     <br />
@@ -407,12 +308,12 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=Java Mid 10 - Exception 1&amp;url=http://localhost:4000/language/2024/09/18/Java-Mid-10/"
+    <a href="http://twitter.com/share?text=Java Adv 11 - atomic operation - 2&amp;url=http://localhost:4000/language/2024/10/14/Java-Adv-13/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/09/18/Java-Mid-10/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/10/14/Java-Adv-13/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -434,21 +335,8 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
       
       
         
-        
           
-
-
-<li class="h4">
-  <a href="/language/2024/10/14/Java-Adv-13/" data-flip="title">
-    <span>Java Adv 11 - atomic operation - 2</span>
-  </a>
-  <small><time datetime="2024-10-14T00:00:00+09:00">
-    14 Oct 2024
-  </time></small>
-</li>
-
-        
-      
+          
         
         
           
@@ -482,6 +370,19 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
         
       
         
+        
+          
+
+
+<li class="h4">
+  <a href="/language/2024/10/05/Java-Adv-10/" data-flip="title">
+    <span>Java Adv 10 - wait, notify</span>
+  </a>
+  <small><time datetime="2024-10-05T00:00:00+09:00">
+    05 Oct 2024
+  </time></small>
+</li>
+
         
       
     
