@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="백준 2910 문제풀이" />
+<meta property="og:title" content="백준 1253 문제풀이" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -56,7 +56,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>백준 2910 문제풀이 &middot; 일벌리는 개발자</title>
+<title>백준 1253 문제풀이 &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
@@ -76,8 +76,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/cs/2024/10/07/Algorithm-15/" />
-<meta property="og:url" content="http://localhost:4000/cs/2024/10/07/Algorithm-15/" />
+<link rel="canonical" href="http://localhost:4000/cs/2024/10/10/Algorithm-16/" />
+<meta property="og:url" content="http://localhost:4000/cs/2024/10/10/Algorithm-16/" />
 
 <link
         rel="alternate"
@@ -87,9 +87,9 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/cs/2024/10/07/Algorithm-14/" />
+<link rel="prev" href="http://localhost:4000/cs/2024/10/10/Algorithm-15/" />
  
-<link rel="next" href="http://localhost:4000/language/2024/10/08/Java-Adv-11/" />
+<link rel="next" href="http://localhost:4000/cs/2024/10/11/Algorithm-17/" />
 
 
 <link
@@ -187,16 +187,16 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-cs/2024/10/07/Algorithm-15" class="post" role="article">
+<article id="post-cs/2024/10/10/Algorithm-16" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      백준 2910 문제풀이
+      백준 1253 문제풀이
       
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-10-07T00:00:00+09:00">07 Oct 2024</time>
+      <time datetime="2024-10-10T00:00:00+09:00">10 Oct 2024</time>
       
 
 
@@ -275,76 +275,86 @@ on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
     <!--<br />-->
     <h2 id="문제-링크">문제 링크</h2>
 
-<p><a href="https://www.acmicpc.net/problem/2910">https://www.acmicpc.net/problem/2910</a></p>
+<p><a href="https://www.acmicpc.net/problem/1253">https://www.acmicpc.net/problem/1253</a></p>
 
 <h2 id="문제-설명">문제 설명</h2>
 
-<p>위대한 해커 창영이는 모든 암호를 깨는 방법을 발견했다. 
-그 방법은 빈도를 조사하는 것이다.
-창영이는 말할 수 없는 방법을 이용해서 현우가 강산이에게 보내는 메시지를 획득했다.
-이 메시지는 숫자 N개로 이루어진 수열이고, 숫자는 모두 C보다 작거나 같다. 
-창영이는 이 숫자를 자주 등장하는 빈도순대로 정렬하려고 한다.
-만약, 수열의 두 수 X와 Y가 있을 때, X가 Y보다 수열에서 많이 등장하는 경우에는 X가 Y보다 앞에 있어야 한다. 
-만약, 등장하는 횟수가 같다면, 먼저 나온 것이 앞에 있어야 한다.
-이렇게 정렬하는 방법을 빈도 정렬이라고 한다.
-수열이 주어졌을 때, 빈도 정렬을 하는 프로그램을 작성하시오.</p>
+<p>N개의 수 중에서 어떤 수가 다른 수 두 개의 합으로 나타낼 수 있다면 그 수를 “좋다(GOOD)”고 한다.
+N개의 수가 주어지면 그 중에서 좋은 수의 개수는 몇 개인지 출력하라.
+수의 위치가 다르면 값이 같아도 다른 수이다.</p>
 
 <h2 id="문제-분석">문제 분석</h2>
 
-<p>문제에서 바로 힌트가 주어진다. x,y가 있을 때 많이 등장하는 수가 앞으로 오는 순서로 정렬을 시도한다.
-pair&lt;int,int&gt; pv를 활용하여 pair&lt;숫자, 빈도수&gt; 를 기준으로 정렬을 하는 것으로 기준점을 잡았다.
-따라서 정렬을 할 수 있는 cmp함수를 만드는 것으로 문제를 해결한다.</p>
+<p>문제가 짧다고 만만하게 보면 안된다.
+하지만 전의 문제와 같이 투포인터 알고리즘을 이용하여 문제를 해결하면 되겠다고 생각했다.
+인덱스 범위를 초반, 그리고 끝범위로 지정을 해주고, targetNumber를 탐색하면 된다.
+left가 right보다 작은 동안 반복된다. (두 포인터가 교차하지 않을 때까지)
+그리고 현재 left 포인터가 i와 같으면, 즉 현재 타겟 숫자와 같은 인덱스를 가리키면 left를 증가시켜서 그 인덱스를 건너뛴다. 
+이 경우는 현재 target과 같은 숫자를 더하지 않기 위해서이다.
+합이 target과 같을 경우는 좋은 수를 찾은 것이므로 goodCount를 증가시키고 내부 루프를 종료한다.
+합이 target보다 작을 경우는 left를 증가시켜서 더 큰 숫자를 찾도록 한다.
+합이 target보다 클 경우는 right를 감소시켜서 더 작은 숫자를 찾도록 한다.
+그리고 마지막으로 찾은 goodCount를 출력하면 끝.</p>
 
 <h2 id="코드">코드</h2>
 
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span><span class="cpf">&lt;bits/stdc++.h&gt;</span><span class="cp">
-</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
-<span class="kt">int</span> <span class="n">n</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">a</span><span class="p">[</span><span class="mi">1004</span><span class="p">];</span>
-<span class="n">map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">mp</span><span class="p">,</span> <span class="n">mp_first</span><span class="p">;</span>
-<span class="n">vector</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">pv</span><span class="p">;</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.*</span><span class="o">;</span>
 
-<span class="kt">bool</span> <span class="nf">cmp</span><span class="p">(</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">a</span><span class="p">,</span> <span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">b</span><span class="p">){</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">second</span> <span class="o">==</span> <span class="n">b</span><span class="p">.</span><span class="n">second</span><span class="p">){</span>
-        <span class="k">return</span> <span class="n">mp_first</span><span class="p">[</span><span class="n">a</span><span class="p">.</span><span class="n">first</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">mp_first</span><span class="p">[</span><span class="n">b</span><span class="p">.</span><span class="n">first</span><span class="p">];</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">a</span><span class="p">.</span><span class="n">second</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">.</span><span class="n">second</span><span class="p">;</span>
-<span class="p">}</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">P1253</span> <span class="o">{</span>
+    <span class="kd">static</span> <span class="kt">int</span> <span class="n">n</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">IOException</span> <span class="o">{</span>
+        <span class="nc">BufferedReader</span> <span class="n">bf</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">BufferedReader</span><span class="o">(</span><span class="k">new</span> <span class="nc">InputStreamReader</span><span class="o">(</span><span class="nc">System</span><span class="o">.</span><span class="na">in</span><span class="o">));</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">parseInt</span><span class="o">(</span><span class="n">bf</span><span class="o">.</span><span class="na">readLine</span><span class="o">());</span>
+        <span class="nc">StringTokenizer</span> <span class="n">st</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StringTokenizer</span><span class="o">(</span><span class="n">bf</span><span class="o">.</span><span class="na">readLine</span><span class="o">());</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
 
-<span class="kt">int</span> <span class="n">main</span><span class="p">(){</span>
-    <span class="n">ios_base</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
-    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="nb">NULL</span><span class="p">),</span> <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
-    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="n">c</span><span class="p">;</span>
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
-        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-        <span class="n">mp</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">++</span><span class="p">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">st</span><span class="o">.</span><span class="na">hasMoreTokens</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="nc">Integer</span><span class="o">.</span><span class="na">parseInt</span><span class="o">(</span><span class="n">st</span><span class="o">.</span><span class="na">nextToken</span><span class="o">()));</span>
+        <span class="o">}</span>
 
-        <span class="k">if</span><span class="p">(</span><span class="n">mp_first</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">){</span>
-            <span class="n">mp_first</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">for</span><span class="p">(</span><span class="k">auto</span> <span class="n">it</span> <span class="o">:</span> <span class="n">mp</span><span class="p">){</span>
-        <span class="n">pv</span><span class="p">.</span><span class="n">push_back</span><span class="p">({</span><span class="n">it</span><span class="p">.</span><span class="n">first</span><span class="p">,</span> <span class="n">it</span><span class="p">.</span><span class="n">second</span><span class="p">});</span>
-    <span class="p">}</span>
-    <span class="n">sort</span><span class="p">(</span><span class="n">pv</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">pv</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">cmp</span><span class="p">);</span>
+        <span class="nc">Collections</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">list</span><span class="o">);</span>
+        <span class="kt">int</span> <span class="n">goodCount</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
 
-    <span class="k">for</span><span class="p">(</span><span class="k">auto</span> <span class="n">i</span> <span class="o">:</span> <span class="n">pv</span><span class="p">){</span>
-        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">i</span><span class="p">.</span><span class="n">second</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">){</span>
-            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">i</span><span class="p">.</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="sc">' '</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">target</span> <span class="o">=</span> <span class="n">list</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+            <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
 
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c1">// target과 같은 인덱스가 아닌 경우에만 합 계산</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">left</span> <span class="o">==</span> <span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">left</span><span class="o">++;</span>
+                    <span class="k">continue</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">right</span> <span class="o">==</span> <span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">right</span><span class="o">--;</span>
+                    <span class="k">continue</span><span class="o">;</span>
+                <span class="o">}</span>
+
+                <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="n">list</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">left</span><span class="o">)</span> <span class="o">+</span> <span class="n">list</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">right</span><span class="o">);</span>
+
+                <span class="k">if</span> <span class="o">(</span><span class="n">sum</span> <span class="o">==</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">goodCount</span><span class="o">++;</span>
+                    <span class="k">break</span><span class="o">;</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">sum</span> <span class="o">&lt;</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">left</span><span class="o">++;</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="n">right</span><span class="o">--;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">goodCount</span><span class="o">);</span>
+    <span class="o">}</span>
 </code></pre></div></div>
 
-<p>a.second == b.second를 보면 빈도수를 기준으로 빈도수가 같다면 첫 번째 등장 위치를 기반으로 정렬을 한다.
-아니라면 빈도수가 큰 것을 기준으로 정렬을 한다.</p>
+<p>Easy</p>
 
-<p><img width="1148" alt="image" src="https://github.com/user-attachments/assets/f5951668-d1fb-4185-a4dc-7301857690c2" /></p>
+<p><img width="1135" alt="image" src="https://github.com/user-attachments/assets/1d44bc64-245c-4866-8375-7184af91aeff" /></p>
 
 <h2 id="reference">Reference</h2>
 
-<p><a href="https://en.wikipedia.org/wiki/Quadtree">https://en.wikipedia.org/wiki/Quadtree</a></p>
+<p><a href="https://www.geeksforgeeks.org/two-pointers-technique/">https://www.geeksforgeeks.org/two-pointers-technique/</a></p>
 
     <br />
     <br />
@@ -358,12 +368,12 @@ pair&lt;int,int&gt; pv를 활용하여 pair&lt;숫자, 빈도수&gt; 를 기준�
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=백준 2910 문제풀이&amp;url=http://localhost:4000/cs/2024/10/07/Algorithm-15/"
+    <a href="http://twitter.com/share?text=백준 1253 문제풀이&amp;url=http://localhost:4000/cs/2024/10/10/Algorithm-16/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/cs/2024/10/07/Algorithm-15/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/cs/2024/10/10/Algorithm-16/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -417,22 +427,22 @@ pair&lt;int,int&gt; pv를 활용하여 pair&lt;숫자, 빈도수&gt; 를 기준�
         
       
         
+          
+          
+        
         
           
 
 
 <li class="h4">
-  <a href="/cs/2024/10/10/Algorithm-16/" data-flip="title">
-    <span>백준 1253 문제풀이</span>
+  <a href="/cs/2024/10/10/Algorithm-15/" data-flip="title">
+    <span>백준 1940 문제풀이</span>
   </a>
   <small><time datetime="2024-10-10T00:00:00+09:00">
     10 Oct 2024
   </time></small>
 </li>
 
-        
-      
-        
         
       
     

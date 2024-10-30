@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="백준 2910 문제풀이" />
+<meta property="og:title" content="Home" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -46,28 +46,22 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 ></script>
 
  
-<meta
-        property="og:image"
-        content="http://localhost:4000/assets//img/algorithm-logo.png"
-/>
-<br />
+<meta property="og:image" content="http://localhost:4000/assets/img/logo.png" />
 
 
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>백준 2910 문제풀이 &middot; 일벌리는 개발자</title>
+<title>Home &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="문제 링크
-
+        content="일을 벌여놔야 주워 담을 수 있습니다.
 "
 />
 <meta
         property="og:description"
-        content="문제 링크
-
+        content="일을 벌여놔야 주워 담을 수 있습니다.
 "
 />
 
@@ -76,8 +70,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/cs/2024/10/07/Algorithm-15/" />
-<meta property="og:url" content="http://localhost:4000/cs/2024/10/07/Algorithm-15/" />
+<link rel="canonical" href="http://localhost:4000/page-12/" />
+<meta property="og:url" content="http://localhost:4000/page-12/" />
 
 <link
         rel="alternate"
@@ -86,11 +80,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         href="http://localhost:4000/feed.xml"
 />
 
-
-<link rel="prev" href="http://localhost:4000/cs/2024/10/07/Algorithm-14/" />
  
-<link rel="next" href="http://localhost:4000/language/2024/10/08/Java-Adv-11/" />
-
 
 <link
         rel="apple-touch-icon"
@@ -186,17 +176,18 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
             data-image="/assets/img/dp.jpeg"
     >
       
+  
 
-<article id="post-cs/2024/10/07/Algorithm-15" class="post" role="article">
+<article id="post-framework/2024/09/17/Spring-02" class="post mb6" role="article">
   <header>
     <h1 class="post-title">
-      
-      백준 2910 문제풀이
-      
+      <a href="/framework/2024/09/17/Spring-02/" data-flip="title">
+      DockerFile로 Spring이미지를 만들어보자
+      </a>
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-10-07T00:00:00+09:00">07 Oct 2024</time>
+      <time datetime="2024-09-17T00:00:00+09:00">17 Sep 2024</time>
       
 
 
@@ -207,7 +198,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 
 
 
-in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
+in <a href="/category/framework/" data-flip="title">Framework</a>
 
       
 
@@ -219,7 +210,7 @@ in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
 
 
 
-on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
+on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
 
     </p>
 
@@ -232,228 +223,322 @@ on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
 
 
   
-  <div class="markdown-body">
+  <h2 id="도커파일-작성하기">도커파일 작성하기</h2>
 
-    <!-- 
-    <div class="head-image"><img src="http://localhost:4000/assets//img/algorithm-logo.png" /></div>
-    <br /> -->
-    <style>
-      .myAd1190 {
-        width: 48%;
-        height: 280px;
-      }
 
-      .myAd1290 {
-        width: 48%;
-        height: 280px;
-      }
-
-      @media(max-width: 800px) {
-        .myAd1190 {
-          display: none;
-        }
-
-        .myAd1290 {
-          width: 98%;
-        }
-      }
-
-      .row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        height: 300px;
-      }
-
-      .row-center {
-        display: flex;
-        justify-content: center;
-        height: 258px;
-      }
-    </style>
-
-    <!--<br />-->
-    <h2 id="문제-링크">문제 링크</h2>
-
-<p><a href="https://www.acmicpc.net/problem/2910">https://www.acmicpc.net/problem/2910</a></p>
-
-<h2 id="문제-설명">문제 설명</h2>
-
-<p>위대한 해커 창영이는 모든 암호를 깨는 방법을 발견했다. 
-그 방법은 빈도를 조사하는 것이다.
-창영이는 말할 수 없는 방법을 이용해서 현우가 강산이에게 보내는 메시지를 획득했다.
-이 메시지는 숫자 N개로 이루어진 수열이고, 숫자는 모두 C보다 작거나 같다. 
-창영이는 이 숫자를 자주 등장하는 빈도순대로 정렬하려고 한다.
-만약, 수열의 두 수 X와 Y가 있을 때, X가 Y보다 수열에서 많이 등장하는 경우에는 X가 Y보다 앞에 있어야 한다. 
-만약, 등장하는 횟수가 같다면, 먼저 나온 것이 앞에 있어야 한다.
-이렇게 정렬하는 방법을 빈도 정렬이라고 한다.
-수열이 주어졌을 때, 빈도 정렬을 하는 프로그램을 작성하시오.</p>
-
-<h2 id="문제-분석">문제 분석</h2>
-
-<p>문제에서 바로 힌트가 주어진다. x,y가 있을 때 많이 등장하는 수가 앞으로 오는 순서로 정렬을 시도한다.
-pair&lt;int,int&gt; pv를 활용하여 pair&lt;숫자, 빈도수&gt; 를 기준으로 정렬을 하는 것으로 기준점을 잡았다.
-따라서 정렬을 할 수 있는 cmp함수를 만드는 것으로 문제를 해결한다.</p>
-
-<h2 id="코드">코드</h2>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span><span class="cpf">&lt;bits/stdc++.h&gt;</span><span class="cp">
-</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
-<span class="kt">int</span> <span class="n">n</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">a</span><span class="p">[</span><span class="mi">1004</span><span class="p">];</span>
-<span class="n">map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">mp</span><span class="p">,</span> <span class="n">mp_first</span><span class="p">;</span>
-<span class="n">vector</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">pv</span><span class="p">;</span>
-
-<span class="kt">bool</span> <span class="nf">cmp</span><span class="p">(</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">a</span><span class="p">,</span> <span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">b</span><span class="p">){</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">second</span> <span class="o">==</span> <span class="n">b</span><span class="p">.</span><span class="n">second</span><span class="p">){</span>
-        <span class="k">return</span> <span class="n">mp_first</span><span class="p">[</span><span class="n">a</span><span class="p">.</span><span class="n">first</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">mp_first</span><span class="p">[</span><span class="n">b</span><span class="p">.</span><span class="n">first</span><span class="p">];</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">a</span><span class="p">.</span><span class="n">second</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">.</span><span class="n">second</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="kt">int</span> <span class="n">main</span><span class="p">(){</span>
-    <span class="n">ios_base</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
-    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="nb">NULL</span><span class="p">),</span> <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
-    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="n">c</span><span class="p">;</span>
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
-        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-        <span class="n">mp</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">++</span><span class="p">;</span>
-
-        <span class="k">if</span><span class="p">(</span><span class="n">mp_first</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">){</span>
-            <span class="n">mp_first</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">for</span><span class="p">(</span><span class="k">auto</span> <span class="n">it</span> <span class="o">:</span> <span class="n">mp</span><span class="p">){</span>
-        <span class="n">pv</span><span class="p">.</span><span class="n">push_back</span><span class="p">({</span><span class="n">it</span><span class="p">.</span><span class="n">first</span><span class="p">,</span> <span class="n">it</span><span class="p">.</span><span class="n">second</span><span class="p">});</span>
-    <span class="p">}</span>
-    <span class="n">sort</span><span class="p">(</span><span class="n">pv</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">pv</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">cmp</span><span class="p">);</span>
-
-    <span class="k">for</span><span class="p">(</span><span class="k">auto</span> <span class="n">i</span> <span class="o">:</span> <span class="n">pv</span><span class="p">){</span>
-        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">i</span><span class="p">.</span><span class="n">second</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">){</span>
-            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">i</span><span class="p">.</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="sc">' '</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>a.second == b.second를 보면 빈도수를 기준으로 빈도수가 같다면 첫 번째 등장 위치를 기반으로 정렬을 한다.
-아니라면 빈도수가 큰 것을 기준으로 정렬을 한다.</p>
-
-<p><img width="1148" alt="image" src="https://github.com/user-attachments/assets/f5951668-d1fb-4185-a4dc-7301857690c2" /></p>
-
-<h2 id="reference">Reference</h2>
-
-<p><a href="https://en.wikipedia.org/wiki/Quadtree">https://en.wikipedia.org/wiki/Quadtree</a></p>
-
-    <br />
-    <br />
-  </div>
+  <p class="read-more"><a class="heading" href="/framework/2024/09/17/Spring-02/" data-flip="title">Continue reading </a>
+  </p>
   
 
 </article>
 
-<!--<hr class="dingbat" />-->
-<!--
-<div class="share">
-  <h2>Share this post</h2>
-  <div class="share-body">
-    <a href="http://twitter.com/share?text=백준 2910 문제풀이&amp;url=http://localhost:4000/cs/2024/10/07/Algorithm-15/"
-      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-      <span class="icon-twitter">
-      </span>
-    </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/cs/2024/10/07/Algorithm-15/"
-      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-      <span class="icon-facebook">
-      </span>
-    </a>
-  </div>
-</div>
--->
-<br />
+
+  
+
+<article id="post-devops/2024/09/17/Infra-01" class="post mb6" role="article">
+  <header>
+    <h1 class="post-title">
+      <a href="/devops/2024/09/17/Infra-01/" data-flip="title">
+      꼭 CPU를 지표로 스케일링해야 할까?
+      </a>
+    </h1>
+
+    <p class="post-date heading">
+      <time datetime="2024-09-17T00:00:00+09:00">17 Sep 2024</time>
+      
 
 
 
 
-<aside class="related" role="complementary">
-  <h2 class="hr">Related Posts</h2>
 
-  <ul class="related-posts">
+
+
+
+
+in <a href="/category/devops/" data-flip="title">Devops</a>
+
+      
+
+
+
+
+
+
+
+
+
+on <a href="/tag/devops-aws/" data-flip="title">aws</a>
+
+    </p>
+
     
+  <div class="hr" style="padding-bottom:0"></div>
+
+
+  </header>
+  
+
+
+  
+  <h2 id="netfunnel">NetFunnel</h2>
+<p>STCLAB의 유튜브를 보고 학습한 내용을 정리한 글
+Autoscaling에 CPU지표만 중요한 것이 아닌 다양한 관점으로 트래픽을 예상할 수 있음이 인상깊었다.
+예를들면 롤드컵이 발생할 것을 미리 대비를 해서 서버를 증설하는 작업을 예시로 들 수 있다.</p>
+
+
+  <p class="read-more"><a class="heading" href="/devops/2024/09/17/Infra-01/" data-flip="title">Continue reading </a>
+  </p>
+  
+
+</article>
+
+
+  
+
+<article id="post-life/2024/09/16/daily-01" class="post mb6" role="article">
+  <header>
+    <h1 class="post-title">
+      <a href="/life/2024/09/16/daily-01/" data-flip="title">
+      블로그 시작의 계기
+      </a>
+    </h1>
+
+    <p class="post-date heading">
+      <time datetime="2024-09-16T00:00:00+09:00">16 Sep 2024</time>
       
+
+
+
+
+
+
+
+
+
+in <a href="/category/life/" data-flip="title">Life</a>
+
       
-      
-        
-        
-          
 
 
-<li class="h4">
-  <a href="/cs/2024/10/11/Algorithm-18/" data-flip="title">
-    <span>Sliding Window</span>
-  </a>
-  <small><time datetime="2024-10-11T00:00:00+09:00">
-    11 Oct 2024
-  </time></small>
-</li>
-
-        
-      
-        
-        
-          
 
 
-<li class="h4">
-  <a href="/cs/2024/10/11/Algorithm-17/" data-flip="title">
-    <span>백준 12891 문제풀이</span>
-  </a>
-  <small><time datetime="2024-10-11T00:00:00+09:00">
-    11 Oct 2024
-  </time></small>
-</li>
-
-        
-      
-        
-        
-          
 
 
-<li class="h4">
-  <a href="/cs/2024/10/10/Algorithm-16/" data-flip="title">
-    <span>백준 1253 문제풀이</span>
-  </a>
-  <small><time datetime="2024-10-10T00:00:00+09:00">
-    10 Oct 2024
-  </time></small>
-</li>
 
-        
-      
-        
-        
-      
+
+
+on <a href="/tag/daily-daily/" data-flip="title">Daily</a>
+
+    </p>
+
     
+  <div class="hr" style="padding-bottom:0"></div>
+
+
+  </header>
+  
+
+
+  
+  <h2 id="시작">시작</h2>
+
+
+  <p class="read-more"><a class="heading" href="/life/2024/09/16/daily-01/" data-flip="title">Continue reading </a>
+  </p>
+  
+
+</article>
+
+
+  
+
+<article id="post-life/2024/09/16/books-01" class="post mb6" role="article">
+  <header>
+    <h1 class="post-title">
+      <a href="/life/2024/09/16/books-01/" data-flip="title">
+      객체지향의 사실과 오해를 읽으며
+      </a>
+    </h1>
+
+    <p class="post-date heading">
+      <time datetime="2024-09-16T00:00:00+09:00">16 Sep 2024</time>
+      
+
+
+
+
+
+
+
+
+
+in <a href="/category/life/" data-flip="title">Life</a>
+
+      
+
+
+
+
+
+
+
+
+
+on <a href="/tag/daily-books/" data-flip="title">Books</a>
+
+    </p>
+
+    
+  <div class="hr" style="padding-bottom:0"></div>
+
+
+  </header>
+  
+
+
+  
+  <h2 id="객체지향의-사실과-오해">객체지향의 사실과 오해</h2>
+
+
+  <p class="read-more"><a class="heading" href="/life/2024/09/16/books-01/" data-flip="title">Continue reading </a>
+  </p>
+  
+
+</article>
+
+
+  
+
+<article id="post-framework/2024/09/16/Spring-basic-01" class="post mb6" role="article">
+  <header>
+    <h1 class="post-title">
+      <a href="/framework/2024/09/16/Spring-basic-01/" data-flip="title">
+      Spring Basic 01 -제어의 역전, ApplicationContext-
+      </a>
+    </h1>
+
+    <p class="post-date heading">
+      <time datetime="2024-09-16T00:00:00+09:00">16 Sep 2024</time>
+      
+
+
+
+
+
+
+
+
+
+in <a href="/category/framework/" data-flip="title">Framework</a>
+
+      
+
+
+
+
+
+
+
+
+
+on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
+
+    </p>
+
+    
+  <div class="hr" style="padding-bottom:0"></div>
+
+
+  </header>
+  
+
+
+  
+  <h2 id="제어의-역전inversion-of-control">제어의 역전(Inversion of Control)</h2>
+
+
+  <p class="read-more"><a class="heading" href="/framework/2024/09/16/Spring-basic-01/" data-flip="title">Continue reading </a>
+  </p>
+  
+
+</article>
+
+
+  
+
+<article id="post-life/2024/06/12/daily-03" class="post mb6" role="article">
+  <header>
+    <h1 class="post-title">
+      <a href="/life/2024/06/12/daily-03/" data-flip="title">
+      졸업작품 이야기
+      </a>
+    </h1>
+
+    <p class="post-date heading">
+      <time datetime="2024-06-12T00:00:00+09:00">12 Jun 2024</time>
+      
+
+
+
+
+
+
+
+
+
+in <a href="/category/life/" data-flip="title">Life</a>
+
+      
+
+
+
+
+
+
+
+
+
+on <a href="/tag/daily-daily/" data-flip="title">Daily</a>
+
+    </p>
+
+    
+  <div class="hr" style="padding-bottom:0"></div>
+
+
+  </header>
+  
+
+
+  
+  <h2 id="들어가기에-앞서-mfc-프로그래밍이란">들어가기에 앞서 MFC 프로그래밍이란?</h2>
+
+
+  <p class="read-more"><a class="heading" href="/life/2024/06/12/daily-03/" data-flip="title">Continue reading </a>
+  </p>
+  
+
+</article>
+
+
+
+<h2 class="sr-only">Pagination</h2>
+<nav class="pagination heading" role="navigation">
+  <ul>
+    <li class="pagination-item older" >
+      
+        <span>Older</span>
+      
+    </li>
+    <li class="pagination-item newer" >
+      
+        <a rel="prev" href="/page-11/">Newer</a>
+      
+    </li>
   </ul>
-</aside>
-  <aside class="comments" role="complementary">
-  <h2>Comments</h2>
-  <hr/>
+</nav>
 
-  <script src="https://utteranc.es/client.js"
-          repo="taewoocode/taewoocode.github.io"
-          issue-term="title"
-          theme="github-light"
-          crossorigin="anonymous"
-          async>
-  </script>
-  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
-</aside>
-
-
-       <footer>
+  <footer>
   <hr/>
   
     <p>© 2022. by taewoo</p>
