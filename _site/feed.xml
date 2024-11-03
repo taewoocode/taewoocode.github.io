@@ -6,12 +6,92 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 31 Oct 2024 01:01:15 +0900</pubDate>
-    <lastBuildDate>Thu, 31 Oct 2024 01:01:15 +0900</lastBuildDate>
+    <pubDate>Sun, 03 Nov 2024 22:49:48 +0900</pubDate>
+    <lastBuildDate>Sun, 03 Nov 2024 22:49:48 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
-        <title>Java Adv 11 - atomic operation - 2</title>
+        <title>Java Adv 13 - atomic operation - 3</title>
+        <description>&lt;h2 id=&quot;atomicinteger&quot;&gt;AtomicInteger&lt;/h2&gt;
+
+&lt;p&gt;자바는 앞서 만든 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SyncInteger&lt;/code&gt; 와 같이 멀티스레드 상황에서 안전하게 증가 연산을 수행할 수 있는
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AtomicInteger&lt;/code&gt; 라는 클래스를 제공한다. 이름 그대로 원자적인 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Integer&lt;/code&gt; 라는 뜻이다.
+다음과 같이 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MyAtomicInteger&lt;/code&gt; 클래스를 만들고, 자바가 제공하는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AtomicInteger&lt;/code&gt; 를 사용해보자.&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;695&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/d20a0dea-2ee7-4577-9cfd-a861fddb0608&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;new AtomicInteger(0)&lt;/code&gt; : 초기값을 지정한다. 생략하면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0&lt;/code&gt; 부터 시작한다.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;incrementAndGet()&lt;/code&gt; : 값을 하나 증가하고 증가된 결과를 반환한다.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;get()&lt;/code&gt; : 현재 값을 반환한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img width=&quot;695&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/d8aff3ae-62b9-4519-b5c8-c3b72f1ec98b&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;실행 결과를 보면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AtomicInteger&lt;/code&gt; 를 사용하면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MyAtomicInteger&lt;/code&gt; 의 결과도 1000인 것을 확인할 수 있다.
+1000개의 스레드가 안전하게 증가 연산을 수행한 것이다.
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AtomicInteger&lt;/code&gt; 는 멀티스레드 상황에 안전하고 또 다양한 값 증가, 감소 연산을 제공한다. 
+특정 값을 증가하거나 감소해야 하는데 여러 스레드가 해당 값을 공유해야 한다면, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AtomicInteger&lt;/code&gt; 를 사용하면 된다.&lt;/p&gt;
+
+&lt;h2 id=&quot;성능-테스트&quot;&gt;성능 테스트&lt;/h2&gt;
+
+&lt;p&gt;&lt;img width=&quot;695&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/7ccee411-b642-4613-8c81-575e54924778&quot; /&gt;
+&lt;img width=&quot;695&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/b6c11592-7c41-4e95-b4b7-55e2ec12d589&quot; /&gt;
+&lt;img width=&quot;695&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/83c9b4c9-0c63-452c-b2ff-ed2f58363fa5&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;BasicInteger
+    &lt;ul&gt;
+      &lt;li&gt;가장 빠르다.&lt;/li&gt;
+      &lt;li&gt;CPU 캐시를 적극 사용한다. CPU 캐시의 위력을 알 수 있다.&lt;/li&gt;
+      &lt;li&gt;안전한 임계 영역도 없고, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;volatile&lt;/code&gt;도 사용하지 않기 때문에 멀티스레드 상황에는 사용할 수 없다.&lt;/li&gt;
+      &lt;li&gt;단일 스레드가 사용하는 경우에 효율적이다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;VolatileInteger
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;volatile&lt;/code&gt; 을 사용해서 CPU 캐시를 사용하지 않고 메인 메모리를 사용한다.&lt;/li&gt;
+      &lt;li&gt;안전한 임계 영역이 없기 때문에 멀티스레드 상황에는 사용할 수 없다.&lt;/li&gt;
+      &lt;li&gt;단일 스레드가 사용하기에는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BasicInteger&lt;/code&gt; 보다 느리다. 그리고 멀티스레드 상황에도 안전하지 않다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;SyncInteger
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt; 를 사용한 안전한 임계 영역이 있기 때문에 멀티스레드 상황에도 안전하게 사용할 수 있다.&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MyAtomicInteger&lt;/code&gt; 보다 성능이 느리다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;MyAtomicInteger
+    &lt;ul&gt;
+      &lt;li&gt;자바가 제공하는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AtomicInteger&lt;/code&gt; 를 사용한다. 멀티스레드 상황에 안전하게 사용할 수 있다.&lt;/li&gt;
+      &lt;li&gt;성능도 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Lock(ReentrantLock)&lt;/code&gt; 을 사용하는 경우보다 1.5 ~ 2배 정도 빠르다.&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SyncInteger&lt;/code&gt; 처럼 락을 사용하는 경우보다, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AtomicInteger&lt;/code&gt; 가 더 빠른 이유는 무엇일까? &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i++&lt;/code&gt; 연산은 원자적인 연산이 아니다.&lt;/li&gt;
+      &lt;li&gt;따라서 분명히 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Lock(ReentrantLock)&lt;/code&gt; 와 같은 락을 통해 안전한 임계 영역을 만들어야 할 것 같다.&lt;/li&gt;
+      &lt;li&gt;놀랍게도 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AtomicInteger&lt;/code&gt; 가 제공하는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;incrementAndGet()&lt;/code&gt; 메서드는 락을 사용하지 않고, 원자적 연산을 만들어낸다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;김영한님의 자바 강의&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://naveen-metta.medium.com/atomic-operations-in-java-mastering-thread-safety-and-concurrency-7c3360ec0bc5&quot;&gt;https://naveen-metta.medium.com/atomic-operations-in-java-mastering-thread-safety-and-concurrency-7c3360ec0bc5&lt;/a&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Tue, 15 Oct 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/language/2024/10/15/Java-Adv-14/</link>
+        <guid isPermaLink="true">http://localhost:4000/language/2024/10/15/Java-Adv-14/</guid>
+        
+        <category>java</category>
+        
+        
+        <category>language</category>
+        
+      </item>
+    
+      <item>
+        <title>Java Adv 13 - atomic operation - 2</title>
         <description>&lt;h2 id=&quot;atomic-operation-thread&quot;&gt;atomic operation Thread&lt;/h2&gt;
 
 &lt;p&gt;&lt;img width=&quot;695&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/507aaa1f-ab38-4715-b4a3-456996cbe944&quot; /&gt;&lt;/p&gt;
@@ -55,7 +135,7 @@
       </item>
     
       <item>
-        <title>Java Adv 11 - atomic operation - 1</title>
+        <title>Java Adv 12 - atomic operation - 1</title>
         <description>&lt;h2 id=&quot;atomic-operation&quot;&gt;atomic operation&lt;/h2&gt;
 
 &lt;p&gt;원자적 연산이란 컴퓨터 과학에서 &lt;strong&gt;더 이상 나눌 수 없는 단위로 수행되는 연산&lt;/strong&gt;을 의미한다. 
@@ -2999,82 +3079,6 @@ ex) 맛집에 줄을 서지만 특정 시간 만큼만 기다린다. 특정 시�
         <pubDate>Thu, 03 Oct 2024 00:00:00 +0900</pubDate>
         <link>http://localhost:4000/language/2024/10/03/Java-Adv-07/</link>
         <guid isPermaLink="true">http://localhost:4000/language/2024/10/03/Java-Adv-07/</guid>
-        
-        <category>java</category>
-        
-        
-        <category>language</category>
-        
-      </item>
-    
-      <item>
-        <title>Java Adv 06 - Synchronized Ex</title>
-        <description>&lt;h2 id=&quot;thread-synchronized&quot;&gt;Thread Synchronized&lt;/h2&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SyncTest1BadMain&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;InterruptedException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;Counter&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;counter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Counter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;Runnable&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;task&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Runnable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-            &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-            &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10000&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;counter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;increment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;};&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;thread1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;task&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;thread2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;task&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-        &lt;span class=&quot;n&quot;&gt;thread1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;thread2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;thread1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;thread2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;결과: &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;counter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getCount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Counter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-        &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;increment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-        &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getCount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;img width=&quot;690&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/fd14e49d-fdc9-4f3a-812d-84a12f6ce7bb&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;기대한 값은 20000인데 왜 저런 값이 나올까?&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;629&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/e7c6a201-44c3-4811-be90-b73b9f8e2bcc&quot; /&gt;
-&lt;img width=&quot;656&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/65f5bce6-a4f1-48fe-be1d-0cb7f420fe90&quot; /&gt;
-&lt;img width=&quot;687&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/89385db4-eded-4730-880f-be5f4cc9c344&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;스레드 2개가 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;increment()&lt;/code&gt; 를 호출하기 때문에 기대하는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;count&lt;/code&gt; 의 결과는 2가 되어야 한다. 하지만 둘이 동시에 실행되기 때문에, 처음에 둘다 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;count&lt;/code&gt; 의 값을 0으로 읽었다.
-여기서 잘 보면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;count&lt;/code&gt; 의 값을 읽어서 계산하는 부분과 그 결과를 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;count&lt;/code&gt; 에 다시 넣는 부분으로 나누어져 있다. 따라서 여러 스레드가 동시에 실행되면 지금과 같은 문제가 발생할 수 있다.
-따라서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt; 키워드를 사용해서 한 번에 하나의 스레드만 실행할 수 있도록, 안전한 임계 영역을 만들어야 한다. (syncronized는 임계영역)
-&lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt;&lt;/strong&gt;를 붙임으로써 임계영역을 한 번에 걸어잠글 수 있는 락(lock)을 제공한다. 
-이제 여러 스레드 중 하나의 스레드가 먼저 임계영역 안으로 들어오면 락이 걸리고, 나머지 스레드들은 먼저 들어간 스레드가 작업을 마치고 임계영역 밖으로 나오기 전까지 대기하게 된다.
-참고로 지역변수 localValue는 다른 스레드와 절대 공유하지 않는다. thread1, thread2의 각각의 메모리 영역에서 생성되는 값이다.&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;김영한님의 자바 강의&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://stackoverflow.com/questions/20906548/why-is-synchronized-block-better-than-synchronized-method&quot;&gt;https://stackoverflow.com/questions/20906548/why-is-synchronized-block-better-than-synchronized-method&lt;/a&gt;&lt;/p&gt;
-
-</description>
-        <pubDate>Thu, 03 Oct 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/language/2024/10/03/Java-Adv-06/</link>
-        <guid isPermaLink="true">http://localhost:4000/language/2024/10/03/Java-Adv-06/</guid>
         
         <category>java</category>
         
