@@ -6,9 +6,67 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 03 Nov 2024 22:49:48 +0900</pubDate>
-    <lastBuildDate>Sun, 03 Nov 2024 22:49:48 +0900</lastBuildDate>
+    <pubDate>Mon, 04 Nov 2024 21:02:40 +0900</pubDate>
+    <lastBuildDate>Mon, 04 Nov 2024 21:02:40 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
+    
+      <item>
+        <title>Java Adv 13 - CAS operation - 1</title>
+        <description>&lt;h2 id=&quot;락-기반-방식의-문제점&quot;&gt;락 기반 방식의 문제점&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SyncInteger&lt;/code&gt; 와 같은 클래스는 데이터를 보호하기 위해 락을 사용한다.
+여기서 말하는 락은 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Lock(ReentrantLock)&lt;/code&gt; 등을 사용하는 것을 말한다.
+락은 특정 자원을 보호하기 위해 스레드가 해당 자원에 대한 접근하는 것을 제한한다. 
+락이 걸려 있는 동안 다른 스레드들은 해당 자원에 접근할 수 없고, 락이 해제될 때까지 대기해야 한다. 
+또한 락 기반 접근에서는 락을 획득하고 해제하는 데 시간이 소요된다. 예를 들어서 락을 사용하는 연산이 있다고 가정하자. 
+락을 사용하는 방식은 다음과 같이 작동한다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;락이 있는지 확인한다.&lt;/li&gt;
+  &lt;li&gt;락을 획득하고 임계 영역에 들어간다.&lt;/li&gt;
+  &lt;li&gt;작업을 수행한다.&lt;/li&gt;
+  &lt;li&gt;락을 반납한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;여기서 락을 획득하고 반납하는 과정이 계속 반복된다. 
+10000번의 연산이 있다면 10000번의 연산 모두 같은 과정을 반복한다. 
+이렇듯 락을 사용하는 방식은 직관적이지만 상대적으로 무거운 방식이다.&lt;/p&gt;
+
+&lt;h2 id=&quot;cas&quot;&gt;CAS&lt;/h2&gt;
+
+&lt;p&gt;이런 문제를 해결하기 위해 락을 걸지 않고 원자적인 연산을 수행할 수 있는 방법이 있는데, 
+이것을 CAS(Compare-And-Swap, Compare-And-Set) 연산이라 한다. 
+이 방법은 락을 사용하지 않기 때문에 락 프리(lock-free) 기법이라한다. 
+참고로 CAS 연산은 락을 완전히 대체하는 것은 아니고, &lt;strong&gt;작은&lt;/strong&gt; &lt;strong&gt;단위의&lt;/strong&gt; &lt;strong&gt;일부&lt;/strong&gt; &lt;strong&gt;영역에&lt;/strong&gt; &lt;strong&gt;적용&lt;/strong&gt;할 수 있다. 
+기본은 락을 사용하고, 특별한 경우에 CAS를 적용할 수 있다고 생각하면 된다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;677&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/80113216-229d-441f-b469-63a5d246d570&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;compareandset0-1&quot;&gt;compareAndSet(0, 1)&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;atomicInteger&lt;/code&gt; 가 가지고 있는 값이 현재 0이면 이 값을 1로 변경하라는 매우 단순한 메서드이다. 
+만약 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;atomicInteger&lt;/code&gt; 의 값이 현재 0이라면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;atomicInteger&lt;/code&gt; 의 값은 1로 변경된다. 
+이 경우 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;true&lt;/code&gt; 를 반환한다. 만약 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;atomicInteger&lt;/code&gt; 의 값이 현재 0이 아니라면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;atomicInteger&lt;/code&gt; 의 값은 변경되지 않는다. 이 경우&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;false&lt;/code&gt; 를 반환한다. 
+여기서 가장 중요한 내용이 있는데, &lt;strong&gt;**이&lt;/strong&gt; &lt;strong&gt;메서드는&lt;/strong&gt; &lt;strong&gt;원자적으로&lt;/strong&gt; &lt;strong&gt;실행&lt;/strong&gt;**된다는 점이다. 
+그리고 이 메서드가 제공하는 기능이 바로 CAS(compareAndSet) 연산이다.&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;김영한님의 자바 강의&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://naveen-metta.medium.com/atomic-operations-in-java-mastering-thread-safety-and-concurrency-7c3360ec0bc5&quot;&gt;https://naveen-metta.medium.com/atomic-operations-in-java-mastering-thread-safety-and-concurrency-7c3360ec0bc5&lt;/a&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 16 Oct 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/language/2024/10/16/Java-Adv-15/</link>
+        <guid isPermaLink="true">http://localhost:4000/language/2024/10/16/Java-Adv-15/</guid>
+        
+        <category>java</category>
+        
+        
+        <category>language</category>
+        
+      </item>
     
       <item>
         <title>Java Adv 13 - atomic operation - 3</title>
@@ -2991,99 +3049,6 @@ ex) 맛집에 줄을 서지만 특정 시간 만큼만 기다린다. 특정 시�
         
         
         <category>devops</category>
-        
-      </item>
-    
-      <item>
-        <title>Java Adv 07 - LockSupport</title>
-        <description>&lt;h2 id=&quot;locksupport&quot;&gt;LockSupport&lt;/h2&gt;
-
-&lt;h3 id=&quot;synchronized의-단점&quot;&gt;Synchronized의 단점&lt;/h3&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt;는 자바 1.0부터 제공되는 매우 편리한 기능이다. 그러나 몇 가지 단점이 있다.&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;&lt;strong&gt;무한 대기&lt;/strong&gt;
-    &lt;ul&gt;
-      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BLOCKED&lt;/code&gt; 상태의 스레드는 락이 풀릴 때까지 무한히 대기하게 된다.&lt;/li&gt;
-      &lt;li&gt;특정 시간까지만 대기하는 타임아웃이 없으며, 중간에 인터럽트가 불가능하다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;공정성&lt;/strong&gt;
-    &lt;ul&gt;
-      &lt;li&gt;락이 풀릴 때 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BLOCKED&lt;/code&gt; 상태의 여러 스레드 중 어떤 스레드가 락을 획득할지 알 수 없다.&lt;/li&gt;
-      &lt;li&gt;최악의 경우 특정 스레드가 매우 오랜 시간 동안 락을 획득하지 못할 수 있다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;이러한 문제를 해결하기 위해 자바 1.5부터 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;java.util.concurrent&lt;/code&gt; 패키지가 추가되었다. 이 패키지는 다양한 동시성 문제를 해결할 수 있는 클래스들을 포함하고 있다.&lt;/p&gt;
-
-&lt;h2 id=&quot;locksupport-1&quot;&gt;LockSupport&lt;/h2&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;LockSupport&lt;/code&gt;는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt;의 가장 큰 단점인 무한 대기 문제를 해결할 수 있는 도구이다.&lt;/p&gt;
-
-&lt;h3 id=&quot;주요-기능&quot;&gt;주요 기능&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;스레드 상태 변경&lt;/strong&gt; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;LockSupport&lt;/code&gt;는 스레드를 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;WAITING&lt;/code&gt; 상태로 변경한다. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;WAITING&lt;/code&gt; 상태의 스레드는 누군가가 깨워주기 전까지 대기하며, CPU 실행 스케줄링에 들어가지 않는다.
-    &lt;ol&gt;
-      &lt;li&gt;&lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;park()&lt;/code&gt;&lt;/strong&gt;&lt;/li&gt;
-    &lt;/ol&gt;
-    &lt;ul&gt;
-      &lt;li&gt;스레드를 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;WAITING&lt;/code&gt; 상태로 변경한다 (주차하다, 두다의 의미)
-        &lt;ol&gt;
-          &lt;li&gt;&lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;parkNanos(nanos)&lt;/code&gt;&lt;/strong&gt;&lt;/li&gt;
-        &lt;/ol&gt;
-      &lt;/li&gt;
-      &lt;li&gt;스레드를 지정한 나노초 동안만 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TIMED_WAITING&lt;/code&gt; 상태로 변경한다.&lt;/li&gt;
-      &lt;li&gt;지정한 시간이 지나면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TIMED_WAITING&lt;/code&gt; 상태에서 빠져나와 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUNNABLE&lt;/code&gt; 상태로 변경된다.
-        &lt;ol&gt;
-          &lt;li&gt;&lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;unpark(thread)&lt;/code&gt;&lt;/strong&gt;&lt;/li&gt;
-        &lt;/ol&gt;
-      &lt;/li&gt;
-      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;WAITING&lt;/code&gt; 상태의 대상 스레드를 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUNNABLE&lt;/code&gt; 상태로 변경한다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;이러한 기능들을 통해 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;LockSupport&lt;/code&gt;는 더 유연하고 세밀한 스레드 제어를 가능하게 한다.&lt;/p&gt;
-
-&lt;h2 id=&quot;thread-park&quot;&gt;Thread Park&lt;/h2&gt;
-
-&lt;p&gt;&lt;img width=&quot;643&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/1b368b5e-3e30-437b-9232-829a39d43ed3&quot; /&gt;
-&lt;img width=&quot;639&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/ea81ed79-9845-4682-b62b-0d92ab359b65&quot; /&gt;
-재밌는 점은 대기 상태로 바꾸는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;LockSupport.park()&lt;/code&gt; 는 매개변수가 없는데, 실행 가능 상태로 바꾸는
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;LockSupport.unpark(thread1)&lt;/code&gt; 는 왜 특정 스레드를 지정하는 매개변수가 있을까?
-왜냐하면 실행 중인 스레드는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;LockSupport.park()&lt;/code&gt; 를 호출해서 스스로 대기 상태에 빠질 수 있지만, 대기 상태의 스레드는 자신의 코드를 실행할 수 없기 때문이다. 따라서 외부 스레드의 도움을 받아야 깨어날 수 있다.&lt;/p&gt;
-
-&lt;h2 id=&quot;시간-대기&quot;&gt;&lt;strong&gt;시간&lt;/strong&gt; &lt;strong&gt;대기&lt;/strong&gt;&lt;/h2&gt;
-
-&lt;p&gt;&lt;img width=&quot;642&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/d2d917a4-3e62-4664-bfea-cffe8fc8a18e&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;parkNanos(nanos)&lt;/code&gt; : 스레드를 나노초 동안만 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TIMED_WAITING&lt;/code&gt; 상태로 변경한다. 지정한 나노초가 지나면
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TIMED_WAITING&lt;/code&gt;상태에서 빠져나와서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUNNABLE&lt;/code&gt; 상태로 변경된다.
-참고로 밀리초 동안만 대기하는 메서드는 없다. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;parkUntil(밀리초)&lt;/code&gt; 라는 메서드가 있는데, 이 메서드는 특정
-에포크(Epoch) 시간에 맞추어 깨어나는 메서드이다. 정확한 미래의 에포크 시점을 지정해야 한다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;608&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/346016de-2d8a-4d9d-bc60-490e0769f186&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;parkNanos(시간)&lt;/code&gt; 를 사용하면 지정한 시간 이후에 스레드가 깨어난다.
-1초 = 1000밀리초(ms) 2초 = 2,000,000,000나노초(ns) 2초의 간격으로 thread가 깨어나는 것을 확인할 수 있다.&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;김영한님의 자바 강의&lt;/p&gt;
-
-</description>
-        <pubDate>Thu, 03 Oct 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/language/2024/10/03/Java-Adv-07/</link>
-        <guid isPermaLink="true">http://localhost:4000/language/2024/10/03/Java-Adv-07/</guid>
-        
-        <category>java</category>
-        
-        
-        <category>language</category>
         
       </item>
     

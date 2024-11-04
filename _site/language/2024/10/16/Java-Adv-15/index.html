@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Home" />
+<meta property="og:title" content="Java Adv 13 - CAS operation - 1" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,16 +52,18 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Home &middot; 일벌리는 개발자</title>
+<title>Java Adv 13 - CAS operation - 1 &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="일을 벌여놔야 주워 담을 수 있습니다.
+        content="락 기반 방식의 문제점
+
 "
 />
 <meta
         property="og:description"
-        content="일을 벌여놔야 주워 담을 수 있습니다.
+        content="락 기반 방식의 문제점
+
 "
 />
 
@@ -70,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/page-7/" />
-<meta property="og:url" content="http://localhost:4000/page-7/" />
+<link rel="canonical" href="http://localhost:4000/language/2024/10/16/Java-Adv-15/" />
+<meta property="og:url" content="http://localhost:4000/language/2024/10/16/Java-Adv-15/" />
 
 <link
         rel="alternate"
@@ -80,6 +82,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         href="http://localhost:4000/feed.xml"
 />
 
+
+<link rel="prev" href="http://localhost:4000/language/2024/10/15/Java-Adv-14/" />
  
 
 <link
@@ -176,18 +180,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
             data-image="/assets/img/dp.jpeg"
     >
       
-  
 
-<article id="post-framework/2024/09/26/Spring-basic-11" class="post mb6" role="article">
+<article id="post-language/2024/10/16/Java-Adv-15" class="post" role="article">
   <header>
     <h1 class="post-title">
-      <a href="/framework/2024/09/26/Spring-basic-11/" data-flip="title">
-      Spring Basic 11 - Proxy Mode
-      </a>
+      
+      Java Adv 13 - CAS operation - 1
+      
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-09-26T00:00:00+09:00">26 Sep 2024</time>
+      <time datetime="2024-10-16T00:00:00+09:00">16 Oct 2024</time>
       
 
 
@@ -198,7 +201,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 
 
 
-in <a href="/category/framework/" data-flip="title">Framework</a>
+in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
 
       
 
@@ -210,7 +213,7 @@ in <a href="/category/framework/" data-flip="title">Framework</a>
 
 
 
-on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
+on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
 
     </p>
 
@@ -223,433 +226,198 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
 
 
   
-  <h2 id="프록시-모드로-사용해보기">프록시 모드로 사용해보기</h2>
+  <div class="markdown-body">
+
+    <!--  -->
+    <style>
+      .myAd1190 {
+        width: 48%;
+        height: 280px;
+      }
+
+      .myAd1290 {
+        width: 48%;
+        height: 280px;
+      }
+
+      @media(max-width: 800px) {
+        .myAd1190 {
+          display: none;
+        }
+
+        .myAd1290 {
+          width: 98%;
+        }
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 300px;
+      }
+
+      .row-center {
+        display: flex;
+        justify-content: center;
+        height: 258px;
+      }
+    </style>
+
+    <!--<br />-->
+    <h2 id="락-기반-방식의-문제점">락 기반 방식의 문제점</h2>
+
+<p><code class="language-plaintext highlighter-rouge">SyncInteger</code> 와 같은 클래스는 데이터를 보호하기 위해 락을 사용한다.
+여기서 말하는 락은 <code class="language-plaintext highlighter-rouge">synchronized</code> , <code class="language-plaintext highlighter-rouge">Lock(ReentrantLock)</code> 등을 사용하는 것을 말한다.
+락은 특정 자원을 보호하기 위해 스레드가 해당 자원에 대한 접근하는 것을 제한한다. 
+락이 걸려 있는 동안 다른 스레드들은 해당 자원에 접근할 수 없고, 락이 해제될 때까지 대기해야 한다. 
+또한 락 기반 접근에서는 락을 획득하고 해제하는 데 시간이 소요된다. 예를 들어서 락을 사용하는 연산이 있다고 가정하자. 
+락을 사용하는 방식은 다음과 같이 작동한다.</p>
+
+<ul>
+  <li>락이 있는지 확인한다.</li>
+  <li>락을 획득하고 임계 영역에 들어간다.</li>
+  <li>작업을 수행한다.</li>
+  <li>락을 반납한다.</li>
+</ul>
+
+<p>여기서 락을 획득하고 반납하는 과정이 계속 반복된다. 
+10000번의 연산이 있다면 10000번의 연산 모두 같은 과정을 반복한다. 
+이렇듯 락을 사용하는 방식은 직관적이지만 상대적으로 무거운 방식이다.</p>
+
+<h2 id="cas">CAS</h2>
+
+<p>이런 문제를 해결하기 위해 락을 걸지 않고 원자적인 연산을 수행할 수 있는 방법이 있는데, 
+이것을 CAS(Compare-And-Swap, Compare-And-Set) 연산이라 한다. 
+이 방법은 락을 사용하지 않기 때문에 락 프리(lock-free) 기법이라한다. 
+참고로 CAS 연산은 락을 완전히 대체하는 것은 아니고, <strong>작은</strong> <strong>단위의</strong> <strong>일부</strong> <strong>영역에</strong> <strong>적용</strong>할 수 있다. 
+기본은 락을 사용하고, 특별한 경우에 CAS를 적용할 수 있다고 생각하면 된다.</p>
+
+<p><img width="677" alt="image" src="https://github.com/user-attachments/assets/80113216-229d-441f-b469-63a5d246d570" /></p>
+
+<h2 id="compareandset0-1">compareAndSet(0, 1)</h2>
+
+<p><code class="language-plaintext highlighter-rouge">atomicInteger</code> 가 가지고 있는 값이 현재 0이면 이 값을 1로 변경하라는 매우 단순한 메서드이다. 
+만약 <code class="language-plaintext highlighter-rouge">atomicInteger</code> 의 값이 현재 0이라면 <code class="language-plaintext highlighter-rouge">atomicInteger</code> 의 값은 1로 변경된다. 
+이 경우 <code class="language-plaintext highlighter-rouge">true</code> 를 반환한다. 만약 <code class="language-plaintext highlighter-rouge">atomicInteger</code> 의 값이 현재 0이 아니라면 <code class="language-plaintext highlighter-rouge">atomicInteger</code> 의 값은 변경되지 않는다. 이 경우<code class="language-plaintext highlighter-rouge">false</code> 를 반환한다. 
+여기서 가장 중요한 내용이 있는데, <strong>**이</strong> <strong>메서드는</strong> <strong>원자적으로</strong> <strong>실행</strong>**된다는 점이다. 
+그리고 이 메서드가 제공하는 기능이 바로 CAS(compareAndSet) 연산이다.</p>
+
+<h2 id="reference">Reference</h2>
+
+<p>김영한님의 자바 강의</p>
+
+<p><a href="https://naveen-metta.medium.com/atomic-operations-in-java-mastering-thread-safety-and-concurrency-7c3360ec0bc5">https://naveen-metta.medium.com/atomic-operations-in-java-mastering-thread-safety-and-concurrency-7c3360ec0bc5</a></p>
 
 
-  <p class="read-more"><a class="heading" href="/framework/2024/09/26/Spring-basic-11/" data-flip="title">Continue reading </a>
-  </p>
+    <br />
+    <br />
+  </div>
   
 
 </article>
 
-
-  
-
-<article id="post-framework/2024/09/26/Spring-basic-10" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/framework/2024/09/26/Spring-basic-10/" data-flip="title">
-      Spring Basic 10 - Web Scope
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-26T00:00:00+09:00">26 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/framework/" data-flip="title">Framework</a>
-
-      
+<!--<hr class="dingbat" />-->
+<!--
+<div class="share">
+  <h2>Share this post</h2>
+  <div class="share-body">
+    <a href="http://twitter.com/share?text=Java Adv 13 - CAS operation - 1&amp;url=http://localhost:4000/language/2024/10/16/Java-Adv-15/"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="icon-twitter">
+      </span>
+    </a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/10/16/Java-Adv-15/"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="icon-facebook">
+      </span>
+    </a>
+  </div>
+</div>
+-->
+<br />
 
 
 
 
+<aside class="related" role="complementary">
+  <h2 class="hr">Related Posts</h2>
 
-
-
-
-
-on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
-
-    </p>
-
+  <ul class="related-posts">
     
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="웹-스코프"><strong>웹</strong> <strong>스코프</strong></h2>
-
-
-  <p class="read-more"><a class="heading" href="/framework/2024/09/26/Spring-basic-10/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-framework/2024/09/26/Spring-basic-09" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/framework/2024/09/26/Spring-basic-09/" data-flip="title">
-      Spring Basic 09 - Bean Scope 03
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-26T00:00:00+09:00">26 Sep 2024</time>
       
-
-
-
-
-
-
-
-
-
-in <a href="/category/framework/" data-flip="title">Framework</a>
-
       
+      
+        
+          
+          
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/language/2024/10/15/Java-Adv-14/" data-flip="title">
+    <span>Java Adv 13 - atomic operation - 3</span>
+  </a>
+  <small><time datetime="2024-10-15T00:00:00+09:00">
+    15 Oct 2024
+  </time></small>
+</li>
+
+        
+      
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/language/2024/10/14/Java-Adv-13/" data-flip="title">
+    <span>Java Adv 13 - atomic operation - 2</span>
+  </a>
+  <small><time datetime="2024-10-14T00:00:00+09:00">
+    14 Oct 2024
+  </time></small>
+</li>
+
+        
+      
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/language/2024/10/14/Java-Adv-12/" data-flip="title">
+    <span>Java Adv 12 - atomic operation - 1</span>
+  </a>
+  <small><time datetime="2024-10-14T00:00:00+09:00">
+    14 Oct 2024
+  </time></small>
+</li>
 
-
-
-on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
-
-    </p>
-
+        
+      
     
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="싱글톤-빈과-프로토타입-빈을-함께-사용할-때-마다-새로운-빈-형성하기">싱글톤 빈과 프로토타입 빈을 함께 사용할 때 마다 새로운 빈 형성하기</h2>
-
-
-  <p class="read-more"><a class="heading" href="/framework/2024/09/26/Spring-basic-09/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-framework/2024/09/26/Spring-basic-08" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/framework/2024/09/26/Spring-basic-08/" data-flip="title">
-      Spring Basic 08 - Bean Scope 02
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-26T00:00:00+09:00">26 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/framework/" data-flip="title">Framework</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="싱글톤과-프로토타입-빈">싱글톤과 프로토타입 빈</h2>
-
-
-  <p class="read-more"><a class="heading" href="/framework/2024/09/26/Spring-basic-08/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-framework/2024/09/26/Spring-basic-07" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/framework/2024/09/26/Spring-basic-07/" data-flip="title">
-      Spring Basic 07 - Bean Scope
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-26T00:00:00+09:00">26 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/framework/" data-flip="title">Framework</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="빈-스코프란"><strong>빈 스코프란</strong>?</h2>
-
-
-  <p class="read-more"><a class="heading" href="/framework/2024/09/26/Spring-basic-07/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-framework/2024/09/25/Spring-basic-06" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/framework/2024/09/25/Spring-basic-06/" data-flip="title">
-      Spring Basic 06 - 빈 생명주기 콜백
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-25T00:00:00+09:00">25 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/framework/" data-flip="title">Framework</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="bean-lifecycle">Bean LifeCycle</h2>
-
-
-  <p class="read-more"><a class="heading" href="/framework/2024/09/25/Spring-basic-06/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-framework/2024/09/25/Spring-basic-05" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/framework/2024/09/25/Spring-basic-05/" data-flip="title">
-      Spring Basic 05 - 애노테이션 직접 만들기
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-25T00:00:00+09:00">25 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/framework/" data-flip="title">Framework</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="애노테이션-만들기">애노테이션 만들기</h2>
-
-
-  <p class="read-more"><a class="heading" href="/framework/2024/09/25/Spring-basic-05/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-framework/2024/09/25/Spring-basic-04" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/framework/2024/09/25/Spring-basic-04/" data-flip="title">
-      Spring Basic 04 - Autowired 는 타입으로 조회를 한다
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-25T00:00:00+09:00">25 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/framework/" data-flip="title">Framework</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="autowired-는-타입으로-조회를-한다">@Autowired 는 타입으로 조회를 한다.</h2>
-
-
-  <p class="read-more"><a class="heading" href="/framework/2024/09/25/Spring-basic-04/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-
-<h2 class="sr-only">Pagination</h2>
-<nav class="pagination heading" role="navigation">
-  <ul>
-    <li class="pagination-item older" >
-      
-        <a rel="next" href="/page-8/">Older</a>
-      
-    </li>
-    <li class="pagination-item newer" >
-      
-        <a rel="prev" href="/page-6/">Newer</a>
-      
-    </li>
   </ul>
-</nav>
+</aside>
+  <aside class="comments" role="complementary">
+  <h2>Comments</h2>
+  <hr/>
 
-  <footer>
+  <script src="https://utteranc.es/client.js"
+          repo="taewoocode/taewoocode.github.io"
+          issue-term="title"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+</aside>
+
+
+       <footer>
   <hr/>
   
     <p>© 2022. by taewoo</p>
