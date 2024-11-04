@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Algorithm" />
+<meta property="og:title" content="백준 9012 문제풀이" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -56,16 +56,18 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Algorithm &middot; 일벌리는 개발자</title>
+<title>백준 9012 문제풀이 &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="
+        content="문제 링크
+
 "
 />
 <meta
         property="og:description"
-        content="
+        content="문제 링크
+
 "
 />
 
@@ -74,8 +76,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/tag/cs-algorithm/" />
-<meta property="og:url" content="http://localhost:4000/tag/cs-algorithm/" />
+<link rel="canonical" href="http://localhost:4000/cs/2024/10/17/Algorithm-19/" />
+<meta property="og:url" content="http://localhost:4000/cs/2024/10/17/Algorithm-19/" />
 
 <link
         rel="alternate"
@@ -84,8 +86,10 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         href="http://localhost:4000/feed.xml"
 />
 
+
+<link rel="prev" href="http://localhost:4000/language/2024/10/16/Java-Adv-15/" />
  
-<link rel="next" href="http://localhost:4000/tag/cs-db/" />
+<link rel="next" href="http://localhost:4000/cs/2024/10/18/Algorithm-20/" />
 
 
 <link
@@ -183,72 +187,12 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-
-  
-
-<article id="post-cs/2024/10/18/Algorithm-20" class="post mb6" role="article">
+<article id="post-cs/2024/10/17/Algorithm-19" class="post" role="article">
   <header>
     <h1 class="post-title">
-      <a href="/cs/2024/10/18/Algorithm-20/" data-flip="title">
-      백준 4949 문제풀이
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-10-18T00:00:00+09:00">18 Oct 2024</time>
       
-
-
-
-
-
-
-
-
-
-in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="문제-링크">문제 링크</h2>
-
-
-  <p class="read-more"><a class="heading" href="/cs/2024/10/18/Algorithm-20/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-cs/2024/10/17/Algorithm-19" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/cs/2024/10/17/Algorithm-19/" data-flip="title">
       백준 9012 문제풀이
-      </a>
+      
     </h1>
 
     <p class="post-date heading">
@@ -288,1118 +232,217 @@ on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
 
 
   
-  <h2 id="문제-링크">문제 링크</h2>
+  <div class="markdown-body">
 
+    <!-- 
+    <div class="head-image"><img src="http://localhost:4000/assets//img/algorithm-logo.png" /></div>
+    <br /> -->
+    <style>
+      .myAd1190 {
+        width: 48%;
+        height: 280px;
+      }
 
-  <p class="read-more"><a class="heading" href="/cs/2024/10/17/Algorithm-19/" data-flip="title">Continue reading </a>
-  </p>
+      .myAd1290 {
+        width: 48%;
+        height: 280px;
+      }
+
+      @media(max-width: 800px) {
+        .myAd1190 {
+          display: none;
+        }
+
+        .myAd1290 {
+          width: 98%;
+        }
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 300px;
+      }
+
+      .row-center {
+        display: flex;
+        justify-content: center;
+        height: 258px;
+      }
+    </style>
+
+    <!--<br />-->
+    <h2 id="문제-링크">문제 링크</h2>
+
+<p><a href="https://www.acmicpc.net/problem/9012">https://www.acmicpc.net/problem/9012</a></p>
+
+<h2 id="문제-설명">문제 설명</h2>
+
+<p>괄호 문자열(Parenthesis String, PS)은 두 개의 괄호 기호인 ‘(’ 와 ‘)’ 만으로 구성되어 있는 문자열이다. 
+그 중에서 괄호의 모양이 바르게 구성된 문자열을 올바른 괄호 문자열(Valid PS, VPS)이라고 부른다. 
+한 쌍의 괄호 기호로 된 “( )” 문자열은 기본 VPS 이라고 부른다. 
+만일 x 가 VPS 라면 이것을 하나의 괄호에 넣은 새로운 문자열 “(x)”도 VPS 가 된다. 
+그리고 두 VPS x 와 y를 접합(concatenation)시킨 새로운 문자열 xy도 VPS 가 된다. 
+예를 들어 “(())()”와 “((()))” 는 VPS 이지만 “(()(”, “(())()))” , 그리고 “(()” 는 모두 VPS 가 아닌 문자열이다.
+여러분은 입력으로 주어진 괄호 문자열이 VPS 인지 아닌지를 판단해서 그 결과를 YES 와 NO 로 나타내어야 한다.</p>
+
+<h2 id="문제-분석">문제 분석</h2>
+
+<p>문제는 짝을 지어주는 것으로 해결한다.
+문자열을 입력받아서 괄호의 짝을 찾아주는 것이 문제 해결의 핵심이다.
+“()()()()(“ 이러한 괄호가 들어온다면 NO를 출력해 주고, “()()()()”라는 문자열이 들어온다면 괄호의 모든 짝이 있으므로
+POP으로 스택에서 제거해 주면 된다. 사실 벡터로도 풀 수 있을 거 같긴 한데 나는 스택을 이용해서 해결했다.</p>
+
+<h2 id="코드">코드</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span><span class="cpf">&lt;bits/stdc++.h&gt;</span><span class="cp">
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
+<span class="n">string</span> <span class="n">s</span><span class="p">;</span>
+
+<span class="kt">bool</span> <span class="nf">check</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">){</span>
+    <span class="n">stack</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span> <span class="n">stk</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">char</span> <span class="n">c</span> <span class="o">:</span> <span class="n">s</span><span class="p">){</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">c</span> <span class="o">==</span> <span class="sc">'('</span><span class="p">)</span> <span class="n">stk</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+        <span class="k">else</span><span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">stk</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="n">stk</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+            <span class="k">else</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">stk</span><span class="p">.</span><span class="n">empty</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">(){</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">s</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">check</span><span class="p">(</span><span class="n">s</span><span class="p">)){</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"YES</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"NO</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>실력이 점점 늘고 있다~~</p>
+
+<p><img width="1133" alt="image" src="https://github.com/user-attachments/assets/e7564843-db7b-49ce-b206-79ced6812d65" /></p>
+
+<h2 id="reference">Reference</h2>
+
+<p>나의 뇌</p>
+
+    <br />
+    <br />
+  </div>
   
 
 </article>
 
-
-  
-
-<article id="post-cs/2024/10/11/Algorithm-18" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/cs/2024/10/11/Algorithm-18/" data-flip="title">
-      Sliding Window
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-10-11T00:00:00+09:00">11 Oct 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
-
-      
+<!--<hr class="dingbat" />-->
+<!--
+<div class="share">
+  <h2>Share this post</h2>
+  <div class="share-body">
+    <a href="http://twitter.com/share?text=백준 9012 문제풀이&amp;url=http://localhost:4000/cs/2024/10/17/Algorithm-19/"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="icon-twitter">
+      </span>
+    </a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/cs/2024/10/17/Algorithm-19/"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="icon-facebook">
+      </span>
+    </a>
+  </div>
+</div>
+-->
+<br />
 
 
 
 
+<aside class="related" role="complementary">
+  <h2 class="hr">Related Posts</h2>
 
-
-
-
-
-on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
-
-    </p>
-
+  <ul class="related-posts">
     
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="sliding-window">Sliding Window</h2>
-
-
-  <p class="read-more"><a class="heading" href="/cs/2024/10/11/Algorithm-18/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-cs/2024/10/11/Algorithm-17" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/cs/2024/10/11/Algorithm-17/" data-flip="title">
-      백준 12891 문제풀이
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-10-11T00:00:00+09:00">11 Oct 2024</time>
       
-
-
-
-
-
-
-
-
-
-in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
-
       
+      
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/cs/2024/10/18/Algorithm-20/" data-flip="title">
+    <span>백준 4949 문제풀이</span>
+  </a>
+  <small><time datetime="2024-10-18T00:00:00+09:00">
+    18 Oct 2024
+  </time></small>
+</li>
+
+        
+      
+        
+          
+          
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/cs/2024/10/11/Algorithm-18/" data-flip="title">
+    <span>Sliding Window</span>
+  </a>
+  <small><time datetime="2024-10-11T00:00:00+09:00">
+    11 Oct 2024
+  </time></small>
+</li>
+
+        
+      
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/cs/2024/10/11/Algorithm-17/" data-flip="title">
+    <span>백준 12891 문제풀이</span>
+  </a>
+  <small><time datetime="2024-10-11T00:00:00+09:00">
+    11 Oct 2024
+  </time></small>
+</li>
 
-
-
-on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
-
-    </p>
-
+        
+      
     
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="문제-링크">문제 링크</h2>
-
-
-  <p class="read-more"><a class="heading" href="/cs/2024/10/11/Algorithm-17/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-cs/2024/10/10/Algorithm-16" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/cs/2024/10/10/Algorithm-16/" data-flip="title">
-      백준 1253 문제풀이
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-10-10T00:00:00+09:00">10 Oct 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="문제-링크">문제 링크</h2>
-
-
-  <p class="read-more"><a class="heading" href="/cs/2024/10/10/Algorithm-16/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-cs/2024/10/10/Algorithm-15" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/cs/2024/10/10/Algorithm-15/" data-flip="title">
-      백준 1940 문제풀이
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-10-10T00:00:00+09:00">10 Oct 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="문제-링크">문제 링크</h2>
-
-
-  <p class="read-more"><a class="heading" href="/cs/2024/10/10/Algorithm-15/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-cs/2024/10/07/Algorithm-15" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/cs/2024/10/07/Algorithm-15/" data-flip="title">
-      백준 2910 문제풀이
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-10-07T00:00:00+09:00">07 Oct 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="문제-링크">문제 링크</h2>
-
-
-  <p class="read-more"><a class="heading" href="/cs/2024/10/07/Algorithm-15/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-cs/2024/10/07/Algorithm-14" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/cs/2024/10/07/Algorithm-14/" data-flip="title">
-      백준 1992 문제풀이
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-10-07T00:00:00+09:00">07 Oct 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="문제-링크">문제 링크</h2>
-
-
-  <p class="read-more"><a class="heading" href="/cs/2024/10/07/Algorithm-14/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-cs/2024/10/06/Algorithm-13" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/cs/2024/10/06/Algorithm-13/" data-flip="title">
-      PrefixSum
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-10-06T00:00:00+09:00">06 Oct 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="prefixsum">PrefixSum</h2>
-
-
-  <p class="read-more"><a class="heading" href="/cs/2024/10/06/Algorithm-13/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-cs/2024/10/06/Algorithm-12" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/cs/2024/10/06/Algorithm-12/" data-flip="title">
-      백준 2583 문제풀이
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-10-06T00:00:00+09:00">06 Oct 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="문제-링크">문제 링크</h2>
-<p>ㅋ<a href="https://www.acmicpc.net/problem/2583">https://www.acmicpc.net/problem/2583</a></p>
-
-
-  <p class="read-more"><a class="heading" href="/cs/2024/10/06/Algorithm-12/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-cs/2024/10/06/Algorithm-11" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/cs/2024/10/06/Algorithm-11/" data-flip="title">
-      백준 2468 문제풀이
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-10-06T00:00:00+09:00">06 Oct 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="문제-링크">문제 링크</h2>
-
-
-  <p class="read-more"><a class="heading" href="/cs/2024/10/06/Algorithm-11/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-cs/2024/10/06/Algorithm-10" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/cs/2024/10/06/Algorithm-10/" data-flip="title">
-      백준 1012 문제풀이
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-10-06T00:00:00+09:00">06 Oct 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="문제-링크">문제 링크</h2>
-
-
-  <p class="read-more"><a class="heading" href="/cs/2024/10/06/Algorithm-10/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-cs/2024/10/06/Algorithm-09" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/cs/2024/10/06/Algorithm-09/" data-flip="title">
-      백준 2178 문제풀이
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-10-06T00:00:00+09:00">06 Oct 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="문제-링크">문제 링크</h2>
-
-
-  <p class="read-more"><a class="heading" href="/cs/2024/10/06/Algorithm-09/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-cs/2024/10/06/Algorithm-08" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/cs/2024/10/06/Algorithm-08/" data-flip="title">
-      BFS - Breadth First Search
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-10-06T00:00:00+09:00">06 Oct 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="breadth-first-search">Breadth First Search</h2>
-
-
-  <p class="read-more"><a class="heading" href="/cs/2024/10/06/Algorithm-08/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-cs/2024/10/03/Algorithm-07" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/cs/2024/10/03/Algorithm-07/" data-flip="title">
-      Map, Direction
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-10-03T00:00:00+09:00">03 Oct 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="맵과-방향벡터">맵과 방향벡터</h2>
-
-
-  <p class="read-more"><a class="heading" href="/cs/2024/10/03/Algorithm-07/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-cs/2024/09/29/Algorithm-06" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/cs/2024/09/29/Algorithm-06/" data-flip="title">
-      DFS - Depth First Search
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-29T00:00:00+09:00">29 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="깊이-우선-탐색depth-first-search">깊이 우선 탐색(Depth First Search)</h2>
-
-
-  <p class="read-more"><a class="heading" href="/cs/2024/09/29/Algorithm-06/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-cs/2024/09/29/Algorithm-05" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/cs/2024/09/29/Algorithm-05/" data-flip="title">
-      Greedy Algorithm
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-29T00:00:00+09:00">29 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="그리디-알고리즘">그리디 알고리즘</h2>
-
-
-  <p class="read-more"><a class="heading" href="/cs/2024/09/29/Algorithm-05/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-cs/2024/09/26/Algorithm-04" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/cs/2024/09/26/Algorithm-04/" data-flip="title">
-      백준 2309 문제풀이
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-26T00:00:00+09:00">26 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="문제-링크">문제 링크</h2>
-
-
-  <p class="read-more"><a class="heading" href="/cs/2024/09/26/Algorithm-04/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-cs/2024/09/26/Algorithm-03" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/cs/2024/09/26/Algorithm-03/" data-flip="title">
-      백준 10989 문제풀이
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-26T00:00:00+09:00">26 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="문제-링크">문제 링크</h2>
-
-
-  <p class="read-more"><a class="heading" href="/cs/2024/09/26/Algorithm-03/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-cs/2024/09/26/Algorithm-02" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/cs/2024/09/26/Algorithm-02/" data-flip="title">
-      백준 11399 문제풀이
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-26T00:00:00+09:00">26 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="문제-링크">문제 링크</h2>
-
-
-  <p class="read-more"><a class="heading" href="/cs/2024/09/26/Algorithm-02/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-cs/2024/09/21/Algorithm-01" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/cs/2024/09/21/Algorithm-01/" data-flip="title">
-      프로그래머스 문자열 분리
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-21T00:00:00+09:00">21 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="문제-링크">문제 링크</h2>
-
-
-  <p class="read-more"><a class="heading" href="/cs/2024/09/21/Algorithm-01/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-
-<h2 class="sr-only">Pagination</h2>
-<nav class="pagination heading" role="navigation">
-  <ul>
-    <li class="pagination-item older" >
-      
-        <span>Older</span>
-      
-    </li>
-    <li class="pagination-item newer" >
-      
-        <span>Newer</span>
-      
-    </li>
   </ul>
-</nav>
+</aside>
+  <aside class="comments" role="complementary">
+  <h2>Comments</h2>
+  <hr/>
 
-  <footer>
+  <script src="https://utteranc.es/client.js"
+          repo="taewoocode/taewoocode.github.io"
+          issue-term="title"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+</aside>
+
+
+       <footer>
   <hr/>
   
     <p>© 2022. by taewoo</p>
@@ -1566,7 +609,7 @@ on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
          
            
              <li>
-               <a class="sidebar-nav-subitem active" href="/tag/cs-algorithm/">Algorithm</a>
+               <a class="sidebar-nav-subitem" href="/tag/cs-algorithm/">Algorithm</a>
              </li>
            
          
