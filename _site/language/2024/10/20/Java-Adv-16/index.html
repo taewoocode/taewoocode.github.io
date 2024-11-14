@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Home" />
+<meta property="og:title" content="Java Adv 14 - 동시성 컬렉션이 필요한 이유" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,16 +52,18 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Home &middot; 일벌리는 개발자</title>
+<title>Java Adv 14 - 동시성 컬렉션이 필요한 이유 &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="일을 벌여놔야 주워 담을 수 있습니다.
+        content="컬렉션 프레임워크는 원자적인 연산을 제공할까?
+
 "
 />
 <meta
         property="og:description"
-        content="일을 벌여놔야 주워 담을 수 있습니다.
+        content="컬렉션 프레임워크는 원자적인 연산을 제공할까?
+
 "
 />
 
@@ -70,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/page-11/" />
-<meta property="og:url" content="http://localhost:4000/page-11/" />
+<link rel="canonical" href="http://localhost:4000/language/2024/10/20/Java-Adv-16/" />
+<meta property="og:url" content="http://localhost:4000/language/2024/10/20/Java-Adv-16/" />
 
 <link
         rel="alternate"
@@ -80,6 +82,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         href="http://localhost:4000/feed.xml"
 />
 
+
+<link rel="prev" href="http://localhost:4000/cs/2024/10/19/Algorithm-21/" />
  
 
 <link
@@ -176,18 +180,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
             data-image="/assets/img/dp.jpeg"
     >
       
-  
 
-<article id="post-language/2024/09/18/Java-Mid-16" class="post mb6" role="article">
+<article id="post-language/2024/10/20/Java-Adv-16" class="post" role="article">
   <header>
     <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-16/" data-flip="title">
-      Java Mid 16 - Collection LinkedList 구현하기
-      </a>
+      
+      Java Adv 14 - 동시성 컬렉션이 필요한 이유
+      
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
+      <time datetime="2024-10-20T00:00:00+09:00">20 Oct 2024</time>
       
 
 
@@ -223,434 +226,198 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
 
 
   
-  <h2 id="linkedlist">LinkedList</h2>
+  <div class="markdown-body">
+
+    <!--  -->
+    <style>
+      .myAd1190 {
+        width: 48%;
+        height: 280px;
+      }
+
+      .myAd1290 {
+        width: 48%;
+        height: 280px;
+      }
+
+      @media(max-width: 800px) {
+        .myAd1190 {
+          display: none;
+        }
+
+        .myAd1290 {
+          width: 98%;
+        }
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 300px;
+      }
+
+      .row-center {
+        display: flex;
+        justify-content: center;
+        height: 258px;
+      }
+    </style>
+
+    <!--<br />-->
+    <h2 id="컬렉션-프레임워크는-원자적인-연산을-제공할까">컬렉션 프레임워크는 원자적인 연산을 제공할까?</h2>
+
+<p>예를 들어서 ArrayList가 인스턴스에 여러 스레드가 동시에 접근을 한다면?
+참고로 스레드가 동시에 접근을 해도 괜찮은 경우를 <strong>스레드 세이프</strong> 하다고 한다.
+그렇다면 ArrayList는 스레드 세이프 할까?
+예제 코드로 확인 해보자</p>
+
+<p><img width="654" alt="image" src="https://github.com/user-attachments/assets/0c203765-49f3-437e-9e68-a4e4f2881542" /></p>
+
+<p>여기서는 멀티스레드를 사용하지 않지만, <strong>**스레드</strong>1<strong>과</strong> <strong>스레드</strong>2<strong>가</strong> <strong>동시에</strong> <strong>다음</strong> <strong>코드를</strong> <strong>실행한다고</strong> <strong>가정</strong>**해보자.
+스레드1: <code class="language-plaintext highlighter-rouge">list</code> 에 <code class="language-plaintext highlighter-rouge">A</code> 를 추가한다.
+스레드2: <code class="language-plaintext highlighter-rouge">list</code> 에 <code class="language-plaintext highlighter-rouge">B</code> 를 추가한다.
+컬렉션에 데이터를 추가하는 <code class="language-plaintext highlighter-rouge">add()</code> 메서드를 생각해보면, 단순히 컬렉션에 데이터를 하나 추가하는 것뿐이다. 
+따라서 이것은 마치 연산이 하나만 있는 원자적인 연산처럼 느껴진다. 
+원자적인 연산은 쪼갤 수 없기 때문에 멀티스레드 상황에 문제가 되지 않는다. 
+물론 멀티스레드는 중간에 스레드의 실행 순서가 변경될 수 있으므로 <code class="language-plaintext highlighter-rouge">[A, B]</code> 또는, <code class="language-plaintext highlighter-rouge">[B, A]</code>는 변경될 수 있지만, 
+결과적으로 데이터는 모두 안전하게 저장될 것 같다. 
+하지만 컬렉션 프레임워크가 제공하는 대부분의 연산은 원자적인 연산이 아니다.</p>
+
+<h2 id="구현">구현</h2>
+
+<p><img width="654" alt="image" src="https://github.com/user-attachments/assets/0ff61560-e3af-4a26-a7b4-de0d3dfa979a" />
+<img width="654" alt="image" src="https://github.com/user-attachments/assets/27e502f2-c138-4110-9c66-6a8dcbdf1569" />
+<img width="654" alt="image" src="https://github.com/user-attachments/assets/1fd82128-9e9c-4144-b205-ac0c9783c267" />
+<img width="654" alt="image" src="https://github.com/user-attachments/assets/aafd213e-011d-4d26-9399-f72674efe14d" /></p>
+
+<p>가장 간단한 컬렉션의 구현이다. 내부에서는 배열을 사용해서 데이터를 보관한다.
+ArrayList:최소 구현 버전이라 생각하면 된다.
+DEFAULT_CAPACITY: 최대 5의 데이터를 저장할 수 있다. (필드 값으로 구현을 해두었다.)
+size: 저장한 데이터의 크기를 나타낸다.
+add(): 컬렉션에 데이터를 추가한다.
+sleep(100): 잠시 기대한다. 이렇게 하면 멀티스레드 상황에 발생하는 문제를 확인하기 쉽다.
+단일 스레드로 실행했기 때문에 아직까지는 아무런 문제 없이 잘 작동한다. 과연 멀티스레드 환경에서는 어떨까?</p>
+
+<h2 id="코드에-sleep을-준-이유는">코드에 sleep을 준 이유는?</h2>
+
+<p>스레드 간 자원 경쟁: 여러 스레드가 동일한 자원(예: 변수, 객체, 데이터베이스 등)을 접근하려고 할 때, 
+sleep()을 사용하면 자원에 접근하는 타이밍을 다르게 하여 경쟁 상황을 의도적으로 유발할 수 있다. 
+이로 인해 동기화 문제가 발생하는지 확인할 수 있다. (의도적으로 타이밍을 다르게 준 것)</p>
+
+<h2 id="reference">Reference</h2>
+
+<p>김영한님의 자바 강의</p>
 
 
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-16/" data-flip="title">Continue reading </a>
-  </p>
+    <br />
+    <br />
+  </div>
   
 
 </article>
 
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-15" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-15/" data-flip="title">
-      Java Mid 15 - Collection ArrayList 구현하기
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
+<!--<hr class="dingbat" />-->
+<!--
+<div class="share">
+  <h2>Share this post</h2>
+  <div class="share-body">
+    <a href="http://twitter.com/share?text=Java Adv 14 - 동시성 컬렉션이 필요한 이유&amp;url=http://localhost:4000/language/2024/10/20/Java-Adv-16/"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="icon-twitter">
+      </span>
+    </a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/10/20/Java-Adv-16/"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="icon-facebook">
+      </span>
+    </a>
+  </div>
+</div>
+-->
+<br />
 
 
 
 
+<aside class="related" role="complementary">
+  <h2 class="hr">Related Posts</h2>
 
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
+  <ul class="related-posts">
     
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="배열의-불편함">배열의 불편함</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-15/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-14" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-14/" data-flip="title">
-      Java Mid 14 - Collection Array
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
       
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
       
+      
+        
+          
+          
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/language/2024/10/16/Java-Adv-15/" data-flip="title">
+    <span>Java Adv 13 - CAS operation - 1</span>
+  </a>
+  <small><time datetime="2024-10-16T00:00:00+09:00">
+    16 Oct 2024
+  </time></small>
+</li>
+
+        
+      
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/language/2024/10/15/Java-Adv-14/" data-flip="title">
+    <span>Java Adv 13 - atomic operation - 3</span>
+  </a>
+  <small><time datetime="2024-10-15T00:00:00+09:00">
+    15 Oct 2024
+  </time></small>
+</li>
+
+        
+      
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/language/2024/10/14/Java-Adv-13/" data-flip="title">
+    <span>Java Adv 13 - atomic operation - 2</span>
+  </a>
+  <small><time datetime="2024-10-14T00:00:00+09:00">
+    14 Oct 2024
+  </time></small>
+</li>
 
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
+        
+      
     
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="배열array-개념-정리">배열(Array) 개념 정리</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-14/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-13" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-13/" data-flip="title">
-      Java Mid 13 - Generic 2
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="제네릭-활용예제">제네릭 활용예제</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-13/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-12" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-12/" data-flip="title">
-      Java Mid 12 - Generic 1
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="제네릭이란">제네릭이란</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-12/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-11" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-11/" data-flip="title">
-      Java Mid 11 - Exception 2
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="예외처리를-더-세밀하게-하자">예외처리를 더 세밀하게 하자</h2>
-<p><img width="698" alt="image" src="https://github.com/user-attachments/assets/d8cb3884-ce71-4552-b5d6-dc4891c9bd3f" /></p>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-11/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-10" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-10/" data-flip="title">
-      Java Mid 10 - Exception 1
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="예외-처리가-필요한-이유">예외 처리가 필요한 이유</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-10/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/09/18/Java-Mid-09" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/09/18/Java-Mid-09/" data-flip="title">
-      Java Mid 09 - Nested Class
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="중첩-클래스-내부-클래스란">중첩 클래스, 내부 클래스란?</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/09/18/Java-Mid-09/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-
-<h2 class="sr-only">Pagination</h2>
-<nav class="pagination heading" role="navigation">
-  <ul>
-    <li class="pagination-item older" >
-      
-        <a rel="next" href="/page-12/">Older</a>
-      
-    </li>
-    <li class="pagination-item newer" >
-      
-        <a rel="prev" href="/page-10/">Newer</a>
-      
-    </li>
   </ul>
-</nav>
+</aside>
+  <aside class="comments" role="complementary">
+  <h2>Comments</h2>
+  <hr/>
 
-  <footer>
+  <script src="https://utteranc.es/client.js"
+          repo="taewoocode/taewoocode.github.io"
+          issue-term="title"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+</aside>
+
+
+       <footer>
   <hr/>
   
     <p>© 2022. by taewoo</p>
