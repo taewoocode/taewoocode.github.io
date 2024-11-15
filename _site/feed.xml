@@ -6,9 +6,65 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 15 Nov 2024 10:42:57 +0900</pubDate>
-    <lastBuildDate>Fri, 15 Nov 2024 10:42:57 +0900</lastBuildDate>
+    <pubDate>Fri, 15 Nov 2024 11:34:36 +0900</pubDate>
+    <lastBuildDate>Fri, 15 Nov 2024 11:34:36 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
+    
+      <item>
+        <title>Java Adv 18 - 자바 동시성 컬렉션</title>
+        <description>&lt;h2 id=&quot;자바-synchronized-프록시&quot;&gt;&lt;strong&gt;자바&lt;/strong&gt; synchronized &lt;strong&gt;프록시&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;p&gt;자바에서 제공하는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;java.util&lt;/code&gt; 패키지의 컬렉션 프레임워크는 대부분 스레드 안전(Thread Safe)하지 않다. 
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ArrayList&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;LinkedList&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;HashSet&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;HashMap&lt;/code&gt; 등의 기본 자료 구조들은 여러 연산들이 동시에 이루어지기 때문에 동기화가 필요하다. 
+그러나 모든 자료 구조에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt;를 사용하여 동기화를 해두는 것은 성능 저하를 초래할 수 있다. 
+동기화는 스레드 안전을 보장하지만, 멀티스레드 환경에서만 필요한 기능이다. 
+동기화를 미리 적용하면 단일 스레드 환경에서도 불필요한 성능 저하가 발생할 수 있다. 
+따라서 동기화의 필요성을 정확히 판단하고, 꼭 필요한 경우에만 동기화를 적용하는 것이 중요하다.
+&lt;strong&gt;Vector&lt;/strong&gt;는 과거에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ArrayList&lt;/code&gt;와 비슷한 기능을 제공하며, 모든 메서드에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt;를 적용하여 동기화를 보장했다. 
+그러나 이로 인해 단일 스레드 환경에서 성능이 저하되었고, 결국 널리 사용되지 않게 되었다. 지금은 하위 호환성을 위해 남아있지만, 다른 대안들이 존재하기 때문에 사용을 권장하지 않는다.
+대신, 동기화를 필요에 따라 적용할 수 있는 방법으로 &lt;strong&gt;프록시 패턴&lt;/strong&gt;을 사용할 수 있다. 
+예를 들어, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Collections.synchronizedList()&lt;/code&gt; 메서드를 사용하면, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ArrayList&lt;/code&gt;를 동기화된 리스트로 변환할 수 있다. 
+이 메서드는 내부적으로 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SynchronizedRandomAccessList&lt;/code&gt;라는 클래스를 사용하여 동기화를 적용한다. 이렇게 하면 기존 코드의 구조를 유지하면서, 필요한 경우에만 동기화를 적용할 수 있다.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nc&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Collections&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;synchronizedList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;());&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img width=&quot;648&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/53881711-199e-4484-9218-40628e5560ce&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;위 코드에서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronizedList()&lt;/code&gt; 메서드는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ArrayList&lt;/code&gt;를 감싸는 동기화된 리스트를 반환한다. 
+이 리스트의 메서드는 내부적으로 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt; 키워드를 사용하여 동기화를 보장한다. 예를 들어, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;add()&lt;/code&gt; 메서드는 다음과 같이 동기화된 코드로 구현된다.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;E&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;synchronized&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mutex&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Collections&lt;/code&gt;는 이와 같이 여러 종류의 동기화 프록시 메서드를 제공하여, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;List&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Set&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Map&lt;/code&gt; 등의 컬렉션을 동기화된 버전으로 변환할 수 있게 해준다. 
+예를 들어, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronizedMap()&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronizedSet()&lt;/code&gt; 등의 메서드를 통해 동기화된 컬렉션을 생성할 수 있다.
+하지만 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt; 프록시를 사용하는 방식에는 단점이 있다. 첫째, 동기화 오버헤드가 발생한다. 
+모든 메서드 호출 시마다 동기화가 이루어지기 때문에 성능이 저하될 수 있다. 
+둘째, 전체 컬렉션에 대해 동기화가 이루어지기 때문에 잠금 범위가 넓어지고, 이는 잠금 경합(lock contention)을 증가시켜 병렬 처리의 효율성을 저하시킬 수 있다. 
+셋째, 선택적인 동기화가 어려워, 과도한 동기화로 이어질 수 있다.
+따라서 자바는 이러한 단점을 보완하기 위해 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;java.util.concurrent&lt;/code&gt; 패키지에서 더 정교한 동시성 컬렉션(concurrent collection)을 제공한다. 
+이 컬렉션들은 동기화 오버헤드를 최소화하고, 동기화의 효율성을 높이며, 멀티스레드 환경에서 성능을 극대화할 수 있도록 설계되었다.&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;김영한님의 자바 강의&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 23 Oct 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/language/2024/10/23/Java-Adv-19/</link>
+        <guid isPermaLink="true">http://localhost:4000/language/2024/10/23/Java-Adv-19/</guid>
+        
+        <category>java</category>
+        
+        
+        <category>language</category>
+        
+      </item>
     
       <item>
         <title>Java Adv 18 - 동시성 컬렉션이 필요한 이유 - 3</title>
@@ -2403,232 +2459,6 @@ BFS는 레이어별로 탐색을 하기에 Queue에 대한 이해가 있어야 �
         
         
         <category>language</category>
-        
-      </item>
-    
-      <item>
-        <title>Elasticsearch Logstash</title>
-        <description>&lt;h2 id=&quot;logstash&quot;&gt;Logstash?&lt;/h2&gt;
-
-&lt;p&gt;로그 스태시는 오픈소스 데이터 처리 파이프라인 도구이다. 
-장애대응 로직이0나 성능 저하 요인을 쉽게 파악할 수 있는 모니터링, API 간단한 조정으로 성능을 튜닝할 수 있는 파라미터들도 제공한다. 비츠, 로그스태시, 엘라스틱서치, 키바나를 이용해 데이터 수집, 변환, 저장, 시각화하는 서비스를 구성할 때 로그스태시는 데이터를 저장하기 전에 원하는 형태로 가공하는 역할을 한다.&lt;/p&gt;
-
-&lt;p&gt;실습을 위한 압축파일 다운로드&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wget https://artifacts.elastic.co/downloads/logstash/logstash-7.17.1-linux-x86_64.tar.gz
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;img width=&quot;445&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/558cbf44-654e-4c00-9a50-d5479ef735c5&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;로그를 수집하는 쪽에서 로그 형태를 분석하고 시스템에서 인식할 수 있도록 로그를 정제하는 작업이 필요한데, 로그스태시는 이 과정을 쉽게 할 수 있도록 지원한다.&lt;/li&gt;
-  &lt;li&gt;어떤 형태의 로그에 대해서도 ‘수집 &amp;gt; 가공 &amp;gt; 전송’ 하는 일련의 과정을 간편하게 구현 하기 위한 강력한 기능을 제공한다.&lt;/li&gt;
-  &lt;li&gt;로그 스태시는 오픈소스 데이터 처리 파이프라인 도구이다.&lt;/li&gt;
-  &lt;li&gt;장애대응 로직이0나 성능 저하 요인을 쉽게 파악할 수 있는 모니터링, API 간단한 조정으로 성능을 튜닝할 수 있는 파라미터들도 제공한다.&lt;/li&gt;
-  &lt;li&gt;비츠, 로그스태시, 엘라스틱서치, 키바나를 이용해 데이터 수집, 변환, 저장, 시각화하는 서비스를 구성할 때 로그스태시는 데이터를 저장하기 전에 원하는 형태로 가공하는 역할을 한다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img width=&quot;678&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/3499c769-5ed8-48dd-b1c2-243be1e3f129&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;input&quot;&gt;Input&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;소스 원본으로부터 데이터를 입력받는 단계이다.&lt;/li&gt;
-  &lt;li&gt;직접 대상에 접근해 읽어 들이는 경우도 있지만, 서버를 열 어놓고 받아들이는 형태의 구성도 가능하다.
-수 있고 이를 쉽게 처리하기 위해 다양한 플러그인들이 존재한다.&lt;/li&gt;
-  &lt;li&gt;예를들어 특정 파일은 파일 플러그인을, 실시간 트윗은 트위터 플러그인을 통해 가져올 수 있다.&lt;/li&gt;
-  &lt;li&gt;자주 쓰이는 플러그인
-    &lt;ul&gt;
-      &lt;li&gt;file : 리눅스의 tail -f 처럼 파일을 스트리밍하여 이벤트를 읽는다.&lt;/li&gt;
-      &lt;li&gt;syslog : 네트워크를 통해 전달되는 syslog를 수신한다.&lt;/li&gt;
-      &lt;li&gt;kafka : 카프카의 토픽에서 데이터를 읽는다.&lt;/li&gt;
-      &lt;li&gt;jdbc : JDBC 드라이버로 지정한 일정마다 쿼리를 실행해서 결과를 읽어 들인다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;filter&quot;&gt;Filter&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;입력 플러그인이 받은 데이터를 의미 있는 데이터로 구조화하는 역할을 한다.&lt;/li&gt;
-  &lt;li&gt;필수 구성요소가 아니어서 필터 없이 파이프라인을 구성할 수 있지만, 필터 없는 파이프라인은 그 기능을 온전히 발휘하기 힘들다&lt;/li&gt;
-  &lt;li&gt;로그스태시 필터는 비정형 데이터를 정형화하고 데이터 분석을 위한 구조를 잡아준다.&lt;/li&gt;
-  &lt;li&gt;비츠나 카프카 등에서 입력받은 데이터를 필터를 이용해 필요한 정보만 손쉽게 추출하거나 형태를 변환하고 부족한 정보는 추가하 는 등 전반적인 데이터 정제/가공 작업을 수행할 수 있다.&lt;/li&gt;
-  &lt;li&gt;정형화된 데이터는 엘라스틱서치나 아마존 S3와 같은 스토리지에 전송되어 분석 등의 용도로 활용된다.&lt;/li&gt;
-  &lt;li&gt;자주 쓰이는 플러그인
-    &lt;ul&gt;
-      &lt;li&gt;add_field : 새로운 필드를 추가한다.&lt;/li&gt;
-      &lt;li&gt;add_tag : 성공한 이벤트에 태그를 추가할 수 있다.&lt;/li&gt;
-      &lt;li&gt;enable_metric : 매트릭 로깅을 활성화하거나 비활성화 할 수 있다. 수집된 데이터는 로그스태시 모니터링에서 해당 필터의 성능을 분석할 떄 사용한다.&lt;/li&gt;
-      &lt;li&gt;id : 플러그인의 ID 를 설정한다. 모니터링 시 아이디를 이용해 특정 플러그인을 쉽게 찾을 수 있다.&lt;/li&gt;
-      &lt;li&gt;remove_field : 필드를 삭제할 수 있다.&lt;/li&gt;
-      &lt;li&gt;remove_tag : 성공한 이벤트에 붙은 태그를 제거할 수 있다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;output&quot;&gt;OutPut&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;출력은 파이프라인의 입력과 필터를 거쳐 가공된 데이터를 지정한 대상으로 내보내는 단계이다.&lt;/li&gt;
-  &lt;li&gt;입력, 필터 플러그인과 마찬가지로 다양한 출력 플러그인을 지원한다.&lt;/li&gt;
-  &lt;li&gt;자주 쓰이는 플러그인
-    &lt;ul&gt;
-      &lt;li&gt;elasticserach : 사용빈도가 가장 높고, bulk API 를 사용하여 엘라스틱서치 인덱싱을 수행한다.&lt;/li&gt;
-      &lt;li&gt;file : 지정한 파일의 새로운 줄에 데이터를 기록한다.&lt;/li&gt;
-      &lt;li&gt;kafka : 카프카 토픽에 데이터를 기록한다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;파이프라인 기본 템플릿 형태&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;input &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; 
-	&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; 입력 플러그인 &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-filter &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; 필터 플러그인 &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 
-
-output &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; 출력 플러그인 &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;소스 원본으로부터 데이터를 입력받는 단계이다. 직접 대상에 접근해 읽어 들이는 경우도 있지만, 서버를 열 어놓고 받아들이는 형태의 구성도 가능하다.&lt;/li&gt;
-  &lt;li&gt;실습을 위한 conf 파일 설정&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vi config/logstash-test.conf 
-
-&lt;span class=&quot;nb&quot;&gt;sudo&lt;/span&gt; ./bin/logstash &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; config/logstash-test.conf
-
-&lt;span class=&quot;nb&quot;&gt;touch &lt;/span&gt;config/fillter-example.log
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;실습을 위해 logstash-test.conf 파일을 생성하고 파일에 파일입력 플러그인을 적용한다.&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@elastic:~/logstash-7.0.1# &lt;span class=&quot;nb&quot;&gt;pwd&lt;/span&gt;
-
-/root/logstash-7.0.1
-
-root@elastic:~/logstash-7.0.1# &lt;span class=&quot;nb&quot;&gt;cat &lt;/span&gt;config/logstash-test.conf
-
-input &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-file &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-	path &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/root/elasticsearch-7.0.1/logs/elasticsearch.log&quot;&lt;/span&gt; 
-	start_position &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;beginning&quot;&lt;/span&gt;
-	&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-output &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  stdout &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;로그스태시 필터는 비정형 데이터를 정형화하고 데이터 분석을 위한 구조를 잡아준다.&lt;/li&gt;
-  &lt;li&gt;비츠나 카프카 등에서 입력받은 데이터를 필터를 이용해 필요한 정보만 손쉽게 추출하거나 형태를 변환하고 부족한 정보는 추가하 는 등 전반적인 데이터 정제/가공 작업을 수행할 수 있다.&lt;/li&gt;
-  &lt;li&gt;이렇게 정형화된 데이터는 엘라스틱서치나 아마존 S3와 같은 스토리지에 전송되어 분석 등의 용도로 활용된다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;binogstash--f-configlogstash-testconf&quot;&gt;/bin/ogstash -f config/logstash-test.conf&lt;/h3&gt;
-
-&lt;p&gt;&lt;img width=&quot;625&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/206197d1-0fb2-44fa-9623-565385baed6f&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;필터-적용&quot;&gt;필터 적용&lt;/h2&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-&lt;span class=&quot;nt&quot;&gt;--&lt;/span&gt;인풋 구조--
-
-input&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  file&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    path &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/home/user1/logstashlab/config/fillter-example.log&quot;&lt;/span&gt;
-    start_position &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;beginning&quot;&lt;/span&gt;
-    sincedb_path &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/dev/null&quot;&lt;/span&gt;
-
-  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;nt&quot;&gt;--&lt;/span&gt;필터구조--
-
-fillter&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
- mutate &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-   &lt;span class=&quot;nb&quot;&gt;split&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;message&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot; &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-   add_field &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;id =&amp;gt; %{[message][2]}&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-   remove_field &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;message&quot;&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;nt&quot;&gt;--&lt;/span&gt;아웃풋 구조--
-
-output&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  stdout &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;mutate 플러그인은 필드를 변형하는 다양한 기능을 제공하고 있다. 필드 이름 변 경, 삭제 등이 가능하다.&lt;/li&gt;
-  &lt;li&gt;mutate 는 플러그인 내부에 옵션이 다양한데 split 도 여러 옵션 중 하나이다. split 옵션은 구분자를 기준으로 데이터를 자를 수 있다.&lt;/li&gt;
-  &lt;li&gt;message 라는 필드를 ‘띄어쓰기’ 기준으로 분리했다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;실행결과&quot;&gt;실행결과&lt;/h2&gt;
-
-&lt;p&gt;&lt;img width=&quot;647&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/68eb9684-d402-443a-8885-248023116806&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;grok-loglevel은-모두다-대문자-동일한-시간포맷으로-로그가-출력하자&quot;&gt;grok. loglevel은 모두다 대문자, 동일한 시간포맷으로 로그가 출력하자&lt;/h2&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;input &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  file &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    path &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/home/user1/logstashlab/config/filter-example.log&quot;&lt;/span&gt;
-    start_position &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;beginning&quot;&lt;/span&gt;
-    sincedb_path &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/dev/null&quot;&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-filter &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  dissect &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    mapping &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;message&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;[%{timestamp}]%{?-&amp;gt;}[%{id}] %{ip} %{+ip} [%{?level}] - %{}.&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;date&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    match &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;timestamp&quot;&lt;/span&gt;, &lt;span class=&quot;s2&quot;&gt;&quot;YYYY-MM-dd HH:mm&quot;&lt;/span&gt;, &lt;span class=&quot;s2&quot;&gt;&quot;yyyy/MM/dd HH:mm:ss&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
-    target &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;new_timestamp&quot;&lt;/span&gt;
-    timezone &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;UTC&quot;&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-output &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  stdout &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-  elasticsearch &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    hosts &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;211.183.3.10:9200&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
-    index &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;2024-01-testlog&quot;&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;실행]
-&lt;span class=&quot;nb&quot;&gt;sudo&lt;/span&gt; ./bin/logstash &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; config/logstash-test2.conf &lt;span class=&quot;nt&quot;&gt;--log&lt;/span&gt;.level error
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;어렵구나 어려워&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.elastic.co/kr/blog/what-is-an-elasticsearch-index&quot;&gt;https://www.elastic.co/kr/blog/what-is-an-elasticsearch-index&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.elastic.co/kr/elasticsearch&quot;&gt;https://www.elastic.co/kr/elasticsearch&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://aws.amazon.com/ko/what-is/elasticsearch/&quot;&gt;https://aws.amazon.com/ko/what-is/elasticsearch/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://victorydntmd.tistory.com/308&quot;&gt;https://victorydntmd.tistory.com/308&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Sat, 05 Oct 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/devops/2024/10/05/ElasticSearch-05/</link>
-        <guid isPermaLink="true">http://localhost:4000/devops/2024/10/05/ElasticSearch-05/</guid>
-        
-        <category>es</category>
-        
-        
-        <category>devops</category>
         
       </item>
     
