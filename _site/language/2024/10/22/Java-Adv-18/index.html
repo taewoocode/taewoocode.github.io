@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Java Mid 08 - Enum Type" />
+<meta property="og:title" content="Java Adv 18 - 동시성 컬렉션이 필요한 이유 - 3" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,17 +52,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Java Mid 08 - Enum Type &middot; 일벌리는 개발자</title>
+<title>Java Adv 18 - 동시성 컬렉션이 필요한 이유 - 3 &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="문자열과 타입 안정성
+        content="프록시(Proxy)
 
 "
 />
 <meta
         property="og:description"
-        content="문자열과 타입 안정성
+        content="프록시(Proxy)
 
 "
 />
@@ -72,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/language/2024/09/18/Java-Mid-08/" />
-<meta property="og:url" content="http://localhost:4000/language/2024/09/18/Java-Mid-08/" />
+<link rel="canonical" href="http://localhost:4000/language/2024/10/22/Java-Adv-18/" />
+<meta property="og:url" content="http://localhost:4000/language/2024/10/22/Java-Adv-18/" />
 
 <link
         rel="alternate"
@@ -83,10 +83,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/language/2024/09/18/Java-Mid-07/" />
+<link rel="prev" href="http://localhost:4000/language/2024/10/21/Java-Adv-17/" />
  
-<link rel="next" href="http://localhost:4000/language/2024/09/18/Java-Mid-09/" />
-
 
 <link
         rel="apple-touch-icon"
@@ -183,16 +181,16 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-language/2024/09/18/Java-Mid-08" class="post" role="article">
+<article id="post-language/2024/10/22/Java-Adv-18" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      Java Mid 08 - Enum Type
+      Java Adv 18 - 동시성 컬렉션이 필요한 이유 - 3
       
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
+      <time datetime="2024-10-22T00:00:00+09:00">22 Oct 2024</time>
       
 
 
@@ -267,66 +265,78 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
     </style>
 
     <!--<br />-->
-    <h2 id="문자열과-타입-안정성">문자열과 타입 안정성</h2>
+    <h2 id="프록시proxy"><strong>프록시</strong>(Proxy)</h2>
 
-<p>자바가 제공하는 열거형(Enum Type)을 제대로 이해하려면 먼저 열거형이 생겨난 이유를 알아야 한다.
-열거형이 만들어진 근본적인 이유는 뭘까? 결론부터 말하자면 타입 안전성을 고려하여 잘못된 값이 할당되거나 사용되는 것을 사전에 미리 방지한다.
-외부에서도 이 인스턴스들만 사용할 수 있게끔 미리 정의된 값들만을 통해 사용을 보장한다.</p>
+<p>우리말로 대리자, 대신 처리해주는 자라는 뜻이다.
+프록시를 쉽게 풀어서 설명하자면 친구에게 대신 음식을 주문해달라고 부탁하는 상황을 생각해 볼 수 있다. 
+예를 들어,당신이 피자를 먹고 싶은데, 직접 전화하는 게 부담스러워서 친구에게 대신 전화해서 피자를 주문해달라고 부탁한다고 해보자. 
+친구가 피자 가게에 전화를 걸어 주문하고, 피자가 도착하면 당신에게 가져다주는 것이다. 여기서 친구가 프록시 역할을 하는 것이다.
+나(클라이언트) 피자 가게(서버), 나(클라이언트) 친구(프록시) 피자 가게(서버)
+객체 세상에도 이런 프록시를 만들 수 있다. 여기서는 프록시가 대신 동기화(<code class="language-plaintext highlighter-rouge">synchronized</code> ) 기능을 처리해주는 것이다. 코드를 만들면서 확인해보자.</p>
 
-<h2 id="타입-안전-열거형-패턴">타입 안전 열거형 패턴</h2>
+<p><img width="654" alt="image" src="https://github.com/user-attachments/assets/7a2c45de-36af-43de-8748-8a095f0d22c7" /></p>
 
-<p>타입 안전 열거형 패턴 영어인 enum은 enumeration의 준말인데 번역하면 열거라는 뜻이고 어떤 항목을 나열하는 것을 뜻한다.
-자바는 타입 안전 열거형 패턴을 매우 편리하게 사용할 수 있도록 열거형을 제공한다. (Type 안정성을 고려)
-프로그래밍에서는 상수들을 사용하여 코드내에서 미리 정의된 값들의 집합을 나타낸다.
-예를 들면 회원의 등급은 상수로 정의한 BASIC, GOLD, DIAMOND만 사용할 수 있다는 얘기이다.</p>
+<p><code class="language-plaintext highlighter-rouge">SyncProxyList</code> 는 <code class="language-plaintext highlighter-rouge">BasicList</code> 와 같은 <code class="language-plaintext highlighter-rouge">SimpleList</code> 인터페이스를 구현한다.
+이 클래스는 생성자를 통해 <code class="language-plaintext highlighter-rouge">SimpleList target</code> 을 주입 받는다. 여기에 실제 호출되는 대상이 들어간다.
+이 클래스는 마치 빈껍데기 처럼 보인다. 이 클래스의 역할은 모든 메서드에 <code class="language-plaintext highlighter-rouge">synchronized</code> 를 걸어주는 일 뿐
+이다. 그리고나서 <code class="language-plaintext highlighter-rouge">target</code> 에 있는 같은 기능을 호출한다.
+이 프록시 클래스는 <code class="language-plaintext highlighter-rouge">synchronized</code> 만 걸고, 그 다음에 바로 실제 호출해야 하는 원본 대상(<code class="language-plaintext highlighter-rouge">target</code> )을 호출한다.
+기존에 <code class="language-plaintext highlighter-rouge">BasicList</code> 를 직접 사용하고 있었다면, 이제 중간에 프록시를 사용하므로 다음과 같은 구조로 변경된다.</p>
+<ul>
+  <li><strong><em>기존 구조</em></strong>: 클라이언트 <code class="language-plaintext highlighter-rouge">BasicList</code> (서버)</li>
+  <li><strong><em>변경 구조</em></strong>: 클라이언트 <code class="language-plaintext highlighter-rouge">SyncProxyList</code> (프록시) <code class="language-plaintext highlighter-rouge">BasicList</code> (서버)</li>
+</ul>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClassGrade</span> <span class="o">{</span>
+<p><img width="654" alt="image" src="https://github.com/user-attachments/assets/43761ecd-1d87-4cf0-a71f-b6ed1b6f031c" /></p>
 
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">ClassGrade</span> <span class="no">BASIC</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ClassGrade</span><span class="o">();</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">ClassGrade</span> <span class="no">GOLD</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ClassGrade</span><span class="o">();</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">ClassGrade</span> <span class="no">DIAMOND</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ClassGrade</span><span class="o">();</span>
-    
-<span class="o">}</span>
+<p>그림과 같이 정적인 클래스의 의존 관계를 정적 의존 관계라 한다.
+<code class="language-plaintext highlighter-rouge">test()</code> 메서드를 클라이언트라고 가정하자. <code class="language-plaintext highlighter-rouge">test()</code> 메서드는 <code class="language-plaintext highlighter-rouge">SimpleList</code> 라는 인터페이스에만 의존한
+다. 이것을 추상화에 의존한다고 표현한다. 덕분에 <code class="language-plaintext highlighter-rouge">SimpleList</code> 인터페이스의 구현체인 <code class="language-plaintext highlighter-rouge">BasicList</code> , <code class="language-plaintext highlighter-rouge">SyncList</code> , <code class="language-plaintext highlighter-rouge">SyncProxyList</code> 중에 어떤 것을 사용하든, 클라이언트인 <code class="language-plaintext highlighter-rouge">test()</code> 의 코드는 전혀 변경하지 않아도 된다. 클라이언트인 <code class="language-plaintext highlighter-rouge">test()</code> 입장에서 생각해보면 <code class="language-plaintext highlighter-rouge">BasicList</code> 가 넘어올지, <code class="language-plaintext highlighter-rouge">SyncProxyList</code> 가 넘어올지 알 수없다. 단순히 <code class="language-plaintext highlighter-rouge">SimpleList</code> 의 구현체 중의 하나가 넘어와서 실행된다는 정도만 알 수 있다. 그래서 클라이언트인 <code class="language-plaintext highlighter-rouge">test()</code> 는 매우 유연하다. <code class="language-plaintext highlighter-rouge">BasicList</code> 의 어떤 구현체든지 다 받아들일 수 있다.</p>
+
+<h2 id="런타임-의존관계">런타임 의존관계</h2>
+
+<p>먼저 <code class="language-plaintext highlighter-rouge">BasicList</code> 를 사용하는 예를 보자.</p>
+
+<p>실제 런타임에 발생하는 인스턴스의 의존 관계를 런타임 의존 관계라 한다.
+먼저 간단한 <code class="language-plaintext highlighter-rouge">BasicList</code> 를 직접 사용하는 경우부터 알아보자. <code class="language-plaintext highlighter-rouge">test(new BasicList())</code> 를 실행하면 <code class="language-plaintext highlighter-rouge">BasicList(x001)</code> 의 인스턴스가 만들어지면서 <code class="language-plaintext highlighter-rouge">test()</code> 메서드에 전달된다. <code class="language-plaintext highlighter-rouge">test()</code> 메서드는 <code class="language-plaintext highlighter-rouge">BasicList(x001)</code> 인스턴스의 참조를 알고 사용하게된다.</p>
+
+<p>다음 두 코드는 같은 코드이므로 쉽게 풀어서 설명하겠다.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">test</span><span class="o">(</span><span class="k">new</span> <span class="nc">SyncProxyList</span><span class="o">(</span><span class="k">new</span> <span class="nc">BasicList</span><span class="o">()))</span>
+</code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">SimpleList</span> <span class="n">basicList</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">BasicList</span><span class="o">();</span>
+<span class="nc">SimpleList</span> <span class="n">list</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SyncProxyList</span><span class="o">(</span><span class="n">basicList</span><span class="o">);</span>
+<span class="n">test</span><span class="o">(</span><span class="n">list</span><span class="o">)</span>
 </code></pre></div></div>
 
 <ul>
-  <li>먼저 회원 등급을 다루는 클래스를 만들고, 각각의 회원 등급별로 상수를 선언한다.</li>
-  <li>각각의 상수마다 별도의 인스턴스를 생성하고, 생성한 인스턴스를 대입한다.</li>
-  <li>상수를 선언하기 위해 static, final을 선언한다.
+  <li><strong>SimpleList basicList = new BasicList();</strong>
     <ul>
-      <li>static을 사용해서 상수를 메서드에 선언한다.</li>
-      <li>final을 사용해서 인스턴스(참조값)을 변경할 수 없게끔 설계한다.</li>
+      <li><code class="language-plaintext highlighter-rouge">BasicList</code>의 인스턴스가 생성되며, 이 인스턴스는 <code class="language-plaintext highlighter-rouge">x001</code>이라는 고유 참조를 가진다.</li>
+      <li>이 인스턴스를 <code class="language-plaintext highlighter-rouge">basicList</code>라는 이름의 변수에 저장한다.</li>
+    </ul>
+  </li>
+  <li><strong>SimpleList list = new SyncProxyList(basicList);</strong>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">SyncProxyList</code>의 인스턴스가 생성된다.</li>
+      <li>생성 시에 <code class="language-plaintext highlighter-rouge">basicList</code>의 참조인 <code class="language-plaintext highlighter-rouge">BasicList(x001)</code>을 인수로 전달받는다.</li>
+      <li>이렇게 만들어진 <code class="language-plaintext highlighter-rouge">SyncProxyList(x002)</code>는 내부에 <code class="language-plaintext highlighter-rouge">target</code>이라는 변수로 <code class="language-plaintext highlighter-rouge">BasicList(x001)</code>의 참조를 저장하고 있다.</li>
+    </ul>
+  </li>
+  <li><strong>test(list);</strong>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">test</code> 메서드에 <code class="language-plaintext highlighter-rouge">SyncProxyList(x002)</code>가 전달된다.</li>
+      <li>이때 <code class="language-plaintext highlighter-rouge">SyncProxyList</code>를 통해 <code class="language-plaintext highlighter-rouge">BasicList</code>의 기능에 접근하게 된다.</li>
+      <li><code class="language-plaintext highlighter-rouge">SyncProxyList</code>는 <code class="language-plaintext highlighter-rouge">BasicList</code>의 기능을 호출하기 전에 동기화 처리나 추가 기능을 적용한다.</li>
     </ul>
   </li>
 </ul>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClassRefMain</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"class BASIC = "</span> <span class="o">+</span> <span class="nc">ClassGrade</span><span class="o">.</span><span class="na">BASIC</span><span class="o">.</span><span class="na">getClass</span><span class="o">());</span> <span class="c1">//상수에 접근</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"class BASIC = "</span> <span class="o">+</span> <span class="nc">ClassGrade</span><span class="o">.</span><span class="na">GOLD</span><span class="o">.</span><span class="na">getClass</span><span class="o">());</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"class BASIC = "</span> <span class="o">+</span> <span class="nc">ClassGrade</span><span class="o">.</span><span class="na">DIAMOND</span><span class="o">.</span><span class="na">getClass</span><span class="o">());</span>
-
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"ref BASIC = "</span> <span class="o">+</span> <span class="nc">ClassGrade</span><span class="o">.</span><span class="na">BASIC</span><span class="o">);</span> <span class="c1">//참조값 확인</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"ref GOLD = "</span> <span class="o">+</span> <span class="nc">ClassGrade</span><span class="o">.</span><span class="na">GOLD</span><span class="o">);</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"ref DIAMOND = "</span> <span class="o">+</span> <span class="nc">ClassGrade</span><span class="o">.</span><span class="na">DIAMOND</span><span class="o">);</span>
-
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-<p><img width="642" alt="image" src="https://github.com/user-attachments/assets/88ed0d47-6d3b-451b-a009-d3f3573655b6" /></p>
-<ul>
-  <li>각각의 상수는 모두 ClassGrade 타입을 기반으로 만들었기 때문에 getClass()의 결과(클래스 조회)는 모두 ClassGrade이다.</li>
-  <li>각각의 상수는 모두 서로 각각 다른 ClassGrade 인스턴스를 참조하기 때문에 서로 다른 참조값을 가진다.</li>
-</ul>
-
-<h2 id="컴파일-오류-확인">컴파일 오류 확인</h2>
-<p><img width="565" alt="image" src="https://github.com/user-attachments/assets/3488b094-9c8a-4c23-9506-f5ff6c5e7259" /></p>
-
-<p>생성자를 통해 객체를 생성해 ClassGrade로 넘겨야 겠다고 생각했지만, private로 생성자를 지정해두었기 때문에 개발자는 열거형에 나열되어 있는 정보만을 사용할 수 있다는 것을 확인할 수 있다.</p>
-
 <h2 id="reference">Reference</h2>
 
-<p>인프런 김영한님의 자바 강좌</p>
+<p>김영한님의 자바 강의</p>
+
 
     <br />
     <br />
@@ -340,12 +350,12 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=Java Mid 08 - Enum Type&amp;url=http://localhost:4000/language/2024/09/18/Java-Mid-08/"
+    <a href="http://twitter.com/share?text=Java Adv 18 - 동시성 컬렉션이 필요한 이유 - 3&amp;url=http://localhost:4000/language/2024/10/22/Java-Adv-18/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/09/18/Java-Mid-08/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/10/22/Java-Adv-18/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -367,21 +377,8 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
       
       
         
-        
           
-
-
-<li class="h4">
-  <a href="/language/2024/10/22/Java-Adv-18/" data-flip="title">
-    <span>Java Adv 18 - 동시성 컬렉션이 필요한 이유 - 3</span>
-  </a>
-  <small><time datetime="2024-10-22T00:00:00+09:00">
-    22 Oct 2024
-  </time></small>
-</li>
-
-        
-      
+          
         
         
           
@@ -415,6 +412,19 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
         
       
         
+        
+          
+
+
+<li class="h4">
+  <a href="/language/2024/10/16/Java-Adv-15/" data-flip="title">
+    <span>Java Adv 15 - CAS operation - 1</span>
+  </a>
+  <small><time datetime="2024-10-16T00:00:00+09:00">
+    16 Oct 2024
+  </time></small>
+</li>
+
         
       
     
