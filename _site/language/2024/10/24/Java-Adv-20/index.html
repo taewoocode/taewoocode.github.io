@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Java Mid 11 - Exception 2" />
+<meta property="og:title" content="Java Adv 18 - 자바 동시성 컬렉션 - 2" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,19 +52,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Java Mid 11 - Exception 2 &middot; 일벌리는 개발자</title>
+<title>Java Adv 18 - 자바 동시성 컬렉션 - 2 &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="예외처리를 더 세밀하게 하자
-
+        content="동시성 컬렉션(Concurrent Collections)
 
 "
 />
 <meta
         property="og:description"
-        content="예외처리를 더 세밀하게 하자
-
+        content="동시성 컬렉션(Concurrent Collections)
 
 "
 />
@@ -74,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/language/2024/09/18/Java-Mid-11/" />
-<meta property="og:url" content="http://localhost:4000/language/2024/09/18/Java-Mid-11/" />
+<link rel="canonical" href="http://localhost:4000/language/2024/10/24/Java-Adv-20/" />
+<meta property="og:url" content="http://localhost:4000/language/2024/10/24/Java-Adv-20/" />
 
 <link
         rel="alternate"
@@ -85,10 +83,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/language/2024/09/18/Java-Mid-10/" />
+<link rel="prev" href="http://localhost:4000/language/2024/10/23/Java-Adv-19/" />
  
-<link rel="next" href="http://localhost:4000/language/2024/09/18/Java-Mid-12/" />
-
 
 <link
         rel="apple-touch-icon"
@@ -185,16 +181,16 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-language/2024/09/18/Java-Mid-11" class="post" role="article">
+<article id="post-language/2024/10/24/Java-Adv-20" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      Java Mid 11 - Exception 2
+      Java Adv 18 - 자바 동시성 컬렉션 - 2
       
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-09-18T00:00:00+09:00">18 Sep 2024</time>
+      <time datetime="2024-10-24T00:00:00+09:00">24 Oct 2024</time>
       
 
 
@@ -269,123 +265,130 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
     </style>
 
     <!--<br />-->
-    <h2 id="예외처리를-더-세밀하게-하자">예외처리를 더 세밀하게 하자</h2>
-<p><img width="698" alt="image" src="https://github.com/user-attachments/assets/d8cb3884-ce71-4552-b5d6-dc4891c9bd3f" /></p>
+    <h2 id="동시성-컬렉션concurrent-collections"><strong>동시성 컬렉션(Concurrent Collections)</strong></h2>
 
-<p>예외를 단순히 오류 코드로 분리하는 것이 아닌 다양하게 계층화 시켜서 예외를 처리할 수 있다.</p>
+<p>자바 1.5부터 멀티스레드 환경에서 성능을 최적화하면서 동시성을 지원하는 여러 가지 컬렉션들이 추가되었다. 
+이 컬렉션들은 <code class="language-plaintext highlighter-rouge">java.util.concurrent</code> 패키지에 포함되어 있으며, 
+스레드 안전(Thread Safe)하고 성능을 고려한 다양한 동기화 기법을 적용하여, 멀티스레드 환경에서의 효율적인 데이터 처리와 동시 접근을 지원한다.</p>
+
+<h2 id="동시성-컬렉션의-특징">동시성 컬렉션의 특징</h2>
+
+<p>기존의 <code class="language-plaintext highlighter-rouge">java.util</code> 패키지에서 제공하는 컬렉션들은 기본적으로 스레드 안전하지 않다. 
+이러한 컬렉션들(<code class="language-plaintext highlighter-rouge">ArrayList</code>, <code class="language-plaintext highlighter-rouge">HashMap</code> 등)은 여러 스레드가 동시에 접근할 경우 데이터 불일치나 경쟁 상태(race condition)를 일으킬 수 있다. 
+반면, 동시성 컬렉션들은 멀티스레드 환경에서 동기화 문제를 해결하면서도 성능 최적화를 고려하여 설계되었다.
+동시성 컬렉션은 <strong>정교한 잠금 메커니즘</strong>을 사용한다. 
+예를 들어, <code class="language-plaintext highlighter-rouge">Lock</code>, <code class="language-plaintext highlighter-rouge">CAS(Compare-And-Swap)</code>, <strong>분할 잠금(segment lock)</strong> 등을 활용하여 
+각 스레드가 경쟁적으로 데이터를 수정하지 않도록 하고, 여러 스레드가 동시에 안전하게 접근할 수 있도록 지원한다.</p>
+
+<h2 id="동시성-컬렉션-클래스">동시성 컬렉션 클래스</h2>
+
+<p>자바는 여러 종류의 동시성 컬렉션을 제공하며, 이를 통해 다양한 자료 구조의 동기화 문제를 해결할 수 있다. 아래는 자주 사용되는 동시성 컬렉션 클래스들이다</p>
+
+<h3 id="1-list">1. <strong>List</strong></h3>
 
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">NetworkClientExceptionV3</code> : <code class="language-plaintext highlighter-rouge">NetworkClient</code> 에서 발생하는 모든 예외는 이 예외의 자식이다.</li>
-  <li><code class="language-plaintext highlighter-rouge">ConnectExceptionV3</code> : 연결 실패시 발생하는 예외이다. 내부에 연결을 시도한 <code class="language-plaintext highlighter-rouge">address</code> 를 보관한다.</li>
-  <li><code class="language-plaintext highlighter-rouge">SendExceptionV3</code> : 전송 실패시 발생하는 예외이다. 내부에 전송을 시도한 데이터인 <code class="language-plaintext highlighter-rouge">sendData</code> 를 보관한다.</li>
+  <li>**<code class="language-plaintext highlighter-rouge">CopyOnWriteArrayList**ArrayList</code>의 대안으로, 내부 배열을 복사하여 수정하는 방식으로 동기화를 처리한다.</li>
+  <li>읽기 작업이 많고 쓰기 작업이 적은 경우에 적합하다.</li>
+  <li>멀티스레드 환경에서 쓰기 작업이 발생할 때마다 배열이 복사되므로 쓰기 작업의 성능이 떨어질 수 있다.</li>
 </ul>
 
-<h3 id="예외를-디테일하게-패키지를-만들어서-예외만-따로-관리한다">예외를 디테일하게 패키지를 만들어서 예외만 따로 관리한다.</h3>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">exception.ex3.exception</span><span class="o">;</span>
-
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">NetworkClientExceptionV3</span> <span class="kd">extends</span> <span class="nc">Exception</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="nf">NetworkClientExceptionV3</span><span class="o">(</span><span class="nc">String</span> <span class="n">message</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kd">super</span><span class="o">(</span><span class="n">message</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">exception.ex3.exception</span><span class="o">;</span>
-
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ConnectExceptionV3</span> <span class="kd">extends</span> <span class="nc">NetworkClientExceptionV3</span> <span class="o">{</span>
-
-    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">String</span> <span class="n">address</span><span class="o">;</span>
-
-    <span class="kd">public</span> <span class="nf">ConnectExceptionV3</span><span class="o">(</span><span class="nc">String</span> <span class="n">address</span><span class="o">,</span> <span class="nc">String</span> <span class="n">message</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kd">super</span><span class="o">(</span><span class="n">message</span><span class="o">);</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">address</span> <span class="o">=</span> <span class="n">address</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getAddress</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">address</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-
-</code></pre></div></div>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">exception.ex3.exception</span><span class="o">;</span>
-
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SendExceptionV3</span> <span class="kd">extends</span> <span class="nc">NetworkClientExceptionV3</span> <span class="o">{</span>
-
-    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">String</span> <span class="n">sendData</span><span class="o">;</span>
-
-    <span class="kd">public</span> <span class="nf">SendExceptionV3</span><span class="o">(</span><span class="nc">String</span> <span class="n">sendData</span><span class="o">,</span> <span class="nc">String</span> <span class="n">message</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kd">super</span><span class="o">(</span><span class="n">message</span><span class="o">);</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">sendData</span> <span class="o">=</span> <span class="n">sendData</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getSendData</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">sendData</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-
-</code></pre></div></div>
-
-<h2 id="필요에-맞는-예외-잡기">필요에 맞는 예외 잡기</h2>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">NetworkServiceV3_1</span> <span class="o">{</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">sendMessage</span><span class="o">(</span><span class="nc">String</span> <span class="n">data</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">String</span> <span class="n">address</span> <span class="o">=</span> <span class="s">"http://example.com"</span><span class="o">;</span>
-        <span class="nc">NetworkClientV3</span> <span class="n">client</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">NetworkClientV3</span><span class="o">(</span><span class="n">address</span><span class="o">);</span>
-        <span class="n">client</span><span class="o">.</span><span class="na">initError</span><span class="o">(</span><span class="n">data</span><span class="o">);</span> <span class="c1">//추가</span>
-
-        <span class="k">try</span> <span class="o">{</span>
-            <span class="n">client</span><span class="o">.</span><span class="na">connect</span><span class="o">();</span>
-            <span class="n">client</span><span class="o">.</span><span class="na">send</span><span class="o">(</span><span class="n">data</span><span class="o">);</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">ConnectExceptionV3</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"[연결 오류] 주소: "</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="na">getAddress</span><span class="o">()</span> <span class="o">+</span> <span class="s">", 메시지: "</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">SendExceptionV3</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"[전송 오류] 전송 데이터: "</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="na">getSendData</span><span class="o">()</span> <span class="o">+</span> <span class="s">", 메시지: "</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
-        <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
-            <span class="n">client</span><span class="o">.</span><span class="na">disconnect</span><span class="o">();</span>
-        <span class="o">}</span>
-
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
+<h3 id="2-set">2. <strong>Set</strong></h3>
 
 <ul>
-  <li>예외 클래스를 각각의 예외 상황에 맞추어 만들면, 각 필요에 맞는 예외를 잡아서 처리할 수 있다.</li>
-  <li>예를 들면 <code class="language-plaintext highlighter-rouge">e.getAddress()</code> , <code class="language-plaintext highlighter-rouge">e.getSendData()</code> 와 같이 각각의 예외 클래스가 가지는 고유의 기능을 활용 할 수 있다.</li>
-  <li><code class="language-plaintext highlighter-rouge">catch (ConnectExceptionV3 e)</code> : 연결 예외를 잡고, 해당 예외가 제공하는 기능을 사용해서 정보를 출력 한다.</li>
-  <li><code class="language-plaintext highlighter-rouge">catch (SendExceptionV3 e)</code> : 전송 예외를 잡고, 해당 예외가 제공하는 기능을 사용해서 정보를 출력한
-다.</li>
+  <li><strong>CopyOnWriteArraySet</strong>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">HashSet</code>의 대안으로, 내부적으로 <code class="language-plaintext highlighter-rouge">CopyOnWriteArrayList</code>를 사용하여 동기화를 처리한다.</li>
+      <li>쓰기 작업이 많은 환경에서는 성능 저하가 있을 수 있지만, 읽기 작업이 많은 환경에서 유리하다.</li>
+    </ul>
+  </li>
+  <li><strong>ConcurrentSkipListSet</strong>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">TreeSet</code>의 대안으로, 정렬된 순서를 유지하면서 스레드 안전성을 보장한다. <code class="language-plaintext highlighter-rouge">Comparator</code>를 사용하여 정렬 순서를 설정할 수 있다.</li>
+    </ul>
+  </li>
 </ul>
 
-<h2 id="실무에서는-예외를-어떻게-잡을까">실무에서는 예외를 어떻게 잡을까?</h2>
-
-<h3 id="처리할-수-없는-예외">처리할 수 없는 예외</h3>
-
-<p>예를 들어서 상대 네트워크 서버에 문제가 발생해서 통신이 불가능하거나, 데이터베이스 서버에 문제가 발생해서 접속이 안되면, 애플리케이션에서 연결 오류, 데이터베이스 접속 실패와 같은 예외가 발생한다.
-이렇게 시스템 오류 때문에 발생한 예외들은 대부분 예외를 잡아도 해결할 수 있는 것이 거의 없다. 예외를 잡아서 다시 호출을 시도해도 같은 오류가 반복될 뿐이다.
-이런 경우 고객에게는 “현재 시스템에 문제가 있습니다.”라는 오류 메시지를 보여주고, 만약 웹이라면 오류 페이지를 보여주면 된다. 그리고 내부 개발자가 문제 상황을 빠르게 인지할 수 있도록, 오류에 대한 로그를 남겨두어야 한다.</p>
-
-<h3 id="그럼-어떻게-보통-처리하는-것이-좋을까">그럼 어떻게 보통 처리하는 것이 좋을까</h3>
-
-<p>실무에서는 <code class="language-plaintext highlighter-rouge">System.out</code> 이나 <code class="language-plaintext highlighter-rouge">System.err</code> 을 통해 콘솔에 무언가를 출력하기 보다는, 주로 Slf4J, logback 같은 별도의 로그 라이브러리를 사용해서 콘솔과 특정 파일에 함께 결과를 출력한다. 그런데
-<code class="language-plaintext highlighter-rouge">e.printStackTrace()</code> 를 직접 호출하면 결과가 콘솔에만 출력된다. 이렇게 되면 서버에서 로그를 확인하기 어렵다. 서버에서는 파일로 로그를 확인해야 한다. 따라서 콘솔에 바로 결과를 출력하는 <code class="language-plaintext highlighter-rouge">e.printStackTrace()</code> 는 잘 사용하지 않는다. 대신에 로그 라이브러리를 통해서 예외 스택 트레이스를 출력 한다. 지금은 로그 라이브러리라는 것이 있다는 정도만 알아두자. 학습 단계에서는 <code class="language-plaintext highlighter-rouge">e.printStackTrace()</code> 를 적극 사용해도 괜찮다.</p>
-
-<p>처음 자바를 설계할 당시에는 체크 예외가 더 나은 선택이라 생각했다. 그래서 자바가 기본으로 제공하는 기능들에는 체 크 예외가 많다. 그런데 시간이 흐르면서 복구 할 수 없는 예외가 너무 많아졌다. 특히 라이브러리를 점점 더 많이 사용 하면서 처리해야 하는 예외도 더 늘어났다. 라이브러리들이 제공하는 체크 예외를 처리할 수 없을 때마다 <code class="language-plaintext highlighter-rouge">throws</code> 에 예외를 덕지덕지 붙어야 했다. 그래서 개발자들은 <code class="language-plaintext highlighter-rouge">throws Exception</code> 이라는 극단적?인 방법도 자주 사용하게 되었 다. 물론 이 방법은 사용하면 안된다. 모든 예외를 던진다고 선언하는 것인데, 결과적으로 어떤 예외를 잡고 어떤 예외를 던지는지 알 수 없기 때문이다. 체크 예외를 사용한다면 잡을 건 잡고 던질 예외는 명확하게 던지도록 선언해야 한다. 체크 예외의 이런 문제점 때문에 최근 라이브러리들은 대부분 런타임 예외를 기본으로 제공한다. 가장 유명한 스프링이 나 JPA 같은 기술들도 대부분 언체크(런타임) 예외를 사용한다.
-런타임 예외도 필요하면 잡을 수 있기 때문에 필요한 경우에는 잡아서 처리하고, 그렇지 않으면 자연스럽게 던지도록 둔 다. 그리고 처리할 수 없는 예외는 예외를 공통으로 처리하는 부분을 만들어서 해결하면 된다.</p>
-
-<h3 id="체크예외는-부담">체크예외는 부담</h3>
-
-<p>체크 예외는 개발자가 실수로 놓칠 수 있는 예외들을 컴파일러가 체크해주기 때문에 오래전부터 많이 사용되었다. 그런 데 앞서 설명한 것 처럼 서비스가 점차 커지면서 처리할 수 없는 예외가 많아지고, 또 프로그램이 점점 복잡해지면서 체크 예외를 사용하는 것이 점점 더 부담스러워졌다.</p>
+<h3 id="3-map">3. <strong>Map</strong></h3>
 
 <ul>
-  <li>모든 경우의 수를 생각하기 힘들기 때문이라고 생각한다.</li>
+  <li><strong>ConcurrentHashMap</strong>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">HashMap</code>의 대안으로, 내부적으로 <strong>분할 잠금</strong>(Segment Lock)을 사용하여 성능을 최적화한다. 여러 스레드가 동시에 다른 세그먼트에 접근할 수 있어 동시성 처리 성능이 뛰어나다.</li>
+    </ul>
+  </li>
+  <li><strong>ConcurrentSkipListMap</strong>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">TreeMap</code>의 대안으로, 정렬된 순서를 유지하면서 스레드 안전성을 보장한다. <code class="language-plaintext highlighter-rouge">Comparator</code>를 사용하여 정렬 순서를 설정할 수 있다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="4-queue">4. <strong>Queue</strong></h3>
+
+<ul>
+  <li><strong>ConcurrentLinkedQueue</strong>비차단(non-blocking) 큐로, <strong>CAS</strong>(Compare-And-Swap) 기법을 사용하여 스레드 안전성을 보장한다. 여러 스레드가 동시에 큐에 접근할 수 있다.</li>
+</ul>
+
+<h3 id="5-deque">5. <strong>Deque</strong></h3>
+
+<ul>
+  <li><strong>ConcurrentLinkedDeque</strong>비차단(non-blocking) 덱(Deque)으로, 양쪽 끝에서 삽입 및 삭제가 가능하며, CAS 기법을 사용해 동기화가 이루어진다. 멀티스레드 환경에서 효율적으로 사용된다.</li>
+</ul>
+
+<h3 id="blockingqueue">BlockingQueue</h3>
+
+<p><code class="language-plaintext highlighter-rouge">BlockingQueue</code>는 데이터를 삽입하거나 제거할 때 <strong>차단(blocking)</strong> 기능을 제공하는 큐로, 주로 생산자-소비자 패턴에서 사용된다. 여러 종류의 블로킹 큐가 제공되며, 각 큐는 고유의 특징을 가지고 있다.</p>
+
+<ul>
+  <li>
+    <p><strong>ArrayBlockingQueue</strong></p>
+
+    <p>고정 크기의 블로킹 큐로, 큐가 가득 찼을 때 삽입을 차단하고, 큐가 비었을 때 제거를 차단한다. 공정(fair) 모드를 지원하며, 이를 통해 큐에 접근하는 스레드의 순서를 보장할 수 있다. 그러나 공정 모드를 사용하면 성능 저하가 발생할 수 있다.</p>
+  </li>
+  <li>
+    <p><strong>LinkedBlockingQueue</strong></p>
+
+    <p>크기가 고정되거나 무한인 블로킹 큐로, 큐가 가득 차면 삽입을 차단하고, 큐가 비면 제거를 차단한다. 큐의 크기가 동적으로 조정될 수 있어 유연하게 사용될 수 있다.</p>
+  </li>
+  <li>
+    <p><strong>PriorityBlockingQueue</strong></p>
+
+    <p>우선순위가 높은 요소를 먼저 처리하는 블로킹 큐이다. 우선순위는 자연 순서나 사용자가 제공하는 <code class="language-plaintext highlighter-rouge">Comparator</code>에 의해 결정된다. 데이터가 삽입된 순서와는 상관없이 우선순위가 높은 요소가 먼저 처리된다.</p>
+  </li>
+  <li>
+    <p><strong>SynchronousQueue</strong></p>
+
+    <p>데이터 저장소가 없는 블로킹 큐로, 생산자가 데이터를 삽입하면 소비자가 데이터를 받을 때까지 대기한다. 이 큐는 직접적인 <strong>핸드오프(hand-off)</strong> 메커니즘을 제공하여 생산자와 소비자가 데이터를 직접 주고받을 수 있게 한다.</p>
+  </li>
+  <li>
+    <p><strong>DelayQueue</strong></p>
+
+    <p>요소가 지정된 시간만큼 지연된 후에야 소비될 수 있는 블로킹 큐이다. 시간 지연이 필요한 작업을 처리하는 데 유용하다. 주로 스케줄링 작업이나 지연된 작업을 처리할 때 사용된다.</p>
+  </li>
+</ul>
+
+<h3 id="동시성-컬렉션의-장점과-단점">동시성 컬렉션의 장점과 단점</h3>
+
+<h3 id="장점">장점</h3>
+
+<ul>
+  <li><strong>성능 최적화</strong>: <code class="language-plaintext highlighter-rouge">ConcurrentHashMap</code>, <code class="language-plaintext highlighter-rouge">CopyOnWriteArrayList</code>와 같은 컬렉션은 동기화 기법을 정교하게 적용하여 멀티스레드 환경에서 성능을 최적화한다.</li>
+  <li><strong>유연한 동기화</strong>: <code class="language-plaintext highlighter-rouge">java.util.concurrent</code> 패키지의 컬렉션들은 특정 메서드에만 동기화를 적용하거나, 잠금 범위를 세밀하게 조정하는 등의 유연한 동기화 전략을 제공한다.</li>
+  <li><strong>스레드 안전</strong>: 멀티스레드 환경에서 데이터를 안전하게 처리할 수 있어, 동시 접근 시 발생할 수 있는 데이터 불일치나 경쟁 상태를 방지할 수 있다.</li>
+</ul>
+
+<h3 id="단점">단점</h3>
+
+<ul>
+  <li><strong>복잡한 구현</strong>: 동시성 컬렉션의 내부 구현은 복잡하고 고급 동기화 기법을 사용하므로, 이를 잘못 사용하면 성능이 저하될 수 있다.</li>
+  <li><strong>메모리 소비</strong>: 일부 동시성 컬렉션은 추가적인 메모리 오버헤드를 발생시킬 수 있다. 예를 들어, <code class="language-plaintext highlighter-rouge">CopyOnWriteArrayList</code>는 매번 데이터를 복사하므로 메모리 사용량이 증가할 수 있다.</li>
+  <li><strong>성능 저하</strong>: 동시성 컬렉션은 비록 멀티스레드 환경에서 안전하지만, 적절한 상황에서 사용되지 않으면 불필요한 동기화로 인해 성능 저하가 발생할 수 있다.</li>
 </ul>
 
 <h2 id="reference">Reference</h2>
 
-<p>인프런 김영한님의 자바강의 + 나의 뇌 + 나의 눈 + 나의 코</p>
+<p>김영한님의 자바 강의</p>
+
 
     <br />
     <br />
@@ -399,12 +402,12 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=Java Mid 11 - Exception 2&amp;url=http://localhost:4000/language/2024/09/18/Java-Mid-11/"
+    <a href="http://twitter.com/share?text=Java Adv 18 - 자바 동시성 컬렉션 - 2&amp;url=http://localhost:4000/language/2024/10/24/Java-Adv-20/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/09/18/Java-Mid-11/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/10/24/Java-Adv-20/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -426,21 +429,8 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
       
       
         
-        
           
-
-
-<li class="h4">
-  <a href="/language/2024/10/24/Java-Adv-20/" data-flip="title">
-    <span>Java Adv 18 - 자바 동시성 컬렉션 - 2</span>
-  </a>
-  <small><time datetime="2024-10-24T00:00:00+09:00">
-    24 Oct 2024
-  </time></small>
-</li>
-
-        
-      
+          
         
         
           
@@ -474,6 +464,19 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
         
       
         
+        
+          
+
+
+<li class="h4">
+  <a href="/language/2024/10/21/Java-Adv-17/" data-flip="title">
+    <span>Java Adv 17 - 동시성 컬렉션이 필요한 이유 - 2</span>
+  </a>
+  <small><time datetime="2024-10-21T00:00:00+09:00">
+    21 Oct 2024
+  </time></small>
+</li>
+
         
       
     

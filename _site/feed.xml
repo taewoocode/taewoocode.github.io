@@ -6,9 +6,147 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 15 Nov 2024 11:34:36 +0900</pubDate>
-    <lastBuildDate>Fri, 15 Nov 2024 11:34:36 +0900</lastBuildDate>
+    <pubDate>Fri, 15 Nov 2024 11:42:29 +0900</pubDate>
+    <lastBuildDate>Fri, 15 Nov 2024 11:42:29 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
+    
+      <item>
+        <title>Java Adv 18 - 자바 동시성 컬렉션 - 2</title>
+        <description>&lt;h2 id=&quot;동시성-컬렉션concurrent-collections&quot;&gt;&lt;strong&gt;동시성 컬렉션(Concurrent Collections)&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;p&gt;자바 1.5부터 멀티스레드 환경에서 성능을 최적화하면서 동시성을 지원하는 여러 가지 컬렉션들이 추가되었다. 
+이 컬렉션들은 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;java.util.concurrent&lt;/code&gt; 패키지에 포함되어 있으며, 
+스레드 안전(Thread Safe)하고 성능을 고려한 다양한 동기화 기법을 적용하여, 멀티스레드 환경에서의 효율적인 데이터 처리와 동시 접근을 지원한다.&lt;/p&gt;
+
+&lt;h2 id=&quot;동시성-컬렉션의-특징&quot;&gt;동시성 컬렉션의 특징&lt;/h2&gt;
+
+&lt;p&gt;기존의 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;java.util&lt;/code&gt; 패키지에서 제공하는 컬렉션들은 기본적으로 스레드 안전하지 않다. 
+이러한 컬렉션들(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ArrayList&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;HashMap&lt;/code&gt; 등)은 여러 스레드가 동시에 접근할 경우 데이터 불일치나 경쟁 상태(race condition)를 일으킬 수 있다. 
+반면, 동시성 컬렉션들은 멀티스레드 환경에서 동기화 문제를 해결하면서도 성능 최적화를 고려하여 설계되었다.
+동시성 컬렉션은 &lt;strong&gt;정교한 잠금 메커니즘&lt;/strong&gt;을 사용한다. 
+예를 들어, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Lock&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CAS(Compare-And-Swap)&lt;/code&gt;, &lt;strong&gt;분할 잠금(segment lock)&lt;/strong&gt; 등을 활용하여 
+각 스레드가 경쟁적으로 데이터를 수정하지 않도록 하고, 여러 스레드가 동시에 안전하게 접근할 수 있도록 지원한다.&lt;/p&gt;
+
+&lt;h2 id=&quot;동시성-컬렉션-클래스&quot;&gt;동시성 컬렉션 클래스&lt;/h2&gt;
+
+&lt;p&gt;자바는 여러 종류의 동시성 컬렉션을 제공하며, 이를 통해 다양한 자료 구조의 동기화 문제를 해결할 수 있다. 아래는 자주 사용되는 동시성 컬렉션 클래스들이다&lt;/p&gt;
+
+&lt;h3 id=&quot;1-list&quot;&gt;1. &lt;strong&gt;List&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;**&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CopyOnWriteArrayList**ArrayList&lt;/code&gt;의 대안으로, 내부 배열을 복사하여 수정하는 방식으로 동기화를 처리한다.&lt;/li&gt;
+  &lt;li&gt;읽기 작업이 많고 쓰기 작업이 적은 경우에 적합하다.&lt;/li&gt;
+  &lt;li&gt;멀티스레드 환경에서 쓰기 작업이 발생할 때마다 배열이 복사되므로 쓰기 작업의 성능이 떨어질 수 있다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;2-set&quot;&gt;2. &lt;strong&gt;Set&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;CopyOnWriteArraySet&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;HashSet&lt;/code&gt;의 대안으로, 내부적으로 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CopyOnWriteArrayList&lt;/code&gt;를 사용하여 동기화를 처리한다.&lt;/li&gt;
+      &lt;li&gt;쓰기 작업이 많은 환경에서는 성능 저하가 있을 수 있지만, 읽기 작업이 많은 환경에서 유리하다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;ConcurrentSkipListSet&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TreeSet&lt;/code&gt;의 대안으로, 정렬된 순서를 유지하면서 스레드 안전성을 보장한다. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Comparator&lt;/code&gt;를 사용하여 정렬 순서를 설정할 수 있다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;3-map&quot;&gt;3. &lt;strong&gt;Map&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;ConcurrentHashMap&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;HashMap&lt;/code&gt;의 대안으로, 내부적으로 &lt;strong&gt;분할 잠금&lt;/strong&gt;(Segment Lock)을 사용하여 성능을 최적화한다. 여러 스레드가 동시에 다른 세그먼트에 접근할 수 있어 동시성 처리 성능이 뛰어나다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;ConcurrentSkipListMap&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TreeMap&lt;/code&gt;의 대안으로, 정렬된 순서를 유지하면서 스레드 안전성을 보장한다. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Comparator&lt;/code&gt;를 사용하여 정렬 순서를 설정할 수 있다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;4-queue&quot;&gt;4. &lt;strong&gt;Queue&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;ConcurrentLinkedQueue&lt;/strong&gt;비차단(non-blocking) 큐로, &lt;strong&gt;CAS&lt;/strong&gt;(Compare-And-Swap) 기법을 사용하여 스레드 안전성을 보장한다. 여러 스레드가 동시에 큐에 접근할 수 있다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;5-deque&quot;&gt;5. &lt;strong&gt;Deque&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;ConcurrentLinkedDeque&lt;/strong&gt;비차단(non-blocking) 덱(Deque)으로, 양쪽 끝에서 삽입 및 삭제가 가능하며, CAS 기법을 사용해 동기화가 이루어진다. 멀티스레드 환경에서 효율적으로 사용된다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;blockingqueue&quot;&gt;BlockingQueue&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BlockingQueue&lt;/code&gt;는 데이터를 삽입하거나 제거할 때 &lt;strong&gt;차단(blocking)&lt;/strong&gt; 기능을 제공하는 큐로, 주로 생산자-소비자 패턴에서 사용된다. 여러 종류의 블로킹 큐가 제공되며, 각 큐는 고유의 특징을 가지고 있다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;ArrayBlockingQueue&lt;/strong&gt;&lt;/p&gt;
+
+    &lt;p&gt;고정 크기의 블로킹 큐로, 큐가 가득 찼을 때 삽입을 차단하고, 큐가 비었을 때 제거를 차단한다. 공정(fair) 모드를 지원하며, 이를 통해 큐에 접근하는 스레드의 순서를 보장할 수 있다. 그러나 공정 모드를 사용하면 성능 저하가 발생할 수 있다.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;LinkedBlockingQueue&lt;/strong&gt;&lt;/p&gt;
+
+    &lt;p&gt;크기가 고정되거나 무한인 블로킹 큐로, 큐가 가득 차면 삽입을 차단하고, 큐가 비면 제거를 차단한다. 큐의 크기가 동적으로 조정될 수 있어 유연하게 사용될 수 있다.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;PriorityBlockingQueue&lt;/strong&gt;&lt;/p&gt;
+
+    &lt;p&gt;우선순위가 높은 요소를 먼저 처리하는 블로킹 큐이다. 우선순위는 자연 순서나 사용자가 제공하는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Comparator&lt;/code&gt;에 의해 결정된다. 데이터가 삽입된 순서와는 상관없이 우선순위가 높은 요소가 먼저 처리된다.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;SynchronousQueue&lt;/strong&gt;&lt;/p&gt;
+
+    &lt;p&gt;데이터 저장소가 없는 블로킹 큐로, 생산자가 데이터를 삽입하면 소비자가 데이터를 받을 때까지 대기한다. 이 큐는 직접적인 &lt;strong&gt;핸드오프(hand-off)&lt;/strong&gt; 메커니즘을 제공하여 생산자와 소비자가 데이터를 직접 주고받을 수 있게 한다.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;DelayQueue&lt;/strong&gt;&lt;/p&gt;
+
+    &lt;p&gt;요소가 지정된 시간만큼 지연된 후에야 소비될 수 있는 블로킹 큐이다. 시간 지연이 필요한 작업을 처리하는 데 유용하다. 주로 스케줄링 작업이나 지연된 작업을 처리할 때 사용된다.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;동시성-컬렉션의-장점과-단점&quot;&gt;동시성 컬렉션의 장점과 단점&lt;/h3&gt;
+
+&lt;h3 id=&quot;장점&quot;&gt;장점&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;성능 최적화&lt;/strong&gt;: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ConcurrentHashMap&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CopyOnWriteArrayList&lt;/code&gt;와 같은 컬렉션은 동기화 기법을 정교하게 적용하여 멀티스레드 환경에서 성능을 최적화한다.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;유연한 동기화&lt;/strong&gt;: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;java.util.concurrent&lt;/code&gt; 패키지의 컬렉션들은 특정 메서드에만 동기화를 적용하거나, 잠금 범위를 세밀하게 조정하는 등의 유연한 동기화 전략을 제공한다.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;스레드 안전&lt;/strong&gt;: 멀티스레드 환경에서 데이터를 안전하게 처리할 수 있어, 동시 접근 시 발생할 수 있는 데이터 불일치나 경쟁 상태를 방지할 수 있다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;단점&quot;&gt;단점&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;복잡한 구현&lt;/strong&gt;: 동시성 컬렉션의 내부 구현은 복잡하고 고급 동기화 기법을 사용하므로, 이를 잘못 사용하면 성능이 저하될 수 있다.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;메모리 소비&lt;/strong&gt;: 일부 동시성 컬렉션은 추가적인 메모리 오버헤드를 발생시킬 수 있다. 예를 들어, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CopyOnWriteArrayList&lt;/code&gt;는 매번 데이터를 복사하므로 메모리 사용량이 증가할 수 있다.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;성능 저하&lt;/strong&gt;: 동시성 컬렉션은 비록 멀티스레드 환경에서 안전하지만, 적절한 상황에서 사용되지 않으면 불필요한 동기화로 인해 성능 저하가 발생할 수 있다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;김영한님의 자바 강의&lt;/p&gt;
+
+</description>
+        <pubDate>Thu, 24 Oct 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/language/2024/10/24/Java-Adv-20/</link>
+        <guid isPermaLink="true">http://localhost:4000/language/2024/10/24/Java-Adv-20/</guid>
+        
+        <category>java</category>
+        
+        
+        <category>language</category>
+        
+      </item>
     
       <item>
         <title>Java Adv 18 - 자바 동시성 컬렉션</title>
@@ -2367,93 +2505,6 @@ BFS는 레이어별로 탐색을 하기에 Queue에 대한 이해가 있어야 �
         <pubDate>Sat, 05 Oct 2024 00:00:00 +0900</pubDate>
         <link>http://localhost:4000/language/2024/10/05/Java-Adv-10/</link>
         <guid isPermaLink="true">http://localhost:4000/language/2024/10/05/Java-Adv-10/</guid>
-        
-        <category>java</category>
-        
-        
-        <category>language</category>
-        
-      </item>
-    
-      <item>
-        <title>Java Adv 09 - Producer, Consumer</title>
-        <description>&lt;h2 id=&quot;produner-consumer&quot;&gt;Produner Consumer&lt;/h2&gt;
-
-&lt;p&gt;생산자 소비자 문제는 멀티스레드 프로그래밍에서 자주 등장하는 동시성 문제 중 하나로, 여러 스레드가 동시에 데이터를 생산하고 소비하는 상황을 다룬다.
-&lt;strong&gt;멀티스레드의&lt;/strong&gt; &lt;strong&gt;핵심을&lt;/strong&gt; &lt;strong&gt;제대로&lt;/strong&gt; &lt;strong&gt;이해하려면&lt;/strong&gt; &lt;strong&gt;반드시&lt;/strong&gt; &lt;strong&gt;생산자&lt;/strong&gt; &lt;strong&gt;소비자&lt;/strong&gt; &lt;strong&gt;문제를&lt;/strong&gt; &lt;strong&gt;이해하고&lt;/strong&gt;, &lt;strong&gt;올바른&lt;/strong&gt; &lt;strong&gt;해결&lt;/strong&gt; &lt;strong&gt;방안도&lt;/strong&gt; &lt;strong&gt;함께&lt;/strong&gt; &lt;strong&gt;알아두어야 한다. 
-생산자&lt;/strong&gt; &lt;strong&gt;소비자&lt;/strong&gt; &lt;strong&gt;문제를&lt;/strong&gt; &lt;strong&gt;제대로&lt;/strong&gt; &lt;strong&gt;이해하면&lt;/strong&gt; &lt;strong&gt;멀티스레드를&lt;/strong&gt; &lt;strong&gt;제대로&lt;/strong&gt; &lt;strong&gt;이해했다고&lt;/strong&gt; &lt;strong&gt;볼&lt;/strong&gt; &lt;strong&gt;수&lt;/strong&gt; &lt;strong&gt;있다&lt;/strong&gt;.
-동시성 문제는 근데 너무 어렵다.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;버퍼&lt;/strong&gt;(Buffer): 생산자가 생성한 데이터를 일시적으로 저장하는 공간이다. 이 버퍼는 한정된 크기를 가지며, 생산자와 소비자가 이 버퍼를 통해 데이터를 주고받는다. 앞서 프린터 예제에서 프린터 큐가 버퍼 역할이다.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;생산자가&lt;/strong&gt; &lt;strong&gt;너무&lt;/strong&gt; &lt;strong&gt;빠를&lt;/strong&gt; &lt;strong&gt;때&lt;/strong&gt;: 버퍼가 가득 차서 더 이상 데이터를 넣을 수 없을 때까지 생산자가 데이터를 생성한다. 버퍼가 가득 찬 경우 생산자는 버퍼에 빈 공간이 생길 때까지 기다려야 한다.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;소비자가&lt;/strong&gt; &lt;strong&gt;너무&lt;/strong&gt; &lt;strong&gt;빠를&lt;/strong&gt; &lt;strong&gt;때&lt;/strong&gt;: 버퍼가 비어서 더 이상 소비할 데이터가 없을 때까지 소비자가 데이터를 처리한다. 버퍼가 비어있을 때 소비자는 버퍼에 새로운 데이터가 들어올 때까지 기다려야 한다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;예시-코드를-통하여-확인하자&quot;&gt;예시 코드를 통하여 확인하자&lt;/h2&gt;
-
-&lt;p&gt;synchronized를 사용하여 한 번에 하나의 스레드만 실행할 수 있고, 다른 스레드는 이 메서드의 실행이 끝날 때까지 대기할 수 있게 대상 객체의 락을 걸어 해당 객체에 대해 다른 스레드의 접근을 제한하기 위해서 synchronized를 사용한다.
-뜬금없이 복습을 하자면 &lt;strong&gt;안전한 임계 영역&lt;/strong&gt;을 만드는 이유는 &lt;strong&gt;멀티스레드 환경에서 데이터의 일관성&lt;/strong&gt;을 유지하고, 여러 스레드가 동시에 자원에 접근할 때 발생할 수 있는 &lt;strong&gt;데이터 충돌&lt;/strong&gt;이나 &lt;strong&gt;경쟁 조건&lt;/strong&gt;(race condition)을 방지하기 위해서이다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;511&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/57e85800-2651-4f11-8df9-52f3edd50751&quot; /&gt;
-&lt;img width=&quot;499&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/61f83656-c844-42f3-a54a-9f28c86a60af&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;생산자가 put으로 request를 요청하게 되면 구현체인 BoundedQueueV1에 있는 queue에 put을 요청하게 된다.&lt;br /&gt;
-그러면 메인메서드에서 하나하나 확인해보자&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;697&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/e95e34d0-818e-47e8-9786-e6d0db8b41f2&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;우선 두가지 조건이 있다. 
-하나는 producer를 먼저 실행하는 시점, 두번째는 consumer를 먼저 실행하는 시점 producer가 먼저 실행되는 시점에서 보자&lt;/p&gt;
-
-&lt;h2 id=&quot;생산자-시점&quot;&gt;생산자 시점&lt;/h2&gt;
-
-&lt;p&gt;&lt;img width=&quot;658&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/3fa185c5-4172-4004-aa01-a8c85fd5e75e&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;결론부터 말하자면 &lt;strong&gt;3명의 생산자&lt;/strong&gt;가 차례대로 &lt;strong&gt;큐라는 상자&lt;/strong&gt;에 데이터를 넣는 걸 보여주고, 나중에 &lt;strong&gt;큐 안에 무엇이 있는지&lt;/strong&gt;와 &lt;strong&gt;생산자들이 어떤 상태&lt;/strong&gt;인지를 확인하는 작업을 하려고 한다. 
-생산자는 &lt;strong&gt;“data0”, “data1”, “data2”&lt;/strong&gt;라는 데이터를 큐에 넣는다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;688&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/f5d7dc37-683e-44a7-83dd-bc0fd9d23aba&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;startProducer: 생산자 스레드를 3개 만들어서 실행한다. 이해를 돕기 위해 0.1초의 간격으로 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sleep&lt;/code&gt;을 주면서 순차적으로 실행한다. 이렇게 하면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;producer1&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;producer2&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;producer3&lt;/code&gt;의 실행 순서를 확인할 수 있다.&lt;/li&gt;
-  &lt;li&gt;printAllstate: 모든 스레드의 상태를 출력한다. 처음에는 생산자 스레드들만 만들어졌으므로 해당 스레드들만 출력한다.&lt;/li&gt;
-  &lt;li&gt;startConsumer: 소비자 스레드를 3개 만들어서 실행한다. 이해를 돕기 위해 0.1초의 간격으로 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sleep&lt;/code&gt;을 주면서 순차적으로 실행한다. 이렇게 하면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;consumer1&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;consumer2&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;consumer3&lt;/code&gt;의 실행 순서를 확인할 수 있다.&lt;/li&gt;
-  &lt;li&gt;printAllState: 모든 스레드의 상태를 출력한다. 이때는 생산자와 소비자 스레드 모두 출력된다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;순차실행&quot;&gt;순차실행&lt;/h2&gt;
-
-&lt;p&gt;생산자 먼저인 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;producerFirst&lt;/code&gt; 를 호출하면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;producer1&lt;/code&gt; → &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;producer2&lt;/code&gt; → &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;producer3&lt;/code&gt; → &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;consumer1&lt;/code&gt; → &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;consumer2&lt;/code&gt; → &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;consumer3&lt;/code&gt; 순서로 실행된다.
-소비자 먼저인 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;consumerFirst&lt;/code&gt; 를 호출하면&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;consumer1&lt;/code&gt; → &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;consumer2&lt;/code&gt; → &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;consumer3&lt;/code&gt; → &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;producer1&lt;/code&gt; → &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;producer2&lt;/code&gt; → &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;producer3&lt;/code&gt; 순서로 실행된다. 참고로 여기서는 이해를 돕기 위해 이렇게 순서대로 실행했다. 실제로는 동시에 실행될 것이다.&lt;/p&gt;
-
-&lt;h2 id=&quot;하지만-이-코드는-문제가-많다&quot;&gt;하지만 이 코드는 문제가 많다.&lt;/h2&gt;
-
-&lt;p&gt;편의상 Consumer를 c, Producer를 p라고 말하겠다.
-&lt;strong&gt;생산자 스레드 먼저 실행&lt;/strong&gt;의 경우 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;p3&lt;/code&gt; 가 보관하는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;data3&lt;/code&gt; 은 버려지고, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;c3&lt;/code&gt; 는 데이터를 받지 못한다. 
-(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;null&lt;/code&gt; 을 받는다.)
-&lt;strong&gt;소비자 스레드 먼저 실행&lt;/strong&gt;의 경우 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;c1&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;c2&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;c3&lt;/code&gt; 는 데이터를 받지 못한다.(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;null&lt;/code&gt; 을 받는다.) 
-그리고 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;p3&lt;/code&gt; 가 보관하는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;data3&lt;/code&gt; 은 버려진다.
-예제는 단순하게 설명하기 위해 생산자 스레드 3개, 소비자 스레드 3개를 한 번만 실행했지만, 실제로 이런 생산자 소비
-자 구조는 보통 계속해서 실행된다. 
-레스토랑에 손님은 계속 찾아오고, 음료 공장은 계속해서 음료를 만들어낸다. 
-쇼핑몰이라면 고객은 계속해서 주문을 한다.
-&lt;strong&gt;버퍼가 가득 찬 경우&lt;/strong&gt;: 생산자 입장에서 버퍼에 여유가 생길 때 까지 조금만 기다리면 되는데, 기다리지 못하고, 데
-이터를 버리는 것은 아쉽다.
-&lt;strong&gt;버퍼가 빈 경우&lt;/strong&gt;: 소비자 입장에서 버퍼에 데이터가 채워질 때 까지 조금만 기다리면 되는데, 기다리지 못하고,
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;null&lt;/code&gt; 데이터를 얻는 것은 아쉽다.
-문제의 해결 방안은 단순하다. 앞서 설명한 것 처럼 스레드가 기다리면 되는 것, 그럼 스레드가 기다리도록 구현해보자.&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;김영한님의 자바 강의&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://stackoverflow.com/questions/50001353/java-one-producer-and-two-consumers&quot;&gt;https://stackoverflow.com/questions/50001353/java-one-producer-and-two-consumers&lt;/a&gt;&lt;/p&gt;
-
-</description>
-        <pubDate>Sat, 05 Oct 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/language/2024/10/05/Java-Adv-09/</link>
-        <guid isPermaLink="true">http://localhost:4000/language/2024/10/05/Java-Adv-09/</guid>
         
         <category>java</category>
         
