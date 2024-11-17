@@ -6,12 +6,124 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 15 Nov 2024 11:42:29 +0900</pubDate>
-    <lastBuildDate>Fri, 15 Nov 2024 11:42:29 +0900</lastBuildDate>
+    <pubDate>Sun, 17 Nov 2024 18:31:30 +0900</pubDate>
+    <lastBuildDate>Sun, 17 Nov 2024 18:31:30 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
-        <title>Java Adv 18 - 자바 동시성 컬렉션 - 2</title>
+        <title>Java Adv 21 - 스레드를 직접 사용할 때의 문제점</title>
+        <description>&lt;h2 id=&quot;스레드-생성-비용으로-인한-성능-문제&quot;&gt;스레드 생성 비용으로 인한 성능 문제&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;메모리 할당
+    &lt;ul&gt;
+      &lt;li&gt;각 스레드는 자신만의 호출 스택(call stack)을 가지고 있다. 이 호출 스택은 스레드가 실행되는 동안 사용하는 메모리 공간이다.&lt;/li&gt;
+      &lt;li&gt;스레드를 생성할 땐 이 호출 스택을 위한 메모리를 할당해야 한다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;운영체제 자원 사용
+    &lt;ul&gt;
+      &lt;li&gt;스레드를 생성하는 작업은 운영체제 커널 수준에서 일어난다.
+        &lt;ul&gt;
+          &lt;li&gt;스레드를 관리하고 실행순서를 조정해야 한다.&lt;/li&gt;
+          &lt;li&gt;참고로 스레드 하나는 보통 1MB 이상의 메모리를 사용한다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;스레드를 생성하는 작업은 생각보다 무겁다. 단순히 자바 객체를 하나 생성하는 것과는 비교할 수 없을 정도로 큰 작업이다. 예를 들어서 어떤 작업 하나를 수행할 때 마다 스레드를 각각 생성하고 실행한다면, 스레드의 생성 비용 때문에 많은 시간이 소모 된다. 아주 가벼운 작업이라면, 작업의 실행 시간보다 스레드의 생성 시간이 더 오래 걸릴 수도 있다. 이러한 문제를 해결하기 위해서 이미 생성한 스레드를 재활용한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;스레드-관리-문제&quot;&gt;스레드 관리 문제&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;서버의 CPU, 메모리 자원은 한정되어 있기 때문에, 스레드는 무한하게 만들 수 없다.&lt;/li&gt;
+  &lt;li&gt;예를 들어서 서버의 사용자의 주문을 처리하는 서비스라고 가정하자. 그리고 사용자는 갑자기 몰려들 수 있다. 평소에는 100개 정도의 스레드 정도면 충분했는데, 갑자기 10000개의 스레드가 필요한 상황이 된다면, CPU 메모리 자원이 버틸 수 없을 것이다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;runnable-인터페이스의-불편함&quot;&gt;Runnable 인터페이스의 불편함&lt;/h2&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Runnable&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;반환 값이 없다: run() 메서드는 반환값을 가지지 않는다. 따라서 실행 결과의 값을 얻으려면 별도의 메커니즘을 사용해야 한다. 쉽게 이야기해서 스레드의 실행 결과를 직접 받을 수 없다. 스레드가 실행한 결과를 멤버 변수에다가 넣고, join() 등을 사용해서 스레드가 종료되기를 기다린 다음에 멤버 변수의 보관한 값을 받아야 한다.&lt;/li&gt;
+  &lt;li&gt;예외 처리: run() 메서드는 체크 예외(checked exception)를 던질 수 없다. 체크 예외의 처리는 메서드 내부에서 처리해야 한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;thread.collection.simple.list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SumTaskExample&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;calculateSum&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;InterruptedException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SumTask&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Runnable&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+            &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;nc&quot;&gt;SumTask&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sumTask&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SumTask&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;thread&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sumTask&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getResult&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;InterruptedException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nc&quot;&gt;SumTaskExample&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sumTaskExample&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SumTaskExample&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;sumTaskExample&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;calculateSum&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;sumTaskExample = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sumTaskExample&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getResult&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// 보통은 이렇게 결과값을 리턴받는다.&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;thread-pool&quot;&gt;Thread pool&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;스레드를 관리하고 생성하는 스레드 풀이 필요하다.&lt;/li&gt;
+  &lt;li&gt;스레드를 관리하는 스레드 풀(스레드가 모여서 대기하는 수영장 풀 같은 개념)에 스레드를 필요한 만큼 미리 만들어 둔다.&lt;/li&gt;
+  &lt;li&gt;스레드는 스레드 풀에서 대기하며 쉰다.&lt;/li&gt;
+  &lt;li&gt;작업 요청이 온다.&lt;/li&gt;
+  &lt;li&gt;스레드 플에서 이미 만들어진 스레드를 꺼낸다.&lt;/li&gt;
+  &lt;li&gt;조회한 스레드1로 작업을 처리한다.&lt;/li&gt;
+  &lt;li&gt;스레드 1은 작업을 완료한다.&lt;/li&gt;
+  &lt;li&gt;작업을 완료한 스레드는 종료하는게 아니라, 다시 스레드 풀에 반납한다. 스레드 1은 이후로 다시 재사용이 될 수 있다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;excutor&quot;&gt;Excutor&lt;/h2&gt;
+
+&lt;p&gt;사실 스레드 풀이라는 것이 별것이 아니다. 그냥 컬렉션에 스레드를 보관하고 재사용할 수 있게 하면 된다. 하지만 스레드 풀에 있는 스레드는 처리할 작업이 없다면, 대기(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;WAITING&lt;/code&gt; ) 상태로 관리해야 하고, 작업 요청이 오면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUNNABLE&lt;/code&gt;상태로 변경해야 한다. 막상 구현하려고 하면 생각보다 매우 복잡하다는 사실을 알게될 것이다. 여기에 생산자 소비자 문제까지 겹친다. 잘 생각해보면 어떤 생산자가 작업(task)를 만들 것이고, 우리의 스레드 풀에 있는 스레드가 소비자가 되는 것이다.
+이런 문제를 한방에 해결해주는 것이 바로 자바가 제공하는 Executor 프레임워크다.
+Executor 프레임워크는 스레드 풀, 스레드 관리, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Runnable&lt;/code&gt; 의 문제점은 물론이고, 생산자 소비자 문제까지 한방에 해결해주는 자바 멀티스레드 최고의 도구이다. 지금까지 우리가 배운 멀티스레드 기술의 총 집합이 여기에 들어있다.
+참고로 앞서 설명한 이유와 같이 스레드를 사용할 때는 생각보다 고려해야 할 일이 많다. 그래서 실무에서는 스레드를 직접 하나하나 생성해서 사용하는 일이 드물다. 대신에 지금부터 설명할 Executor 프레임워크를 주로 사용하는데, 이 기술을 사용하면 매우 편리하게 멀티스레드 프로그래밍을 할 수 있다.&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;김영한님의 자바 강의&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://docs.oracle.com/javase/tutorial/essential/concurrency/sync.html&quot;&gt;https://docs.oracle.com/javase/tutorial/essential/concurrency/sync.html&lt;/a&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Thu, 24 Oct 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/language/2024/10/24/Java-Adv-21/</link>
+        <guid isPermaLink="true">http://localhost:4000/language/2024/10/24/Java-Adv-21/</guid>
+        
+        <category>java</category>
+        
+        
+        <category>language</category>
+        
+      </item>
+    
+      <item>
+        <title>Java Adv 20 - 자바 동시성 컬렉션 - 2</title>
         <description>&lt;h2 id=&quot;동시성-컬렉션concurrent-collections&quot;&gt;&lt;strong&gt;동시성 컬렉션(Concurrent Collections)&lt;/strong&gt;&lt;/h2&gt;
 
 &lt;p&gt;자바 1.5부터 멀티스레드 환경에서 성능을 최적화하면서 동시성을 지원하는 여러 가지 컬렉션들이 추가되었다. 
@@ -132,9 +244,13 @@
   &lt;li&gt;&lt;strong&gt;성능 저하&lt;/strong&gt;: 동시성 컬렉션은 비록 멀티스레드 환경에서 안전하지만, 적절한 상황에서 사용되지 않으면 불필요한 동기화로 인해 성능 저하가 발생할 수 있다.&lt;/li&gt;
 &lt;/ul&gt;
 
+&lt;p&gt;프록시 패턴을 이용하여 모든 객체에&lt;/p&gt;
+
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
 
 &lt;p&gt;김영한님의 자바 강의&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://docs.oracle.com/javase/tutorial/essential/concurrency/sync.html&quot;&gt;https://docs.oracle.com/javase/tutorial/essential/concurrency/sync.html&lt;/a&gt;&lt;/p&gt;
 
 </description>
         <pubDate>Thu, 24 Oct 2024 00:00:00 +0900</pubDate>
@@ -149,7 +265,7 @@
       </item>
     
       <item>
-        <title>Java Adv 18 - 자바 동시성 컬렉션</title>
+        <title>Java Adv 19 - 자바 동시성 컬렉션</title>
         <description>&lt;h2 id=&quot;자바-synchronized-프록시&quot;&gt;&lt;strong&gt;자바&lt;/strong&gt; synchronized &lt;strong&gt;프록시&lt;/strong&gt;&lt;/h2&gt;
 
 &lt;p&gt;자바에서 제공하는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;java.util&lt;/code&gt; 패키지의 컬렉션 프레임워크는 대부분 스레드 안전(Thread Safe)하지 않다. 
@@ -2436,80 +2552,6 @@ BFS는 레이어별로 탐색을 하기에 Queue에 대한 이해가 있어야 �
         
         
         <category>cs</category>
-        
-      </item>
-    
-      <item>
-        <title>Java Adv 10 - wait, notify</title>
-        <description>&lt;h2 id=&quot;java-multitherad&quot;&gt;Java MultiTherad&lt;/h2&gt;
-
-&lt;p&gt;자바는 처음부터 멀티스레드를 고려하며 탄생한 언어다.&lt;br /&gt;
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt; 를 사용한 임계 영역 안에서 락을 가지고 무한 대기하는 문제는 흥미롭게도 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Object&lt;/code&gt; 클래스에 해결 방안이 있다. 
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Object&lt;/code&gt; 클래스는 이런 문제를 해결할 수 있는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;wait()&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;notify()&lt;/code&gt; 라는 메서드를 제공한다. 
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Object&lt;/code&gt; 는 모든 자바 객체의 부모이기 때문에, 여기 있는 기능들은 모두 자바 언어의 기본 기능이라 생각하면 된다.&lt;/p&gt;
-
-&lt;h2 id=&quot;wait-notify&quot;&gt;wait(), notify()&lt;/h2&gt;
-
-&lt;p&gt;&lt;img width=&quot;559&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/f4590213-463c-472c-8c2a-54646e5d6b81&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Object.wait()&lt;/code&gt;
-    &lt;ul&gt;
-      &lt;li&gt;현재 스레드가 가진 락을 반납하고 대기(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;WAITING&lt;/code&gt; )한다.&lt;/li&gt;
-      &lt;li&gt;현재 스레드를 대기(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;WAITING&lt;/code&gt;) 상태로 전환한다.&lt;/li&gt;
-      &lt;li&gt;이 메서드는 현재 스레드가 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt; 블록이나메서드에서 락을 소유하고 있을 때만 호출할 수 있다.&lt;/li&gt;
-      &lt;li&gt;호출한 스레드는 락을 반납하고, 다른 스레드가 해당 락을 획득할 수 있도록 한다.&lt;/li&gt;
-      &lt;li&gt;이렇게 대기 상태로 전환된 스레드는 다른 스레드가 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;notify()&lt;/code&gt; 또는&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;notifyAll()&lt;/code&gt; 을 호출할 때까지 대기 상태를 유지한다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Object.notify()&lt;/code&gt;
-    &lt;ul&gt;
-      &lt;li&gt;대기 중인 스레드 중 하나를 깨운다. 이 메서드는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt; 블록이나 메서드에서 호출되어야 한다.&lt;/li&gt;
-      &lt;li&gt;깨운 스레드는 락을 다시 획득할 기회를 얻게 된다. 만약 대기 중인 스레드가 여러 개라면, 그 중 하나만이 깨워지게 된다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Object.notifyAll()&lt;/code&gt;
-    &lt;ul&gt;
-      &lt;li&gt;대기 중인 모든 스레드를 깨운다.&lt;/li&gt;
-      &lt;li&gt;이 메서드 역시 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt; 블록이나 메서드에서 호출되어야 하며, 모든 대기 중인 스레드가 락을 획득할 수 있는 기회를 얻게 된다.&lt;/li&gt;
-      &lt;li&gt;이 방법은 모든 스레드를 깨워야 할 필요가 있는 경우에 유용하다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;달라진-점은&quot;&gt;달라진 점은?&lt;/h3&gt;
-
-&lt;p&gt;앞서 작성한 코드는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sleep()&lt;/code&gt; 코드는 제거하고 대신에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Object.wait()&lt;/code&gt; 를 사용하자. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Object&lt;/code&gt; 는 모든 클래스의 부모이므로 자바의 모든 객체는 해당 기능을 사용할 수 있다.
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt; 를 통해 임계 영역을 설정한다. 생산자 스레드는 락 획득을 시도한다.
-락을 획득한 생산자 스레드는 반복문을 사용해서 큐에 빈 공간이 생기는지 주기적으로 체크한다. 만약 빈 공간이
-없다면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Object.wait()&lt;/code&gt; 을 사용해서 대기한다. 참고로 &lt;strong&gt;**대기할&lt;/strong&gt; &lt;strong&gt;때&lt;/strong&gt; &lt;strong&gt;락을&lt;/strong&gt; &lt;strong&gt;반납하고&lt;/strong&gt; &lt;strong&gt;대기&lt;/strong&gt;**한다. 그리고 대기 상태에서 깨어나면, 다시 반복문에서 큐의 빈 공간을 체크한다.
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;wait()&lt;/code&gt; 를 호출해서 대기하는 경우 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUNNABLE&lt;/code&gt; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;WAITING&lt;/code&gt; 상태가 된다.
-생산자가 데이터를 큐에 저장하고 나면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;notify()&lt;/code&gt; 를 통해 저장된 데이터가 있다고 대기하는 스레드에 알려주어야 한다. 
-예를 들어서 큐에 데이터가 없어서 대기하는 소비자 스레드가 있다고 가정하자. 
-이때 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;notify()&lt;/code&gt; 를 호출하면 소비자 스레드는 깨어나서 저장된 데이터를 획득할 수 있다.&lt;/p&gt;
-
-&lt;h2 id=&quot;wait-notify의-한계&quot;&gt;wait, notify의 한계&lt;/h2&gt;
-
-&lt;p&gt;Object.wait(), Object.notify() 방식은 스레드 대기 집학 하나에 생산자, 소비자 스레드를 모두 관리한다. 그리고 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;notify()&lt;/code&gt; 를 호출할 때 임의의 스레드가 선택된다. 따라서 앞서 살펴본 것 처럼 큐에 데이터가 없는 상황에 소비자가 같은 소비자를 깨우는 비효율이 발생할 수 있다. 
-또는 큐에 데이터가 가득 차있는데 생산자가 같은 생산자를 깨우는 비효율도 발생할 수 있다.
-같은 종류의 스레드를 깨울 때 비효율이 발생하고 있다. 만약 생산자가 소비자를 깨우고, 소비자가 생산자를 깨운다면 비효율이 발생하지 않는다.&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;김영한님의 자바 강의&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://stackoverflow.com/questions/50001353/java-one-producer-and-two-consumers&quot;&gt;https://stackoverflow.com/questions/50001353/java-one-producer-and-two-consumers&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://docs.oracle.com/javase/8/docs/api/java/lang/Thread.html&quot;&gt;https://docs.oracle.com/javase/8/docs/api/java/lang/Thread.html&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Sat, 05 Oct 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/language/2024/10/05/Java-Adv-10/</link>
-        <guid isPermaLink="true">http://localhost:4000/language/2024/10/05/Java-Adv-10/</guid>
-        
-        <category>java</category>
-        
-        
-        <category>language</category>
         
       </item>
     
