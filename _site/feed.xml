@@ -6,9 +6,109 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 17 Nov 2024 18:31:30 +0900</pubDate>
-    <lastBuildDate>Sun, 17 Nov 2024 18:31:30 +0900</lastBuildDate>
+    <pubDate>Mon, 18 Nov 2024 16:53:13 +0900</pubDate>
+    <lastBuildDate>Mon, 18 Nov 2024 16:53:13 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
+    
+      <item>
+        <title>Java Adv 22 - Executor framework</title>
+        <description>&lt;h2 id=&quot;executor-&quot;&gt;Executor ?&lt;/h2&gt;
+
+&lt;p&gt;자바의 Excutor 프레임워크는 멀티스레딩 및 병렬처리를 쉽게 사용할 수 있도록 돕는 기능의 모음이다.
+이 프레임워크는 작업 실행의 관리 및 스레드 풀 관리를 효율적으로 처리해서 개발자가 직접 스레드를 생성하고 관리하는 복잡함을 줄여준다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;701&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/36cca863-d732-4b84-b54f-7a679a910d9f&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;pool: 스레드 풀에서 관리되는 스레드의 숫자&lt;/li&gt;
+  &lt;li&gt;active: 작업을 수행중인 스레드의 숫자&lt;/li&gt;
+  &lt;li&gt;queuedTask: 큐에 대기중인 작업의 숫자&lt;/li&gt;
+  &lt;li&gt;completedTask: 완료된 작업의 숫자&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;16:21:25.327 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;     main] &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; 초기 상태 &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; 
+16:21:25.337 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;     main] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;pool&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0, &lt;span class=&quot;nv&quot;&gt;active&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0, &lt;span class=&quot;nv&quot;&gt;queuedTasks&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0, &lt;span class=&quot;nv&quot;&gt;completedTask&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0]
+16:21:25.338 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;     main] &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; 작업 수행 중 &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; 
+16:21:25.338 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;     main] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;pool&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2, &lt;span class=&quot;nv&quot;&gt;active&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2, &lt;span class=&quot;nv&quot;&gt;queuedTasks&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2, &lt;span class=&quot;nv&quot;&gt;completedTask&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0]
+16:21:25.338 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;pool-1-thread-2] taskB 시작
+16:21:25.338 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;pool-1-thread-1] taskA 시작
+16:21:26.343 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;pool-1-thread-2] taskB 완료
+16:21:26.343 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;pool-1-thread-1] taskA 완료
+16:21:26.344 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;pool-1-thread-2] taskC 시작
+16:21:26.344 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;pool-1-thread-1] taskD 시작
+16:21:27.348 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;pool-1-thread-2] taskC 완료
+16:21:27.349 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;pool-1-thread-1] taskD 완료
+16:21:28.344 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;     main] &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; 작업 수행 완료 &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; 
+16:21:28.345 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;     main] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;pool&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2, &lt;span class=&quot;nv&quot;&gt;active&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0, &lt;span class=&quot;nv&quot;&gt;queuedTasks&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0, &lt;span class=&quot;nv&quot;&gt;completedTask&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;4]
+16:21:28.347 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;     main] &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; shutdown &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; 
+16:21:28.347 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;     main] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;pool&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0, &lt;span class=&quot;nv&quot;&gt;active&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0, &lt;span class=&quot;nv&quot;&gt;queuedTasks&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0, &lt;span class=&quot;nv&quot;&gt;completedTask&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;4]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;threadpoolexecutor의-구성-요소-및-동작-원리&quot;&gt;ThreadPoolExecutor의 구성 요소 및 동작 원리&lt;/h2&gt;
+
+&lt;h2 id=&quot;1-구성-요소&quot;&gt;1. &lt;strong&gt;구성 요소&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;스레드 풀&lt;/strong&gt;: 스레드를 생성하고 관리하는 역할을 한다.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;BlockingQueue&lt;/strong&gt;: 작업을 보관하며, 생산자-소비자 문제를 해결하기 위해 단순 큐 대신 사용된다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;2-생산자와-소비자&quot;&gt;2. &lt;strong&gt;생산자와 소비자&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;생산자&lt;/strong&gt;: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;main&lt;/code&gt; 스레드가 생산자로, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;es.execute(작업)&lt;/code&gt; 호출 시 작업이 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BlockingQueue&lt;/code&gt;에 저장된다.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;소비자&lt;/strong&gt;: 스레드 풀 내의 스레드가 소비자로, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BlockingQueue&lt;/code&gt;에서 작업을 꺼내어 처리한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;3-threadpoolexecutor-생성자-주요-속성&quot;&gt;3. &lt;strong&gt;ThreadPoolExecutor 생성자 주요 속성&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;corePoolSize: 기본적으로 유지되는 스레드 수.&lt;/li&gt;
+  &lt;li&gt;maximumPoolSize: 허용되는 최대 스레드 수.&lt;/li&gt;
+  &lt;li&gt;keepAliveTime 및 TimeUnit unit: 기본 스레드 수를 초과한 스레드가 유지되는 시간. 시간이 초과되면 스레드가 제거된다.&lt;/li&gt;
+  &lt;li&gt;BlockingQueue workQueue: 작업을 저장하는 블로킹 큐.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;4-구체적인-예&quot;&gt;4. 구체적인 예&lt;/h2&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ThreadPoolExecutor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TimeUnit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;MILLISECONDS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;LinkedBlockingQueue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;());&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;corePoolSize=2, maximumPoolSize=2: 스레드 풀에서 스레드 수는 고정(2개)이다.&lt;/li&gt;
+  &lt;li&gt;keepAliveTime=0 및 TimeUnit.MILLISECONDS: 초과 스레드가 제거될 시간이 없으므로 의미 없음.&lt;/li&gt;
+  &lt;li&gt;LinkedBlockingQueue: 작업을 무한정 저장할 수 있는 블로킹 큐를 사용.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;참고로 당연한 이야기지만 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;main&lt;/code&gt; 스레드는 작업을 전달하고 기다리지 않는다. 전달한 작업은 다른 스레드
+가 실행할 것이다. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;main&lt;/code&gt; 스레드는 작업을 큐에 보관까지만 하고 바로 다음 코드를 수행한다.
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;taskA~D&lt;/code&gt; 요청이 블로킹 큐에 들어온다.
+최초의 작업이 들어오면 이때 작업을 처리하기 위해 스레드를 만든다.
+참고로 스레드 풀에 스레드를 미리 만들어두지는 않는다.
+작업이 들어올 때 마다 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;corePoolSize&lt;/code&gt; 의 크기 까지 스레드를 만든다.
+예를 들어서 최초 작업인 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;taskA&lt;/code&gt; 가 들어오는 시점에 스레드1을 생성하고, 
+다음 작업인 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;taskB&lt;/code&gt; 가 들어오는 시점에 스레드2를 생성한다. 
+이런 방식으로 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;corePoolSize&lt;/code&gt; 에 지정한 수 만큼 스레드를 스레드 풀에 만든다. 
+여기서는 2를 설정했으므로 2개까지 만든다. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;corePoolSize&lt;/code&gt; 까지 스레드가 생성되고 나면, 
+이후에는 스레드를 생성하지 않고 앞서 만든 스레드를 재b사용한다.&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;김영한님의 자바 강의&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://docs.oracle.com/javase/tutorial/essential/concurrency/sync.html&quot;&gt;https://docs.oracle.com/javase/tutorial/essential/concurrency/sync.html&lt;/a&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Sat, 26 Oct 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/language/2024/10/26/Java-Adv-22/</link>
+        <guid isPermaLink="true">http://localhost:4000/language/2024/10/26/Java-Adv-22/</guid>
+        
+        <category>java</category>
+        
+        
+        <category>language</category>
+        
+      </item>
     
       <item>
         <title>Java Adv 21 - 스레드를 직접 사용할 때의 문제점</title>
@@ -111,9 +211,9 @@ Executor 프레임워크는 스레드 풀, 스레드 관리, &lt;code class=&quo
 &lt;p&gt;&lt;a href=&quot;https://docs.oracle.com/javase/tutorial/essential/concurrency/sync.html&quot;&gt;https://docs.oracle.com/javase/tutorial/essential/concurrency/sync.html&lt;/a&gt;&lt;/p&gt;
 
 </description>
-        <pubDate>Thu, 24 Oct 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/language/2024/10/24/Java-Adv-21/</link>
-        <guid isPermaLink="true">http://localhost:4000/language/2024/10/24/Java-Adv-21/</guid>
+        <pubDate>Fri, 25 Oct 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/language/2024/10/25/Java-Adv-21/</link>
+        <guid isPermaLink="true">http://localhost:4000/language/2024/10/25/Java-Adv-21/</guid>
         
         <category>java</category>
         
@@ -2473,80 +2573,6 @@ BFS 알고리즘은 큐에서 하나씩 좌표를 꺼내 네 방향(상, 우, �
         <pubDate>Sun, 06 Oct 2024 00:00:00 +0900</pubDate>
         <link>http://localhost:4000/cs/2024/10/06/Algorithm-09/</link>
         <guid isPermaLink="true">http://localhost:4000/cs/2024/10/06/Algorithm-09/</guid>
-        
-        <category>Algorithm</category>
-        
-        
-        <category>cs</category>
-        
-      </item>
-    
-      <item>
-        <title>BFS - Breadth First Search</title>
-        <description>&lt;h2 id=&quot;breadth-first-search&quot;&gt;Breadth First Search&lt;/h2&gt;
-
-&lt;p&gt;BFS는 그래프를 탐색하는 알고리즘이며 어떤 정점에서 시작해 다음 깊이의 정점으로 이동하기전 현재 깊이의 모든 정점을 탐색하며 방문한 정점은 다시 방문하지 않는 알고리즘이다.
-같은 가중치를 가진 그래프에서 최단거리알고리즘으로 쓰인다.
-BFS로 탐색을 한다는 것은 이런식으로 레이어별, 레벨별로 탐색한다는 뜻이다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;435&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/462b7d11-611f-4bac-9ce4-460968508def&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;bfs-구현&quot;&gt;BFS 구현&lt;/h2&gt;
-
-&lt;div class=&quot;language-cpp highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#include&lt;/span&gt;&lt;span class=&quot;cpf&quot;&gt;&amp;lt;bits/stdc++.h&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;namespace&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;vector&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
-&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;visited&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
-&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nodeList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;12&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;14&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;18&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;22&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;24&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
-&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bfs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;here&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;queue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;q&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;visited&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;here&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;q&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;push&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;here&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;q&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()){&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;here&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;q&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;front&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;q&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-
-        &lt;span class=&quot;c1&quot;&gt;//adj의 각요소들을 there에 저&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;there&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;here&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]){&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;visited&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;there&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]){&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;continue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;visited&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;there&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;visited&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;here&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;q&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;push&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;there&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;adj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;push_back&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;12&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;adj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;push_back&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;14&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;adj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;push_back&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;adj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;12&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;push_back&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;18&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;adj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;12&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;push_back&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;adj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;push_back&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;23&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;adj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;push_back&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;24&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;bfs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nodeList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot; : &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;visited&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&apos;\n&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;10번으로부터 24번까지 최단거리는 : &quot;&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;visited&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;24&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&apos;\n&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;큐 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;q&lt;/code&gt;는 BFS 탐색을 위한 큐로 사용된다. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;visited[here] = 1&lt;/code&gt;은 현재 노드를 방문 처리하면서 거리를 1로 설정한다. 
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;q.push(here)&lt;/code&gt;는 큐에 현재 노드를 추가한다.
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;while(q.size())&lt;/code&gt;는 큐에 노드가 있는 동안 반복하며, 각 반복에서 큐의 맨 앞 노드를 가져온다.
-인접 노드 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;there&lt;/code&gt;를 검사하고, 방문하지 않은 노드에 대해 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;visited[there] = visited[here] + 1&lt;/code&gt;로 거리를 업데이트하며, 큐에 추가한다.
-BFS는 레이어별로 탐색을 하기에 Queue에 대한 이해가 있어야 쉽게 이해할 수 있다.&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://stackoverflow.com/questions/2505431/breadth-first-search-and-depth-first-search&quot;&gt;https://stackoverflow.com/questions/2505431/breadth-first-search-and-depth-first-search&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Sun, 06 Oct 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/cs/2024/10/06/Algorithm-08/</link>
-        <guid isPermaLink="true">http://localhost:4000/cs/2024/10/06/Algorithm-08/</guid>
         
         <category>Algorithm</category>
         
