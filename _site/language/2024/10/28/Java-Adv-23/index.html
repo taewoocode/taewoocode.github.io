@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Java Adv 19 - 자바 동시성 컬렉션" />
+<meta property="og:title" content="Java Adv 23 - Executor framework" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,17 +52,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Java Adv 19 - 자바 동시성 컬렉션 &middot; 일벌리는 개발자</title>
+<title>Java Adv 23 - Executor framework &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="자바 synchronized 프록시
+        content="Callable
 
 "
 />
 <meta
         property="og:description"
-        content="자바 synchronized 프록시
+        content="Callable
 
 "
 />
@@ -72,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/language/2024/10/23/Java-Adv-19/" />
-<meta property="og:url" content="http://localhost:4000/language/2024/10/23/Java-Adv-19/" />
+<link rel="canonical" href="http://localhost:4000/language/2024/10/28/Java-Adv-23/" />
+<meta property="og:url" content="http://localhost:4000/language/2024/10/28/Java-Adv-23/" />
 
 <link
         rel="alternate"
@@ -83,10 +83,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/language/2024/10/22/Java-Adv-18/" />
+<link rel="prev" href="http://localhost:4000/cs/2024/10/27/Algorithm-22/" />
  
-<link rel="next" href="http://localhost:4000/language/2024/10/24/Java-Adv-20/" />
-
 
 <link
         rel="apple-touch-icon"
@@ -183,16 +181,16 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-language/2024/10/23/Java-Adv-19" class="post" role="article">
+<article id="post-language/2024/10/28/Java-Adv-23" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      Java Adv 19 - 자바 동시성 컬렉션
+      Java Adv 23 - Executor framework
       
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-10-23T00:00:00+09:00">23 Oct 2024</time>
+      <time datetime="2024-10-28T00:00:00+09:00">28 Oct 2024</time>
       
 
 
@@ -267,47 +265,56 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
     </style>
 
     <!--<br />-->
-    <h2 id="자바-synchronized-프록시"><strong>자바</strong> synchronized <strong>프록시</strong></h2>
+    <h2 id="callable">Callable</h2>
 
-<p>자바에서 제공하는 <code class="language-plaintext highlighter-rouge">java.util</code> 패키지의 컬렉션 프레임워크는 대부분 스레드 안전(Thread Safe)하지 않다. 
-<code class="language-plaintext highlighter-rouge">ArrayList</code>, <code class="language-plaintext highlighter-rouge">LinkedList</code>, <code class="language-plaintext highlighter-rouge">HashSet</code>, <code class="language-plaintext highlighter-rouge">HashMap</code> 등의 기본 자료 구조들은 여러 연산들이 동시에 이루어지기 때문에 동기화가 필요하다. 
-그러나 모든 자료 구조에 <code class="language-plaintext highlighter-rouge">synchronized</code>를 사용하여 동기화를 해두는 것은 성능 저하를 초래할 수 있다. 
-동기화는 스레드 안전을 보장하지만, 멀티스레드 환경에서만 필요한 기능이다. 
-동기화를 미리 적용하면 단일 스레드 환경에서도 불필요한 성능 저하가 발생할 수 있다. 
-따라서 동기화의 필요성을 정확히 판단하고, 꼭 필요한 경우에만 동기화를 적용하는 것이 중요하다.
-<strong>Vector</strong>는 과거에 <code class="language-plaintext highlighter-rouge">ArrayList</code>와 비슷한 기능을 제공하며, 모든 메서드에 <code class="language-plaintext highlighter-rouge">synchronized</code>를 적용하여 동기화를 보장했다. 
-그러나 이로 인해 단일 스레드 환경에서 성능이 저하되었고, 결국 널리 사용되지 않게 되었다. 지금은 하위 호환성을 위해 남아있지만, 다른 대안들이 존재하기 때문에 사용을 권장하지 않는다.
-대신, 동기화를 필요에 따라 적용할 수 있는 방법으로 <strong>프록시 패턴</strong>을 사용할 수 있다. 
-예를 들어, <code class="language-plaintext highlighter-rouge">Collections.synchronizedList()</code> 메서드를 사용하면, <code class="language-plaintext highlighter-rouge">ArrayList</code>를 동기화된 리스트로 변환할 수 있다. 
-이 메서드는 내부적으로 <code class="language-plaintext highlighter-rouge">SynchronizedRandomAccessList</code>라는 클래스를 사용하여 동기화를 적용한다. 이렇게 하면 기존 코드의 구조를 유지하면서, 필요한 경우에만 동기화를 적용할 수 있다.</p>
+<p><img width="654" alt="image" src="https://github.com/user-attachments/assets/ad0cac70-aafe-4107-8856-3b28743de4dd" /></p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="nc">Collections</span><span class="o">.</span><span class="na">synchronizedList</span><span class="o">(</span><span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;());</span>
+<p><code class="language-plaintext highlighter-rouge">java.util.concurrent.Executors</code> 가 제공하는 <code class="language-plaintext highlighter-rouge">newFixedThreadPool(size)</code> 을 사용하면 편리하게
+<code class="language-plaintext highlighter-rouge">ExecutorService</code> 를 생성할 수 있다.</p>
+
+<p>기존 코드</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">ExecutorService</span> <span class="n">es</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ThreadPoolExecutor</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">1</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span> <span class="nc">TimeUnit</span><span class="o">.</span><span class="na">MILLISECONDS</span><span class="o">,</span> <span class="k">new</span>
+
+<span class="nc">LinkedBlockingQueue</span><span class="o">&lt;&gt;());</span>
 </code></pre></div></div>
 
-<p><img width="648" alt="image" src="https://github.com/user-attachments/assets/53881711-199e-4484-9218-40628e5560ce" /></p>
+<p>편의 코드</p>
 
-<p>위 코드에서 <code class="language-plaintext highlighter-rouge">synchronizedList()</code> 메서드는 <code class="language-plaintext highlighter-rouge">ArrayList</code>를 감싸는 동기화된 리스트를 반환한다. 
-이 리스트의 메서드는 내부적으로 <code class="language-plaintext highlighter-rouge">synchronized</code> 키워드를 사용하여 동기화를 보장한다. 예를 들어, <code class="language-plaintext highlighter-rouge">add()</code> 메서드는 다음과 같이 동기화된 코드로 구현된다.</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">add</span><span class="o">(</span><span class="no">E</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-    <span class="kd">synchronized</span> <span class="o">(</span><span class="n">mutex</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">c</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">ExecutorService</span> <span class="n">es</span> <span class="o">=</span> <span class="nc">Executors</span><span class="o">.</span><span class="na">newFixedThreadPool</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
 </code></pre></div></div>
 
-<p><code class="language-plaintext highlighter-rouge">Collections</code>는 이와 같이 여러 종류의 동기화 프록시 메서드를 제공하여, <code class="language-plaintext highlighter-rouge">List</code>, <code class="language-plaintext highlighter-rouge">Set</code>, <code class="language-plaintext highlighter-rouge">Map</code> 등의 컬렉션을 동기화된 버전으로 변환할 수 있게 해준다. 
-예를 들어, <code class="language-plaintext highlighter-rouge">synchronizedMap()</code>, <code class="language-plaintext highlighter-rouge">synchronizedSet()</code> 등의 메서드를 통해 동기화된 컬렉션을 생성할 수 있다.
-하지만 <code class="language-plaintext highlighter-rouge">synchronized</code> 프록시를 사용하는 방식에는 단점이 있다. 첫째, 동기화 오버헤드가 발생한다. 
-모든 메서드 호출 시마다 동기화가 이루어지기 때문에 성능이 저하될 수 있다. 
-둘째, 전체 컬렉션에 대해 동기화가 이루어지기 때문에 잠금 범위가 넓어지고, 이는 잠금 경합(lock contention)을 증가시켜 병렬 처리의 효율성을 저하시킬 수 있다. 
-셋째, 선택적인 동기화가 어려워, 과도한 동기화로 이어질 수 있다.
-따라서 자바는 이러한 단점을 보완하기 위해 <code class="language-plaintext highlighter-rouge">java.util.concurrent</code> 패키지에서 더 정교한 동시성 컬렉션(concurrent collection)을 제공한다. 
-이 컬렉션들은 동기화 오버헤드를 최소화하고, 동기화의 효율성을 높이며, 멀티스레드 환경에서 성능을 극대화할 수 있도록 설계되었다.</p>
+<p><code class="language-plaintext highlighter-rouge">MyCallable</code>은 숫자를 반환하는 <code class="language-plaintext highlighter-rouge">Callable</code> 인터페이스를 구현한 클래스이다. 
+이 인터페이스를 활용하면 작업 완료 후 결과를 반환할 수 있다는 점에서 <code class="language-plaintext highlighter-rouge">Runnable</code>과 차이가 있다. 
+<code class="language-plaintext highlighter-rouge">Runnable</code>은 작업 결과를 직접 반환할 수 없기 때문에 결과를 저장할 별도의 필드를 만들어야 하지만, 
+<code class="language-plaintext highlighter-rouge">Callable</code>은 결과를 반환하는 기능을 제공하기 때문에 필드 없이 구현이 가능하다.
+<code class="language-plaintext highlighter-rouge">ExecutorService</code>는 <code class="language-plaintext highlighter-rouge">submit()</code> 메서드를 통해 <code class="language-plaintext highlighter-rouge">Callable</code> 작업을 스레드 풀에 전달할 수 있게 한다. 
+<code class="language-plaintext highlighter-rouge">submit()</code> 메서드는 <code class="language-plaintext highlighter-rouge">Future</code>라는 특별한 인터페이스를 반환하며, 이를 통해 비동기적으로 작업 결과를 확인하거나 가져올 수 있다. 
+예를 들어, <code class="language-plaintext highlighter-rouge">MyCallable</code> 인스턴스를 <code class="language-plaintext highlighter-rouge">submit()</code> 메서드에 전달하면 해당 작업은 블로킹 큐에 추가되고, 
+스레드 풀의 스레드 중 하나가 이를 실행한다.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Future</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">future</span> <span class="o">=</span> <span class="n">es</span><span class="o">.</span><span class="na">submit</span><span class="o">(</span><span class="k">new</span> <span class="nc">MyCallable</span><span class="o">());</span>
+</code></pre></div></div>
+
+<p>작업의 처리 결과는 <code class="language-plaintext highlighter-rouge">Future</code> 객체를 통해 얻을 수 있다. 
+<code class="language-plaintext highlighter-rouge">get()</code> 메서드를 호출하면 <code class="language-plaintext highlighter-rouge">MyCallable</code>의 <code class="language-plaintext highlighter-rouge">call()</code> 메서드가 반환한 결과를 받을 수 있으며, 
+작업이 완료될 때까지 호출부가 블로킹된다.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Integer</span> <span class="n">result</span> <span class="o">=</span> <span class="n">future</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
+</code></pre></div></div>
+
+<p>이 과정에서 <code class="language-plaintext highlighter-rouge">get()</code> 메서드는 <code class="language-plaintext highlighter-rouge">InterruptedException</code>과 <code class="language-plaintext highlighter-rouge">ExecutionException</code>이라는 체크 예외를 던질 수 있다. 
+예외는 필요에 따라 적절히 처리하거나 호출부로 전달할 수 있다.
+Executor 프레임워크의 가장 큰 강점은 스레드를 생성하거나 제어하는 복잡한 작업을 하지 않아도 멀티스레드 환경을 쉽게 활용할 수 있다는 점이다. 
+<code class="language-plaintext highlighter-rouge">Callable</code>을 사용하면 작업 결과를 반환받아야 하는 상황에서도 편리하며, 
+개발자는 단순히 작업을 <code class="language-plaintext highlighter-rouge">ExecutorService</code>에 제출하고 결과를 받아 사용하는 방식으로 구현할 수 있다. 
+복잡한 멀티스레드 작업을 간단하게 처리할 수 있도록 해주는 것이 Executor 프레임워크의 핵심적인 장점이다.</p>
 
 <h2 id="reference">Reference</h2>
 
 <p>김영한님의 자바 강의</p>
+
+<p><a href="https://docs.oracle.com/javase/tutorial/essential/concurrency/sync.html">https://docs.oracle.com/javase/tutorial/essential/concurrency/sync.html</a></p>
 
 
     <br />
@@ -322,12 +329,12 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=Java Adv 19 - 자바 동시성 컬렉션&amp;url=http://localhost:4000/language/2024/10/23/Java-Adv-19/"
+    <a href="http://twitter.com/share?text=Java Adv 23 - Executor framework&amp;url=http://localhost:4000/language/2024/10/28/Java-Adv-23/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/10/23/Java-Adv-19/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/10/28/Java-Adv-23/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -349,21 +356,8 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
       
       
         
-        
           
-
-
-<li class="h4">
-  <a href="/language/2024/10/28/Java-Adv-23/" data-flip="title">
-    <span>Java Adv 23 - Executor framework</span>
-  </a>
-  <small><time datetime="2024-10-28T00:00:00+09:00">
-    28 Oct 2024
-  </time></small>
-</li>
-
-        
-      
+          
         
         
           
@@ -397,6 +391,19 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
         
       
         
+        
+          
+
+
+<li class="h4">
+  <a href="/language/2024/10/24/Java-Adv-20/" data-flip="title">
+    <span>Java Adv 20 - 자바 동시성 컬렉션 - 2</span>
+  </a>
+  <small><time datetime="2024-10-24T00:00:00+09:00">
+    24 Oct 2024
+  </time></small>
+</li>
+
         
       
     
