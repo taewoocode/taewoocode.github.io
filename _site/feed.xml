@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 27 Nov 2024 16:55:34 +0900</pubDate>
-    <lastBuildDate>Wed, 27 Nov 2024 16:55:34 +0900</lastBuildDate>
+    <pubDate>Wed, 27 Nov 2024 16:56:53 +0900</pubDate>
+    <lastBuildDate>Wed, 27 Nov 2024 16:56:53 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
@@ -32,13 +32,16 @@
 
 &lt;p&gt;각 프로파일에 따른 설정&lt;/p&gt;
 
-&lt;p&gt;local, prod, dev 세 가지 프로파일로 나뉘어져 있다. 각 프로파일에 대해 다른 설정을 적용할 수 있다.
-local: 개발자가 로컬 환경에서 실행할 때 사용하는 프로파일로, 로컬 데이터베이스나 디버깅 설정 등을 포함할 수 있다.
-prod: 운영 환경에서 사용하는 프로파일로, 실제 서비스에 배포되는 설정을 포함합니다. 보통 보안이나 성능 관련 설정이 중요하다.
-dev: 개발 환경에서 사용하는 프로파일로, 개발 중에 사용되는 설정이 포함됩니다. 로깅이나 디버깅을 위해 다양한 설정을 추가할 수 있다.&lt;/p&gt;
+&lt;p&gt;local, prod, dev 세 가지 프로파일로 나뉘어져 있다. 각 프로파일에 대해 다른 설정을 적용할 수 있다.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;local: 개발자가 로컬 환경에서 실행할 때 사용하는 프로파일로, 로컬 데이터베이스나 디버깅 설정 등을 포함할 수 있다.&lt;/li&gt;
+  &lt;li&gt;prod: 운영 환경에서 사용하는 프로파일로, 실제 서비스에 배포되는 설정을 포함합니다. 보통 보안이나 성능 관련 설정이 중요하다.&lt;/li&gt;
+  &lt;li&gt;dev: 개발 환경에서 사용하는 프로파일로, 개발 중에 사용되는 설정이 포함됩니다. 로깅이나 디버깅을 위해 다양한 설정을 추가할 수 있다.&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-&lt;p&gt;&lt;a href=&quot;https://velog.io/@18k7102dy/Docker-Spring-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EB%A5%BC-Docker%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%B4%EC%84%9C-%EB%B0%B0%ED%8F%AC%ED%95%B4%EB%B4%85%EC%8B%9C%EB%8B%A4&quot;&gt;https://velog.io/@18k7102dy/Docker-Spring-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EB%A5%BC-Docker%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%B4%EC%84%9C-%EB%B0%B0%ED%8F%AC%ED%95%B4%EB%B4%85%EC%8B%9C%EB%8B%A4&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-boot/docs/1.2.0.M1/reference/html/boot-features-profiles.html&quot;&gt;https://docs.spring.io/spring-boot/docs/1.2.0.M1/reference/html/boot-features-profiles.html&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Fri, 01 Nov 2024 00:00:00 +0900</pubDate>
         <link>http://localhost:4000/framework/2024/11/01/Spring-03/</link>
