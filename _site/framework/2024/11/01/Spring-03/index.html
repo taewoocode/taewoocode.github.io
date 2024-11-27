@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Spring Basic 10 - Web Scope" />
+<meta property="og:title" content="Spring Profile" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,17 +52,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Spring Basic 10 - Web Scope &middot; 일벌리는 개발자</title>
+<title>Spring Profile &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="웹 스코프
+        content="Spring Profile
 
 "
 />
 <meta
         property="og:description"
-        content="웹 스코프
+        content="Spring Profile
 
 "
 />
@@ -72,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/framework/2024/09/26/Spring-basic-10/" />
-<meta property="og:url" content="http://localhost:4000/framework/2024/09/26/Spring-basic-10/" />
+<link rel="canonical" href="http://localhost:4000/framework/2024/11/01/Spring-03/" />
+<meta property="og:url" content="http://localhost:4000/framework/2024/11/01/Spring-03/" />
 
 <link
         rel="alternate"
@@ -83,10 +83,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/framework/2024/09/26/Spring-basic-09/" />
+<link rel="prev" href="http://localhost:4000/language/2024/10/28/Java-Adv-23/" />
  
-<link rel="next" href="http://localhost:4000/framework/2024/09/26/Spring-basic-11/" />
-
 
 <link
         rel="apple-touch-icon"
@@ -183,16 +181,16 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-framework/2024/09/26/Spring-basic-10" class="post" role="article">
+<article id="post-framework/2024/11/01/Spring-03" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      Spring Basic 10 - Web Scope
+      Spring Profile
       
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-09-26T00:00:00+09:00">26 Sep 2024</time>
+      <time datetime="2024-11-01T00:00:00+09:00">01 Nov 2024</time>
       
 
 
@@ -267,114 +265,33 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
     </style>
 
     <!--<br />-->
-    <h2 id="웹-스코프"><strong>웹</strong> <strong>스코프</strong></h2>
+    <h2 id="spring-profile">Spring Profile</h2>
 
-<ul>
-  <li>웹 스코프는 웹 환경에서만 동작한다.</li>
-  <li>웹 스코프는 프로토타입과 다르게 스프링이 해당 스코프의 종료시점까지 관리한다. 따라서 종료 메서드가 호출된다.</li>
-</ul>
+<p>입사하고 얼마 지나지 않아 서비스를 운영하게 되는데 Spring profile에 대해서 처음알게 되었다.
+항상 하나의 개발 환경세팅만 하다보니 각 환경에 대해서 분리해서 개발을 진행하게 되는지 처음 알았다.
+우선 Spring Profile이란 Spring 애플리케이션에서 환경에 따라 다르게 동작하도록 설정을 분리하는 기능이다. 
+이를 통해 개발, 테스트, 프로덕션 등 여러 환경에 맞게 설정을 관리할 수 있다. Spring Profile을 사용하면, 
+각 환경에 특화된 설정을 선언하고, 애플리케이션이 실행될 때 해당 프로파일에 맞는 설정을 자동으로 로드할 수 있다.</p>
 
-<h3 id="웹-스코프-종류"><strong>웹</strong> <strong>스코프</strong> <strong>종류</strong></h3>
+<h2 id="왜-중요할까">왜 중요할까?</h2>
 
-<ul>
-  <li><em>request:</em> HTTP 요청 하나가 들어오고 나갈 때 까지 유지되는 스코프, 각각의 HTTP 요청마다 별도의 빈 인스턴스가 생성되고, 관리된다.</li>
-  <li><em>session:</em> HTTP Session과 동일한 생명주기를 가지는 스코프</li>
-  <li><em>application:</em> 서블릿 컨텍스트(<code class="language-plaintext highlighter-rouge">ServletContext</code> )와 동일한 생명주기를 가지는 스코프</li>
-  <li><em>websocket:</em> 웹 소켓과 동일한 생명주기를 가지는 스코프</li>
-</ul>
+<p>환경에 맞는 설정을 자동으로 적용한다. 예를 들어, application-dev.properties 파일과 application-prod.properties 파일을 두고, 
+개발 환경에서는 개발용 데이터베이스 설정을, 운영 환경에서는 실제 운영 데이터베이스 설정을 자동으로 읽어올 수 있다.
+환경에 따른 Bean 설정: @Profile 어노테이션을 사용하여 특정 환경에서만 활성화되는 Bean을 정의할 수 있다. 
+예를 들어, 개발 환경에서는 디버깅용으로 로깅 레벨을 높게 설정하고, 운영 환경에서는 성능을 고려한 로깅 설정을 할 수 있다.</p>
 
-<h2 id="request-스코프-예제-개발">request <strong>스코프</strong> <strong>예제</strong> <strong>개발</strong></h2>
+<p><img width="576" alt="image" src="https://github.com/user-attachments/assets/0065b293-deb8-455d-8a58-5eeee16be926" />
+<img width="590" alt="image" src="https://github.com/user-attachments/assets/8c8fd2d2-6a47-4214-8c42-d825c865e839" /></p>
 
-<p>동시에 여러 HTTP 요청이 오면 정확히 어떤 요청이 남긴 로그인지 구분하기 어렵다. 이럴때 사용하기 딱 좋은것이 바로 request 스코프이다. 다음과 같이 로그가 남도록 request 스코프를 활용해서 추가 기능을 개발해보자.</p>
+<p>각 프로파일에 따른 설정</p>
 
-<ul>
-  <li>기대하는 공통 포멧: [UUID][requestURL] {message}</li>
-  <li>UUID를 사용해서 HTTP 요청을 구분하자.</li>
-  <li>requestURL 정보도 추가로 넣어서 어떤 URL을 요청해서 남은 로그인지 확인하자.</li>
-</ul>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">hello.core.common</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">jakarta.annotation.PostConstruct</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">jakarta.annotation.PreDestroy</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.context.annotation.Scope</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.stereotype.Component</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">java.util.UUID</span><span class="o">;</span>
-
-<span class="nd">@Component</span>
-<span class="nd">@Scope</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"request"</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyLogger</span> <span class="o">{</span>
-
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">uuid</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">requestURL</span><span class="o">;</span>
-
-    <span class="kd">public</span> <span class="nf">MyLogger</span><span class="o">(</span><span class="nc">String</span> <span class="n">uuid</span><span class="o">,</span> <span class="nc">String</span> <span class="n">requestURL</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">uuid</span> <span class="o">=</span> <span class="n">uuid</span><span class="o">;</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">requestURL</span> <span class="o">=</span> <span class="n">requestURL</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="c1">//메시지를 전달한다.</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">log</span><span class="o">(</span><span class="nc">String</span> <span class="n">message</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"["</span> <span class="o">+</span> <span class="n">uuid</span> <span class="o">+</span> <span class="s">"]"</span> <span class="o">+</span> <span class="s">"["</span> <span class="o">+</span> <span class="n">requestURL</span> <span class="o">+</span> <span class="s">"] "</span> <span class="o">+</span> <span class="n">message</span> <span class="o">);</span>
-    <span class="o">}</span>
-
-    <span class="nd">@PostConstruct</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">init</span><span class="o">()</span> <span class="o">{</span>
-        <span class="n">uuid</span> <span class="o">=</span> <span class="no">UUID</span><span class="o">.</span><span class="na">randomUUID</span><span class="o">().</span><span class="na">toString</span><span class="o">();</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"["</span> <span class="o">+</span> <span class="n">uuid</span> <span class="o">+</span> <span class="s">"] request scope bean create: "</span> <span class="o">+</span> <span class="k">this</span> <span class="o">);</span>
-    <span class="o">}</span>
-
-    <span class="nd">@PreDestroy</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">close</span><span class="o">()</span> <span class="o">{</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">();</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"["</span> <span class="o">+</span> <span class="n">uuid</span> <span class="o">+</span> <span class="s">"] request scope bean close: "</span> <span class="o">+</span> <span class="k">this</span> <span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-
-</code></pre></div></div>
-
-<ul>
-  <li>로그를 출력하기 위한 <code class="language-plaintext highlighter-rouge">MyLogger</code> 클래스이다. <code class="language-plaintext highlighter-rouge">@Scope(value = "request")</code> 를 사용해서 request 스코프로 지정했다.</li>
-  <li>이제 이 빈은 HTTP 요청 당 하나씩 생성되고, HTTP 요청이 끝나는 시점에 소멸된다.</li>
-  <li>이 빈이 생성되는 시점에 자동으로 <code class="language-plaintext highlighter-rouge">@PostConstruct</code> 초기화 메서드를 사용해서 uuid를 생성 저장한다.</li>
-  <li>이 빈은 HTTP 요청 당 하나씩 생성되므로, uuid를 저장해두면 다른 HTTP 요청과 구분할 수 있다.</li>
-  <li>이 빈이 소멸되는 시점에 <code class="language-plaintext highlighter-rouge">@PreDestroy</code> 를 사용해서 종료 메시지를 남긴다.</li>
-  <li><code class="language-plaintext highlighter-rouge">requestURL</code> 은 이 빈이 생성되는 시점에는 알 수 없으므로, 외부에서 setter로 입력 받는다.</li>
-</ul>
-
-<p><img width="674" alt="image" src="https://github.com/user-attachments/assets/88ab674e-5df9-4786-ad15-3d24953b0cda" /></p>
-
-<ul>
-  <li>로거가 잘 작동하는지 확인하는 테스트용 컨트롤러다.</li>
-  <li>여기서 HttpServletRequest를 통해서 요청 URL을 받았다.</li>
-  <li>requestURL<code class="language-plaintext highlighter-rouge">http://localhost:8080/log-demo</code> 이렇게 받은 requestURL 값을 myLogger에 저장해둔다.</li>
-  <li>myLogger는 HTTP 요청 당 각각 구분되므로 다른HTTP 요청 때문에 값이 섞이는 걱정은 하지 않아도 된다.</li>
-  <li>컨트롤러에서 controller test라는 로그를 남긴다.</li>
-</ul>
-
-<p><img width="679" alt="image" src="https://github.com/user-attachments/assets/9ca5d42a-0f08-4d29-83af-8567a86766ff" /></p>
-
-<ul>
-  <li>비즈니스 로직이 있는 서비스 계층에서도 로그를 출력해보자.</li>
-  <li>request scope를 사용하지 않고 파라미터로 이 모든 정보를 서비스 계층에 넘긴다면,파라미터가 많아서 지저분해진다.</li>
-  <li>더 문제는 requestURL 같은 웹과 관련된 정보가 웹과 관련없는 서비스 계층까지 넘어가게 된다.</li>
-  <li>웹과 관련된 부분은 컨트롤러까지만 사용해야 한다.</li>
-  <li>서비스 계층은 웹 기술에 종속되지 않고, 가급적 순수하게 유지하는 것이 유지보수 관점에서 좋다.</li>
-  <li>request scope의 MyLogger 덕분에 이런 부분을 파라미터로 넘기지 않고, MyLogger의 멤버변수에 저장해서 코드와 계층을 깔끔하게 유지할 수 있다.</li>
-</ul>
-
-<p><img width="681" alt="image" src="https://github.com/user-attachments/assets/69d973a8-3f98-44fa-b77d-817247779659" /></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">ObjectProvider</code> 덕분에 <code class="language-plaintext highlighter-rouge">ObjectProvider.getObject()</code> 를 호출하는 시점까지 request scope <strong>**빈의생성을</strong> <strong>지연</strong>**할 수 있다.</li>
-  <li><code class="language-plaintext highlighter-rouge">ObjectProvider.getObject()</code> 를 호출하시는 시점에는 HTTP 요청이 진행중이므로 request scope 빈의 생성이 정상 처리된다.</li>
-  <li><code class="language-plaintext highlighter-rouge">ObjectProvider.getObject()</code> 를 <code class="language-plaintext highlighter-rouge">LogDemoController</code> , <code class="language-plaintext highlighter-rouge">LogDemoService</code> 에서 각각 한번씩 따로 호출해도 같은 HTTP 요청이면 같은 스프링 빈이 반환된다!</li>
-</ul>
+<p>local, prod, dev 세 가지 프로파일로 나뉘어져 있다. 각 프로파일에 대해 다른 설정을 적용할 수 있다.
+local: 개발자가 로컬 환경에서 실행할 때 사용하는 프로파일로, 로컬 데이터베이스나 디버깅 설정 등을 포함할 수 있다.
+prod: 운영 환경에서 사용하는 프로파일로, 실제 서비스에 배포되는 설정을 포함합니다. 보통 보안이나 성능 관련 설정이 중요하다.
+dev: 개발 환경에서 사용하는 프로파일로, 개발 중에 사용되는 설정이 포함됩니다. 로깅이나 디버깅을 위해 다양한 설정을 추가할 수 있다.</p>
 
 <h2 id="reference">Reference</h2>
-
-<p>김영한님의 스프링 강의 정리 + 어렵다 스프링</p>
+<p><a href="https://velog.io/@18k7102dy/Docker-Spring-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EB%A5%BC-Docker%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%B4%EC%84%9C-%EB%B0%B0%ED%8F%AC%ED%95%B4%EB%B4%85%EC%8B%9C%EB%8B%A4">https://velog.io/@18k7102dy/Docker-Spring-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EB%A5%BC-Docker%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%B4%EC%84%9C-%EB%B0%B0%ED%8F%AC%ED%95%B4%EB%B4%85%EC%8B%9C%EB%8B%A4</a></p>
 
     <br />
     <br />
@@ -388,12 +305,12 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=Spring Basic 10 - Web Scope&amp;url=http://localhost:4000/framework/2024/09/26/Spring-basic-10/"
+    <a href="http://twitter.com/share?text=Spring Profile&amp;url=http://localhost:4000/framework/2024/11/01/Spring-03/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/framework/2024/09/26/Spring-basic-10/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/framework/2024/11/01/Spring-03/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -415,21 +332,8 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
       
       
         
-        
           
-
-
-<li class="h4">
-  <a href="/framework/2024/11/01/Spring-03/" data-flip="title">
-    <span>Spring Profile</span>
-  </a>
-  <small><time datetime="2024-11-01T00:00:00+09:00">
-    01 Nov 2024
-  </time></small>
-</li>
-
-        
-      
+          
         
         
           
@@ -463,6 +367,19 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
         
       
         
+        
+          
+
+
+<li class="h4">
+  <a href="/framework/2024/10/04/Spring-03/" data-flip="title">
+    <span>http의 동작방식과 spring이 http를 지원해주는 방식</span>
+  </a>
+  <small><time datetime="2024-10-04T00:00:00+09:00">
+    04 Oct 2024
+  </time></small>
+</li>
+
         
       
     
