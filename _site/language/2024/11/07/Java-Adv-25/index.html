@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Java Adv 03 - Thread 3" />
+<meta property="og:title" content="Java Adv 25 - ThreadPool 전략" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,17 +52,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Java Adv 03 - Thread 3 &middot; 일벌리는 개발자</title>
+<title>Java Adv 25 - ThreadPool 전략 &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="채크 예외 재정의
+        content="Executor 스레드 풀 관리 - 고정 풀 전략
 
 "
 />
 <meta
         property="og:description"
-        content="채크 예외 재정의
+        content="Executor 스레드 풀 관리 - 고정 풀 전략
 
 "
 />
@@ -72,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/language/2024/09/22/Java-Adv-03/" />
-<meta property="og:url" content="http://localhost:4000/language/2024/09/22/Java-Adv-03/" />
+<link rel="canonical" href="http://localhost:4000/language/2024/11/07/Java-Adv-25/" />
+<meta property="og:url" content="http://localhost:4000/language/2024/11/07/Java-Adv-25/" />
 
 <link
         rel="alternate"
@@ -83,10 +83,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/devops/2024/09/22/Kubernetes-basic-02/" />
+<link rel="prev" href="http://localhost:4000/language/2024/11/05/Java-Adv-24/" />
  
-<link rel="next" href="http://localhost:4000/language/2024/09/22/Java-Adv-04/" />
-
 
 <link
         rel="apple-touch-icon"
@@ -183,16 +181,16 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-language/2024/09/22/Java-Adv-03" class="post" role="article">
+<article id="post-language/2024/11/07/Java-Adv-25" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      Java Adv 03 - Thread 3
+      Java Adv 25 - ThreadPool 전략
       
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-09-22T00:00:00+09:00">22 Sep 2024</time>
+      <time datetime="2024-11-07T00:00:00+09:00">07 Nov 2024</time>
       
 
 
@@ -267,89 +265,165 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
     </style>
 
     <!--<br />-->
-    <h2 id="채크-예외-재정의">채크 예외 재정의</h2>
+    <h2 id="executor-스레드-풀-관리---고정-풀-전략">Executor 스레드 풀 관리 - 고정 풀 전략</h2>
+
+<p><img width="654" alt="image" src="https://github.com/user-attachments/assets/ed2c7546-af1d-4ae1-9521-4af2038d7f1c" /></p>
+
+<h2 id="executor-스레드-풀-관리---캐시-풀-전략">Executor 스레드 풀 관리 - 캐시 풀 전략</h2>
+
+<p><img width="654" alt="image" src="https://github.com/user-attachments/assets/8db6e252-07e7-4129-9809-b4d901abdde6" /></p>
 
 <ul>
-  <li>Runnable 인터페이스의 run() 메서드를 구현할 때 InterruptionException 체크 예외를 밖으로 던질 수 없는 이유를 알아보자</li>
-</ul>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">thread.control</span><span class="o">;</span>
-
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CheckedExceptionMain</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
-        <span class="k">throw</span> <span class="k">new</span> <span class="nf">Exception</span><span class="o">();</span>
-    <span class="o">}</span>
-
-    <span class="kd">static</span> <span class="kd">class</span> <span class="nc">CheckedRunnable</span> <span class="kd">implements</span> <span class="nc">Runnable</span> <span class="o">{</span>
-
-        <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nf">Exception</span><span class="o">();</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-
-</code></pre></div></div>
-
-<ul>
-  <li>자바에서 메서드를 재정의 할 때, 재정의 메서드가 지켜야할 예와와 관련 규칙이 있다.</li>
-</ul>
-
-<h3 id="체크예외">체크예외</h3>
-
-<ul>
-  <li>부모 메서드가 체크 예외를 던지지 않는 경우, 재정의된 자식 메서드도 체크예외를 던질 수 없다.</li>
-  <li>자식 메서드는 부모 메서드가 던질 수 있는 체크 예외의 하위 타입만 던질 수 있다.</li>
-</ul>
-
-<h3 id="언체크-예외">언체크 예외</h3>
-
-<ul>
-  <li>예외 처리를 강제하지 않으므로 상관없이 던질 수 있다.</li>
-</ul>
-
-<h3 id="자바는-왜-이런-제약을-두는-걸까">자바는 왜 이런 제약을 두는 걸까?</h3>
-
-<ul>
-  <li>부모 클래스의 메서드를 호출하는 클라이언트 코드는 부모 메서드가 던지는 특정 예외만을 처리하도록 작성한다. 자식 클래스가 더 넓은 예외의 범위를 던지면 해당 코드는 모든 예외를 제대로 처리하지 못할 수 있다.</li>
-  <li>예외 처리의 일관성을 해치고, 예상하지 못한 런타임 오류가 발생할 수 있다.</li>
-  <li>ex) 예를 들어서 만약 부모가 InteruptException을 던지면 자식은 Exception을 던질 수 없다. 왜냐?
+  <li>newCachedThreadPool()
     <ul>
-      <li>InteruptException은 Exception의 자식이기 때문이다. 예외도 부모와 자식관의 범주를 정해놓고 그 해당 범위 내에서만 예외가 적용됨을 알 수 있다.</li>
+      <li>기본 스레드를 사용하지 않고, 60초 생존 주기를 가진 초과 스레드만 사용하낟</li>
+      <li>초과 스레드의 수는 제한이 없다.</li>
+      <li>큐에 작접을 저장하지 않는다.
+        <ul>
+          <li>대신에 생산자 요청을 스레드 풀의 소비자 스레드가 직접 받아서 바로 처리한다.</li>
+        </ul>
+      </li>
+      <li>모든 요청이 대기하지 않고 스레드가 바로바로 처리한다. 따라서 빠른 처리가 가능하다.</li>
     </ul>
   </li>
 </ul>
 
-<p>예시코드</p>
+<p><img width="654" alt="image" src="https://github.com/user-attachments/assets/ef6b16cb-7b5d-4d87-9d58-1704068268d7" /></p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Test</span><span class="o">{</span>
-	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">){</span>
-		<span class="nc">Parent</span> <span class="n">p</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Child</span><span class="o">();</span> <span class="c1">//인스턴스는 자식이지만 참조는 Parent이다.</span>
-		<span class="k">try</span> <span class="o">{</span>
-			<span class="n">p</span><span class="o">.</span><span class="na">method</span><span class="o">();</span>
-			<span class="o">}</span> <span class="k">catch</span><span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-			<span class="o">}</span>
-		<span class="o">}</span>
-	<span class="o">}</span>
+<p>캐시 스레드 풀 전략은 매우 빠르고, 유연한 전략이다.</p>
+
+<p>이 전략은 기본 스레드도 없고, 대기 큐에 작업도 쌓이지 않는다. 대신에 작업 요청이 오면 초과 스레드로 작업을 바로바로 처리한다.</p>
+
+<p>초과 스레드의 수도 제한이 없기 때문에 CPU, 메모리 자원만 허용한다면 시스템의 자원을 최대로 활용할 수 있다. 추가로 초과 스레드도 갑자기 증가하고, 요청이 줄어들면 스레드도 점점 줄어든다.</p>
+
+<h3 id="주의">주의</h3>
+
+<ul>
+  <li>이 방식은 작업 수에 맞춰서 스레드 수가 변하기 때문에, 작업의 처리 속도가 빠르고 CPU, 메모리를 유연하게 사용할 수 있다는 장점이 있다. 하지만 상황에 따라서 가장 큰 단점이 되기도 한다.</li>
+  <li>캐시 스레드 전략은 사용자가 점점 증가하면서 스레드 사용량도 함께 늘어나게 된다. 따라서 CPU 메모리의 사용량도 자연스럽게 증가 된다.
+    <ul>
+      <li>캐시 스레드 풀 전략은 스레드가 무한으로 생성될 수 있기 때문에 너무 많은 스레드가 작업을 처리하면서 시스템 전체가 느려지는 상황을 맞이할 수도 있다.</li>
+      <li>시스템이 멈추는 장애도 발생할 가능성이 있다. 주의해서 사용해야 한다.</li>
+      <li>갑작스럽게 작업량이 늘어나서 작업을 처리해야할 때 사용하는 것이 좋을 것 같다.</li>
+      <li>잠깐의 급한불을 끄는 정도?</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="executor-스레드-풀-관리---사용자-정의-풀-전략">Executor 스레드 풀 관리 - 사용자 정의 풀 전략</h2>
+
+<h2 id="상황1---점진적인-사용자-확대"><strong>상황</strong>1 - <strong>점진적인</strong> <strong>사용자</strong> <strong>확대</strong></h2>
+
+<p>개발한 서비스가 잘 되어서 사용자가 점점 늘어난다.</p>
+
+<h2 id="상황2---갑작스런-요청-증가"><strong>상황</strong>2 - <strong>갑작스런</strong> <strong>요청</strong> <strong>증가</strong></h2>
+
+<p>마케팅 팀의 이벤트가 대성공 하면서 갑자기 사용자가 폭증했다.
+다음과 같이 세분화된 전략을 사용하면 상황1, 상황2를 모두 어느정도 대응할 수 있다.</p>
+
+<ul>
+  <li><strong>일반</strong>: 일반적인 상황에는 CPU, 메모리 자원을 예측할 수 있도록 고정 크기의 스레드로 서비스를 안정적으로 운영한다.</li>
+  <li><strong>긴급</strong>: 사용자의 요청이 갑자기 증가하면 긴급하게 스레드를 추가로 투입해서 작업을 빠르게 처리한다.</li>
+  <li><strong>거절</strong>: 사용자의 요청이 폭증해서 긴급 대응도 어렵다면 사용자의 요청을 거절한다.</li>
+</ul>
+
+<p>이 방법은 평소에는 안정적으로 운영하다가, 사용자의 요청이 갑자기 증가하면 긴급하게 스레드를 더 투입해서 급한 불을 끄는 방법이다. 
+물론 긴급 상황에는 CPU, 메모리 자원을 더 사용하기 때문에 적정 수준을 찾아야 한다. 
+일반적으로는 여기까지 대응이 되겠지만, 시스템이 감당할 수 없을 정도로 사용자의 요청이 폭증하면, 
+처리 가능한 수준의 사용자 요청만 처리하고 나머지 요청은 거절해야 한다. 
+어떤 경우에도 시스템이 다운되는 최악의 상황은 피해야 한다.</p>
+
+<h2 id="실무에서-자주-하는-실수"><strong>실무에서</strong> <strong>자주</strong> <strong>하는</strong> <strong>실수</strong></h2>
+
+<ul>
+  <li><strong>참고</strong> - <strong>만약</strong> <strong>다음과</strong> <strong>같이</strong> <strong>설정하면</strong>?</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">new</span> <span class="nc">ThreadPoolExecutor</span><span class="o">(</span><span class="mi">100</span><span class="o">,</span> <span class="mi">200</span><span class="o">,</span> <span class="mi">60</span><span class="o">,</span> <span class="nc">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">,</span> <span class="k">new</span>
+
+<span class="nc">LinkedBlockingQueue</span><span class="o">());</span>
 </code></pre></div></div>
 
 <ul>
-  <li>자식 클래스의 재정의된 메서드는 부모 메서드가 던질 수 있는 체크 예외의 하위 타입만 던질 수 있다.</li>
-  <li>원래 메서드가 체크 예외를 던지지 않는 경우, 재정의된 메서드도 체크 예외를 던질 수 없다.</li>
+  <li>기본 스레드 100개</li>
+  <li>최대 스레드 200개</li>
+  <li>큐 사이즈: 무한대</li>
 </ul>
 
-<h2 id="안전한-예외처리">안전한 예외처리</h2>
+<p>이렇게 설정하면 절대로 최대 사이즈 만큼 늘어나지 않는다. 왜냐하면 큐가 가득차야 긴급 상황으로 인지 되는데,
+<code class="language-plaintext highlighter-rouge">LinkedBlockingQueue</code> 를 기본 생성자를 통해 무한대의 사이즈로 사용하게 되면, 큐가 가득찰 수 가 없다. 결국 기본 스레드 100개만으로 무한대의 작업을 처리해야 하는 문제가 발생한다. 실무에서 자주하는 실수 중에 하나이다.</p>
+
+<h2 id="executor-예외-정책">Executor <strong>예외</strong> <strong>정책</strong></h2>
+
+<p>생산자 소비자 문제를 실무에서 사용할 때는, 결국 소비자가 처리할 수 없을 정도로 생산 요청이 가득 차면 어떻게 할지를 정해야 한다. 
+개발자가 인지할 수 있게 로그도 남겨야 하고, 사용자에게 현재 시스템에 문제가 있다고 알리는 것도 필요하다. 
+이런 것을 위해 예외 정책이 필요하다. <code class="language-plaintext highlighter-rouge">ThreadPoolExecutor</code> 에 작업을 요청할 때, 큐도 가득차고, 초과 스레드도 더는 할당할 수 없다면 작업을 거절한다.
+<code class="language-plaintext highlighter-rouge">ThreadPoolExecutor</code> 는 작업을 거절하는 다양한 정책을 제공한다.</p>
 
 <ul>
-  <li>체크 예외를 run() 메서드에서 던질 수 없도록 강제함으로써, 개발자는 반드시 체크 예외를 try-catch 블록 내에서 처리하게 된다.</li>
-  <li>프로그램이 비정상으로 종료되는 상황을 방지할 수 있다.</li>
-  <li>멀티스레딩 환경에서는 예외 처리를 강제함으로써 스레드의 안정성과 일관성을 유지할 수 있다.</li>
-  <li>최근에는 체크예외 보다는 언체크(런타임) 예외를 선호한다.</li>
+  <li>AbortPolicy: 새로운 작업을 제출할 때 <code class="language-plaintext highlighter-rouge">RejectedExecutionException</code> 을 발생시킨다. 기본 정책이다.</li>
+  <li>DiscardPolicy: 새로운 작업을 조용히 버린다.</li>
+  <li>CallerRunsPolicy: 새로운 작업을 제출한 스레드가 대신해서 직접 작업을 실행한다.</li>
+  <li><strong>사용자</strong> <strong>정의</strong>(<code class="language-plaintext highlighter-rouge">RejectedExecutionHandler</code> ): 개발자가 직접 정의한 거절 정책을 사용할 수 있다.</li>
 </ul>
+
+<p>참고로 <code class="language-plaintext highlighter-rouge">ThreadPoolExecutor</code> 를 <code class="language-plaintext highlighter-rouge">shutdown()</code> 하면 이후에 요청하는 작업을 거절하는데, 이때도 같은 정책이 적용된다.</p>
+
+<p><img width="654" alt="image" src="https://github.com/user-attachments/assets/1c84b96b-6b44-48c1-84a3-66d6cd32434e" /></p>
+
+<p>작업이 거절되면 <code class="language-plaintext highlighter-rouge">RejectedExecutionException</code> 을 던진다. 기본적으로 설정되어 있는 정책이다.
+<code class="language-plaintext highlighter-rouge">task1</code> 은 풀의 스레드가 수행한다. <code class="language-plaintext highlighter-rouge">task2</code> 를 요청하면 허용 작업을 초과한다. 
+따라서 <code class="language-plaintext highlighter-rouge">RejectedExecutionException</code> 이 발생한다. 
+<code class="language-plaintext highlighter-rouge">RejectedExecutionException</code> 예외를 잡아서 작업을 포기하거나, 사용자에게 알리거나, 다시 시도하면 된다. 
+이렇게 예외를 잡아서 필요한 코드를 직접 구현해도 되고, 아니면 다음에 설명한 다른 정책들을 사용해도 된다.</p>
+
+<h2 id="rejectedexecutionhandler">RejectedExecutionHandler</h2>
+
+<p>마지막에 전달한 <code class="language-plaintext highlighter-rouge">AbortPolicy</code> 는 <code class="language-plaintext highlighter-rouge">RejectedExecutionHandler</code> 의 구현체이다.
+<code class="language-plaintext highlighter-rouge">ThreadPoolExecutor</code> 생성자는 <code class="language-plaintext highlighter-rouge">RejectedExecutionHandler</code> 의 구현체를 전달 받는다.</p>
+
+<h2 id="discardpolicy">DiscardPolicy</h2>
+
+<p><img width="654" alt="image" src="https://github.com/user-attachments/assets/1d5a4d45-84d3-45e3-a064-3d33d1f2bf28" /></p>
+
+<p>거절된 작업을 무시하고 아무런 예외도 발생시키지 않는다. 
+<code class="language-plaintext highlighter-rouge">ThreadPoolExecutor</code> 생성자 마지막에 <code class="language-plaintext highlighter-rouge">new ThreadPoolExecutor.DiscardPolicy()</code> 를 제공하면 된다.
+코드를 확인해보면 비어있는 것을 확인할 수 있다.</p>
+
+<h2 id="callerrunspolicy">CallerRunsPolicy</h2>
+
+<p><img width="654" alt="image" src="https://github.com/user-attachments/assets/79548339-d306-461b-b68e-4eaadaee4c02" />
+<img width="654" alt="image" src="https://github.com/user-attachments/assets/aafc1e76-ac58-4b1d-bcf6-f11365c87b2d" /></p>
+
+<p><code class="language-plaintext highlighter-rouge">task2</code> 는 스레드 풀에 보관할 큐도 없고, 작업할 스레드가 없다. 거절해야 한다. 
+이때 작업을 거절하는 대신에, 작업을 요청한 스레드에 대신 일을 시킨다.
+<code class="language-plaintext highlighter-rouge">task2</code> 의 작업을 <code class="language-plaintext highlighter-rouge">main</code> 스레드가 수행하는 것을 확인할 수 있다.
+이 정책의 특징은 생산자 스레드가 소비자 대신 일을 수행하는 것도 있지만, 
+생산자 스레드가 대신 일을 수행하는 덕분에 작업의 생산 자체가 느려진다는 점이다. 
+덕분에 작업의 생산 속도가 너무 빠르다면, 생산 속도를 조절할 수 있다. 
+원래대로 하면 <code class="language-plaintext highlighter-rouge">main</code> 스레드가 <code class="language-plaintext highlighter-rouge">task1</code> , <code class="language-plaintext highlighter-rouge">task2</code> , <code class="language-plaintext highlighter-rouge">task3</code> , <code class="language-plaintext highlighter-rouge">task4</code> 를 연속해서 바로 생산해야 한다.
+<code class="language-plaintext highlighter-rouge">CallerRunsPolicy</code> 정책 덕분에 <code class="language-plaintext highlighter-rouge">main</code> 스레드는 <code class="language-plaintext highlighter-rouge">task2</code> 를 본인이 직접 완료하고 나서야 <code class="language-plaintext highlighter-rouge">task3</code> 을 생산할 수 있다. 
+결과적으로 생산 속도가 조절되었다.</p>
+
+<h2 id="가장-좋은-최적화는-최적화하지-않는-것이다">가장 좋은 최적화는 최적화하지 않는 것이다</h2>
+
+<p>많은 개발자가 미래에 발생하지 않을 일 때문에 코드를 최적화하는 경우가 많다. 예를 들어서 초기 서비스이고, 아직 사용자가 많을지 예측이 되지 않는 상황인데, 코드 최적화에 너무 많은 시간을 사용할 수 있다. 이것은 사용자는 얼마 없는데 매우 비싼 서버를 구매하는 것과 같다. 물론 이 이야기가 극단적으로 최적화를 하지 말자는 말이 아니다. 예를 들어서 A와 관련된 기능을 매우 많이 최적화 했는데, 사용자가 없어서 결국 버리게 되는 경우도 있다. 반면에 별로 신경쓰지 않은 B와 관련된 기능에 사용자가 많이 늘어날 수도 있다. 
+중요한 것은 예측 불가능한 너무 먼 미래 보다는 현재 상황에 맞는 최적화가 필요하다는 점이다.
+시스템의 상황을 잘 모니터링 하고 있다가, 최적화가 필요한 부분들이 발생하면, 그때 필요한 부분들을 개선하는 것이다.
+우리가 만든 서비스가 잘 되어서 많은 요청이 들어오면 좋겠지만, 대부분의 서비스는 트래픽이 어느정도 예측 가능하다. 
+그리고 성장하는 서비스라도 어느정도 성장이 예측 가능하다. 
+그래서 일반적인 상황이라면 고정 스레드 풀 전략이나, 캐시 스레드 풀 전략을 사용하면 충분하다. 
+한번에 처리할 수 있는 수를 제안하고 안정적으로 처리하고 싶다면 고정 풀 전략을 선택하고, 
+사용자의 요청을 빠르게 대응하고 싶다면 캐시 스레드 풀 전략을 사용하면 된다. 
+물론 자원만 충분하다면 고정 풀 전략을 선택하면서 풀의 수를 많이 늘려서 사용자의 요청도 빠르게 대응하면서 안정적인 서비스 운영도 가능하다. 
+그러다가 일반적인 상황을 벋어날 정도로 서비스가 잘 운영되면 그때 더 나은 최적화 방법을 선택하면 된다.</p>
 
 <h2 id="reference">Reference</h2>
 
-<p>인프런 김영한님의 자바강좌 + 나의 뇌</p>
+<p>김영한님의 자바 강의</p>
+
+<p><a href="https://docs.oracle.com/javase/tutorial/essential/concurrency/sync.html">https://docs.oracle.com/javase/tutorial/essential/concurrency/sync.html</a></p>
+
 
     <br />
     <br />
@@ -363,12 +437,12 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=Java Adv 03 - Thread 3&amp;url=http://localhost:4000/language/2024/09/22/Java-Adv-03/"
+    <a href="http://twitter.com/share?text=Java Adv 25 - ThreadPool 전략&amp;url=http://localhost:4000/language/2024/11/07/Java-Adv-25/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/09/22/Java-Adv-03/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/language/2024/11/07/Java-Adv-25/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -390,21 +464,8 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
       
       
         
-        
           
-
-
-<li class="h4">
-  <a href="/language/2024/11/07/Java-Adv-25/" data-flip="title">
-    <span>Java Adv 25 - ThreadPool 전략</span>
-  </a>
-  <small><time datetime="2024-11-07T00:00:00+09:00">
-    07 Nov 2024
-  </time></small>
-</li>
-
-        
-      
+          
         
         
           
@@ -438,6 +499,19 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
         
       
         
+        
+          
+
+
+<li class="h4">
+  <a href="/language/2024/10/26/Java-Adv-22/" data-flip="title">
+    <span>Java Adv 22 - Executor framework</span>
+  </a>
+  <small><time datetime="2024-10-26T00:00:00+09:00">
+    26 Oct 2024
+  </time></small>
+</li>
+
         
       
     
