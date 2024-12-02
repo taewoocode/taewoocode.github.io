@@ -6,13 +6,15 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 02 Dec 2024 16:55:51 +0900</pubDate>
-    <lastBuildDate>Mon, 02 Dec 2024 16:55:51 +0900</lastBuildDate>
+    <pubDate>Mon, 02 Dec 2024 16:58:46 +0900</pubDate>
+    <lastBuildDate>Mon, 02 Dec 2024 16:58:46 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
-        <title>Spring MVC - FrontController</title>
+        <title>Spring MVC 01 - FrontController</title>
         <description>&lt;h2 id=&quot;frontcontroller&quot;&gt;FrontController&lt;/h2&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/b757077e-b69d-471c-8131-ef8f894e07d4&quot; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;FrontController &lt;strong&gt;패턴&lt;/strong&gt; &lt;strong&gt;특징&lt;/strong&gt;&lt;/li&gt;
@@ -20,8 +22,6 @@
   &lt;li&gt;&lt;strong&gt;스프링&lt;/strong&gt; &lt;strong&gt;웹&lt;/strong&gt; MVC&lt;strong&gt;와&lt;/strong&gt; &lt;strong&gt;프론트&lt;/strong&gt; &lt;strong&gt;컨트롤러&lt;/strong&gt;&lt;/li&gt;
   &lt;li&gt;스프링 웹 MVC의 핵심도 바로 &lt;strong&gt;FrontController&lt;/strong&gt; 스프링 웹 MVC의 &lt;strong&gt;DispatcherServlet&lt;/strong&gt;이 FrontController 패턴으로 구현되어 있음&lt;/li&gt;
 &lt;/ul&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/b757077e-b69d-471c-8131-ef8f894e07d4&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;프론트 컨트롤러를 단계적으로 도입해보자. 이번 목표는 기존 코드를 최대한 유지하면서, 프론트 컨트롤러를 도입하는 것이다. 먼저 구조를 맞추어두고 코드를 짜보자&lt;/p&gt;
 
