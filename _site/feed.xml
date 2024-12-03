@@ -6,9 +6,105 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 02 Dec 2024 16:58:46 +0900</pubDate>
-    <lastBuildDate>Mon, 02 Dec 2024 16:58:46 +0900</lastBuildDate>
+    <pubDate>Wed, 04 Dec 2024 02:35:58 +0900</pubDate>
+    <lastBuildDate>Wed, 04 Dec 2024 02:35:58 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
+    
+      <item>
+        <title>CPU Outline</title>
+        <description>&lt;h2 id=&quot;central-processing-unit&quot;&gt;Central Processing Unit&lt;/h2&gt;
+
+&lt;p&gt;컴퓨터 시스템을 이루는 3 대 구성이 있다면 CPU, 메리 그리고 디스크이다. 
+여기에 I/O 까지 추가 된다면 그것을 컴퓨터를 이루는 기본 골격이라고 할 수 있는데, 
+이것을 제안한 것이 폰 노이만이다. 주요 특징은 명령어 → 데이터 로드 → 실행 → 저장을 순차적으로 수행하는 것과 데이터/프로그램을 하나의 버스로 접근하는 구조이다.
+폰 노이만 구조는 중앙 처리 장치라는 것이 있고 이 중앙 처리 장치를 통해서 연산을 수행하게 되는 구조이다. 
+이 CPU(중앙처리 장치)는 각종 연산을 수행하고 기억장치에 기억되어 있는 명령어들을 수행하는 컴퓨터 시스템을 이루는 핵심 부품이다.&lt;/p&gt;
+
+&lt;h2 id=&quot;cpu의-속도-hz-clock&quot;&gt;CPU의 속도 Hz, Clock&lt;/h2&gt;
+
+&lt;p&gt;CPU는 수를 계산하는 칩정도로 생각하면 된다. 원리가 덧셈기와 같이 동작한다.
+컴퓨터의 성능을 CPU의 속도와 메모리의 용량으로 표현할 수 있다. 
+시스템내의 CPU 에 전기적으로 공급되는 신호를 Clock 이라고 하는데, 
+이것은 주기적으로 일정한 시그널을 보내주는 칩이다. Clock 에서는 일정 볼트로 주기적으로 신호를 발생한다. 
+그러면 CPU 는 이 신호를 받고 데이터를 주거나 받고 처리하게 된다. 
+전기적 신호 한번에 의해서 CPU에서는 한개의 명령을 처리한다. 
+CPU 의 속도를 Hz 로 나타내고 이 Hz 가 높으면 속도가 빠른 성능의 CPU 가 되는 것이다. 
+그래서 주사율이 높은 모니터를 쓰려면 CPU의 성능이 좋아야 하나보다.&lt;/p&gt;
+
+&lt;h2 id=&quot;cpu의-구성도&quot;&gt;CPU의 구성도&lt;/h2&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/7db9bc08-41b1-4ccd-a1ac-4fc82bebaee0&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;CPU 의 내부 구성은 크게 산술/논리 연산 장치(ALU), 제어 장치와 레지스터로 구성되어 있다. 
+산술은 덧셈을 수행하는 것이고, 제어 장치는 시그럴을 통해서 데이터 흐름을 통제하는 것이며 레지스터는 CPU 내부의 메모리이다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Instruction Fetcher&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;컴퓨터의 &lt;strong&gt;프로세서(Processor)&lt;/strong&gt;에서 명령어(Instruction)를 가져오는 역할을 하는 컴포넌트이다. 프로세서는 프로그램의 명령어를 실행하기 위해 메모리에서 명령어를 가져와야 하는데, 이 과정이 Instruction Fetch라고 불린다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Instruction Decoder&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;읽어들인 명령어에 대해 수행할 동작을 결정하기 위해 명령어를 해독한다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Register&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;프로세서에 위치한 고속 메모리로써 매우 적은 소량의 데이터나 자주 사용되는 결과값들을 미리 저장해두는 공간이다. 프로세서가 빠르게 레지스터를 참조하여 작업 속도를 증가시키는데 목적이 있다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;ALU&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;산술 논리 장치의 경우에는 덧셈, 뺄셈과 같은 단순 산순연산부터 베타적 논리합, 논리곱과 같은 논리 연산을 수행한다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;명령어-구조&quot;&gt;명령어 구조&lt;/h2&gt;
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/7164732b-bfee-4b0b-a0a1-32afb6aae3fa&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;명령어는 시스템이 특정 동작을 수행시키는 작은 단위이다. 명령어는 코드로 되어 있는데 아래와 같이 동작코드(Op-code: Operation Code)와 오퍼랜드(Operand)로 구성되어 있다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;명령어 = 동작코드 _ 오퍼랜드&lt;/li&gt;
+  &lt;li&gt;동작코드 : 각 명령어의 실행 동작을 구분하여 표현&lt;/li&gt;
+  &lt;li&gt;오퍼랜드 : 명령어의 실행에 필요한 자료나 실제 자료의 저장 위치&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;명령어-수행-과정&quot;&gt;명령어 수행 과정&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;CPU가 하나의 명령(Operation)을 처리하는 과정은 다음과 같다.&lt;/li&gt;
+  &lt;li&gt;FI → DI → EI → WB&lt;/li&gt;
+  &lt;li&gt;읽기(Fetch Instruction): 메모리에서 명령을 가져온다.&lt;/li&gt;
+  &lt;li&gt;해석(Decode Instruction): 명령을 해석한다.&lt;/li&gt;
+  &lt;li&gt;실행(Execute Instruction): 명령을 수행한다.&lt;/li&gt;
+  &lt;li&gt;기록(Wrtie Back): 수행한 결과를 기록한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Program Counter는 Fetch 할 다음의 명령어 주소를 갖고 있다. 
+(여기저기서 Fetch가 정말 많이 등장하는데 Fetch는 가져오다라는 어원을 가지고 있다. ) 
+프로세스는 PC(ProgramCounter)가 가리키는 주소위치에서 명령어를 가져오면서 PC를 증가시키고 명령문은 Instruction Register에 Load 된다.
+그리고 Load된 명령어는 Execute Cycle Fetch 과정에서 가져온 명령어를 실제 ALU(가산기)에서 처리하게 된다.&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;나의 뇌&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Arithmetic_logic_unit&quot;&gt;https://en.wikipedia.org/wiki/Arithmetic_logic_unit&lt;/a&gt;
+&lt;a href=&quot;https://www.techtarget.com/whatis/definition/arithmetic-logic-unit-ALU&quot;&gt;https://www.techtarget.com/whatis/definition/arithmetic-logic-unit-ALU&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Mon, 11 Nov 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/cs/2024/11/11/Operating-system-01/</link>
+        <guid isPermaLink="true">http://localhost:4000/cs/2024/11/11/Operating-system-01/</guid>
+        
+        <category>OS</category>
+        
+        
+        <category>cs</category>
+        
+      </item>
     
       <item>
         <title>Spring MVC 01 - FrontController</title>
@@ -2429,56 +2525,6 @@ Setter를 사용하면 나중에 필드를 추가할 수 있기 때문에, 객�
         
         
         <category>framework</category>
-        
-      </item>
-    
-      <item>
-        <title>Java Adv 11 - Thread Consumer, Producer</title>
-        <description>&lt;h2 id=&quot;생산자-소비자-대기-공간-분리&quot;&gt;생산자 소비자 대기 공간 분리&lt;/h2&gt;
-
-&lt;p&gt;&lt;img width=&quot;621&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/18e0cc8d-e5c4-4d58-9a92-bab8c663e474&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;생산자용 Condition과 소비자용 Condition을 나눠서 만든다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;519&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/f0b81a0b-f79b-4675-857b-00f3e46c17ea&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;lock.newCondition을 2번 호출해서 ReentrantLock을 사용하는 스레드 대기 공간을 2개 만들었다.
-이렇게 관리하면 생산자 스레드, 소비자 스레드를 정확하게 나누어 관리하고 깨울 수 있다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;523&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/8fcd96b9-8797-481e-b0c4-c455b686dca2&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;생산자가 데이터를 생산하면 생산자용 대기에서 기다리고, 데이터를 생산하면 소비자를 깨운다.
-소비자는 소비자 대기소에서 기다리고, 소비자가 데이터를 소비하고 나면 생산자를 깨우게 된다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;682&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/15017864-a1eb-4fc0-9416-5a9973ed1ed7&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;signal을 호출해서 대기중인 소비자를 깨우는 것을 확인할 수 있다.&lt;/p&gt;
-
-&lt;h2 id=&quot;objectnotify-vs-conditionsignalobjectnotify&quot;&gt;&lt;strong&gt;Object.notify() vs Condition.signal()Object.notify()&lt;/strong&gt;&lt;/h2&gt;
-
-&lt;p&gt;대기 중인 스레드 중 임의의 하나를 선택해서 깨운다. 스레드가 깨어나는 순서는 정의되어 있지 않으며,
-JVM 구현에 따라 다르다. 보통은 먼저 들어온 스레드가 먼저 수행되지만 구현에 따라 다를 수 있다.
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt; 블록 내에서 모니터 락을 가지고 있는 스레드가 호출해야 한다. &lt;strong&gt;Condition.signal()&lt;/strong&gt;
-대기 중인 스레드 중 하나를 깨우며, 일반적으로는 FIFO 순서로 깨운다. 이 부분은 자바 버전과 구현에 따
-라 달라질 수 있지만, 보통 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Condition&lt;/code&gt; 의 구현은 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Queue&lt;/code&gt; 구조를 사용하기 때문에 FIFO 순서로 깨운다.
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ReentrantLock&lt;/code&gt; 을 가지고 있는 스레드가 호출해야 한다.&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;김영한님의 자바 강의&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://stackoverflow.com/questions/50001353/java-one-producer-and-two-consumers&quot;&gt;https://stackoverflow.com/questions/50001353/java-one-producer-and-two-consumers&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://docs.oracle.com/javase/8/docs/api/java/lang/Thread.html&quot;&gt;https://docs.oracle.com/javase/8/docs/api/java/lang/Thread.html&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Tue, 08 Oct 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/language/2024/10/08/Java-Adv-11/</link>
-        <guid isPermaLink="true">http://localhost:4000/language/2024/10/08/Java-Adv-11/</guid>
-        
-        <category>java</category>
-        
-        
-        <category>language</category>
         
       </item>
     
