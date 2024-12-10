@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 04 Dec 2024 02:45:42 +0900</pubDate>
-    <lastBuildDate>Wed, 04 Dec 2024 02:45:42 +0900</lastBuildDate>
+    <pubDate>Wed, 04 Dec 2024 02:45:53 +0900</pubDate>
+    <lastBuildDate>Wed, 04 Dec 2024 02:45:53 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
@@ -41,7 +41,7 @@ CPU 의 속도를 Hz 로 나타내고 이 Hz 가 높으면 속도가 빠른 성�
 &lt;ul&gt;
   &lt;li&gt;&lt;strong&gt;Instruction Fetcher&lt;/strong&gt;
     &lt;ul&gt;
-      &lt;li&gt;컴퓨터의 &lt;strong&gt;프로세서(Processor)&lt;/strong&gt;에서 명령어(Instruction)를 가져오는 역할을 하는 컴포넌트이다. 프로세서는 프로그램의 명령어를 실행하기 위해 메모리에서 명령어를 가져와야 하는데, 이 과정이 Instruction Fetch라고 불린다.&lt;/li&gt;
+      &lt;li&gt;컴퓨터의 프로세서(Processor)**에서 명령어(Instruction)를 가져오는 역할을 하는 컴포넌트이다. 프로세서는 프로그램의 명령어를 실행하기 위해 메모리에서 명령어를 가져와야 하는데, 이 과정이 Instruction Fetch라고 불린다.&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;Instruction Decoder&lt;/strong&gt;
