@@ -6,9 +6,156 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 04 Dec 2024 02:45:53 +0900</pubDate>
-    <lastBuildDate>Wed, 04 Dec 2024 02:45:53 +0900</lastBuildDate>
+    <pubDate>Mon, 16 Dec 2024 10:47:17 +0900</pubDate>
+    <lastBuildDate>Mon, 16 Dec 2024 10:47:17 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
+    
+      <item>
+        <title>Android 01 - Activity LifeCycle</title>
+        <description>&lt;h2 id=&quot;activity&quot;&gt;Activity&lt;/h2&gt;
+
+&lt;p&gt;액티비는 안드로이드 4대 컴포넌트 중에 하나이다. 앱을 실행했을 때 보이는 화면이다.
+생명주기 메서드는 아래와 같다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://github.com/user-attachments/assets/c3b76366-53e5-4f3e-bcda-5c64cdb62427&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;onCreate()
+    &lt;ul&gt;
+      &lt;li&gt;액티비티가 최초 생성될 때 호출된다.&lt;/li&gt;
+      &lt;li&gt;액티비티의 초기화 작업(레이아웃 설정, 데이터 바인딩, 리소스 초기화)를 수행한다.&lt;/li&gt;
+      &lt;li&gt;한번만 호출된다.&lt;/li&gt;
+      &lt;li&gt;생성된 화면 요소를 메모리에 로드한다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;onStart()
+    &lt;ul&gt;
+      &lt;li&gt;액티비티가 사용자에게 보여지기 시작할 때 호출된다.&lt;/li&gt;
+      &lt;li&gt;화면이 표시되기 직전에 준비 상태로 들어간다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;onResume()
+    &lt;ul&gt;
+      &lt;li&gt;액티비티가 사용자와 상호작용 가능한 상태로 전환될 때 호출된다.&lt;/li&gt;
+      &lt;li&gt;화면이 포커스를 얻고, 이벤트를 받을 수 있는 상태이다(터치, 키 입력)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;onPause()
+    &lt;ul&gt;
+      &lt;li&gt;액티비티가 다른 화면에 의해 부분적으로 가려지거나 비활성화될 때 호출된다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;onStop()
+    &lt;ul&gt;
+      &lt;li&gt;액티비티가 완전히 화면에서 보이지 않을 때 호출된다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;onDestroy()
+    &lt;ul&gt;
+      &lt;li&gt;액티비티가 완전히 종료될 때 호출된다.&lt;/li&gt;
+      &lt;li&gt;시스템이 메모리를 회수하거나, 사용자가 앱을 종료할 때 호출된다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;onPause() → onStop()
+    &lt;ul&gt;
+      &lt;li&gt;현재 액티비티를 종료하지 않고 새로운 액티비티가 만들어질 때(Stopped) 상태&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;onStart() → onResume()
+    &lt;ul&gt;
+      &lt;li&gt;두 메서드가 연속적으로 실행되고 Resumed 상태로 변경된다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;생명주기를 쉽게 이해하려면 실제 화면에 표시 유무를 생각하면 된다. 
+먼저 최초로 앱을 실행하면 onCreate()가 호출된다. 이때 초기화 관련 작업을 하면 좋다. 
+다음으로 onStart()가 호출이되고 이 시점부터 사용자가 액티비티를 볼 수 있다. 
+그리고 액티비티가 실제 사용자와 상호작용이 가능한 포그라운드에 위치하면 onResume()이 호출된다. 
+이 상태를 액티비티가 실행 중인 것으로 본다.
+반대로 액티비티가 실행 중인 상태에서 사용자와 상호작용이 불가능한 상태, 즉 포커스를 잃은 상태가 되면 onPause()가 호출된다. 
+onStop()은 액티비티가 더 이상 보이지 않을 때 호출된다. 
+그리고 액티비티가 종료되거나 앱 프로세스 자체가 종료되면 onDestroy()가 호출된다.
+주의할 점은 불투명한 새로운 액티비티가 최상단으로 올라와서 기존 액티비티가 완전히 보이지 않게 되면 onPause()에 이어서 바로 onStop()까지 호출된다.&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://source.android.com/docs?hl=ko&quot;&gt;https://source.android.com/docs?hl=ko&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Tue, 19 Nov 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/framework/2024/11/19/Kotlin-android-01/</link>
+        <guid isPermaLink="true">http://localhost:4000/framework/2024/11/19/Kotlin-android-01/</guid>
+        
+        <category>android</category>
+        
+        
+        <category>framework</category>
+        
+      </item>
+    
+      <item>
+        <title>Spring MVC 02 - Adapter Pattern</title>
+        <description>&lt;h2 id=&quot;adapter-pattern&quot;&gt;Adapter Pattern&lt;/h2&gt;
+
+&lt;p&gt;어댑터 패턴(Adapter Pattern)은 구조적 디자인 패턴의 하나로, 서로 호환되지 않는 인터페이스를 가진 클래스들을 연결하여 함께 동작할 수 있도록 돕는 역할을 한다. 
+즉, 클라이언트가 기존 클래스나 인터페이스를 사용할 수 있게 “중간 다리 역할”을 하는 객체를 만드는 패턴이다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/111ef9aa-45ad-4579-9359-5bad5df6cf22&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;핸들러 어댑터
+    &lt;ul&gt;
+      &lt;li&gt;중간에 어댑터 역할을 하는 어댑터가 추가되었는데, 이름이 핸들러 어댑터이다. 여기서 어댑터 역할을 해주는 덕분에 다양한 종류의 컨트롤러를 호출할 수 있다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;핸들러
+    &lt;ul&gt;
+      &lt;li&gt;컨트롤러의 이름을 더 넓힌 범위의 핸들러로 변경이 되었다. 그 이유는 이제 어댑터가 있기 때문에 꼭 컨트롤러의 개념 뿐만이 아니라 어떠한 것이든 해당하는 종류의 어댑터만 있으면 다 처리할 수 있기 때문이다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/626fcd87-70c3-4d75-91a8-697663535631&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;boolean supports(Object handler)
+    &lt;ul&gt;
+      &lt;li&gt;handler는 컨트롤러를 말한다.&lt;/li&gt;
+      &lt;li&gt;어댑터가 해당 컨트롤러를 처리할 수 있는지 판단하는 메서드다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;ModelView handle(HttpServletRequest request, HttpServletResponse response, Object handler)
+    &lt;ul&gt;
+      &lt;li&gt;어댑터는 실제 컨트롤러를 호출하고, 그 결과로 ModelView를 반환해야 한다.&lt;/li&gt;
+      &lt;li&gt;실제 컨트롤러가 ModelView를 반환하지 못하면, 어댑터가 ModelView를 직접 생성해서라도 반환해야
+한다.&lt;/li&gt;
+      &lt;li&gt;이전에는 프론트 컨트롤러가 실제 컨트롤러를 호출했지만 이제는 이 어댑터를 통해서 실제 컨트롤러가 호출 된다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/7dba62de-f27a-44dc-bf24-da773579a47f&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;코드를 잘보면 위의 그림을 그대로 표현한 것이다.
+클라이언트가 요청을 하면 일단 핸들러 맵핑 정보를 뒤져본다.
+핸들러를 처리할 수 있는 핸들러 어댑터를 getHandler 어댑터에다가 이 핸들러를 던지면서 V3 컨트롤러에 대한 걸 처리할 수 있는 핸들러 어댑터를 찾아온다.
+그러면 V3 컨트롤러를 바꾼 다음 컨트롤러의 프로세서를 호출한다. 이후 모델뷰를 반환한다.&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-framework/docs/3.0.0.M4/spring-framework-reference/html/ch15s02.html&quot;&gt;https://docs.spring.io/spring-framework/docs/3.0.0.M4/spring-framework-reference/html/ch15s02.html&lt;/a&gt;
+&lt;a href=&quot;https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-collaborators.html&quot;&gt;https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-collaborators.html&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Fri, 15 Nov 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/framework/2024/11/15/Spring-framework-mvc-02/</link>
+        <guid isPermaLink="true">http://localhost:4000/framework/2024/11/15/Spring-framework-mvc-02/</guid>
+        
+        <category>mvc</category>
+        
+        
+        <category>framework</category>
+        
+      </item>
     
       <item>
         <title>CPU Outline</title>
@@ -2355,176 +2502,6 @@ left가 right보다 작은 동안 반복된다. (두 포인터가 교차하지 �
         
         
         <category>cs</category>
-        
-      </item>
-    
-      <item>
-        <title>Simple Library App - Repository</title>
-        <description>&lt;h2 id=&quot;bookrepository를-왜-인터페이스로-분리를-했을까&quot;&gt;BookRepository를 왜 인터페이스로 분리를 했을까?&lt;/h2&gt;
-
-&lt;p&gt;&lt;img width=&quot;699&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/bcbb0ec7-ffef-473b-9aad-2e9f4a165d83&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BookRepository&lt;/code&gt;를 인터페이스로 분리하는 이유는 다양한 구현체를 통해 다양한 전략 패턴을 활용하기 위함이다. 
-이렇게 분리함으로써 코드의 유연성과 확장성을 높일 수 있다. 
-예를 들어, 메모리 기반 저장소, 데이터베이스 기반 저장소, 파일 기반 저장소 등의 서로 다른 구현체를 만들어 필요에 따라 선택하여 사용할 수 있다. 
-이로 인해 특정 구현체에 종속되지 않고, 변경이 용이할 수 있다.
-이와 같이 인터페이스를 사용하면 새로운 기능을 추가하거나 기존 기능을 수정할 때도 기존 코드를 건드리지 않고도 다양한 방식으로 구현할 수 있다.
-또한 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BookService&lt;/code&gt;는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BookRepository&lt;/code&gt;에 의존하고 있다. 
-이는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BookService&lt;/code&gt;가 데이터 저장 및 조회를 위해 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BookRepository&lt;/code&gt;를 사용한다는 것을 의미한다. 
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BookService&lt;/code&gt;는 책을 추가, 수정, 삭제, 조회하는 비즈니스 로직을 구현하고, 이 과정에서 실제 데이터 작업은 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BookRepository&lt;/code&gt;가 담당한다.
-생성자 주입을 통해 런타임에 다양한 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Repository&lt;/code&gt;의 구현체를 주입받는다. 
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BookService&lt;/code&gt;의 생성자에서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BookRepository&lt;/code&gt;를 인터페이스를 매개변수로 받아 주입받는 방식이다. 
-런타임시 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BookService&lt;/code&gt;의 생성자에서 구현체를 주입받게 된다.
-런타임에 다양한 전략을 주입받는 것은 Spring의 의존성 주입 기능을 활용하는 것이다. 
-애플리케이션 실행 시점에 어떤 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BookRepository&lt;/code&gt; 구현체가 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BookService&lt;/code&gt;에 주입될지를 결정하게 된다. 
-예를 들어, BookRepositoryV0, BookRepositoryV1, BookRepositoryV2와 같은 다양한 구현체가 있을 수 있다.
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BookService&lt;/code&gt;는 주입받은 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BookRepository&lt;/code&gt;를 사용하여 비즈니스 로직을 수행한다. 
-책을 추가하는 기능은 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bookRepository&lt;/code&gt;의 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;save&lt;/code&gt; 메서드를 호출하여 책을 저장하는 방식으로 구현될 수 있다. 
-이때, 실제 데이터 저장 방식은 주입된 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BookRepository&lt;/code&gt;의 구현체에 따라 달라진다.
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BookService&lt;/code&gt;는 구체적인 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BookRepository&lt;/code&gt;의 구현에 대해 알 필요가 없고, 오로지 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BookRepository&lt;/code&gt; 인터페이스만 알고 있으면 된다. 
-이는 다양한 데이터 저장 방식을 손쉽게 변경하거나 추가할 수 있는 기반이 된다.&lt;/p&gt;
-
-&lt;h2 id=&quot;다양한-정책기반의-구현체&quot;&gt;다양한 정책기반의 구현체&lt;/h2&gt;
-
-&lt;p&gt;위에 내용을 조금 간추려 보자면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BookRepository&lt;/code&gt;와 같은 인터페이스를 사용할 때 다양한 정책을 구현할 수 있다는 점이다. 
-예를 들어, 책 관리 시스템에서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BookRepository&lt;/code&gt; 인터페이스를 구현하는 여러 정책을 생각해볼 수 있다.
-BookRepository와 같은 인터페이스를 활용하면 다양한 정책을 구현할 수 있는 유연성을 제공한다. 
-예를 들어, 책 관리 시스템에서 BookRepository 인터페이스를 구현하는 여러 정책을 고려할 수 있다. 
-각 비즈니스 요구 사항에 맞춰 서로 다른 구현체를 만들어 제공할 수 있으며, InMemoryBookRepository, FileBookRepository, DatabaseBookRepository 등 다양한 구현체를 통해 서로 다른 저장소를 사용할 수 있다.&lt;/p&gt;
-
-&lt;h2 id=&quot;다양한-정책기반의-구현체를-어떻게-넣어줄-것인데&quot;&gt;다양한 정책기반의 구현체를 어떻게 넣어줄 것인데?&lt;/h2&gt;
-
-&lt;p&gt;&lt;img width=&quot;474&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/b05b7469-559b-4f0b-aa23-5c163bc6a6e4&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AppConfig&lt;/code&gt;는 Spring 애플리케이션에서 의존성 주입을 관리하는 중요한 구성 요소이다. 
-이 클래스는 Spring 컨테이너에 빈을 등록하고 특정 구현체를 주입하는 역할을 한다.
-Spring의 의존성 주입은 런타임 시점에 어떤 구현체가 사용될지를 결정한다. 
-즉, 주입되는 시점에 실제로 어떤 구현체가 사용될지를 선택하게 된다. 
-이는 코드에서 인터페이스에만 의존하게 하고, 런타임에 Spring이 관리하는 빈을 기반으로 필요한 의존성을 주입하는 방식을 의미한다.
-컴파일 시점에서는 인터페이스만 확인되므로 어떤 구현체가 사용될지를 알 수 없다. 
-예를 들어, 여러 개의 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BookService&lt;/code&gt; 인터페이스 구현체가 있을 때, 컴파일 시점에는 이들 중 어떤 것이 선택될지를 알 수 없다. 
-이때는 인터페이스에만 의존하게 되어 유연성을 높인다.
-Spring에서는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@Autowired&lt;/code&gt; 어노테이션을 사용하여 해당 인터페이스의 구현체를 자동으로 주입받을 수 있다. 
-예를 들어, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BookRepository&lt;/code&gt; 인터페이스의 여러 구현체 (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BookRepositoryV0&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BookRepositoryV1&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BookRepositoryV2&lt;/code&gt;)가 있을 경우, 
-Spring은 컨테이너에 등록된 빈 중에서 적절한 구현체를 찾아 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bookRepository&lt;/code&gt;에 주입한다.
-결론적으로, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AppConfig&lt;/code&gt;는 Spring에서 의존성을 관리하는 핵심 요소이다. 
-런타임에 어떤 구현체가 주입될지를 결정하는 데 필수적이다. 
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@Autowired&lt;/code&gt;를 통해 필요한 의존성을 자동으로 주입받아, 컴파일 시점에서는 인터페이스에만 의존하고 런타임 시점에 구현체가 결정되는 방식이다.&lt;/p&gt;
-
-&lt;h2 id=&quot;repository-save-logic&quot;&gt;Repository Save Logic&lt;/h2&gt;
-
-&lt;p&gt;&lt;img width=&quot;692&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/9e5fc6e5-1331-4c1f-a54b-f8075bb6bf8f&quot; /&gt;
-&lt;img width=&quot;674&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/e8014f05-05b2-453c-9ee1-91883b764341&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;새로운 책을 추가하려는 경우, 메서드는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;book.getId() == null&lt;/code&gt; 조건을 검사한다. 만약 책의 ID가 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;null&lt;/code&gt;이라면, 이는 새로운 책을 추가한다. 
-이때 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;makeBook(book)&lt;/code&gt; 메서드를 호출하여 새로운 책 객체를 생성한다. 
-이 메서드는 책 객체의 ID를 설정하고 필요한 다른 속성을 초기화하는 역할을 수행한다. 
-이후, 생성된 새 책 객체는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bookStore&lt;/code&gt;라는 저장소에 추가된다. 
-새로 추가된 책 객체를 반환하여 호출자에게 추가된 책의 정보를 제공한다.
-반면, 책의 ID가 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;null&lt;/code&gt;이 아닐 경우, 기존 책을 수정하거나 업데이트를 할 수 있다. 
-이 경우 메서드는 먼저 주어진 ID가 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bookStore&lt;/code&gt;에 존재하는지를 확인한다. 
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bookStore.containsKey(book.getId())&lt;/code&gt; 조건을 통해 ID의 유효성을 검증하며, 
-만약 존재하지 않는다면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;IllegalArgumentException&lt;/code&gt;을 발생시킨다. 
-이 예외는 주어진 ID가 유효하지 않음을 나타내며, 호출자는 잘못된 ID로 인해 발생할 수 있는 오류를 방지할 수 있다. 
-만약 ID가 유효하다면, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bookStore&lt;/code&gt;에 해당 ID로 책을 업데이트한다.
-예외처리에 있어서  &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;IllegalArgumentException&lt;/code&gt;은 “잘못된 인수 예외”라는 뜻이다. 
-이 예외는 메서드에 전달된 인수가 잘못되었거나 유효하지 않을 때 발생한다. 
-즉, 메서드가 요구하는 조건을 만족하지 않는 인수(예: 범위를 초과하거나 null 값 등)가 전달되었을 때 발생하는 예외를 말한다.
-예를 들어, 어떤 메서드가 음수를 허용하지 않는데 음수가 전달되거나 
-위 코드와 같이 호출자가 잘못된 ID를 호출하여 ID값이 유효하지가 않다면 
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;IllegalArgumentException&lt;/code&gt;을 던져서 “잘못된 인수”임을 알리고 적절한 오류 처리를 할 수 있다.&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;나의 뇌 + 공식 문서가 참 잘 나와있다.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-framework/reference/core/beans/classpath-scanning.html#beans-scanning-filters&quot;&gt;https://docs.spring.io/spring-framework/reference/core/beans/classpath-scanning.html#beans-scanning-filters&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Wed, 09 Oct 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/framework/2024/10/09/Spring-05/</link>
-        <guid isPermaLink="true">http://localhost:4000/framework/2024/10/09/Spring-05/</guid>
-        
-        <category>spring</category>
-        
-        
-        <category>framework</category>
-        
-      </item>
-    
-      <item>
-        <title>Simple Library App - Entity</title>
-        <description>&lt;h2 id=&quot;도서관-앱-만들기&quot;&gt;도서관 앱 만들기&lt;/h2&gt;
-
-&lt;p&gt;&lt;img width=&quot;668&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/467e9eda-63f1-44a1-aa87-ddc49e0a36c7&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;자바와 스프링을 공부하면서 내가 배운 내용들을 실전에 잘 녹여낼 수 있을지, 
-그리고 항상 이론만 듣기보단 실제로 어느정도 활용할 수 있을지 체크하는 방법은 배운 내용들을 직접 기능을 구현해 나가면서 
-배움을 확인할 때 가장 효과적이라고 생각해서 하나의 간단한 프로젝트를 진행해보면서 체크하기로 했다.
-사실 백엔드 개발자라면 CRUD(JSON 상하차)만 잘해도 반은 먹고 들어간다고 생각하는 입장이다.
-글의 주된 목적은 배움을 확인하는 것이고, 모호했던 어노테이션에 대한 부분들에 대해서 정리하고 넘어가려는 목적이 크다.&lt;/p&gt;
-
-&lt;h2 id=&quot;앤티티-설계&quot;&gt;앤티티 설계&lt;/h2&gt;
-
-&lt;p&gt;&lt;img width=&quot;691&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/f0dd533b-7ecc-40ff-993d-e5bc7f93f3af&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;generatedvaluestrategy--generationtypeidentity-이게뭐고-id-이게뭔지&quot;&gt;@GeneratedValue(strategy = GenerationType.IDENTITY) 이게뭐고? @Id 이게뭔지?&lt;/h2&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@Id&lt;/code&gt;와 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@GeneratedValue(strategy = GenerationType.IDENTITY)&lt;/code&gt;는 JPA에서 엔티티의 기본 키(Primary Key)를 정의하고 
-그 생성 방식을 지정하는 어노테이션이다.&lt;/p&gt;
-
-&lt;h3 id=&quot;id&quot;&gt;@Id&lt;/h3&gt;
-
-&lt;p&gt;해당 필드가 &lt;strong&gt;엔티티의 기본 키&lt;/strong&gt;(Primary Key)임을 명시한다. 
-엔티티 클래스에서 기본 키를 나타내는 필드에 이 어노테이션을 붙이고 기본 키는 데이터베이스에서 각 레코드를 고유하게 식별하는 필드로 사용된다.&lt;/p&gt;
-
-&lt;h2 id=&quot;generatedvaluestrategy--generationtypeidentity&quot;&gt;@GeneratedValue(strategy = GenerationType.IDENTITY)&lt;/h2&gt;
-
-&lt;p&gt;기본 키 값이 데이터베이스에 의해 자동으로 생성되도록 지정한다. 
-새로운 레코드가 추가될 때마다 데이터베이스가 알아서 고유한 기본 키 값을 생성합니다.
-상황으로 쉽게 생각을 해보면 우선 하나의 도서를 추가하는 시나리오가 있다고 생각하자. 
-도서관 앱에서 각 도서(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Book&lt;/code&gt;)를 데이터베이스에 저장할 때, 각 도서에는 고유한 식별자(즉, 기본 키)가 필요하다. 
-이 기본 키는 도서를 고유하게 식별하기 위해 사용된다.&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;사용자(클라이언트)가 도서를 추가할 때, 코드에서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bookRepository.save(newBook)&lt;/code&gt;와 같은 메서드를 호출한다.&lt;/li&gt;
-  &lt;li&gt;이 메서드가 호출되면, JPA는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;INSERT INTO book (...) VALUES (...)&lt;/code&gt; SQL 쿼리를 데이터베이스에 보내게 된다.&lt;/li&gt;
-  &lt;li&gt;데이터베이스는 자동으로 기본 키 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;id&lt;/code&gt;를 생성한다. 예를 들어, 첫 번째 도서가 추가되면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;id&lt;/code&gt;는 1로 설정됩니다.&lt;/li&gt;
-  &lt;li&gt;다음 예시로 “helloMyBook”를 추가하면 데이터베이스는 기본 키 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;id&lt;/code&gt;를 2로 설정한다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;setter를-최대한-지양하자&quot;&gt;Setter를 최대한 지양하자&lt;/h2&gt;
-
-&lt;p&gt;&lt;img width=&quot;697&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/85dea725-66a2-43f9-aaf8-af5974ca22f7&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;코드를 확인해보면 엔티티 클래스에 생성자가 존재하고, getter를 통한 접근밖에는 허용하지 않았다. 
-정말 아래쪽에서도 setter를 숨겨두지 않았다. set을 통해서 접근해서 편하게 데이터를 변경하거나 수정도 편리한데 왜 Setter를 지양하게 되었을까? 
-그리고 왜 Setter대신에 생성자 패턴이 자리를 하게 되었을까?
-나는 다음과 같은 두가지 이유를 중점으로 Setter대신 생성자 패턴을 사용하게 되었다. 
-비즈니스 로직에선 생성자 패턴이 어떻게 활용이 될까?&lt;/p&gt;
-
-&lt;h2 id=&quot;상태의-일관성-보장&quot;&gt;상태의 일관성 보장&lt;/h2&gt;
-
-&lt;p&gt;생성자를 사용하면 필수 필드를 반드시 초기화하게 할 수 있어 객체 생성 시 유효성을 보장할 수 있다. 
-Setter를 사용하면 나중에 필드를 추가할 수 있기 때문에, 객체가 완전히 초기화되기 전까지 사용할 수 있는 상태가 발생할 수 있다.&lt;/p&gt;
-
-&lt;h2 id=&quot;캡슐화&quot;&gt;캡슐화&lt;/h2&gt;
-
-&lt;p&gt;객체의 속성을 외부에서 직접 변경하지 못하도록 하여, 객체의 내부 상태를 보호한다. 
-그리고 한가지 디테일은 사용자 정의 생성자가 있으면 기본 생성자는 제공되지 않으므로, 필요한 경우 명시적으로 추가해야 한다. 암묵적으로 제공받을 수가 없다.&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;나의 뇌&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-framework/reference/data-access/orm.html&quot;&gt;https://docs.spring.io/spring-framework/reference/data-access/orm.html&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Wed, 09 Oct 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/framework/2024/10/09/Spring-04/</link>
-        <guid isPermaLink="true">http://localhost:4000/framework/2024/10/09/Spring-04/</guid>
-        
-        <category>spring</category>
-        
-        
-        <category>framework</category>
         
       </item>
     
