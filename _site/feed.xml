@@ -6,13 +6,15 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 18 Dec 2024 11:21:00 +0900</pubDate>
-    <lastBuildDate>Wed, 18 Dec 2024 11:21:00 +0900</lastBuildDate>
+    <pubDate>Wed, 18 Dec 2024 11:45:32 +0900</pubDate>
+    <lastBuildDate>Wed, 18 Dec 2024 11:45:32 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
         <title>Kotlin In Action 02 - Statement, Expression</title>
-        <description>&lt;h2 id=&quot;자바의-if-statement&quot;&gt;&lt;strong&gt;자바의 if (Statement)&lt;/strong&gt;&lt;/h2&gt;
+        <description>&lt;h2 id=&quot;statement-expression&quot;&gt;Statement, Expression&lt;/h2&gt;
+
+&lt;h2 id=&quot;자바의-if-statement&quot;&gt;&lt;strong&gt;자바의 if (Statement)&lt;/strong&gt;&lt;/h2&gt;
 
 &lt;p&gt;자바에서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;if&lt;/code&gt;는 &lt;strong&gt;Statement&lt;/strong&gt;이다. 
 즉, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;if&lt;/code&gt;는 단순히 조건에 따라 &lt;strong&gt;코드를 실행&lt;/strong&gt;하거나 &lt;strong&gt;다른 코드 블록을 선택&lt;/strong&gt;하는 역할만 하고, 
@@ -26,11 +28,9 @@
     &lt;span class=&quot;n&quot;&gt;max&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;위 코드에서 if문은 조건에 따라 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;max&lt;/code&gt; 값을 결정하지만, if문 자체는 아무런 값을 반환하지 않는다.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;max&lt;/code&gt;는 if문을 사용하여 계산된 결과로 결정되며, if는 단지 &lt;strong&gt;코드를 실행하는 역할&lt;/strong&gt;만 한다. 흐름만 제어하는 정도라고 생각하면 된다.&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;위 코드에서 if문은 조건에 따라 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;max&lt;/code&gt; 값을 결정하지만, if문 자체는 아무런 값을 반환하지 않는다.
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;max&lt;/code&gt;는 if문을 사용하여 계산된 결과로 결정되며, 
+if는 단지 &lt;strong&gt;코드를 실행하는 역할&lt;/strong&gt;만 한다. 흐름만 제어하는 정도라고 생각하면 된다.&lt;/p&gt;
 
 &lt;h2 id=&quot;코틀린의-if-expression&quot;&gt;&lt;strong&gt;코틀린의 if (Expression)&lt;/strong&gt;&lt;/h2&gt;
 
@@ -50,8 +50,8 @@ if문을 바로 변수에 할당하거나 다른 표현식의 일부로 사용�
 &lt;h3 id=&quot;왜-이런-차이가-있을까&quot;&gt;왜 이런 차이가 있을까?&lt;/h3&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;자바&lt;/strong&gt;는 기본적으로 모든 조건문이 &lt;strong&gt;Statement&lt;/strong&gt;로 작동하며, 실행의 흐름을 제어하는 데 초점을 맞추기 때문에 if문이 값을 반환하지 않는다.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;코틀린&lt;/strong&gt;은 &lt;strong&gt;Expression 중심&lt;/strong&gt; 언어로 설계되었다. 그래서 if와 같은 조건문도 하나의 &lt;strong&gt;값&lt;/strong&gt;으로 취급하여 코드가 더 간결하고, 표현식으로 값을 바로 처리할 수 있도록 한다.&lt;/li&gt;
+  &lt;li&gt;자바는 기본적으로 모든 조건문이 &lt;strong&gt;Statement&lt;/strong&gt;로 작동하며, 실행의 흐름을 제어하는 데 초점을 맞추기 때문에 if문이 값을 반환하지 않는다.&lt;/li&gt;
+  &lt;li&gt;코틀린은 &lt;strong&gt;Expression 중심&lt;/strong&gt; 언어로 설계되었다. 그래서 if와 같은 조건문도 하나의 &lt;strong&gt;값&lt;/strong&gt;으로 취급하여 코드가 더 간결하고, 표현식으로 값을 바로 처리할 수 있도록 한다.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
