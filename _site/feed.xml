@@ -6,9 +6,84 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 16 Dec 2024 10:47:17 +0900</pubDate>
-    <lastBuildDate>Mon, 16 Dec 2024 10:47:17 +0900</lastBuildDate>
+    <pubDate>Wed, 18 Dec 2024 11:02:58 +0900</pubDate>
+    <lastBuildDate>Wed, 18 Dec 2024 11:02:58 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
+    
+      <item>
+        <title>Kotlin In Action 01 - 코틀린 철학</title>
+        <description>&lt;p&gt;프로그래밍 언어, 프레임워크를 공부하다 보면 왜 배워야 하는지, 
+어떤 목적으로 만들어졌는지에 대한 생각이 가장 많이 난다. 
+굳이 왜 잘쓰고 있는 자바를 대체하면서 Kotlin으로 마이그레이션을 하는지 궁금했다. 
+그래서 Kotlin in Action이라는 책을 읽으며 왜 Kotlin을 써야하는지 어떤 부분에서 좋은지 알고 싶었다.
+회사에서 안드로이드 개발도 해야하니 Kotlin을 주언어로 써야하기도 한다. (사실 이게 가장 큼)&lt;/p&gt;
+
+&lt;h2 id=&quot;실용성&quot;&gt;실용성&lt;/h2&gt;
+
+&lt;h3 id=&quot;코틀린은-실전-문제를-해결하기-위해-만든-실용적인-언어&quot;&gt;코틀린은 실전 문제를 해결하기 위해 만든 실용적인 언어&lt;/h3&gt;
+
+&lt;p&gt;코틀린은 연구를 위한 언어가 아니기 때문에, 
+최신 프로그래밍에 앞서 채택하지 않고, 
+다른 프로그래밍 언어가 채택한 이미 성공적으로 검증된 해법과 기능에 의존한다고 한다. 
+이러한 장점이 언어의 복잡도가 줄어들고 이미 알고 있는 기존 개념을 통해 쉽게 배울 수가 있다. 
+기존 자바의 라이브러리 기능을 그대로 사용할 수 있다는 말 인 것 같다.&lt;/p&gt;
+
+&lt;h3 id=&quot;코틀린은-어느-특정-프로그래밍-스타일이나-패러다임을-사용하는-것을-강제로-요구x&quot;&gt;코틀린은 어느 특정 프로그래밍 스타일이나 패러다임을 사용하는 것을 강제로 요구X&lt;/h3&gt;
+
+&lt;p&gt;코틀린을 처음 배우는 사람은 자바에서 사용해 온 익숙한 프로그래밍 스타일이나 기법을 활용할 수 있고, 
+나중에 코틀린의 강력한 특성을 발견하고 적응 해나가 더 간결한 코드를 작성하라고 한다.&lt;/p&gt;
+
+&lt;h2 id=&quot;간결성&quot;&gt;&lt;strong&gt;간결성&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;h3 id=&quot;코틀린은-코드가-더-간단하고-간결할수록-내용을-파악하기-더-좋다&quot;&gt;&lt;strong&gt;코틀린은 코드가 더 간단하고 간결할수록 내용을 파악하기 더 좋다&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;p&gt;어떤 언어가 간결하다는 말은 그 언어로 작성된 코드를 읽을 때 의도를 쉽게 파악할 수 있는 구문 구조를 제공하고, 
+그 의도를 달성하는 방법을 이해할 때 방해가 될 수 있는 부가적인 준비 코드가 적다는 뜻이다.&lt;/p&gt;
+
+&lt;h3 id=&quot;코틀린은-boiler-plate-코드를-줄임&quot;&gt;&lt;strong&gt;코틀린은 boiler plate 코드를 줄임&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;p&gt;코틀린은 &lt;strong&gt;Setter, Setter, Constructor&lt;/strong&gt; 묵시적으로 제공하기 때문에 코틀린 소스코드는 boiler plate 코드를 줄였다고 한다.&lt;/p&gt;
+
+&lt;h2 id=&quot;안정성&quot;&gt;안정성&lt;/h2&gt;
+
+&lt;h3 id=&quot;jvm에서-실행되는-정적-타입-지정-언어&quot;&gt;&lt;strong&gt;JVM에서 실행되는 정적 타입 지정 언어&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;p&gt;JVM을 사용하면 메모리 안전성을 보장하고, 버퍼 오버플로우를 방지하며, 동적으로 할당한 메모리를 잘못 사용함으로 인해 발생할 수 있는 다양한 문제를 예방할 수 있다.&lt;/p&gt;
+
+&lt;h3 id=&quot;컴파일-시점-검사를-통해-오류를-더-많이-방지&quot;&gt;&lt;strong&gt;컴파일 시점 검사를 통해 오류를 더 많이 방지&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;NullPointerException을 없애주기 위해 노력했다고 한다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;코틀린의 타입 시스템은 null이 될 수 없는 값을 추적하며, 실행 시점에 NullPointerException이 발생할 수 있는 연산을 사용하는 코드를 금지한다.&lt;/p&gt;
+
+&lt;h3 id=&quot;classcastexception을-방지해준다&quot;&gt;&lt;strong&gt;ClassCastException을 방지해준다.&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;p&gt;코틀린은 어떤 객체를 다른 타입으로 캐스트하기 전에 타입을 미리 검사하지 않으면 ClassCastException이 발생한다.&lt;/p&gt;
+
+&lt;h2 id=&quot;상호운용성&quot;&gt;&lt;strong&gt;상호운용성&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;h3 id=&quot;코틀린은-자바-표준-라이브러리-클래스에-의존하기-때문에-자바와-상호운용성이-좋다&quot;&gt;&lt;strong&gt;코틀린은 자바 표준 라이브러리 클래스에 의존하기 때문에 자바와 상호운용성이 좋다.&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;p&gt;자바와 코틀린 소스 파일을 자유롭게 내비게이션 할 수 있다.
+자바 메서드를 리팩터링 해도 그 메소드와 관련 있는 코틀린 코드까지 제대로 변경된다. 
+역으로 코틀린 메소드를 리팩토링해도 자바 코드까지 모두 자동으로 변경된다고 한다.&lt;/p&gt;
+
+&lt;p&gt;가자 Kotlin Deep Dive~~&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.yes24.com/product/goods/55148593&quot;&gt;https://www.yes24.com/product/goods/55148593&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Sat, 23 Nov 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/language/2024/11/23/Kotlin-basic-01/</link>
+        <guid isPermaLink="true">http://localhost:4000/language/2024/11/23/Kotlin-basic-01/</guid>
+        
+        <category>kotlin</category>
+        
+        
+        <category>language</category>
+        
+      </item>
     
       <item>
         <title>Android 01 - Activity LifeCycle</title>
@@ -76,7 +151,8 @@
 반대로 액티비티가 실행 중인 상태에서 사용자와 상호작용이 불가능한 상태, 즉 포커스를 잃은 상태가 되면 onPause()가 호출된다. 
 onStop()은 액티비티가 더 이상 보이지 않을 때 호출된다. 
 그리고 액티비티가 종료되거나 앱 프로세스 자체가 종료되면 onDestroy()가 호출된다.
-주의할 점은 불투명한 새로운 액티비티가 최상단으로 올라와서 기존 액티비티가 완전히 보이지 않게 되면 onPause()에 이어서 바로 onStop()까지 호출된다.&lt;/p&gt;
+주의할 점은 불투명한 새로운 액티비티가 최상단으로 올라와서 기존 액티비티가 완전히 보이지 않게 되면 onPause()에 이어서 바로 onStop()까지 호출된다.
+안드로이드 열시미 해야겠다. 코루틴도 공부해야지&lt;/p&gt;
 
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
 
@@ -2405,98 +2481,6 @@ left가 right보다 작은 동안 반복된다. (두 포인터가 교차하지 �
         <pubDate>Thu, 10 Oct 2024 00:00:00 +0900</pubDate>
         <link>http://localhost:4000/cs/2024/10/10/Algorithm-16/</link>
         <guid isPermaLink="true">http://localhost:4000/cs/2024/10/10/Algorithm-16/</guid>
-        
-        <category>Algorithm</category>
-        
-        
-        <category>cs</category>
-        
-      </item>
-    
-      <item>
-        <title>백준 1940 문제풀이</title>
-        <description>&lt;h2 id=&quot;문제-링크&quot;&gt;문제 링크&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.acmicpc.net/problem/1940&quot;&gt;https://www.acmicpc.net/problem/1940&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;문제-설명&quot;&gt;문제 설명&lt;/h2&gt;
-
-&lt;p&gt;주몽은 철기군을 양성하기 위한 프로젝트에 나섰다. 
-그래서 야철대장을 통해 철기군이 입을 갑옷을 만들게 하였다. 
-야철대장은 주몽의 명에 따르기 위하여 연구에 착수하던 중 아래와 같은 사실을 발견하게 되었다.
-갑옷을 만드는 재료들은 각각 고유한 번호를 가지고 있다. 
-갑옷은 두 개의 재료로 만드는데 두 재료의 고유한 번호를 합쳐서 M(1 ≤ M ≤ 10,000,000)이 되면 갑옷이 만들어 지게 된다. 
-야철대장은 자신이 만들고 있는 재료를 가지고 갑옷을 몇 개나 만들 수 있는지 궁금해졌다. 
-이러한 궁금증을 풀어 주기 위하여 N(1 ≤ N ≤ 15,000) 개의 재료와 M이 주어졌을 때 몇 개의 갑옷을 만들 수 있는지를 구하는 프로그램을 작성하시오.&lt;/p&gt;
-
-&lt;h2 id=&quot;문제-분석&quot;&gt;문제 분석&lt;/h2&gt;
-
-&lt;p&gt;주어진 문제는 두 개의 재료 고유 번호를 합쳐 특정 값 &lt;strong&gt;( M )&lt;/strong&gt;을 만들 수 있는 조합의 개수를 찾는 것이다. 
-여기서 &lt;strong&gt;( M )&lt;/strong&gt;의 범위가 1에서 10,000,000까지라는 점은 문제 해결에 중요한 고려사항이 된다. 
-재료의 고유 번호가 &lt;strong&gt;( M )&lt;/strong&gt;에 비해 상대적으로 클 경우 유효한 조합을 찾기가 어려울 수 있다.
-이 문제를 해결하기 위해 &lt;strong&gt;( O(N^2) )&lt;/strong&gt;의 시간 복잡도를 가진 이중 for문을 사용하는 것은 바람직하지 않다. 
-&lt;strong&gt;( N )&lt;/strong&gt;이 최대 15,000일 경우, 이중 for문을 사용하면 최악의 경우 약 2억 번의 연산이 필요하므로 매우 비효율적이다.(1초에 1억번의 연산이라 생각하면 쉽다)
-따라서 성능 저하와 시간 제한 문제를 피하기 위해 효율적인 알고리즘이 필요하다.
-효율적으로 문제를 해결하기 위해 &lt;strong&gt;투 포인터 알고리즘&lt;/strong&gt;을 적용하는 것이 적합하다. 
-재료의 고유 번호를 정렬한 후, 두 개의 포인터를 사용하여 한 포인터는 배열의 시작 부분에, 다른 포인터는 끝 부분에 위치시킨다. 
-두 포인터가 가리키는 값의 합을 계산하여 &lt;strong&gt;( M )&lt;/strong&gt;과 비교하고, 합이 &lt;strong&gt;( M )&lt;/strong&gt;보다 작으면 왼쪽 포인터를 오른쪽으로, 크면 오른쪽 포인터를 왼쪽으로 이동시킨다. 
-합이 &lt;strong&gt;( M )&lt;/strong&gt;과 같다면 조합을 찾은 것이므로 카운트를 증가시키고 두 포인터를 조정한다.&lt;/p&gt;
-
-&lt;h2 id=&quot;코드&quot;&gt;코드&lt;/h2&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.util.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.io.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;P1940&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;IOException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;BufferedReader&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bf&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;BufferedReader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;InputStreamReader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;parseInt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;readLine&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;parseInt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;readLine&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-
-        &lt;span class=&quot;nc&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;();&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;StringTokenizer&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;st&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;StringTokenizer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;readLine&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;st&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;hasMoreTokens&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()){&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;parseInt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;st&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;nextToken&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()));&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-        &lt;span class=&quot;nc&quot;&gt;Collections&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;sort&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;start_index&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;end_index&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-        &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;start_index&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;end_index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
-            &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;start_index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;end_index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;start_index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;end_index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;--;&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;start_index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;end_index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;--;&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;간만에 자바로 코딩테스트를 준비해야 할 일이 있어서 자바로 문제풀이를 시작했다.
-자바로 하니까 생각보다 코드가 길어졌다;;
-그래도 알고리즘의 적용은 비슷하니 어서 문법에 익숙해져야겠다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;1141&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/1385fb28-3f82-48f3-b952-a96d3bcb8854&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.geeksforgeeks.org/two-pointers-technique/&quot;&gt;https://www.geeksforgeeks.org/two-pointers-technique/&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Thu, 10 Oct 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/cs/2024/10/10/Algorithm-15/</link>
-        <guid isPermaLink="true">http://localhost:4000/cs/2024/10/10/Algorithm-15/</guid>
         
         <category>Algorithm</category>
         
