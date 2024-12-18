@@ -6,9 +6,84 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 18 Dec 2024 11:02:58 +0900</pubDate>
-    <lastBuildDate>Wed, 18 Dec 2024 11:02:58 +0900</lastBuildDate>
+    <pubDate>Wed, 18 Dec 2024 11:19:39 +0900</pubDate>
+    <lastBuildDate>Wed, 18 Dec 2024 11:19:39 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
+    
+      <item>
+        <title>Kotlin In Action 02 - Statement, Expression</title>
+        <description>&lt;p&gt;프로그래밍 언어, 프레임워크를 공부하다 보면 왜 배워야 하는지, 
+어떤 목적으로 만들어졌는지에 대한 생각이 가장 많이 난다. 
+굳이 왜 잘쓰고 있는 자바를 대체하면서 Kotlin으로 마이그레이션을 하는지 궁금했다. 
+그래서 Kotlin in Action이라는 책을 읽으며 왜 Kotlin을 써야하는지 어떤 부분에서 좋은지 알고 싶었다.
+회사에서 안드로이드 개발도 해야하니 Kotlin을 주언어로 써야하기도 한다. (사실 이게 가장 큼)&lt;/p&gt;
+
+&lt;h2 id=&quot;실용성&quot;&gt;실용성&lt;/h2&gt;
+
+&lt;h3 id=&quot;코틀린은-실전-문제를-해결하기-위해-만든-실용적인-언어&quot;&gt;코틀린은 실전 문제를 해결하기 위해 만든 실용적인 언어&lt;/h3&gt;
+
+&lt;p&gt;코틀린은 연구를 위한 언어가 아니기 때문에, 
+최신 프로그래밍에 앞서 채택하지 않고, 
+다른 프로그래밍 언어가 채택한 이미 성공적으로 검증된 해법과 기능에 의존한다고 한다. 
+이러한 장점이 언어의 복잡도가 줄어들고 이미 알고 있는 기존 개념을 통해 쉽게 배울 수가 있다. 
+기존 자바의 라이브러리 기능을 그대로 사용할 수 있다는 말 인 것 같다.&lt;/p&gt;
+
+&lt;h3 id=&quot;코틀린은-어느-특정-프로그래밍-스타일이나-패러다임을-사용하는-것을-강제로-요구x&quot;&gt;코틀린은 어느 특정 프로그래밍 스타일이나 패러다임을 사용하는 것을 강제로 요구X&lt;/h3&gt;
+
+&lt;p&gt;코틀린을 처음 배우는 사람은 자바에서 사용해 온 익숙한 프로그래밍 스타일이나 기법을 활용할 수 있고, 
+나중에 코틀린의 강력한 특성을 발견하고 적응 해나가 더 간결한 코드를 작성하라고 한다.&lt;/p&gt;
+
+&lt;h2 id=&quot;간결성&quot;&gt;&lt;strong&gt;간결성&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;h3 id=&quot;코틀린은-코드가-더-간단하고-간결할수록-내용을-파악하기-더-좋다&quot;&gt;&lt;strong&gt;코틀린은 코드가 더 간단하고 간결할수록 내용을 파악하기 더 좋다&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;p&gt;어떤 언어가 간결하다는 말은 그 언어로 작성된 코드를 읽을 때 의도를 쉽게 파악할 수 있는 구문 구조를 제공하고, 
+그 의도를 달성하는 방법을 이해할 때 방해가 될 수 있는 부가적인 준비 코드가 적다는 뜻이다.&lt;/p&gt;
+
+&lt;h3 id=&quot;코틀린은-boiler-plate-코드를-줄임&quot;&gt;&lt;strong&gt;코틀린은 boiler plate 코드를 줄임&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;p&gt;코틀린은 &lt;strong&gt;Setter, Setter, Constructor&lt;/strong&gt; 묵시적으로 제공하기 때문에 코틀린 소스코드는 boiler plate 코드를 줄였다고 한다.&lt;/p&gt;
+
+&lt;h2 id=&quot;안정성&quot;&gt;안정성&lt;/h2&gt;
+
+&lt;h3 id=&quot;jvm에서-실행되는-정적-타입-지정-언어&quot;&gt;&lt;strong&gt;JVM에서 실행되는 정적 타입 지정 언어&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;p&gt;JVM을 사용하면 메모리 안전성을 보장하고, 버퍼 오버플로우를 방지하며, 동적으로 할당한 메모리를 잘못 사용함으로 인해 발생할 수 있는 다양한 문제를 예방할 수 있다.&lt;/p&gt;
+
+&lt;h3 id=&quot;컴파일-시점-검사를-통해-오류를-더-많이-방지&quot;&gt;&lt;strong&gt;컴파일 시점 검사를 통해 오류를 더 많이 방지&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;NullPointerException을 없애주기 위해 노력했다고 한다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;코틀린의 타입 시스템은 null이 될 수 없는 값을 추적하며, 실행 시점에 NullPointerException이 발생할 수 있는 연산을 사용하는 코드를 금지한다.&lt;/p&gt;
+
+&lt;h3 id=&quot;classcastexception을-방지해준다&quot;&gt;&lt;strong&gt;ClassCastException을 방지해준다.&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;p&gt;코틀린은 어떤 객체를 다른 타입으로 캐스트하기 전에 타입을 미리 검사하지 않으면 ClassCastException이 발생한다.&lt;/p&gt;
+
+&lt;h2 id=&quot;상호운용성&quot;&gt;&lt;strong&gt;상호운용성&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;h3 id=&quot;코틀린은-자바-표준-라이브러리-클래스에-의존하기-때문에-자바와-상호운용성이-좋다&quot;&gt;&lt;strong&gt;코틀린은 자바 표준 라이브러리 클래스에 의존하기 때문에 자바와 상호운용성이 좋다.&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;p&gt;자바와 코틀린 소스 파일을 자유롭게 내비게이션 할 수 있다.
+자바 메서드를 리팩터링 해도 그 메소드와 관련 있는 코틀린 코드까지 제대로 변경된다. 
+역으로 코틀린 메소드를 리팩토링해도 자바 코드까지 모두 자동으로 변경된다고 한다.&lt;/p&gt;
+
+&lt;p&gt;가자 Kotlin Deep Dive~~&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.yes24.com/product/goods/55148593&quot;&gt;https://www.yes24.com/product/goods/55148593&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Mon, 25 Nov 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/language/2024/11/25/Kotlin-basic-02/</link>
+        <guid isPermaLink="true">http://localhost:4000/language/2024/11/25/Kotlin-basic-02/</guid>
+        
+        <category>kotlin</category>
+        
+        
+        <category>language</category>
+        
+      </item>
     
       <item>
         <title>Kotlin In Action 01 - 코틀린 철학</title>
@@ -2385,102 +2460,6 @@ DNA 문자열은 모든 문자열에 등장하는 문자가 {‘A’, ‘C’, �
         <pubDate>Fri, 11 Oct 2024 00:00:00 +0900</pubDate>
         <link>http://localhost:4000/cs/2024/10/11/Algorithm-17/</link>
         <guid isPermaLink="true">http://localhost:4000/cs/2024/10/11/Algorithm-17/</guid>
-        
-        <category>Algorithm</category>
-        
-        
-        <category>cs</category>
-        
-      </item>
-    
-      <item>
-        <title>백준 1253 문제풀이</title>
-        <description>&lt;h2 id=&quot;문제-링크&quot;&gt;문제 링크&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.acmicpc.net/problem/1253&quot;&gt;https://www.acmicpc.net/problem/1253&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;문제-설명&quot;&gt;문제 설명&lt;/h2&gt;
-
-&lt;p&gt;N개의 수 중에서 어떤 수가 다른 수 두 개의 합으로 나타낼 수 있다면 그 수를 “좋다(GOOD)”고 한다.
-N개의 수가 주어지면 그 중에서 좋은 수의 개수는 몇 개인지 출력하라.
-수의 위치가 다르면 값이 같아도 다른 수이다.&lt;/p&gt;
-
-&lt;h2 id=&quot;문제-분석&quot;&gt;문제 분석&lt;/h2&gt;
-
-&lt;p&gt;문제가 짧다고 만만하게 보면 안된다.
-하지만 전의 문제와 같이 투포인터 알고리즘을 이용하여 문제를 해결하면 되겠다고 생각했다.
-인덱스 범위를 초반, 그리고 끝범위로 지정을 해주고, targetNumber를 탐색하면 된다.
-left가 right보다 작은 동안 반복된다. (두 포인터가 교차하지 않을 때까지)
-그리고 현재 left 포인터가 i와 같으면, 즉 현재 타겟 숫자와 같은 인덱스를 가리키면 left를 증가시켜서 그 인덱스를 건너뛴다. 
-이 경우는 현재 target과 같은 숫자를 더하지 않기 위해서이다.
-합이 target과 같을 경우는 좋은 수를 찾은 것이므로 goodCount를 증가시키고 내부 루프를 종료한다.
-합이 target보다 작을 경우는 left를 증가시켜서 더 큰 숫자를 찾도록 한다.
-합이 target보다 클 경우는 right를 감소시켜서 더 작은 숫자를 찾도록 한다.
-그리고 마지막으로 찾은 goodCount를 출력하면 끝.&lt;/p&gt;
-
-&lt;h2 id=&quot;코드&quot;&gt;코드&lt;/h2&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.util.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.io.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;P1253&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;IOException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;BufferedReader&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bf&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;BufferedReader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;InputStreamReader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;parseInt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;readLine&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;StringTokenizer&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;st&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;StringTokenizer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;readLine&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;();&lt;/span&gt;
-
-        &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;st&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;hasMoreTokens&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;parseInt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;st&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;nextToken&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()));&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-        &lt;span class=&quot;nc&quot;&gt;Collections&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;sort&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;goodCount&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;target&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-            &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;left&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-            &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;left&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;c1&quot;&gt;// target과 같은 인덱스가 아닌 경우에만 합 계산&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;left&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;left&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
-                    &lt;span class=&quot;k&quot;&gt;continue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;right&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;--;&lt;/span&gt;
-                    &lt;span class=&quot;k&quot;&gt;continue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-                &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;left&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;goodCount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
-                    &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;left&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;--;&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;goodCount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Easy&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;1135&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/1d44bc64-245c-4866-8375-7184af91aeff&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.geeksforgeeks.org/two-pointers-technique/&quot;&gt;https://www.geeksforgeeks.org/two-pointers-technique/&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Thu, 10 Oct 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/cs/2024/10/10/Algorithm-16/</link>
-        <guid isPermaLink="true">http://localhost:4000/cs/2024/10/10/Algorithm-16/</guid>
         
         <category>Algorithm</category>
         
