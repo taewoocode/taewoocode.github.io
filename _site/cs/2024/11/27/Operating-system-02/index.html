@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="백준 1992 문제풀이" />
+<meta property="og:title" content="운영체제의 역사" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -48,7 +48,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
  
 <meta
         property="og:image"
-        content="http://localhost:4000/assets//img/algorithm-logo.png"
+        content="http://localhost:4000/assets//img/network-logo.png"
 />
 <br />
 
@@ -56,17 +56,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>백준 1992 문제풀이 &middot; 일벌리는 개발자</title>
+<title>운영체제의 역사 &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="문제 링크
+        content="운영체제 역사
 
 "
 />
 <meta
         property="og:description"
-        content="문제 링크
+        content="운영체제 역사
 
 "
 />
@@ -76,8 +76,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/cs/2024/10/07/Algorithm-14/" />
-<meta property="og:url" content="http://localhost:4000/cs/2024/10/07/Algorithm-14/" />
+<link rel="canonical" href="http://localhost:4000/cs/2024/11/27/Operating-system-02/" />
+<meta property="og:url" content="http://localhost:4000/cs/2024/11/27/Operating-system-02/" />
 
 <link
         rel="alternate"
@@ -87,10 +87,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/cs/2024/10/06/Algorithm-13/" />
+<link rel="prev" href="http://localhost:4000/language/2024/11/25/Kotlin-basic-02/" />
  
-<link rel="next" href="http://localhost:4000/cs/2024/10/07/Algorithm-15/" />
-
 
 <link
         rel="apple-touch-icon"
@@ -187,16 +185,16 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-cs/2024/10/07/Algorithm-14" class="post" role="article">
+<article id="post-cs/2024/11/27/Operating-system-02" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      백준 1992 문제풀이
+      운영체제의 역사
       
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-10-07T00:00:00+09:00">07 Oct 2024</time>
+      <time datetime="2024-11-27T00:00:00+09:00">27 Nov 2024</time>
       
 
 
@@ -219,7 +217,7 @@ in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
 
 
 
-on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
+on <a href="/tag/cs-operatingsystem/" data-flip="title">Operating System</a>
 
     </p>
 
@@ -235,7 +233,7 @@ on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
   <div class="markdown-body">
 
     <!-- 
-    <div class="head-image"><img src="http://localhost:4000/assets//img/algorithm-logo.png" /></div>
+    <div class="head-image"><img src="http://localhost:4000/assets//img/network-logo.png" /></div>
     <br /> -->
     <style>
       .myAd1190 {
@@ -273,91 +271,97 @@ on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
     </style>
 
     <!--<br />-->
-    <h2 id="문제-링크">문제 링크</h2>
+    <h2 id="운영체제-역사">운영체제 역사</h2>
 
-<p><a href="https://www.acmicpc.net/problem/1992">https://www.acmicpc.net/problem/1992</a></p>
+<p>운영체제 역사를 아는 것은 지금의 컴퓨터를 이해하는데 있어서 밑거름이 된다고 한다.</p>
 
-<h2 id="문제-설명">문제 설명</h2>
+<h2 id="1940년대---초창기-컴퓨터">1940년대 - 초창기 컴퓨터</h2>
 
-<p><img width="475" alt="image" src="https://github.com/user-attachments/assets/b858fe82-ad70-45c0-b3a2-8957f7b008b4" /></p>
+<p><img src="https://github.com/user-attachments/assets/0fdaeedd-6269-4fa5-aee5-9470ff51323f" alt="image" /></p>
 
-<p>흑백 영상을 압축하여 표현하는 데이터 구조로 쿼드 트리(Quad Tree)라는 방법이 있다. 
-흰 점을 나타내는 0과 검은 점을 나타내는 1로만 이루어진 영상(2차원 배열)에서 같은 숫자의 점들이 한 곳에 많이 몰려있으면, 쿼드 트리에서는 이를 압축하여 간단히 표현할 수 있다.
-주어진 영상이 모두 0으로만 되어 있으면 압축 결과는 “0”이 되고, 모두 1로만 되어 있으면 압축 결과는 “1”이 된다. 만약 0과 1이 섞여 있으면 전체를 한 번에 나타내지를 못하고
-, 왼쪽 위, 오른쪽 위, 왼쪽 아래, 오른쪽 아래, 이렇게 4개의 영상으로 나누어 압축하게 되며, 이 4개의 영역을 압축한 결과를 차례대로 괄호 안에 묶어서 표현한다.</p>
+<ul>
+  <li>에니악은 펜실베이니아대학의 존 모클리John Mauclily 와 존 에커트Jolin Eckert 가 만들었다. 전선을 잭에 꼽아 회로를 연결하여 구성한 에니악은 30톤 규모의 거대한 계산기로 미사일 탄도를 계산하기 위해 제작</li>
+  <li>진공관이 켜지면 1, 진공관이 꺼지면 0 진공관은 백열전구를 말한다.</li>
+  <li>하드어와이링 방식</li>
+  <li>전선이 18000여개 정도 이어짐</li>
+</ul>
 
-<h2 id="문제-분석">문제 분석</h2>
+<h2 id="1950년대---일괄-작업-시스템">1950년대 - 일괄 작업 시스템</h2>
 
-<p>이 문제는 Divide, Conquer이라는 알고리즘의 개념을 사용해서 재귀적인 호출을 통해서 문제를 해결한다.
-Divide, Conquer이라는 개념을 쉽게 설명하자면 큰 문제(상위 문제)를 작은 문제(하위 문제)라는 개념으로 나누어서 작은 문제를
-해결하는 목적으로 큰 문제를 해결한다.
-아래에는 문제를 그림으로 나타내었다.</p>
+<p><img src="https://github.com/user-attachments/assets/c8908e34-6dd8-42ec-9170-79191b1db9ff" alt="image" /></p>
 
-<p><img width="695" alt="image" src="https://github.com/user-attachments/assets/c7628b99-e797-4164-b298-5c382e02bd2c" /></p>
+<ul>
+  <li>옛날 컴퓨터들이라 사진이 다 흑백임..</li>
+  <li>일괄작업시스템(batch-job-system)
+    <ul>
+      <li>현대는 여러가지 작업이 가능하지만 당시에는 한 번에 한 가지 작업만 가능했음
+        <ul>
+          <li>batch-job-system, batch-processing-system이라 하는데 프로그램 실행 중간에 사용자는 데이터를 수정할 수 없게 되어있음</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>CPU와 메인메모리가 있었으나, 키보드와 모니터와 같은 출력장치가 존재하지 않았음</li>
+  <li>천공카드 리더를 입력장치로 라인 프린터를 출력장치로 사용함
+    <ul>
+      <li>천공카드 리더는 펜으로 표시하여 데이터를 수집하는 방식과는 달리 구멍을 뚫어 숫자를 표현했다.</li>
+      <li>라인 프린터는 문자만 출력하는 프린터로 한 번에 한 줄씩 출력하기 때문에 라인 프린터라는 이름이 붙여졌다.</li>
+    </ul>
+  </li>
+</ul>
 
-<p>4개의 숫자가 주어지고 4개의 숫자가 모두 0이면 0, 1이면 1인데 1과 0이 섞여 있으면 Z를 그리며 상하좌우 탐색을 시작한다.
-만약 16개의 숫자가 나온다면 4개의 구역으로 분할해서 4개의 분할된 구역을 상하좌우로 탐색한다.</p>
+<h2 id="1960---대화형-시스템">1960 - 대화형 시스템</h2>
 
-<h2 id="코드">코드</h2>
+<ul>
+  <li>옛날 컴퓨터의 방식은 천공 카드에 구멍을 뚫어 데이터를 적재하고 그 데이터를 읽는 방식으로 작업을 수행했다 따라서 중간에 데이터를 수정할 수가 없었다. 하지만 컴퓨터와 모니터가 등장한 이후에는 중간에 데이터를 수정할 수 있었다. 또한 중간 결과값을 출력하여 프로그램에 이상이 있는지 혹은 프로그램이 정상적으로 진행되고 있는지도 확인할 수 있게 되었다. 이러한 시스템은 컴퓨터와 사용자의 대화를 통해 작업이 이루어지므로 대화형 시스템(interactive system)이라고 일컫는다.</li>
+</ul>
 
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span><span class="cpf">&lt;bits/stdc++.h&gt;</span><span class="cp">
-</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
-<span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
-<span class="n">string</span> <span class="n">s</span><span class="p">;</span>
-<span class="k">typedef</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">ll</span><span class="p">;</span>
-<span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="mi">104</span><span class="p">][</span><span class="mi">104</span><span class="p">];</span>
+<h2 id="1960-후반---시분할-시스템">1960 후반 - 시분할 시스템</h2>
 
-<span class="n">string</span> <span class="nf">quard</span><span class="p">(</span><span class="kt">int</span> <span class="n">y</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">size</span><span class="p">){</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span><span class="p">){</span>
-        <span class="k">return</span> <span class="n">string</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">a</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">x</span><span class="p">]);</span>
-    <span class="p">}</span>
-    <span class="kt">char</span> <span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">x</span><span class="p">];</span>
-    <span class="n">string</span> <span class="n">ret</span> <span class="o">=</span> <span class="s">""</span><span class="p">;</span>
-    <span class="kt">bool</span> <span class="n">flag</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="c1">//y부터 size, x부터 size</span>
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">y</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">y</span> <span class="o">+</span> <span class="n">size</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
-        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">x</span> <span class="o">+</span> <span class="n">size</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">){</span>
-            <span class="k">if</span><span class="p">(</span><span class="n">b</span> <span class="o">!=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]){</span>
-                <span class="n">ret</span> <span class="o">+=</span> <span class="sc">'('</span><span class="p">;</span>
-                <span class="n">ret</span> <span class="o">+=</span> <span class="n">quard</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">size</span> <span class="o">/</span> <span class="mi">2</span><span class="p">);</span>
-                <span class="n">ret</span> <span class="o">+=</span> <span class="n">quard</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span> <span class="o">+</span> <span class="n">size</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">size</span> <span class="o">/</span> <span class="mi">2</span><span class="p">);</span>
-                <span class="n">ret</span> <span class="o">+=</span> <span class="n">quard</span><span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="n">size</span> <span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">size</span> <span class="o">/</span> <span class="mi">2</span><span class="p">);</span>
-                <span class="n">ret</span> <span class="o">+=</span> <span class="n">quard</span><span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="n">size</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">x</span> <span class="o">+</span> <span class="n">size</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">size</span> <span class="o">/</span> <span class="mi">2</span><span class="p">);</span>
-                <span class="n">ret</span> <span class="o">+=</span> <span class="sc">')'</span><span class="p">;</span>
-                <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">string</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">a</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">x</span><span class="p">]);</span>
+<ul>
+  <li>컴퓨터의 크기가 작아지고 계산 능력이 향상되었다. 하지만 허가받은 몇몇 사용자만 사용할 수 있는 데다 고가였다. 값비싼 기계로 한 번에 하나의 작업만 수행하는 것은 낭비라 효율적으로 사용하기 위한 연구가 진행된 결과 다중 프로그래밍multiprogramming 기술이 개발되었다.</li>
+  <li>일괄 작업 시스템은 CPU에서 한번에 하나의 작업만이 가능했지만 후반에는 CPU로 여러 작업을 동시에 실행할 수 있었다. 어떻게 ? 시간을 분할하는 방법으로</li>
+  <li>다중 프로그래밍 시스템에서는 CPU 사용 시간을 아즈 잘게 쪼개어 여러 작업으로 나누어 준다.</li>
+  <li>영화 필름을 생각해보면 된다. 작은 시퀸스 조각으로 여럿 쪼개서 이어 붙이면 동영상이 되듯이 모든 작업을 조금씩 처리하여 작업이 동시에 이루어지는 것처럼 보이게 하는 것이다.</li>
+</ul>
 
-<span class="p">}</span>
+<h2 id="1970년대---분산-시스템">1970년대 - 분산 시스템</h2>
 
-<span class="kt">int</span> <span class="n">main</span><span class="p">(){</span>
-    <span class="n">ios_base</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
-    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="nb">NULL</span><span class="p">),</span> <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
-    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
-        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">s</span><span class="p">;</span>
-        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">){</span>
-            <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">quard</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
+<ul>
+  <li>개인용 컴퓨터와 인터넷이 보급되면서 값이 싸고 크기가 작은 컴퓨터들을 하나로 묶어
+대형 컴퓨터에 버금가는 시스템을 만들게 되었는데 이를 분산 시스템distributed system이라고 부
+른다. 분산 시스템은 네트워크상에 분산되어 있는 여러 컴퓨터로 작업을 처리하고 그 결과를
+상호 교환하도록 구성한 시스템이다.</li>
+  <li>TCP/IP라는 프로토콜을 정의했다.</li>
+</ul>
 
-<p>쿼드트리는 공간을 4개의 동일한 부분으로 나누는 방식으로 데이터를 표현하는데, 
-각 부분이 동일한 값을 가질 경우 더 이상 나누지 않고 하나의 값으로 표현할 수 있다.
-만약 사각형의 모든 값이 같다면, 그 값을 하나의 문자로 간단히 표현할 수 있다
-quard 함수는 재귀적으로 호출되며, 이 과정에서 각 사각형이 동일한 값을 갖는지 확인한다. 
-동일한 값을 가진 사각형은 더 이상 나누지 않고 반환하여 처리한다.</p>
+<h2 id="1990---클라이언트---서버-시스템">1990 - 클라이언트 - 서버 시스템</h2>
 
-<p><img width="1166" alt="image" src="https://github.com/user-attachments/assets/94e0c1cd-e7e4-446c-836a-24ba726e35a6" /></p>
+<ul>
+  <li>작업을 요청하는 클라이언트와 거기에 응답하여 요청받은 작업을 처리하는 서버의 이중
+구조로 나뉜다.</li>
+  <li>클라이언트/서버 구조가 일반인들에게 알려진 것은 웹 시스템이 보급된 이후이다.</li>
+  <li>웹 시스템의 등장으로 그림이나 링크를 통한 다양한 응용 서비스가 가능해졌다.</li>
+  <li>클라이언트/서버 구조의 문제점으로는 서버 과부하가 있다. 모든 요청이 서버로 집중되기 때문에 수십만 명의 클라이언트를 처리하기 위해서는 많은 서버와 큰 용량의 네트워크가 필요하다.</li>
+  <li>NOTE_DAEMON
+    <ul>
+      <li>클라이언트/서버 시스템 구조에서 서버가 멈추지 않고 계속 동작하여 클라이언트의 요청을 처리해야 하는데, 이렇게 멈추지 않고 계속 동작하는 프로그램을 데몬이라고 한다. 보통은 데몬을 가진 컴퓨터를 서버라고 부르며, 웹 데몬이 설치된 컴퓨터는 웹 서버, FTP 데몬이 설치된 컴퓨터는 FTP 서버, 이메일 데몬이 설치된 컴퓨터는 이메일 서버라고 한다. 웹 데몬의 역할을 하는 프로그램은 아파티 톰캣, Internet Informantion Service등이 있다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="2000년대-초반---현재---p2p-시스템">2000년대 초반 - 현재 - P2P 시스템</h2>
+
+<ul>
+  <li>1990년대 말에 전 세계의 MP3 음악 파일을 공유하려는 시도가 있었는데 문제는 클라이언트/서버 시스템의 서버 과부하였다. 웹 페이지는 한 페이지가 수 킬로바이트이지만 MP3 파일은 수 메가바이트에 달하기 때문에 기존의 클라이언트/서버 구조로 MP3 파일 공유 시스템을 구현하면 서버 과부하가 걸림</li>
+  <li>서버의 부하를 줄일 수 있는 새로운 시스템은 P2P 시스템이다.</li>
+  <li>peer는 말단 노드, 즉 사용자의 PC를 가르키고, P2P는 서버를 거치지 않고, 사용자와 사용자를 직접 연결을 한다. P2P 시스템에서는 서버가 파일 검색만 맡고 사용자 간에 파일 전송이 이루어지기 때문에 서버의 부하가 적다.</li>
+</ul>
 
 <h2 id="reference">Reference</h2>
 
-<p><a href="https://en.wikipedia.org/wiki/Quadtree">https://en.wikipedia.org/wiki/Quadtree</a></p>
+<p><a href="https://en.wikipedia.org/wiki/Arithmetic_logic_unit">https://en.wikipedia.org/wiki/Arithmetic_logic_unit</a>
+<a href="https://www.techtarget.com/whatis/definition/arithmetic-logic-unit-ALU">https://www.techtarget.com/whatis/definition/arithmetic-logic-unit-ALU</a></p>
 
     <br />
     <br />
@@ -371,12 +375,12 @@ quard 함수는 재귀적으로 호출되며, 이 과정에서 각 사각형이 
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=백준 1992 문제풀이&amp;url=http://localhost:4000/cs/2024/10/07/Algorithm-14/"
+    <a href="http://twitter.com/share?text=운영체제의 역사&amp;url=http://localhost:4000/cs/2024/11/27/Operating-system-02/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/cs/2024/10/07/Algorithm-14/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/cs/2024/11/27/Operating-system-02/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -398,21 +402,8 @@ quard 함수는 재귀적으로 호출되며, 이 과정에서 각 사각형이 
       
       
         
-        
           
-
-
-<li class="h4">
-  <a href="/cs/2024/11/27/Operating-system-02/" data-flip="title">
-    <span>운영체제의 역사</span>
-  </a>
-  <small><time datetime="2024-11-27T00:00:00+09:00">
-    27 Nov 2024
-  </time></small>
-</li>
-
-        
-      
+          
         
         
           
@@ -446,6 +437,19 @@ quard 함수는 재귀적으로 호출되며, 이 과정에서 각 사각형이 
         
       
         
+        
+          
+
+
+<li class="h4">
+  <a href="/cs/2024/10/19/Algorithm-21/" data-flip="title">
+    <span>백준 2636 문제풀이</span>
+  </a>
+  <small><time datetime="2024-10-19T00:00:00+09:00">
+    19 Oct 2024
+  </time></small>
+</li>
+
         
       
     
