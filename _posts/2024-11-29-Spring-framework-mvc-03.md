@@ -20,9 +20,9 @@ comments: false
   - @Controller는 반환 값이 `String` 이면 뷰 이름으로 인식된다. 그래서 `뷰를 찾고 렌더링` 된다.
   - @RestController는 반환 값을초 뷰를 찾는 것이 아니라, HTTP 메시지 바디에 바로 입력 한다. 따라서 실행 결과로 ok 메시지를 받을 수 있다. @ResponseBody와 관련이 있는데, 뒤에서 더 자세히 설명한다.
 
-<https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-collaborators.html>
-
 ## 올바른 로그 사용법
+
+![image](https://github.com/user-attachments/assets/76665cb7-f66e-4866-88bd-24cec95b34fe)
 
 ```kotlin
 log.info("info log" + name)
