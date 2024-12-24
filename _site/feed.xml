@@ -6,9 +6,74 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 20 Dec 2024 13:57:29 +0900</pubDate>
-    <lastBuildDate>Fri, 20 Dec 2024 13:57:29 +0900</lastBuildDate>
+    <pubDate>Tue, 24 Dec 2024 16:13:45 +0900</pubDate>
+    <lastBuildDate>Tue, 24 Dec 2024 16:13:45 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
+    
+      <item>
+        <title>Spring MVC 03 - Logger</title>
+        <description>&lt;h2 id=&quot;logging-library&quot;&gt;Logging Library&lt;/h2&gt;
+
+&lt;p&gt;운영 시스템에서는 System.out.println() 같은 시스템 콘솔을 사용해서 필요한 정보를 출력하지 않고, 
+별도의 로깅 라이브러리를 사용해서 로그를 출력한다.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;로그 라이브러리는 Logback, Log4J, Log4J2등등 수 많은 라이브러리가 있는데, 그것을 통합해서 인터페이스로 제공하는 것이 바로 SLF4J 라이브러리다.&lt;/li&gt;
+  &lt;li&gt;쉽게 이야기해서 SLF4J는 인터페이스이고, 그 구현체로 LogBack을 대부분 사용한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;restcontroller-controller-차이&quot;&gt;RestController, Controller 차이?&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;@RestController
+    &lt;ul&gt;
+      &lt;li&gt;@Controller는 반환 값이 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;String&lt;/code&gt; 이면 뷰 이름으로 인식된다. 그래서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;뷰를 찾고 렌더링&lt;/code&gt; 된다.&lt;/li&gt;
+      &lt;li&gt;@RestController는 반환 값을초 뷰를 찾는 것이 아니라, HTTP 메시지 바디에 바로 입력 한다. 따라서 실행 결과로 ok 메시지를 받을 수 있다. @ResponseBody와 관련이 있는데, 뒤에서 더 자세히 설명한다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;info log&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;위와 같은 형식으로 로그를 출력하면 안된다.
+이유는 로그를 출력하기 전에 이미 더해지는 연산이 일어나기 때문이다.&lt;/p&gt;
+
+&lt;h2 id=&quot;로그-사용시-장점&quot;&gt;로그 사용시 장점&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;쓰레드 정보, 클래스 이름 같은 부가 정보를 함께 볼 수 있고, 출력 모양을 조정할 수 있다.&lt;/li&gt;
+  &lt;li&gt;로그 레벨에 따라 개발 서버에서는 모든 로그를 출력하고, 운영서버에서는 출력하지 않는 등 로그를 상황에 맞게 조절할 수 있다.&lt;/li&gt;
+  &lt;li&gt;시스템 아웃 콘솔에만 출력하는 것이 아니라, 파일이나 네트워크 등, 로그를 별도의 위치에 남길 수 있다. 특히 파일로 남길 때는 일별, 특정 용량에 따라 로그를 분할하는 것도 가능하다.&lt;/li&gt;
+  &lt;li&gt;성능도 일반 System.out보다 좋다. (내부 버퍼링, 멀티 쓰레드 등등) 그래서 실무에서는 꼭 로그를 사용해야 한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://www.slf4j.org&quot;&gt;http://www.slf4j.org&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://logback.qos.ch&quot;&gt;http://logback.qos.ch&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-logging?&quot;&gt;https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-logging?&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;올바른-로그-사용법&quot;&gt;올바른 로그 사용법&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://github.com/user-attachments/assets/76665cb7-f66e-4866-88bd-24cec95b34fe&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;reference-1&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-framework/docs/3.0.0.M4/spring-framework-reference/html/ch15s02.html&quot;&gt;https://docs.spring.io/spring-framework/docs/3.0.0.M4/spring-framework-reference/html/ch15s02.html&lt;/a&gt;
+&lt;a href=&quot;https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-collaborators.html&quot;&gt;https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-collaborators.html&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Fri, 29 Nov 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/framework/2024/11/29/Spring-framework-mvc-03/</link>
+        <guid isPermaLink="true">http://localhost:4000/framework/2024/11/29/Spring-framework-mvc-03/</guid>
+        
+        <category>mvc</category>
+        
+        
+        <category>framework</category>
+        
+      </item>
     
       <item>
         <title>운영체제의 역사</title>
@@ -2337,108 +2402,6 @@ CRUD나 RestFul API에 대한 이론적인 학습보다 직접 구현해보면�
         
         
         <category>life</category>
-        
-      </item>
-    
-      <item>
-        <title>Sliding Window</title>
-        <description>&lt;h2 id=&quot;sliding-window&quot;&gt;Sliding Window&lt;/h2&gt;
-
-&lt;p&gt;Sliding Window는 주어진 배열이나 문자열에서 특정 크기의 서브 배열이나 서브 문자열을 연속적으로 처리할 때 사용되는 기법이다. 
-이 방법은 주로 연속적인 부분에서 계산을 최적화할 때 유용하다. 슬라이딩 윈도우의 주요 아이디어는, 윈도우의 시작점과 끝점을 조정하면서 필요할 때마다 데이터를 업데이트하여 전체 배열을 반복하지 않고도 문제를 해결하는 것이 포인트이다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;616&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/9a05014c-7c6a-441d-bc12-70443e63e1f8&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;슬라이딩-윈도우의-동작-방식&quot;&gt;슬라이딩 윈도우의 동작 방식&lt;/h3&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;윈도우 초기화: 처음에 배열의 첫 부분에서 윈도우의 시작점과 끝점을 설정한다.&lt;/li&gt;
-  &lt;li&gt;윈도우 이동: 끝점을 오른쪽으로 이동하면서 새로운 요소를 추가하고, 조건에 따라 시작점을 오른쪽으로 이동한다.&lt;/li&gt;
-  &lt;li&gt;조건 검증: 현재 윈도우의 조건을 검증하고, 필요한 작업(계산, 결과 저장 등)을 수행한다.&lt;/li&gt;
-  &lt;li&gt;반복: 배열 끝까지 윈도우를 이동하면서 작업을 반복한다.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.util.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.io.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SlidingWindow&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;arr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;={&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;};&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;maxSum&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;maxSum&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;arr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;maxSum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;windowSum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++){&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;windowSum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;arr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;maxSum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;windowSum&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;arr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++){&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;windowSum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;arr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;arr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;maxSum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Math&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;max&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;maxSum&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;windowSum&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;maxSum&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;슬라이딩-윈도우&quot;&gt;슬라이딩 윈도우&lt;/h2&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;윈도우 정의
-    &lt;ul&gt;
-      &lt;li&gt;배열에서 길이가 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;k&lt;/code&gt;인 연속적인 요소들로 이루어진 부분을 윈도우라고 한다.&lt;/li&gt;
-      &lt;li&gt;예를 들어, 배열이 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[1, 2, 3, 4, 5, 6, 7, 8]&lt;/code&gt;이고 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;k = 3&lt;/code&gt;이라면, 초기 윈도우는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[1, 2, 3]&lt;/code&gt; 이다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;초기 윈도우의 합
-    &lt;ul&gt;
-      &lt;li&gt;처음에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;k&lt;/code&gt;개의 요소의 합을 구한 후, 그 값을 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;windowSum&lt;/code&gt;에 저장한다.&lt;/li&gt;
-      &lt;li&gt;이 예제에서 처음 윈도우는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[1, 2, 3]&lt;/code&gt;이고, 그 합은 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1 + 2 + 3 = 6&lt;/code&gt; 이다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;윈도우 이동
-    &lt;ul&gt;
-      &lt;li&gt;윈도우를 한 칸 오른쪽으로 이동시키려면, 새로운 요소를 추가하고, 가장 왼쪽의 요소를 제거해야 한다.&lt;/li&gt;
-      &lt;li&gt;예를 들어, 다음 윈도우는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[2, 3, 4]&lt;/code&gt; 이다.&lt;/li&gt;
-      &lt;li&gt;여기서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;4&lt;/code&gt;는 새로운 요소로 추가되고, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt;은 윈도우에서 나가게 된다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;합 계산
-    &lt;ul&gt;
-      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;windowSum += arr[i] - arr[i - k];&lt;/code&gt; 이 부분이 바로 이 과정을 수행한다.&lt;/li&gt;
-      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;arr[i]&lt;/code&gt;는 새로운 요소(현재 인덱스 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i&lt;/code&gt;의 값)를 의미하고, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;arr[i - k]&lt;/code&gt;는 윈도우에서 제거될 요소(윈도우의 가장 왼쪽 요소)를 의미한다.&lt;/li&gt;
-      &lt;li&gt;예를 들어, 윈도우를 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[1, 2, 3]&lt;/code&gt;에서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[2, 3, 4]&lt;/code&gt;로 이동할 때
-        &lt;ul&gt;
-          &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;windowSum&lt;/code&gt;은 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;6&lt;/code&gt; (이전 합)에서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt; (나간 요소)을 빼고 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;4&lt;/code&gt; (새로운 요소)를 더하게 되어&lt;/li&gt;
-          &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;windowSum = 6 - 1 + 4 = 9&lt;/code&gt;가 된다.&lt;/li&gt;
-          &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;windowSum += arr[i] - arr[i - k];&lt;/code&gt;*는 현재 윈도우의 합을 효율적으로 업데이트하는 방법이다.&lt;/li&gt;
-          &lt;li&gt;이 코드를 사용하면 매번 새로운 윈도우의 합을 모두 더하지 않고도, 단 두 개의 값만으로 윈도우의 합을 빠르게 계산할 수 있다.&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://stackoverflow.com/questions/8269916/what-is-sliding-window-algorithm-examples&quot;&gt;https://stackoverflow.com/questions/8269916/what-is-sliding-window-algorithm-examples&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Fri, 11 Oct 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/cs/2024/10/11/Algorithm-18/</link>
-        <guid isPermaLink="true">http://localhost:4000/cs/2024/10/11/Algorithm-18/</guid>
-        
-        <category>Algorithm</category>
-        
-        
-        <category>cs</category>
         
       </item>
     

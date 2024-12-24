@@ -7,7 +7,7 @@ tags: mvc
 comments: false
 ---
 
-## 로깅 라이브러리
+## Logging Library
 
 운영 시스템에서는 System.out.println() 같은 시스템 콘솔을 사용해서 필요한 정보를 출력하지 않고, 
 별도의 로깅 라이브러리를 사용해서 로그를 출력한다.
