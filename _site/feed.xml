@@ -6,9 +6,133 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 24 Dec 2024 16:15:02 +0900</pubDate>
-    <lastBuildDate>Tue, 24 Dec 2024 16:15:02 +0900</lastBuildDate>
+    <pubDate>Wed, 25 Dec 2024 18:07:17 +0900</pubDate>
+    <lastBuildDate>Wed, 25 Dec 2024 18:07:17 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
+    
+      <item>
+        <title>Spring MVC 04 - RequestParameter - Query</title>
+        <description>&lt;h2 id=&quot;client-to-server&quot;&gt;Client to Server&lt;/h2&gt;
+
+&lt;h3 id=&quot;get---쿼리-파라미터&quot;&gt;GET - 쿼리 파라미터&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;/url ?username = hello&amp;amp;age=20
+    &lt;ul&gt;
+      &lt;li&gt;메시지 바디 없이 URL의 쿼리 파라미터에 데이터를 포함해서 전달&lt;/li&gt;
+      &lt;li&gt;검색 필터, 페이징등에서 많이 사용하는 방식&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;post---html-form&quot;&gt;POST - HTML Form&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;content-type: application/x-www.form-urlencoded
+    &lt;ul&gt;
+      &lt;li&gt;회원 가입, 상품 주문, HTML Form 사용&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;http-message-body&quot;&gt;HTTP Message body&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;HTTP API에서 주로 사용, JSON, XML, TEXT
+    &lt;ul&gt;
+      &lt;li&gt;데이터 형식은 주로 JSON 사용&lt;/li&gt;
+      &lt;li&gt;POST, PUT, PATCH&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;http으로-요청-파라미터-조회&quot;&gt;HTTP으로 요청 파라미터 조회&lt;/h2&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/44d90888-6c4c-41f7-bfbf-753c695734f2&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/6e7f3bde-4900-4aca-ada0-cc25aef49aa4&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;spring으로-요청-파라미터-조회&quot;&gt;Spring으로 요청 파라미터 조회&lt;/h2&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/0d004f0c-0196-4650-93bc-66cdce712724&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;RequestParam을 사용하면 요청 파리미터를 쉽게 사용할 수 있다.&lt;/li&gt;
+  &lt;li&gt;@Controller이면서 반환타입이 String 이면 ok라는 뷰를 찾게 된다.&lt;/li&gt;
+  &lt;li&gt;따라서 클래스 레벨에서 @RestController로 변경해주거나, 메소드 레벨에서 @ReponseBody를 사용한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/8420783a-23ca-48ac-b6b2-6ed155fb4d7c&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;String, int 등의 단순 타입이면 @RequestParam 도 생략 가능&lt;/li&gt;
+  &lt;li&gt;String, int, Integer 등의  단순 타입이면 @RequestParam 도 생략가능
+    &lt;ul&gt;
+      &lt;li&gt;이렇게 애노테이션을 완전히 생략해도 되는데, 너무 없는 것도 약간 과하다는 주관적 생각이 있다.
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@RequestParam&lt;/code&gt; 이 있으면 명확하게 요청 파리미터에서 데이터를 읽는 다는 것을 알 수 있다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/6445a22e-592e-437a-bc40-4c2285a46102&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;(와중에 FHD, MAC 화질차이가..)&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;RequiredParam 속성에서 기본값은 true이다. 아무것도 명시해주지 않는다면 false로 적용이 되어있다.&lt;/li&gt;
+  &lt;li&gt;위의코드는 age는 필수값이 되어있고, username은 필수가 아니다.&lt;/li&gt;
+  &lt;li&gt;또한 자바에서는 기본형은 null을 허용하지 않고, Integer(객체)는 null을 허용한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;modelattribute&quot;&gt;ModelAttribute&lt;/h2&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/40b5bb13-6c54-4485-94e0-ecff9255615e&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;ModelAttribute를 활용해보기 위해서 HelloData 객체 생성&lt;/li&gt;
+  &lt;li&gt;Lombok이 제공해주는 @Data로 @Getter, @Setter, @ToString, @EqualsAndHashCode, @RequiredArgsConstructor를 자동으로 적용해준다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/3bcf608d-0322-4665-984f-958497c1ab4f&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;위에 두 코드는 같은 기능을 하는 코드이다.&lt;/li&gt;
+  &lt;li&gt;@ModelAttribute를 사용하면 @ModelAttribute는 HelloData 객체를 생성하고 요청 파라미터 이름으로 HelloData 객체의 프로퍼티를 찾는다. 그리고 해당 프로퍼티의 setter를 호출해서 파라미터 값을 입력한다.
+    &lt;ul&gt;
+      &lt;li&gt;파라미터 이름이 username이라면 setUsername() 메서드를 찾아서 호출하면서 값을 입력해준다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/ef23de6e-38e9-4ce8-b14c-b5581cd1ceff&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@ModelAttribute&lt;/code&gt; 는 생략할 수 있다. 그런데 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@RequestParam&lt;/code&gt;도 생략할 수 있으니 혼란이 발생할 수 있다.&lt;/li&gt;
+  &lt;li&gt;스프링은 해당 생략시 다음과 같은 규칙을 적용한다.
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;String&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;int&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Integer&lt;/code&gt; 같은 단순 타입 = &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@RequestParam&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;나머지 = &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@ModelAttribute&lt;/code&gt; (argument resolver 로 지정해둔 타입 외)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://www.slf4j.org&quot;&gt;http://www.slf4j.org&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://logback.qos.ch&quot;&gt;http://logback.qos.ch&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-logging?&quot;&gt;https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-logging?&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Sun, 01 Dec 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/framework/2024/12/01/Spring-framework-mvc-04/</link>
+        <guid isPermaLink="true">http://localhost:4000/framework/2024/12/01/Spring-framework-mvc-04/</guid>
+        
+        <category>mvc</category>
+        
+        
+        <category>framework</category>
+        
+      </item>
     
       <item>
         <title>Spring MVC 03 - Logger</title>
@@ -32,9 +156,9 @@
   &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-collaborators.html&quot;&gt;https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-collaborators.html&lt;/a&gt;&lt;/p&gt;
-
 &lt;h2 id=&quot;올바른-로그-사용법&quot;&gt;올바른 로그 사용법&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://github.com/user-attachments/assets/76665cb7-f66e-4866-88bd-24cec95b34fe&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 
 &lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;info log&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
@@ -2322,76 +2446,6 @@ Doug lea 형님의 사진을 보면 많은 내공이 느껴진다.
         <pubDate>Sun, 13 Oct 2024 00:00:00 +0900</pubDate>
         <link>http://localhost:4000/life/2024/10/13/daily-05/</link>
         <guid isPermaLink="true">http://localhost:4000/life/2024/10/13/daily-05/</guid>
-        
-        <category>daily</category>
-        
-        
-        <category>life</category>
-        
-      </item>
-    
-      <item>
-        <title>1150번의 커밋</title>
-        <description>&lt;h2 id=&quot;지나온-1년간의-커밋&quot;&gt;지나온 1년간의 커밋&lt;/h2&gt;
-
-&lt;p&gt;&lt;img width=&quot;786&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/b3ac8f67-23df-4bab-82f4-2fa9cfcfefec&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;무엇을-커밋했나&quot;&gt;무엇을 커밋했나&lt;/h3&gt;
-
-&lt;p&gt;크게 3가지로 나눌 수 있을 것 같다.&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;알고리즘 문제풀이&lt;/li&gt;
-  &lt;li&gt;사이드 프로젝트&lt;/li&gt;
-  &lt;li&gt;블로그 포스팅&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;1-알고리즘-문제풀이&quot;&gt;1. 알고리즘 문제풀이&lt;/h2&gt;
-
-&lt;p&gt;프로그래머스와 백준 문제의 솔루션 레포지토리를 팠다. 
-어쨌든 알고리즘은 꾸준히 계속 풀어야 한다고 생각했으니깐. 
-매일매일 의미있는 난이도의 문제를 푼 건 아니었다. 하지만 레벨 1의 문제라도 약간의 의미는 있었다고 생각한다. 
-브론즈 문제에서도 꽤나 애를 먹었던 문제들은 많았다. 나중에 솔루션을 다시 보니 재귀를 써서 가독성을 높일걸 for문으로 길게 늘여썼다거나, 
-하는 식으로 문제를 접근 할 때에 기본적인 것들에 대해서 배울 수 있었다.&lt;/p&gt;
-
-&lt;h2 id=&quot;2-사이드-프로젝트&quot;&gt;2. 사이드 프로젝트&lt;/h2&gt;
-
-&lt;p&gt;2개의 사이드 프로젝트를 진행했다.
-하나는 사용자를 관리하는 RESTful API 서버를 구현한 예제이다. 
-Spring Boot를 사용하여 간단한 CRUD (생성, 조회, 수정, 삭제) 작업을 수행할 수 있는 API를 연습했었던 작은 사이드 프로젝트이다. 
-CRUD나 RestFul API에 대한 이론적인 학습보다 직접 구현해보면서 배울 수 있었다. 
-또한 디자인 패턴중에 하나인 MVC 패턴에 대해서 제대로 짚고 넘어갈 수 있어서 개인적으로 많은 공부가 되었다. 
-또한 TDD를 충분히 많이 연습해볼 수 있었다.
-테스트케이스를 작성하면서 성공케이스만 작성하는 것이 아닌 테스트에 실패하는 코드까지 작성하면서 확실한 예외에 대한 검증을 공부할 수 있었다.
-두번째는 태라폼을 활용하여 AWS EKS Cluster에 프로비저닝 해본 경험이다.테라폼 사용 이전에는 AWS에서 EKS Cluster를 설정할 때 콘솔로 직접 돌아다니는 번거로움이 있었고, 
-여러가지 권한들을 설정에 빼먹는 것이나 고려하지 못했던 부분들이 많았는데, 테라폼을 도입해서 권한부터 노드의 최소, 최대 개수까지 고려하면서 프로비저닝을 경험할 수 있었다. 그리고 당시의 프로젝트를 진행하면서 실무에서는 장애를 어떻게 대비하는지 많이 궁금했었는데, 테라폼을 통한 빠른 프로비저닝 그리고 재사용이 가능한 코드들로 미리 대비한다는 전략들이 있다는 것을 배울 수 있었다.&lt;/p&gt;
-
-&lt;h2 id=&quot;3-블로그-포스팅&quot;&gt;3. 블로그 포스팅&lt;/h2&gt;
-
-&lt;p&gt;이건 비교적 최근에 시작했다. 블로그를 velog로부터 이사오면서 포스팅에 집중하는 것 같다.
-노션에도 기록을 진행하고 있고, 커밋도 진행중이지만, 블로그에도 기록을 하고있다.
-블로그에도 기록을 집중하게 되었던 이유는 내가 존경하는 멘토님이나, 열정을 가지고 계신분들은 다 블로그를 하셨던 것 같다.
-그리고 나도 다시 블로그를 작성하게 되면서 배움을 복기할 수 있어서 큰 도움이 되는 것 같다.&lt;/p&gt;
-
-&lt;h2 id=&quot;무엇을-얻었나&quot;&gt;무엇을 얻었나.&lt;/h2&gt;
-
-&lt;p&gt;무언가를 매일 한다는 건 결코 아무 의미가 없지 않다고 생각한다. 
-물론 매일 1일 1커밋을 했던 것은 아니지만, 공부한 것을 매일 커밋했다는 것은 지난 1년에 비해서 많은 성장이 있었음을 증명할 수 있을 것 같다.&lt;/p&gt;
-
-&lt;h3 id=&quot;1-2개의-프로젝트-완결&quot;&gt;1. 2개의 프로젝트 완결&lt;/h3&gt;
-
-&lt;p&gt;어쨌든 나는 2개의 사이드 프로젝트를 완성했다. 항상 시작보다 끝맺음을 잘하는 게 어렵다. 
-물론 종료라고 완전 종료는 아니고 계속 업데이트할 프로젝트들이긴 하지만, 1.0 버전을 공개된 장소에 올려두었다는 것 자체가 큰 의미가 있다고 생각한다.&lt;/p&gt;
-
-&lt;h3 id=&quot;2-개발-습관&quot;&gt;2. 개발 습관&lt;/h3&gt;
-
-&lt;p&gt;노력은 습관이라고 생각한다. 
-시간은 생각보다 금방 간다. 내일 해야지, 오늘 하루 쯤 미뤄도 돼 하다보면 몇날며칠이 훌쩍 갔던 것 같다. 
-작게라도 오늘 하고 별 의미가 없는 일이라도 오늘 하다보면 하루쯤은 크고 의미가 없는 일을 할 것이다. 
-이렇게라도 매일 하는 경우가, 그렇지 않은 경우보다 의미 있는 일을 하는 횟수가 더 많을 것이라고 나는 생각한다. 뿌듯하다 뿌듯해.&lt;/p&gt;
-</description>
-        <pubDate>Sat, 12 Oct 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/life/2024/10/12/daily-04/</link>
-        <guid isPermaLink="true">http://localhost:4000/life/2024/10/12/daily-04/</guid>
         
         <category>daily</category>
         

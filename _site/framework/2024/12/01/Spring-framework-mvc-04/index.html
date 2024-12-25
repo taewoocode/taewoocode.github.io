@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Spring Basic 07 - Bean Scope" />
+<meta property="og:title" content="Spring MVC 04 - RequestParameter - Query" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,17 +52,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Spring Basic 07 - Bean Scope &middot; 일벌리는 개발자</title>
+<title>Spring MVC 04 - RequestParameter - Query &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="빈 스코프란?
+        content="Client to Server
 
 "
 />
 <meta
         property="og:description"
-        content="빈 스코프란?
+        content="Client to Server
 
 "
 />
@@ -72,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/framework/2024/09/26/Spring-basic-07/" />
-<meta property="og:url" content="http://localhost:4000/framework/2024/09/26/Spring-basic-07/" />
+<link rel="canonical" href="http://localhost:4000/framework/2024/12/01/Spring-framework-mvc-04/" />
+<meta property="og:url" content="http://localhost:4000/framework/2024/12/01/Spring-framework-mvc-04/" />
 
 <link
         rel="alternate"
@@ -83,10 +83,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/framework/2024/09/25/Spring-basic-06/" />
+<link rel="prev" href="http://localhost:4000/framework/2024/11/29/Spring-framework-mvc-03/" />
  
-<link rel="next" href="http://localhost:4000/framework/2024/09/26/Spring-basic-08/" />
-
 
 <link
         rel="apple-touch-icon"
@@ -183,16 +181,16 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-framework/2024/09/26/Spring-basic-07" class="post" role="article">
+<article id="post-framework/2024/12/01/Spring-framework-mvc-04" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      Spring Basic 07 - Bean Scope
+      Spring MVC 04 - RequestParameter - Query
       
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-09-26T00:00:00+09:00">26 Sep 2024</time>
+      <time datetime="2024-12-01T00:00:00+09:00">01 Dec 2024</time>
       
 
 
@@ -215,7 +213,7 @@ in <a href="/category/framework/" data-flip="title">Framework</a>
 
 
 
-on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
+on <a href="/tag/framework-spring-mvc/" data-flip="title">Spring MVC</a>
 
     </p>
 
@@ -267,80 +265,116 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
     </style>
 
     <!--<br />-->
-    <h2 id="빈-스코프란"><strong>빈 스코프란</strong>?</h2>
+    <h2 id="client-to-server">Client to Server</h2>
 
-<p>스프링 빈이 스프링 컨테이너의 시작과 함께 생성되어서 스프링 컨테이너가 종료될 때 까지 유지된다.
-스프링 빈은 기본적으로 싱글톤 스코프로 생성되기 때문이다. 스코프는 번역 그대로 빈이 존재할
-수 있는 범위를 뜻한다.</p>
-
-<h2 id="스프링의-다양한-스코프"><strong>스프링의 다양한 스코프</strong></h2>
+<h3 id="get---쿼리-파라미터">GET - 쿼리 파라미터</h3>
 
 <ul>
-  <li><strong>싱글톤</strong>: 기본 스코프, 스프링 컨테이너의 시작과 종료까지 유지되는 가장 넓은 범위의 스코프이다.</li>
-  <li><strong>프로토타입</strong>: 스프링 컨테이너는 프로토타입 빈의 생성과 의존관계 주입까지만 관여하고 더는 관리하지 않는 매우짧은 범위의 스코프이다.</li>
-  <li><strong>웹 관련 스코프</strong>
+  <li>/url ?username = hello&amp;age=20
     <ul>
-      <li><strong>request</strong>: 웹 요청이 들어오고 나갈때 까지 유지되는 스코프이다.
-<strong>session</strong>: 웹 세션이 생성되고 종료될 때 까지 유지되는 스코프이다.
-<strong>application</strong>: 웹의 서블릿 컨텍스트와 같은 범위로 유지되는 스코프이다.</li>
+      <li>메시지 바디 없이 URL의 쿼리 파라미터에 데이터를 포함해서 전달</li>
+      <li>검색 필터, 페이징등에서 많이 사용하는 방식</li>
     </ul>
   </li>
 </ul>
 
-<h2 id="프로토타입-스코프">프로토타입 스코프</h2>
+<h3 id="post---html-form">POST - HTML Form</h3>
 
 <ul>
-  <li>싱글톤 스코프의 빈을 조회하면 스프링 컨테이너는 항상 같은 인스턴스의 스프링 빈을 반환한다. 반면에 프로토타입 스코프를 스프링 컨테이너에 조회하면 스프링 컨테이너는 항상 새로운 인스턴스를 반환한다.</li>
+  <li>content-type: application/x-www.form-urlencoded
+    <ul>
+      <li>회원 가입, 상품 주문, HTML Form 사용</li>
+    </ul>
+  </li>
 </ul>
 
-<h3 id="싱글톤-빈-요청">싱글톤 빈 요청</h3>
+<h3 id="http-message-body">HTTP Message body</h3>
 
 <ul>
-  <li>싱글톤 스코의 빈을 스프링 컨테이너에 요청한다.</li>
-  <li>스프링 컨테이너는 본인이 관리하는 스프링 빈을 반환한다.</li>
-  <li>이후에 스프링 컨테이너에 같은 요청이 들어와도 같은 객체 인스턴스를 반환한다.</li>
+  <li>HTTP API에서 주로 사용, JSON, XML, TEXT
+    <ul>
+      <li>데이터 형식은 주로 JSON 사용</li>
+      <li>POST, PUT, PATCH</li>
+    </ul>
+  </li>
 </ul>
 
-<h3 id="프로토타입-빈-요청">프로토타입 빈 요청</h3>
+<h2 id="http으로-요청-파라미터-조회">HTTP으로 요청 파라미터 조회</h2>
+
+<p><img width="654" alt="image" src="https://github.com/user-attachments/assets/44d90888-6c4c-41f7-bfbf-753c695734f2" /></p>
+
+<p><img width="654" alt="image" src="https://github.com/user-attachments/assets/6e7f3bde-4900-4aca-ada0-cc25aef49aa4" /></p>
+
+<h2 id="spring으로-요청-파라미터-조회">Spring으로 요청 파라미터 조회</h2>
+
+<p><img width="654" alt="image" src="https://github.com/user-attachments/assets/0d004f0c-0196-4650-93bc-66cdce712724" /></p>
 
 <ul>
-  <li>프로토타입 스코프의 빈을 스프링 컨테이너에게 요청한다.</li>
-  <li>스프링 컨테이너는 이 시점에 프로토타입 빈을 생성하고, 필요한 의존관계를 주입한다.</li>
-  <li>스프링 컨테이너는 생성한 프로토타입 빈을 클라이언트에게 반환한다.</li>
-  <li>스프링 컨테이너에 같은 요청이 온다면 항상 새로운 프로토타입 빈을 생성해서 반환한다.</li>
+  <li>RequestParam을 사용하면 요청 파리미터를 쉽게 사용할 수 있다.</li>
+  <li>@Controller이면서 반환타입이 String 이면 ok라는 뷰를 찾게 된다.</li>
+  <li>따라서 클래스 레벨에서 @RestController로 변경해주거나, 메소드 레벨에서 @ReponseBody를 사용한다.</li>
 </ul>
 
-<h3 id="핵심은">핵심은?</h3>
+<p><img width="654" alt="image" src="https://github.com/user-attachments/assets/8420783a-23ca-48ac-b6b2-6ed155fb4d7c" /></p>
 
 <ul>
-  <li>스프링 컨테이너는 프로토타입 빈을 생성하고, 의존관계 주입, 초기화까지만 처리한다. 클라이언트에 빈을 반환하고, 이후 스프링 컨테이너는 생성된 프로토타입 빈을 관리하지 않는다. 프로토타입 빈을 관리할 책임은 프로토타입 빈을 받은 클라이언트에게 있다. 그래서 @PreDestroy 같은 종료 메서드가 호출되지 않는다.</li>
+  <li>String, int 등의 단순 타입이면 @RequestParam 도 생략 가능</li>
+  <li>String, int, Integer 등의  단순 타입이면 @RequestParam 도 생략가능
+    <ul>
+      <li>이렇게 애노테이션을 완전히 생략해도 되는데, 너무 없는 것도 약간 과하다는 주관적 생각이 있다.
+<code class="language-plaintext highlighter-rouge">@RequestParam</code> 이 있으면 명확하게 요청 파리미터에서 데이터를 읽는 다는 것을 알 수 있다.</li>
+    </ul>
+  </li>
 </ul>
 
-<h2 id="싱글톤-스코프-빈-테스트">싱글톤 스코프 빈 테스트</h2>
-<p><img width="700" alt="image" src="https://github.com/user-attachments/assets/be4fbc8b-3e09-4c9c-b226-afaeba2c901c" />
-<img width="641" alt="image" src="https://github.com/user-attachments/assets/9d5085be-68db-4a79-93f5-f71ea4630c00" /></p>
+<p><img width="654" alt="image" src="https://github.com/user-attachments/assets/6445a22e-592e-437a-bc40-4c2285a46102" /></p>
 
-<h2 id="프로토타입-스코프-빈-테스트">프로토타입 스코프 빈 테스트</h2>
-<p><img width="691" alt="image" src="https://github.com/user-attachments/assets/9841b38e-2f85-4249-b1c1-7fb9c5cc302f" />
-<img width="563" alt="image" src="https://github.com/user-attachments/assets/6fb983f2-f8c4-4346-903a-4bb5d9bf2e83" /></p>
+<p>(와중에 FHD, MAC 화질차이가..)</p>
+<ul>
+  <li>RequiredParam 속성에서 기본값은 true이다. 아무것도 명시해주지 않는다면 false로 적용이 되어있다.</li>
+  <li>위의코드는 age는 필수값이 되어있고, username은 필수가 아니다.</li>
+  <li>또한 자바에서는 기본형은 null을 허용하지 않고, Integer(객체)는 null을 허용한다.</li>
+</ul>
 
-<p>싱글톤 빈은 스프링 컨테이너 생성 시점에 초기화 메서드가 실행 되지만, 프로토타입 스코프의 빈은 스프링 컨테
-이너에서 빈을 조회할 때 생성되고, 초기화 메서드도 실행된다.프로토타입 빈을 2번 조회했으므로 완전히 다른 스프링 빈이 생성되고, 초기화도 2번 실행된 것을 확인할 수 있다.
-싱글톤 빈은 스프링 컨테이너가 관리하기 때문에 스프링 컨테이너가 종료될 때 빈의 종료 메서드가 실행되지만,
-프로토타입 빈은 스프링 컨테이너가 생성과 의존관계 주입 그리고 초기화 까지만 관여하고, 더는 관리하지 않는다. 
-따라서 프로토타입 빈은 스프링 컨테이너가 종료될 때 <code class="language-plaintext highlighter-rouge">@PreDestroy</code> 같은 종료 메서드가 전혀 실행되지 않는다.</p>
+<h2 id="modelattribute">ModelAttribute</h2>
 
-<h2 id="프로토타입-빈의-특징-정리"><strong>프로토타입 빈의 특징 정리</strong></h2>
+<p><img width="654" alt="image" src="https://github.com/user-attachments/assets/40b5bb13-6c54-4485-94e0-ecff9255615e" /></p>
 
 <ul>
-  <li>스프링 컨테이너에 요청할 때 마다 새로 생성된다.</li>
-  <li>스프링 컨테이너는 프로토타입 빈의 생성과 의존관계 주입 그리고 초기화까지만 관여한다.</li>
-  <li>프로토타입 빈을 조회한 클라이언트가 관리해야 한다. → 종료 메서드에 대한 호출도 클라이언트가 직접 해야 한다.</li>
+  <li>ModelAttribute를 활용해보기 위해서 HelloData 객체 생성</li>
+  <li>Lombok이 제공해주는 @Data로 @Getter, @Setter, @ToString, @EqualsAndHashCode, @RequiredArgsConstructor를 자동으로 적용해준다.</li>
+</ul>
+
+<p><img width="654" alt="image" src="https://github.com/user-attachments/assets/3bcf608d-0322-4665-984f-958497c1ab4f" /></p>
+
+<ul>
+  <li>위에 두 코드는 같은 기능을 하는 코드이다.</li>
+  <li>@ModelAttribute를 사용하면 @ModelAttribute는 HelloData 객체를 생성하고 요청 파라미터 이름으로 HelloData 객체의 프로퍼티를 찾는다. 그리고 해당 프로퍼티의 setter를 호출해서 파라미터 값을 입력한다.
+    <ul>
+      <li>파라미터 이름이 username이라면 setUsername() 메서드를 찾아서 호출하면서 값을 입력해준다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img width="654" alt="image" src="https://github.com/user-attachments/assets/ef23de6e-38e9-4ce8-b14c-b5581cd1ceff" /></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">@ModelAttribute</code> 는 생략할 수 있다. 그런데 <code class="language-plaintext highlighter-rouge">@RequestParam</code>도 생략할 수 있으니 혼란이 발생할 수 있다.</li>
+  <li>스프링은 해당 생략시 다음과 같은 규칙을 적용한다.
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">String</code> , <code class="language-plaintext highlighter-rouge">int</code> , <code class="language-plaintext highlighter-rouge">Integer</code> 같은 단순 타입 = <code class="language-plaintext highlighter-rouge">@RequestParam</code></li>
+      <li>나머지 = <code class="language-plaintext highlighter-rouge">@ModelAttribute</code> (argument resolver 로 지정해둔 타입 외)</li>
+    </ul>
+  </li>
 </ul>
 
 <h2 id="reference">Reference</h2>
 
-<p>김영한님의 스프링 강의 정리</p>
+<p><a href="http://www.slf4j.org">http://www.slf4j.org</a></p>
+
+<p><a href="http://logback.qos.ch">http://logback.qos.ch</a></p>
+
+<p><a href="https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-logging?">https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-logging?</a></p>
 
     <br />
     <br />
@@ -354,12 +388,12 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=Spring Basic 07 - Bean Scope&amp;url=http://localhost:4000/framework/2024/09/26/Spring-basic-07/"
+    <a href="http://twitter.com/share?text=Spring MVC 04 - RequestParameter - Query&amp;url=http://localhost:4000/framework/2024/12/01/Spring-framework-mvc-04/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/framework/2024/09/26/Spring-basic-07/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/framework/2024/12/01/Spring-framework-mvc-04/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -381,21 +415,8 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
       
       
         
-        
           
-
-
-<li class="h4">
-  <a href="/framework/2024/12/01/Spring-framework-mvc-04/" data-flip="title">
-    <span>Spring MVC 04 - RequestParameter - Query</span>
-  </a>
-  <small><time datetime="2024-12-01T00:00:00+09:00">
-    01 Dec 2024
-  </time></small>
-</li>
-
-        
-      
+          
         
         
           
@@ -429,6 +450,19 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
         
       
         
+        
+          
+
+
+<li class="h4">
+  <a href="/framework/2024/11/15/Spring-framework-mvc-02/" data-flip="title">
+    <span>Spring MVC 02 - Adapter Pattern</span>
+  </a>
+  <small><time datetime="2024-11-15T00:00:00+09:00">
+    15 Nov 2024
+  </time></small>
+</li>
+
         
       
     
