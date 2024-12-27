@@ -6,9 +6,48 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 25 Dec 2024 18:27:48 +0900</pubDate>
-    <lastBuildDate>Wed, 25 Dec 2024 18:27:48 +0900</lastBuildDate>
+    <pubDate>Fri, 27 Dec 2024 13:58:01 +0900</pubDate>
+    <lastBuildDate>Fri, 27 Dec 2024 13:58:01 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
+    
+      <item>
+        <title>SpringBoot Contribute</title>
+        <description>&lt;h2 id=&quot;issue&quot;&gt;Issue&lt;/h2&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/79f345b0-d55c-497f-8e86-06ad21f9bf04&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;스프링에서 Open되어있는 이슈들에서 task를 받아서 기여할 수도 있지만 나는 평소 스프링이 어떻게 구조화 되어있는지 내심 궁금했기에 
+하나하나 소스코드들을 읽어 보았다. 그러던 와중에 스프링에 문제아닌 문제? 마이너한 문제를 찾을 수 있었다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/07134b6a-2b24-4bd5-a93e-dde1c7d2e906&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;SpringBoot/http/client에 ReflectiveComponentsClientHttpRequestFactoryBuilder의 생성자에서 assert 오류 메시지 포맷을 개선한 변경 하였다.
+기존의 오류 메시지가 문자열이 하드코딩되어 있어, 메시지 수정이나 로컬라이징 작업이 어려워 보였고 String.format()을 사용하여 동적으로 생성되도록 수정하였다.
+사실 개선사항이 크게 필요는 없는 부분이지만 장기적으로 보았을 땐 변경되는 코드에 따라서 메시지의 포맷이 일관되게 유지되면 좋겠다고 생각했다.
+그리고 무엇보다 오픈소스 생태계 그것도 스프링 오픈소스 생태계에 기여해볼 수 있다는 것이 가장 큰 동기부여가 되었다.&lt;/p&gt;
+
+&lt;h2 id=&quot;변경&quot;&gt;변경&lt;/h2&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/80281847-748a-4534-9549-0d8e99939b56&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;매우 작고 간단했던 작업 내용이였지만 내가 직접 세계적인 오픈소스의 컨트리뷰터가 되기 위한 첫 걸음을 나아갔다는 점에서 상당히 뿌듯하다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/5c2992cb-3b2c-4abb-a4a3-5da7e1eb0b2e&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;그리고 오픈소스들이라면 코딩 및 커밋 컨벤션을 가지고 있다. 해당 규칙을 만족해야 커밋이 반영이 된다. 
+SpringBoot 같은 경우에는 &lt;a href=&quot;https://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html&quot;&gt;여기&lt;/a&gt;에서 컨벤션 규칙을 정리해두었다. 꼭 읽고 커밋하자&lt;/p&gt;
+
+</description>
+        <pubDate>Tue, 03 Dec 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/opensource/2024/12/03/SpringBoot-contribute-01/</link>
+        <guid isPermaLink="true">http://localhost:4000/opensource/2024/12/03/SpringBoot-contribute-01/</guid>
+        
+        <category>opensource</category>
+        
+        
+        <category>opensource</category>
+        
+      </item>
     
       <item>
         <title>Spring MVC 04 - RequestParameter - Query</title>
@@ -1060,8 +1099,8 @@ include 경로를 제거해줘야 한다.
 &lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-boot/docs/1.2.0.M1/reference/html/boot-features-profiles.html&quot;&gt;https://docs.spring.io/spring-boot/docs/1.2.0.M1/reference/html/boot-features-profiles.html&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Fri, 01 Nov 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/framework/2024/11/01/Spring-03/</link>
-        <guid isPermaLink="true">http://localhost:4000/framework/2024/11/01/Spring-03/</guid>
+        <link>http://localhost:4000/framework/2024/11/01/Spring-06/</link>
+        <guid isPermaLink="true">http://localhost:4000/framework/2024/11/01/Spring-06/</guid>
         
         <category>spring</category>
         
@@ -2410,47 +2449,6 @@ POP으로 스택에서 제거해 주면 된다. 사실 벡터로도 풀 수 있�
         
         
         <category>language</category>
-        
-      </item>
-    
-      <item>
-        <title>who is Doug Lea?</title>
-        <description>&lt;h2 id=&quot;who-is-doug-lea&quot;&gt;who is Doug Lea?&lt;/h2&gt;
-
-&lt;p&gt;동시성을 공부하다가 이것은 누가 만들었을까 갑자기 궁금했다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;777&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/30042d20-9b07-4342-bc54-1d1b1048c259&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;716&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/b2f24b55-0b72-4664-b320-849683664a22&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Thread 및 동시성 관련된 인터페이스나 클래스를 사용하다보면 이런 생각은 누가 했을까 궁금해서 찾아보게 되었다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;236&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/a60f35ef-f68f-49b9-88ff-b96b3b34b851&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;자바 1.5에 추가된 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;java.util.concurrent&lt;/code&gt; 패키지가 제공하는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Lock&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ReentrantLock&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Condition&lt;/code&gt; ,
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BlockingQueue&lt;/code&gt; 등을 보면 참 견고하게 잘 만들어진 라이브러리라는 생각이 들 것이다.
-아주 흥미로운 점은 이 코드들을 열어보면 모두 코드 작성자에 “Doug Lea”라는 이름이 있는 것을 확인할 수 있다. 
-Doug Lea는 컴퓨터 과학 교수로 동시성 프로그래밍, 멀티스레딩, 병렬 컴퓨팅, 알고리즘 및 데이터 구조 등의 분야에서 많은 업적을 만들었다. 
-특히 자바 커뮤니티 프로세스(JCP)의 일원으로 활동하면서, JSR-166이라는 자바 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;java.util.concurrent&lt;/code&gt; 패키지의 주요 설계 및 구현을 주도했다. (참고로 혼자 만든 것은 아니다. 대표자의 이름이 들어간다.)
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;java.util.concurrent&lt;/code&gt; 패키지가 제공하는 동시성 라이브러리는 매우 견고하고, 높은 성능을 낼 수 있도록 최적화 되어 있다. 그리고 다양한 동시성 시나리오를 대응할 수 있고, 무엇보다 개발자가 쉽고 편리하게 복잡한 동시성 문제를 다룰 수 있게 해준다.
-그는 동시성 프로그래밍의 복잡한 개념들을 실용적이고 효율적인 구현으로 변환하는 데 큰 역할을 했다.
-결론적으로, Doug Lea의 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;java.util.concurrent&lt;/code&gt; 패키지에 대한 기여는 자바의 동시성 프로그래밍을 크게 발전시키고, 이는 현대 자바 프로그래밍의 핵심적인 부분이 되었다.
-수 많은 자바 동시성 라이브러리들 뿐만 아니라, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Queue&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Deque&lt;/code&gt; 같은 자료 구조의 코드를 열어 보면 Doug Lea의 이름을 발견할 수 있을 것이다.
-Doug lea 형님의 사진을 보면 많은 내공이 느껴진다.
-이렇게 고생하신 여러 선배 개발자분들 덕분에 우리가 편하게 개발을 하고있는 것은 아닐까 생각이 든다.&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Doug_Lea&quot;&gt;https://en.wikipedia.org/wiki/Doug_Lea&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Sun, 13 Oct 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/life/2024/10/13/daily-05/</link>
-        <guid isPermaLink="true">http://localhost:4000/life/2024/10/13/daily-05/</guid>
-        
-        <category>daily</category>
-        
-        
-        <category>life</category>
         
       </item>
     
