@@ -6,9 +6,62 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 27 Dec 2024 13:58:01 +0900</pubDate>
-    <lastBuildDate>Fri, 27 Dec 2024 13:58:01 +0900</lastBuildDate>
+    <pubDate>Mon, 30 Dec 2024 15:19:04 +0900</pubDate>
+    <lastBuildDate>Mon, 30 Dec 2024 15:19:04 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
+    
+      <item>
+        <title>Spring MVC 04 - Query Parameter</title>
+        <description>&lt;h2 id=&quot;query&quot;&gt;Query&lt;/h2&gt;
+
+&lt;p&gt;쿼리는 ‘문의’ 또는 ‘물음표’라는 사전적 의미를 가지고 있다. 쿼리 파라미터는 URL 뒤에 물음표 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;?&lt;/code&gt;와 함께 붙는 키-값(key-value)
+쌍이다. 여래 개의 파라미터를 전달하려면 파라미터 사이에 앰퍼샌드 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;amp;&lt;/code&gt;를 추가해서 하나의 문자열(string)으로 전달한다.
+쿼리 파라미터로는 문자열뿐만 아니라 숫자, 리스트 등 다양한 형태의 데이터를 넣을 수 있다.
+쿼리 파라미터는 다양한 용도가 있는데, 웹 서버의 요청에 대한 추가 정보를 제공한다.&lt;/p&gt;
+
+&lt;h2 id=&quot;그럼-언제가-적절할까&quot;&gt;그럼 언제가 적절할까?&lt;/h2&gt;
+
+&lt;p&gt;Query parameter는 url에서 특정한 조건을 주고싶을 때 사용하는 것이 적절하다.
+같은 API를 호출한다고 해도, 서로 다른 조건을 나열하는 것이 필요한 상황에 사용한다.
+같은 신발 목록 데이터를 호출 하는데, 신상품 순, 사이즈가 250인 데이터만 따로, 260인 데이터만 따로, 낮은 가격순으로 데이터를 호출하는
+API를 매번 새롭게 생성하는 것은 비효율적이다. 따라서 필요한 조건을 요청에 따라 선택적으로 처리할 수 있는 통일된 API를 구성할 때 사용한다.
+쿼리 파라미터는 HTTP [GET], [DELETE] 요청에서만 사용하고, 유일 값을 식별하기 위한 용도가 아닌 옵션을 줄 때 사용한다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;사이즈가 230인 신발 요청&lt;/strong&gt;&lt;/p&gt;
+
+    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  GET /shoes?size&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;230
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;가격이 낮은 순으로 정렬된 신발 요청&lt;/strong&gt;&lt;/p&gt;
+
+    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  GET /shoes?sort&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;price_asc
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;이처럼 쿼리 파라미터를 사용하면 하나의 API(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/shoes&lt;/code&gt;)로 다양한 조건의 데이터를 요청할 수 있으니 효율적이다.&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://www.slf4j.org&quot;&gt;http://www.slf4j.org&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://logback.qos.ch&quot;&gt;http://logback.qos.ch&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-logging?&quot;&gt;https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-logging?&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Fri, 06 Dec 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/framework/2024/12/06/Spring-framework-mvc-05/</link>
+        <guid isPermaLink="true">http://localhost:4000/framework/2024/12/06/Spring-framework-mvc-05/</guid>
+        
+        <category>mvc</category>
+        
+        
+        <category>framework</category>
+        
+      </item>
     
       <item>
         <title>SpringBoot Contribute</title>
@@ -2393,57 +2446,6 @@ POP으로 스택에서 제거해 주면 된다. 사실 벡터로도 풀 수 있�
         <pubDate>Mon, 14 Oct 2024 00:00:00 +0900</pubDate>
         <link>http://localhost:4000/language/2024/10/14/Java-Adv-13/</link>
         <guid isPermaLink="true">http://localhost:4000/language/2024/10/14/Java-Adv-13/</guid>
-        
-        <category>java</category>
-        
-        
-        <category>language</category>
-        
-      </item>
-    
-      <item>
-        <title>Java Adv 12 - atomic operation - 1</title>
-        <description>&lt;h2 id=&quot;atomic-operation&quot;&gt;atomic operation&lt;/h2&gt;
-
-&lt;p&gt;원자적 연산이란 컴퓨터 과학에서 &lt;strong&gt;더 이상 나눌 수 없는 단위로 수행되는 연산&lt;/strong&gt;을 의미한다. 
-이 연산은 중단 없이 &lt;strong&gt;완전히 실행되거나 전혀 실행되지 않으며&lt;/strong&gt;, 다른 연산의 간섭 없이 독립적으로 처리된다. 
-즉, &lt;strong&gt;멀티스레드 환경에서도 안전하게 수행되는 연산&lt;/strong&gt;이다.&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;어원: 과거 원자는 더 이상 나눌 수 없는 가장 작은 단위로 여겨졌다. 여기에서 유래하여, 컴퓨터 과학에서는 나눌 수 없는 연산을 “원자적 연산”이라 한다.&lt;/p&gt;
-
-&lt;/blockquote&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;java&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;코드&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;복사&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;volatile&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;위 코드에서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i = 1&lt;/code&gt; 연산은 원자적 연산이다. 
-하나의 연산으로 값을 대입하는 단일 단계로 이루어지기 때문이다.
-반면, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i = i + 1&lt;/code&gt;은 원자적 연산이 아니다. 
-이 연산은 다음과 같이 여러 단계로 나뉘어 실행된다&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i&lt;/code&gt;의 값을 읽는다.&lt;/li&gt;
-  &lt;li&gt;1을 더한다.&lt;/li&gt;
-  &lt;li&gt;결과를 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i&lt;/code&gt;에 대입한다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;이처럼 원자적이지 않은 연산은 다른 스레드의 간섭을 받을 수 있어 멀티스레드 환경에서 문제가 발생할 수 있다. 
-따라서, 원자적이지 않은 연산을 안전하게 처리하기 위해서는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt; 블록이나 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Lock&lt;/code&gt;을 사용하여 임계 영역을 보호해야 한다.&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;김영한님의 자바 강의&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://naveen-metta.medium.com/atomic-operations-in-java-mastering-thread-safety-and-concurrency-7c3360ec0bc5&quot;&gt;https://naveen-metta.medium.com/atomic-operations-in-java-mastering-thread-safety-and-concurrency-7c3360ec0bc5&lt;/a&gt;&lt;/p&gt;
-
-</description>
-        <pubDate>Mon, 14 Oct 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/language/2024/10/14/Java-Adv-12/</link>
-        <guid isPermaLink="true">http://localhost:4000/language/2024/10/14/Java-Adv-12/</guid>
         
         <category>java</category>
         
