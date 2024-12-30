@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Spring MVC 04 - Query Parameter
+title: Spring MVC 05 - Query Parameter
 subtitle: ""
 categories: framework
 tags: mvc
