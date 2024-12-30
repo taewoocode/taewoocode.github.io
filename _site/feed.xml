@@ -6,12 +6,66 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 30 Dec 2024 15:22:22 +0900</pubDate>
-    <lastBuildDate>Mon, 30 Dec 2024 15:22:22 +0900</lastBuildDate>
+    <pubDate>Mon, 30 Dec 2024 15:45:04 +0900</pubDate>
+    <lastBuildDate>Mon, 30 Dec 2024 15:45:04 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
-        <title>Spring MVC 04 - Query Parameter</title>
+        <title>Spring MVC 06 - Dispatcher-Servlet</title>
+        <description>&lt;h2 id=&quot;dispatcher-servlet&quot;&gt;Dispatcher Servlet&lt;/h2&gt;
+
+&lt;p&gt;디스패처 서블릿의 dispatch는 ‘보내다’라는 뜻을 가지고 있다.
+디스패처 서블릿은 HTTP 프로토콜로 들어오는 모든 요청을 가장 먼저 받아 적합한 컨트롤러에 위임해주는 프론트 컨트롤러라고 정의할 수 있다.
+클라이언트로부터 어떠한 요청이 오면 Tomcat과 같은 서블릿 컨테이너가 요청을 받는다. 그리고 이 모든 요청을 프론트 컨트롤러인 디스패치 서블릿이 가장 먼저
+받게 된다. 그러면 디스패처 서블릿은 공통적인 작업을 먼저 처리한 후에 해당 요청을 처리해야 하는 컨트롤러를 찾아서 작업을 위임한다.
+여기서 Front Controller는 서블릿 컨테이너의 제일 앞에서 서버로 들어오는 클라이언트의 모든 요청을 받아서 처리해주는 컨트롤러로써
+MVC 구조에서 함께 사용되는 디자인 패턴이다.&lt;/p&gt;
+
+&lt;h2 id=&quot;dispatcher-servlet의-장점은&quot;&gt;Dispatcher Servlet의 장점은?&lt;/h2&gt;
+
+&lt;p&gt;Spring MVC에서 Dispatcher Servlet이 등장함에 따라서 web.xml의 역할을 상당히 축소시켰다.
+과거에는 모든 서블릿을 URL 매핑을 위해 web.xml에 모두 등록해야 했다.
+dispatcher Servlet의 등장으로 해당 애플리케이션으로 들어오는 모든 요청을 핸들링하고 공통 작업을 처리하면서 상당히 편리하게 이용한다.
+우리는 컨트롤러를 구현만 해두면 디스패처 서블릿이 알아서 적합한 컨트롤러로 위임하게 된다. -&amp;gt; 그냥 컨트롤러에 집중만 하면 된다.&lt;/p&gt;
+
+&lt;h2 id=&quot;dispatcher-servlet의-동작&quot;&gt;Dispatcher Servlet의 동작&lt;/h2&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/1e8516bc-7943-4553-87d1-91e44a8db7d5&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;사이즈가 230인 신발 요청&lt;/strong&gt;&lt;/p&gt;
+
+    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  GET /shoes?size&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;230
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;가격이 낮은 순으로 정렬된 신발 요청&lt;/strong&gt;&lt;/p&gt;
+
+    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  GET /shoes?sort&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;price_asc
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;이처럼 쿼리 파라미터를 사용하면 하나의 API(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/shoes&lt;/code&gt;)로 다양한 조건의 데이터를 요청할 수 있으니 효율적이다.&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-framework/reference/web/webmvc.html&quot;&gt;https://docs.spring.io/spring-framework/reference/web/webmvc.html&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Sun, 08 Dec 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/framework/2024/12/08/Spring-framework-mvc-06/</link>
+        <guid isPermaLink="true">http://localhost:4000/framework/2024/12/08/Spring-framework-mvc-06/</guid>
+        
+        <category>mvc</category>
+        
+        
+        <category>framework</category>
+        
+      </item>
+    
+      <item>
+        <title>Spring MVC 05 - Query Parameter</title>
         <description>&lt;h2 id=&quot;query&quot;&gt;Query&lt;/h2&gt;
 
 &lt;p&gt;쿼리는 ‘문의’ 또는 ‘물음표’라는 사전적 의미를 가지고 있다. 쿼리 파라미터는 URL 뒤에 물음표 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;?&lt;/code&gt;와 함께 붙는 키-값(key-value)
@@ -2398,50 +2452,6 @@ POP으로 스택에서 제거해 주면 된다. 사실 벡터로도 풀 수 있�
         <pubDate>Tue, 15 Oct 2024 00:00:00 +0900</pubDate>
         <link>http://localhost:4000/language/2024/10/15/Java-Adv-14/</link>
         <guid isPermaLink="true">http://localhost:4000/language/2024/10/15/Java-Adv-14/</guid>
-        
-        <category>java</category>
-        
-        
-        <category>language</category>
-        
-      </item>
-    
-      <item>
-        <title>Java Adv 13 - atomic operation - 2</title>
-        <description>&lt;h2 id=&quot;atomic-operation-thread&quot;&gt;atomic operation Thread&lt;/h2&gt;
-
-&lt;p&gt;&lt;img width=&quot;695&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/507aaa1f-ab38-4715-b4a3-456996cbe944&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;원자적이지 않은 연산을 멀티스레드 환경에서 실행하면 어떤 문제가 발생하는지 코드로 알아보자.
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;IncrementInteger&lt;/code&gt; 는 숫자 값을 하나씩 증가시키는 기능을 제공한다. 
-예를 들어서 지금까지 접속한 사용자의 수 등을 계산할 때 사용할 수 있다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;695&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/aa6dfdb1-d4b9-418c-b6a2-986cde809cce&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;1000개의 스레드가 increment 메서드를 호출하여 IncrementInteger 객체의 값을 증가시키도록 한다. 
-모든 스레드가 종료된 후, 최종 증가된 값을 출력한다.
-대기 시간을 두는 이유는 모든 스레드가 동시에 increment()를 호출하면 각 스레드가 접근하는 타이밍이 거의 같아 경쟁 조건이 발생하지 않거나 최소한으로 발생할 수 있다.
-그러나 sleep(10)을 추가하면 스레드들이 순차적으로 약간의 시간 차이를 두고 메서드에 접근하게 되면서, 이미 increment() 
-연산을 진행 중인 다른 스레드와 동시에 겹쳐서 자원에 접근할 가능성이 높아진다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;695&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/5a976264-1bff-426e-82f9-840b1b9aca26&quot; /&gt;
-&lt;img width=&quot;695&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/842d7b2d-a758-4a12-ba28-074ad0398b95&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;실행 결과를 보면 기대한 1000이 아니라 다른 숫자가 보인다. 아마도 실행 환경에 따라서 다르겠지만 1000이 아니라
-조금 더 적은 숫자가 보일 것이다. 물론 실행 환경에 따라서 1000이 보일 수도 있다.
-이 문제는 앞서 설명한 것 처럼 여러 스레드가 동시에 원자적이지 않은 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;value++&lt;/code&gt; 을 호출했기 때문에 발생한다.
-그럼 혹시 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;volatile&lt;/code&gt; 을 적용하면 될까?&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;김영한님의 자바 강의&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://naveen-metta.medium.com/atomic-operations-in-java-mastering-thread-safety-and-concurrency-7c3360ec0bc5&quot;&gt;https://naveen-metta.medium.com/atomic-operations-in-java-mastering-thread-safety-and-concurrency-7c3360ec0bc5&lt;/a&gt;&lt;/p&gt;
-
-</description>
-        <pubDate>Mon, 14 Oct 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/language/2024/10/14/Java-Adv-13/</link>
-        <guid isPermaLink="true">http://localhost:4000/language/2024/10/14/Java-Adv-13/</guid>
         
         <category>java</category>
         
