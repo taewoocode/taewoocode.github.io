@@ -38,8 +38,4 @@ API를 매번 새롭게 생성하는 것은 비효율적이다. 따라서 필요
 
 ## Reference
 
-<http://www.slf4j.org>
-
-<http://logback.qos.ch>
-
-<https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-logging?>
+<https://docs.spring.io/spring-framework/reference/web/webmvc.html>
