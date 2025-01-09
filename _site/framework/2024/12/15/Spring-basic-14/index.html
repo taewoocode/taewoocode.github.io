@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Home" />
+<meta property="og:title" content="Spring Basic 14 - 라이브러리 직접 만들어 보기" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,16 +52,18 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>일벌리는 개발자 &middot;</title>
+<title>Spring Basic 14 - 라이브러리 직접 만들어 보기 &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="일을 벌여놔야 주워 담을 수 있습니다.
+        content="##
+
 "
 />
 <meta
         property="og:description"
-        content="일을 벌여놔야 주워 담을 수 있습니다.
+        content="##
+
 "
 />
 
@@ -70,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/" />
-<meta property="og:url" content="http://localhost:4000/" />
+<link rel="canonical" href="http://localhost:4000/framework/2024/12/15/Spring-basic-14/" />
+<meta property="og:url" content="http://localhost:4000/framework/2024/12/15/Spring-basic-14/" />
 
 <link
         rel="alternate"
@@ -80,6 +82,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         href="http://localhost:4000/feed.xml"
 />
 
+
+<link rel="prev" href="http://localhost:4000/framework/2024/12/08/Spring-framework-mvc-06/" />
  
 
 <link
@@ -176,14 +180,13 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
             data-image="/assets/img/dp.jpeg"
     >
       
-  
 
-<article id="post-framework/2024/12/15/Spring-basic-14" class="post mb6" role="article">
+<article id="post-framework/2024/12/15/Spring-basic-14" class="post" role="article">
   <header>
     <h1 class="post-title">
-      <a href="/framework/2024/12/15/Spring-basic-14/" data-flip="title">
+      
       Spring Basic 14 - 라이브러리 직접 만들어 보기
-      </a>
+      
     </h1>
 
     <p class="post-date heading">
@@ -223,433 +226,183 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
 
 
   
-  <p>##</p>
+  <div class="markdown-body">
 
+    <!--  -->
+    <style>
+      .myAd1190 {
+        width: 48%;
+        height: 280px;
+      }
 
-  <p class="read-more"><a class="heading" href="/framework/2024/12/15/Spring-basic-14/" data-flip="title">Continue reading </a>
-  </p>
+      .myAd1290 {
+        width: 48%;
+        height: 280px;
+      }
+
+      @media(max-width: 800px) {
+        .myAd1190 {
+          display: none;
+        }
+
+        .myAd1290 {
+          width: 98%;
+        }
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 300px;
+      }
+
+      .row-center {
+        display: flex;
+        justify-content: center;
+        height: 258px;
+      }
+    </style>
+
+    <!--<br />-->
+    <p>##</p>
+
+<h2 id="순수-라이브러리">순수 라이브러리</h2>
+
+<p>스프링부트가 직접 제공해주는 @AutoConfiguration을 이해하기 위해서는 그 전에 먼저 라이브러리가 어떻게 사용되는지 이해하는 것이 필요하다.
+그리고 직접 라이브러리를 만들어 보면서 스프링 부트가 얼마나 위대한지 알 수 있었다.</p>
+
+<p><img width="654" alt="image" src="https://github.com/user-attachments/assets/61384a2f-0a19-4356-b5b8-1e7d093ec679" /></p>
+
+<p>우선 라이브러리로 사용할 프로젝트에서 jar를 만들어 준다.</p>
+
+<p><img width="654" alt="image" src="https://github.com/user-attachments/assets/71978aa7-529a-48c2-9449-12cdba1928ff" /></p>
+
+<p>그리고 실제 라이브러리를 사용하는 프로젝트에서 루트 디렉토리 아래에 libs 폴더를 생성해 준다.</p>
+
+<p><img width="654" alt="image" src="https://github.com/user-attachments/assets/3a7770af-51d5-4198-9ef8-aee960c25169" /></p>
+
+<p>그리고 gradle에 가서 방금 추가한 jar의 경로를 gradle에 추가한다.</p>
+
+<p><img width="654" alt="image" src="https://github.com/user-attachments/assets/5837456f-ba1b-4ada-b460-b7e677b963f5" /></p>
+
+<p>사실 여기가 제일 난감하다. 지금은 프로젝트가 소규모 프로젝트이고, 학습을 위한 프로젝트라서 간단하지 실제로 이게 대규모 프로젝트였다면 라이브러리를 등록하기
+위한 Bean을 다 설정해 줘야 하는데 어디서부터 건드려야 할지 굉장히 어려워진다고 한다.</p>
+
+<p>그래서 우리는 Springboot가 제공해주는 AutoConfiguration이 있기에 라이브러리를 편리하게 사용할 수 있다.</p>
+
+<h2 id="reference">Reference</h2>
+
+<p><a href="https://stackoverflow.com/questions/61506907/how-can-a-library-module-of-a-spring-application-add-additional-configuration-to">https://stackoverflow.com/questions/61506907/how-can-a-library-module-of-a-spring-application-add-additional-configuration-to</a></p>
+
+    <br />
+    <br />
+  </div>
   
 
 </article>
 
-
-  
-
-<article id="post-framework/2024/12/08/Spring-framework-mvc-06" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/framework/2024/12/08/Spring-framework-mvc-06/" data-flip="title">
-      Spring MVC 06 - Dispatcher-Servlet
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-12-08T00:00:00+09:00">08 Dec 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/framework/" data-flip="title">Framework</a>
-
-      
+<!--<hr class="dingbat" />-->
+<!--
+<div class="share">
+  <h2>Share this post</h2>
+  <div class="share-body">
+    <a href="http://twitter.com/share?text=Spring Basic 14 - 라이브러리 직접 만들어 보기&amp;url=http://localhost:4000/framework/2024/12/15/Spring-basic-14/"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="icon-twitter">
+      </span>
+    </a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/framework/2024/12/15/Spring-basic-14/"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="icon-facebook">
+      </span>
+    </a>
+  </div>
+</div>
+-->
+<br />
 
 
 
 
+<aside class="related" role="complementary">
+  <h2 class="hr">Related Posts</h2>
 
-
-
-
-
-on <a href="/tag/framework-spring-mvc/" data-flip="title">Spring MVC</a>
-
-    </p>
-
+  <ul class="related-posts">
     
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="dispatcher-servlet">Dispatcher Servlet</h2>
-
-
-  <p class="read-more"><a class="heading" href="/framework/2024/12/08/Spring-framework-mvc-06/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-framework/2024/12/06/Spring-framework-mvc-05" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/framework/2024/12/06/Spring-framework-mvc-05/" data-flip="title">
-      Spring MVC 05 - Query Parameter
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-12-06T00:00:00+09:00">06 Dec 2024</time>
       
-
-
-
-
-
-
-
-
-
-in <a href="/category/framework/" data-flip="title">Framework</a>
-
       
+      
+        
+          
+          
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/framework/2024/12/08/Spring-framework-mvc-06/" data-flip="title">
+    <span>Spring MVC 06 - Dispatcher-Servlet</span>
+  </a>
+  <small><time datetime="2024-12-08T00:00:00+09:00">
+    08 Dec 2024
+  </time></small>
+</li>
+
+        
+      
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/framework/2024/12/06/Spring-framework-mvc-05/" data-flip="title">
+    <span>Spring MVC 05 - Query Parameter</span>
+  </a>
+  <small><time datetime="2024-12-06T00:00:00+09:00">
+    06 Dec 2024
+  </time></small>
+</li>
+
+        
+      
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/framework/2024/12/01/Spring-framework-mvc-04/" data-flip="title">
+    <span>Spring MVC 04 - RequestParameter - Query</span>
+  </a>
+  <small><time datetime="2024-12-01T00:00:00+09:00">
+    01 Dec 2024
+  </time></small>
+</li>
 
-
-
-on <a href="/tag/framework-spring-mvc/" data-flip="title">Spring MVC</a>
-
-    </p>
-
+        
+      
     
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="query">Query</h2>
-
-
-  <p class="read-more"><a class="heading" href="/framework/2024/12/06/Spring-framework-mvc-05/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-opensource/2024/12/03/SpringBoot-contribute-01" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/opensource/2024/12/03/SpringBoot-contribute-01/" data-flip="title">
-      SpringBoot Contribute
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-12-03T00:00:00+09:00">03 Dec 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/opensource/" data-flip="title">Open Source</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/opensource-opensource/" data-flip="title">Open Source</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="issue">Issue</h2>
-
-
-  <p class="read-more"><a class="heading" href="/opensource/2024/12/03/SpringBoot-contribute-01/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-framework/2024/12/01/Spring-framework-mvc-04" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/framework/2024/12/01/Spring-framework-mvc-04/" data-flip="title">
-      Spring MVC 04 - RequestParameter - Query
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-12-01T00:00:00+09:00">01 Dec 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/framework/" data-flip="title">Framework</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/framework-spring-mvc/" data-flip="title">Spring MVC</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="client-to-server">Client to Server</h2>
-
-
-  <p class="read-more"><a class="heading" href="/framework/2024/12/01/Spring-framework-mvc-04/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-framework/2024/11/29/Spring-framework-mvc-03" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/framework/2024/11/29/Spring-framework-mvc-03/" data-flip="title">
-      Spring MVC 03 - Logger
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-11-29T00:00:00+09:00">29 Nov 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/framework/" data-flip="title">Framework</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/framework-spring-mvc/" data-flip="title">Spring MVC</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="logging-library">Logging Library</h2>
-
-
-  <p class="read-more"><a class="heading" href="/framework/2024/11/29/Spring-framework-mvc-03/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-cs/2024/11/27/Operating-system-02" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/cs/2024/11/27/Operating-system-02/" data-flip="title">
-      운영체제의 역사
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-11-27T00:00:00+09:00">27 Nov 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/cs-operatingsystem/" data-flip="title">Operating System</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="운영체제-역사">운영체제 역사</h2>
-
-
-  <p class="read-more"><a class="heading" href="/cs/2024/11/27/Operating-system-02/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/11/25/Kotlin-basic-02" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/11/25/Kotlin-basic-02/" data-flip="title">
-      Kotlin In Action 02 - Statement, Expression
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-11-25T00:00:00+09:00">25 Nov 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-kotlin/" data-flip="title">Kotlin</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="statement-expression">Statement, Expression</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/11/25/Kotlin-basic-02/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-
-<h2 class="sr-only">Pagination</h2>
-<nav class="pagination heading" role="navigation">
-  <ul>
-    <li class="pagination-item older" >
-      
-        <a rel="next" href="/page-2/">Older</a>
-      
-    </li>
-    <li class="pagination-item newer" >
-      
-        <span>Newer</span>
-      
-    </li>
   </ul>
-</nav>
+</aside>
+  <aside class="comments" role="complementary">
+  <h2>Comments</h2>
+  <hr/>
 
-  <footer>
+  <script src="https://utteranc.es/client.js"
+          repo="taewoocode/taewoocode.github.io"
+          issue-term="title"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+</aside>
+
+
+       <footer>
   <hr/>
   
     <p>© 2022. by taewoo</p>

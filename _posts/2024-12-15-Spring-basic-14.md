@@ -7,8 +7,6 @@ tags: spring
 comments: false
 ---
 
-## 
-
 ## 순수 라이브러리
 
 스프링부트가 직접 제공해주는 @AutoConfiguration을 이해하기 위해서는 그 전에 먼저 라이브러리가 어떻게 사용되는지 이해하는 것이 필요하다.
