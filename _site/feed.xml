@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 30 Dec 2024 15:45:04 +0900</pubDate>
-    <lastBuildDate>Mon, 30 Dec 2024 15:45:04 +0900</lastBuildDate>
+    <pubDate>Mon, 30 Dec 2024 15:50:00 +0900</pubDate>
+    <lastBuildDate>Mon, 30 Dec 2024 15:50:00 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
@@ -33,21 +33,18 @@ dispatcher Servlet의 등장으로 해당 애플리케이션으로 들어오는 
 &lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/1e8516bc-7943-4553-87d1-91e44a8db7d5&quot; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;사이즈가 230인 신발 요청&lt;/strong&gt;&lt;/p&gt;
-
-    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  GET /shoes?size&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;230
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;가격이 낮은 순으로 정렬된 신발 요청&lt;/strong&gt;&lt;/p&gt;
-
-    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  GET /shoes?sort&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;price_asc
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
+  &lt;li&gt;클라이언트의 요청을 디스패처 서블릿이 받는다.&lt;/li&gt;
+  &lt;li&gt;요청 정보를 통해 요청을 위임할 컨트롤러를 찾는다.&lt;/li&gt;
+  &lt;li&gt;요청을 컨트롤러로 위임할 핸들러 어댑터를 찾아서 전달한다.&lt;/li&gt;
+  &lt;li&gt;핸들러 어댑터가 컨트롤러로 요청을 위임한다.&lt;/li&gt;
+  &lt;li&gt;비즈니스 로직 수행 후 컨트롤러가 반환값을 반환한다.&lt;/li&gt;
+  &lt;li&gt;핸들러 어댑터가 반환값을 처리하고 서버의 응답을 클라이언트로 반환한다.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;이처럼 쿼리 파라미터를 사용하면 하나의 API(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/shoes&lt;/code&gt;)로 다양한 조건의 데이터를 요청할 수 있으니 효율적이다.&lt;/p&gt;
+&lt;p&gt;디스패처 서블릿은 요청을 처리할 핸들러(컨트롤러)를 찾고 객체의 메소드를 호출한다. 따라서 가장 먼저 어느 컨트롤러가 요청을 처리할 수 있는지를 식별해야 한다.
+해당 역할을 하는 것이 바로 HandlerMapping이다.&lt;/p&gt;
+
+&lt;p&gt;결론은 디스패처 서블릿을 통해 요청을 처리할 컨트롤러를 찾아서 위임하고, 그 결과를 받아오는 정도로 이해하면 좋다.&lt;/p&gt;
 
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
 
