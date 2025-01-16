@@ -8,6 +8,7 @@ comments: false
 ---
 
 ## Spring ConfigurationProperties
+
 - 스프링은 외부 설정의 묶음 정보를 객체로 변환하는 기능을 제공한다.
 - 타입 안전한 설정 속성이라 한다.
 - 객체를 사용하면 타입을 사용할 수 있다.
@@ -46,3 +47,7 @@ comments: false
 그리고 표기법 변환이 일어난 것을 확인할 수 있다. 
 max-connection은 (캐밥 케이스(표기법))을 따랐지만, 
 자바 코드는 카멜 케이스로 적은 것을 확인할 수 있다. 스프링은 캐밥 표기법을 카멜 케이스로 중간에 자동변환을 지원해준다.
+
+## Reference
+
+<https://docs.spring.io/spring-boot/reference/features/profiles.html>

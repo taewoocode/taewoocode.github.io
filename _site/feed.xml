@@ -6,9 +6,72 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 10 Jan 2025 00:30:11 +0900</pubDate>
-    <lastBuildDate>Fri, 10 Jan 2025 00:30:11 +0900</lastBuildDate>
+    <pubDate>Thu, 16 Jan 2025 18:05:39 +0900</pubDate>
+    <lastBuildDate>Thu, 16 Jan 2025 18:05:39 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
+    
+      <item>
+        <title>Spring Basic 15 - ConfigurationProperties</title>
+        <description>&lt;h2 id=&quot;spring-configurationproperties&quot;&gt;Spring ConfigurationProperties&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;스프링은 외부 설정의 묶음 정보를 객체로 변환하는 기능을 제공한다.&lt;/li&gt;
+  &lt;li&gt;타입 안전한 설정 속성이라 한다.&lt;/li&gt;
+  &lt;li&gt;객체를 사용하면 타입을 사용할 수 있다.&lt;/li&gt;
+  &lt;li&gt;따라서 타입 안전성이 보장된다.&lt;/li&gt;
+  &lt;li&gt;객체를 통해서 활용할 수 있는 부분들이 많아진다.&lt;/li&gt;
+  &lt;li&gt;위에서 말한 것들을 정리 해본다면 → 모든 외부 설정들을 자바코드로 관리하게 된다.&lt;/li&gt;
+  &lt;li&gt;설정 정보 그 자체도 타입임&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;코드로-알아보자&quot;&gt;코드로 알아보자&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;application.propeties&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/8f58f364-7b42-4ec4-9928-3b249e7684bd&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;외부 설정을 해줄 설정정보는 위와 같이 작성한다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/6793c3d4-3e4e-4a53-a140-6009f75b2e82&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;외부 설정을 주입 받을 객체를 생성한다. 
+그리고 각 필드를 외부 설정의 키 값에 맞추어 준비한다.
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@ConfigurationProperties&lt;/code&gt; 이 있으면 외부 설정을 주입 받는 객체라는 뜻이다. 
+여기에 외부 설정 KEY의 묶음 시작점인 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;my.datasource&lt;/code&gt; 를 적어준다. 기본 주입 방식은 자바빈 프로퍼티 방식이다. 
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Getter&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Setter&lt;/code&gt; 가 필요하다. (롬복의 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@Data&lt;/code&gt; 에 의해 자동 생성된다.)&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/b875b4e1-eeb9-424e-b6d3-4fb83c12c8d4&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@EnableConfigurationProperties(MyDataSourcePropertiesV1.class)&lt;/code&gt;스프링에게 사용할 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@ConfigurationProperties&lt;/code&gt; 를 지정해주어야 한다.&lt;/li&gt;
+  &lt;li&gt;이렇게 하면 해당 클래스는 스프링 빈으로 등록되고, 필요한 곳에서 주입 받아서 사용할 수 있다.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;private final MyDataSourcePropertiesV1 properties&lt;/code&gt; 설정 속성을 생성자를 통해 주입 받
+아서 사용한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/18dc1571-0c62-4596-8c0a-6fbd7166b924&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;외부설정 값을 읽어오는 것을 확인할 수 있다.
+그리고 표기법 변환이 일어난 것을 확인할 수 있다. 
+max-connection은 (캐밥 케이스(표기법))을 따랐지만, 
+자바 코드는 카멜 케이스로 적은 것을 확인할 수 있다. 스프링은 캐밥 표기법을 카멜 케이스로 중간에 자동변환을 지원해준다.&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-boot/reference/features/profiles.html&quot;&gt;https://docs.spring.io/spring-boot/reference/features/profiles.html&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Fri, 20 Dec 2024 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/framework/2024/12/20/Spring-basic-15/</link>
+        <guid isPermaLink="true">http://localhost:4000/framework/2024/12/20/Spring-basic-15/</guid>
+        
+        <category>spring</category>
+        
+        
+        <category>framework</category>
+        
+      </item>
     
       <item>
         <title>Spring Basic 14 - 라이브러리 직접 만들어 보기</title>
@@ -2357,64 +2420,6 @@ POP으로 스택에서 제거해 주면 된다. 사실 벡터로도 풀 수 있�
         
         
         <category>cs</category>
-        
-      </item>
-    
-      <item>
-        <title>Java Adv 15 - CAS operation - 1</title>
-        <description>&lt;h2 id=&quot;락-기반-방식의-문제점&quot;&gt;락 기반 방식의 문제점&lt;/h2&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SyncInteger&lt;/code&gt; 와 같은 클래스는 데이터를 보호하기 위해 락을 사용한다.
-여기서 말하는 락은 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Lock(ReentrantLock)&lt;/code&gt; 등을 사용하는 것을 말한다.
-락은 특정 자원을 보호하기 위해 스레드가 해당 자원에 대한 접근하는 것을 제한한다. 
-락이 걸려 있는 동안 다른 스레드들은 해당 자원에 접근할 수 없고, 락이 해제될 때까지 대기해야 한다. 
-또한 락 기반 접근에서는 락을 획득하고 해제하는 데 시간이 소요된다. 예를 들어서 락을 사용하는 연산이 있다고 가정하자. 
-락을 사용하는 방식은 다음과 같이 작동한다.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;락이 있는지 확인한다.&lt;/li&gt;
-  &lt;li&gt;락을 획득하고 임계 영역에 들어간다.&lt;/li&gt;
-  &lt;li&gt;작업을 수행한다.&lt;/li&gt;
-  &lt;li&gt;락을 반납한다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;여기서 락을 획득하고 반납하는 과정이 계속 반복된다. 
-10000번의 연산이 있다면 10000번의 연산 모두 같은 과정을 반복한다. 
-이렇듯 락을 사용하는 방식은 직관적이지만 상대적으로 무거운 방식이다.&lt;/p&gt;
-
-&lt;h2 id=&quot;cas&quot;&gt;CAS&lt;/h2&gt;
-
-&lt;p&gt;이런 문제를 해결하기 위해 락을 걸지 않고 원자적인 연산을 수행할 수 있는 방법이 있는데, 
-이것을 CAS(Compare-And-Swap, Compare-And-Set) 연산이라 한다. 
-이 방법은 락을 사용하지 않기 때문에 락 프리(lock-free) 기법이라한다. 
-참고로 CAS 연산은 락을 완전히 대체하는 것은 아니고, &lt;strong&gt;작은&lt;/strong&gt; &lt;strong&gt;단위의&lt;/strong&gt; &lt;strong&gt;일부&lt;/strong&gt; &lt;strong&gt;영역에&lt;/strong&gt; &lt;strong&gt;적용&lt;/strong&gt;할 수 있다. 
-기본은 락을 사용하고, 특별한 경우에 CAS를 적용할 수 있다고 생각하면 된다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;677&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/80113216-229d-441f-b469-63a5d246d570&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;compareandset0-1&quot;&gt;compareAndSet(0, 1)&lt;/h2&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;atomicInteger&lt;/code&gt; 가 가지고 있는 값이 현재 0이면 이 값을 1로 변경하라는 매우 단순한 메서드이다. 
-만약 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;atomicInteger&lt;/code&gt; 의 값이 현재 0이라면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;atomicInteger&lt;/code&gt; 의 값은 1로 변경된다. 
-이 경우 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;true&lt;/code&gt; 를 반환한다. 만약 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;atomicInteger&lt;/code&gt; 의 값이 현재 0이 아니라면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;atomicInteger&lt;/code&gt; 의 값은 변경되지 않는다. 이 경우&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;false&lt;/code&gt; 를 반환한다. 
-여기서 가장 중요한 내용이 있는데, &lt;strong&gt;**이&lt;/strong&gt; &lt;strong&gt;메서드는&lt;/strong&gt; &lt;strong&gt;원자적으로&lt;/strong&gt; &lt;strong&gt;실행&lt;/strong&gt;**된다는 점이다. 
-그리고 이 메서드가 제공하는 기능이 바로 CAS(compareAndSet) 연산이다.&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;김영한님의 자바 강의&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://naveen-metta.medium.com/atomic-operations-in-java-mastering-thread-safety-and-concurrency-7c3360ec0bc5&quot;&gt;https://naveen-metta.medium.com/atomic-operations-in-java-mastering-thread-safety-and-concurrency-7c3360ec0bc5&lt;/a&gt;&lt;/p&gt;
-
-</description>
-        <pubDate>Wed, 16 Oct 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/language/2024/10/16/Java-Adv-15/</link>
-        <guid isPermaLink="true">http://localhost:4000/language/2024/10/16/Java-Adv-15/</guid>
-        
-        <category>java</category>
-        
-        
-        <category>language</category>
         
       </item>
     

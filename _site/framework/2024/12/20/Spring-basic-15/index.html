@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Home" />
+<meta property="og:title" content="Spring Basic 15 - ConfigurationProperties" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,16 +52,18 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Home &middot; 일벌리는 개발자</title>
+<title>Spring Basic 15 - ConfigurationProperties &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="일을 벌여놔야 주워 담을 수 있습니다.
+        content="Spring ConfigurationProperties
+
 "
 />
 <meta
         property="og:description"
-        content="일을 벌여놔야 주워 담을 수 있습니다.
+        content="Spring ConfigurationProperties
+
 "
 />
 
@@ -70,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/page-10/" />
-<meta property="og:url" content="http://localhost:4000/page-10/" />
+<link rel="canonical" href="http://localhost:4000/framework/2024/12/20/Spring-basic-15/" />
+<meta property="og:url" content="http://localhost:4000/framework/2024/12/20/Spring-basic-15/" />
 
 <link
         rel="alternate"
@@ -80,6 +82,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         href="http://localhost:4000/feed.xml"
 />
 
+
+<link rel="prev" href="http://localhost:4000/framework/2024/12/15/Spring-basic-14/" />
  
 
 <link
@@ -176,75 +180,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
             data-image="/assets/img/dp.jpeg"
     >
       
-  
 
-<article id="post-framework/2024/09/28/Spring-Data-jdbc-01" class="post mb6" role="article">
+<article id="post-framework/2024/12/20/Spring-basic-15" class="post" role="article">
   <header>
     <h1 class="post-title">
-      <a href="/framework/2024/09/28/Spring-Data-jdbc-01/" data-flip="title">
-      Spring JDBC 01 - Hello JDBC
-      </a>
+      
+      Spring Basic 15 - ConfigurationProperties
+      
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-09-28T00:00:00+09:00">28 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/framework/" data-flip="title">Framework</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/framework-spring-data-jpa/" data-flip="title">Spring Data JPA</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="jdbc">JDBC?</h2>
-
-
-  <p class="read-more"><a class="heading" href="/framework/2024/09/28/Spring-Data-jdbc-01/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-framework/2024/09/27/Spring-basic-13" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/framework/2024/09/27/Spring-basic-13/" data-flip="title">
-      Spring Basic 13 - Dependency Injection 02
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-27T00:00:00+09:00">27 Sep 2024</time>
+      <time datetime="2024-12-20T00:00:00+09:00">20 Dec 2024</time>
       
 
 
@@ -280,376 +226,203 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
 
 
   
-  <h2 id="다양한-의존관계-주입방법">다양한 의존관계 주입방법</h2>
+  <div class="markdown-body">
 
+    <!--  -->
+    <style>
+      .myAd1190 {
+        width: 48%;
+        height: 280px;
+      }
 
-  <p class="read-more"><a class="heading" href="/framework/2024/09/27/Spring-basic-13/" data-flip="title">Continue reading </a>
-  </p>
+      .myAd1290 {
+        width: 48%;
+        height: 280px;
+      }
+
+      @media(max-width: 800px) {
+        .myAd1190 {
+          display: none;
+        }
+
+        .myAd1290 {
+          width: 98%;
+        }
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 300px;
+      }
+
+      .row-center {
+        display: flex;
+        justify-content: center;
+        height: 258px;
+      }
+    </style>
+
+    <!--<br />-->
+    <h2 id="spring-configurationproperties">Spring ConfigurationProperties</h2>
+
+<ul>
+  <li>스프링은 외부 설정의 묶음 정보를 객체로 변환하는 기능을 제공한다.</li>
+  <li>타입 안전한 설정 속성이라 한다.</li>
+  <li>객체를 사용하면 타입을 사용할 수 있다.</li>
+  <li>따라서 타입 안전성이 보장된다.</li>
+  <li>객체를 통해서 활용할 수 있는 부분들이 많아진다.</li>
+  <li>위에서 말한 것들을 정리 해본다면 → 모든 외부 설정들을 자바코드로 관리하게 된다.</li>
+  <li>설정 정보 그 자체도 타입임</li>
+</ul>
+
+<h2 id="코드로-알아보자">코드로 알아보자</h2>
+
+<ul>
+  <li>application.propeties</li>
+</ul>
+
+<p><img width="654" alt="image" src="https://github.com/user-attachments/assets/8f58f364-7b42-4ec4-9928-3b249e7684bd" /></p>
+
+<p>외부 설정을 해줄 설정정보는 위와 같이 작성한다.</p>
+
+<p><img width="654" alt="image" src="https://github.com/user-attachments/assets/6793c3d4-3e4e-4a53-a140-6009f75b2e82" /></p>
+
+<p>외부 설정을 주입 받을 객체를 생성한다. 
+그리고 각 필드를 외부 설정의 키 값에 맞추어 준비한다.
+<code class="language-plaintext highlighter-rouge">@ConfigurationProperties</code> 이 있으면 외부 설정을 주입 받는 객체라는 뜻이다. 
+여기에 외부 설정 KEY의 묶음 시작점인 <code class="language-plaintext highlighter-rouge">my.datasource</code> 를 적어준다. 기본 주입 방식은 자바빈 프로퍼티 방식이다. 
+<code class="language-plaintext highlighter-rouge">Getter</code> , <code class="language-plaintext highlighter-rouge">Setter</code> 가 필요하다. (롬복의 <code class="language-plaintext highlighter-rouge">@Data</code> 에 의해 자동 생성된다.)</p>
+
+<p><img width="654" alt="image" src="https://github.com/user-attachments/assets/b875b4e1-eeb9-424e-b6d3-4fb83c12c8d4" /></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">@EnableConfigurationProperties(MyDataSourcePropertiesV1.class)</code>스프링에게 사용할 <code class="language-plaintext highlighter-rouge">@ConfigurationProperties</code> 를 지정해주어야 한다.</li>
+  <li>이렇게 하면 해당 클래스는 스프링 빈으로 등록되고, 필요한 곳에서 주입 받아서 사용할 수 있다.</li>
+  <li><code class="language-plaintext highlighter-rouge">private final MyDataSourcePropertiesV1 properties</code> 설정 속성을 생성자를 통해 주입 받
+아서 사용한다.</li>
+</ul>
+
+<p><img width="654" alt="image" src="https://github.com/user-attachments/assets/18dc1571-0c62-4596-8c0a-6fbd7166b924" /></p>
+
+<p>외부설정 값을 읽어오는 것을 확인할 수 있다.
+그리고 표기법 변환이 일어난 것을 확인할 수 있다. 
+max-connection은 (캐밥 케이스(표기법))을 따랐지만, 
+자바 코드는 카멜 케이스로 적은 것을 확인할 수 있다. 스프링은 캐밥 표기법을 카멜 케이스로 중간에 자동변환을 지원해준다.</p>
+
+<h2 id="reference">Reference</h2>
+
+<p><a href="https://docs.spring.io/spring-boot/reference/features/profiles.html">https://docs.spring.io/spring-boot/reference/features/profiles.html</a></p>
+
+    <br />
+    <br />
+  </div>
   
 
 </article>
 
-
-  
-
-<article id="post-framework/2024/09/27/Spring-basic-12" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/framework/2024/09/27/Spring-basic-12/" data-flip="title">
-      Spring Basic 12 - Dependency Injection 01
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-27T00:00:00+09:00">27 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/framework/" data-flip="title">Framework</a>
-
-      
+<!--<hr class="dingbat" />-->
+<!--
+<div class="share">
+  <h2>Share this post</h2>
+  <div class="share-body">
+    <a href="http://twitter.com/share?text=Spring Basic 15 - ConfigurationProperties&amp;url=http://localhost:4000/framework/2024/12/20/Spring-basic-15/"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="icon-twitter">
+      </span>
+    </a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/framework/2024/12/20/Spring-basic-15/"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="icon-facebook">
+      </span>
+    </a>
+  </div>
+</div>
+-->
+<br />
 
 
 
 
+<aside class="related" role="complementary">
+  <h2 class="hr">Related Posts</h2>
 
-
-
-
-
-on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
-
-    </p>
-
+  <ul class="related-posts">
     
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="dependency-injection">Dependency Injection</h2>
-
-
-  <p class="read-more"><a class="heading" href="/framework/2024/09/27/Spring-basic-12/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-cs/2024/09/26/Algorithm-04" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/cs/2024/09/26/Algorithm-04/" data-flip="title">
-      백준 2309 문제풀이
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-26T00:00:00+09:00">26 Sep 2024</time>
       
-
-
-
-
-
-
-
-
-
-in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
-
       
+      
+        
+          
+          
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/framework/2024/12/15/Spring-basic-14/" data-flip="title">
+    <span>Spring Basic 14 - 라이브러리 직접 만들어 보기</span>
+  </a>
+  <small><time datetime="2024-12-15T00:00:00+09:00">
+    15 Dec 2024
+  </time></small>
+</li>
+
+        
+      
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/framework/2024/12/08/Spring-framework-mvc-06/" data-flip="title">
+    <span>Spring MVC 06 - Dispatcher-Servlet</span>
+  </a>
+  <small><time datetime="2024-12-08T00:00:00+09:00">
+    08 Dec 2024
+  </time></small>
+</li>
+
+        
+      
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/framework/2024/12/06/Spring-framework-mvc-05/" data-flip="title">
+    <span>Spring MVC 05 - Query Parameter</span>
+  </a>
+  <small><time datetime="2024-12-06T00:00:00+09:00">
+    06 Dec 2024
+  </time></small>
+</li>
 
-
-
-on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
-
-    </p>
-
+        
+      
     
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="문제-링크">문제 링크</h2>
-
-
-  <p class="read-more"><a class="heading" href="/cs/2024/09/26/Algorithm-04/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-cs/2024/09/26/Algorithm-03" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/cs/2024/09/26/Algorithm-03/" data-flip="title">
-      백준 10989 문제풀이
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-26T00:00:00+09:00">26 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="문제-링크">문제 링크</h2>
-
-
-  <p class="read-more"><a class="heading" href="/cs/2024/09/26/Algorithm-03/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-cs/2024/09/26/Algorithm-02" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/cs/2024/09/26/Algorithm-02/" data-flip="title">
-      백준 11399 문제풀이
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-26T00:00:00+09:00">26 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="문제-링크">문제 링크</h2>
-
-
-  <p class="read-more"><a class="heading" href="/cs/2024/09/26/Algorithm-02/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-framework/2024/09/26/Spring-basic-11" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/framework/2024/09/26/Spring-basic-11/" data-flip="title">
-      Spring Basic 11 - Proxy Mode
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-26T00:00:00+09:00">26 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/framework/" data-flip="title">Framework</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="프록시-모드로-사용해보기">프록시 모드로 사용해보기</h2>
-
-
-  <p class="read-more"><a class="heading" href="/framework/2024/09/26/Spring-basic-11/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-framework/2024/09/26/Spring-basic-10" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/framework/2024/09/26/Spring-basic-10/" data-flip="title">
-      Spring Basic 10 - Web Scope
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-09-26T00:00:00+09:00">26 Sep 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/framework/" data-flip="title">Framework</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="웹-스코프"><strong>웹</strong> <strong>스코프</strong></h2>
-
-
-  <p class="read-more"><a class="heading" href="/framework/2024/09/26/Spring-basic-10/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-
-<h2 class="sr-only">Pagination</h2>
-<nav class="pagination heading" role="navigation">
-  <ul>
-    <li class="pagination-item older" >
-      
-        <a rel="next" href="/page-11/">Older</a>
-      
-    </li>
-    <li class="pagination-item newer" >
-      
-        <a rel="prev" href="/page-9/">Newer</a>
-      
-    </li>
   </ul>
-</nav>
+</aside>
+  <aside class="comments" role="complementary">
+  <h2>Comments</h2>
+  <hr/>
 
-  <footer>
+  <script src="https://utteranc.es/client.js"
+          repo="taewoocode/taewoocode.github.io"
+          issue-term="title"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+</aside>
+
+
+       <footer>
   <hr/>
   
     <p>© 2022. by taewoo</p>
