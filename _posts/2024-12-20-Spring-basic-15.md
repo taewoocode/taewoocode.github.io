@@ -58,6 +58,18 @@ max-connection은 (캐밥 케이스(표기법))을 따랐지만,
 신의 문제를 해결하기 위해 `setter` 를 통해서 값을 변경하게 되면, 애플리케이션 전체에 심각한 버그를 유발할 수 있
 다.
 
+## Data -> Getter
+
+코드의 개선을 V2 버전을 만들어서 Lombok @Data에서 @Getter로 변경해주고 다시 실행시켰는데 
+
+<img width="654" alt="image" src="https://github.com/user-attachments/assets/4e31da83-70e4-40d1-be15-49515c292132" />
+
+이러한 에러가 생겼다. 보니까 자바 빈 프로퍼티 주입 방식에서 Setter를 찾을 수 없어서 주입이 되지 않는다는 에러였다.
+
+<img width="654" alt="image" src="https://github.com/user-attachments/assets/3298aa66-3874-4deb-ad50-abfcb1ef1887" />
+
+따라서 생성자를 통해 주입을 해주니 잘 되는 것을 확인할 수 있었다.
+
 ## Reference
 
 <https://docs.spring.io/spring-boot/reference/features/profiles.html>
