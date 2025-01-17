@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Framework" />
+<meta property="og:title" content="Spring Basic 16 - Profile Bean" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,16 +52,18 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Framework &middot; 일벌리는 개발자</title>
+<title>Spring Basic 16 - Profile Bean &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="프레임워크
+        content="프로덕션 준비
+
 "
 />
 <meta
         property="og:description"
-        content="프레임워크
+        content="프로덕션 준비
+
 "
 />
 
@@ -70,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/category/framework/" />
-<meta property="og:url" content="http://localhost:4000/category/framework/" />
+<link rel="canonical" href="http://localhost:4000/framework/2024/12/30/Spring-basic-17/" />
+<meta property="og:url" content="http://localhost:4000/framework/2024/12/30/Spring-basic-17/" />
 
 <link
         rel="alternate"
@@ -81,10 +83,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/category/devops/" />
+<link rel="prev" href="http://localhost:4000/framework/2024/12/26/Spring-basic-16/" />
  
-<link rel="next" href="http://localhost:4000/category/language/" />
-
 
 <link
         rel="apple-touch-icon"
@@ -181,47 +181,154 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-
-
+<article id="post-framework/2024/12/30/Spring-basic-17" class="post" role="article">
   <header>
-    <h1 class="page-title">Framework</h1>
+    <h1 class="post-title">
+      
+      Spring Basic 16 - Profile Bean
+      
+    </h1>
+
+    <p class="post-date heading">
+      <time datetime="2024-12-30T00:00:00+09:00">30 Dec 2024</time>
+      
+
+
+
+
+
+
+
+
+
+in <a href="/category/framework/" data-flip="title">Framework</a>
+
+      
+
+
+
+
+
+
+
+
+
+on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
+
+    </p>
+
     
-  
-  
-<p class="message">프레임워크</p>
-
-
+  <div class="hr" style="padding-bottom:0"></div>
 
 
   </header>
-  <hr class="sr-only"/>
-
+  
 
 
   
+  <div class="markdown-body">
+
+    <!--  -->
+    <style>
+      .myAd1190 {
+        width: 48%;
+        height: 280px;
+      }
+
+      .myAd1290 {
+        width: 48%;
+        height: 280px;
+      }
+
+      @media(max-width: 800px) {
+        .myAd1190 {
+          display: none;
+        }
+
+        .myAd1290 {
+          width: 98%;
+        }
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 300px;
+      }
+
+      .row-center {
+        display: flex;
+        justify-content: center;
+        height: 258px;
+      }
+    </style>
+
+    <!--<br />-->
+    <h2 id="프로덕션-준비">프로덕션 준비</h2>
+
+<p>운영 환경에서 서비스할 때 필요한 이런 기능들을 프로덕션 준비 기능이라 한다. 쉽게 이야기해서 프로덕션을 운영에 배포할 때 준비해야 하는 비 기능적 요소들을 뜻한다.
+지표(metric), 추적(trace), 감사(auditing) 애플리케이션이 현재 살아있는지, 로그 정보는 정상 설정 되었는지, 커넥션 풀은 얼마나 사용되고 있는지 등을 확인할 수 있어야 한다.
+스프링 부트가 제공하는 액추에이터는 이런 프로덕션 준비 기능을 매우 편리하게 사용할 수 있는 다양한 편의 기능들을 제공한다. 더 나아가서 마이크로미터, 프로메테우스, 그라파나 같은 최근 유행하는 모니터링 시스템과 매우 쉽게 연동할 수 있는 기능도 제공한다.
+참고로 액추에이터는 시스템을 움직이거나 제어하는 데 쓰이는 기계 장치라는 뜻이다.
+여러 설명보다 한번 만들어서 실행해보는 것이 더 빨리 이해가 될 것이다.</p>
+
+<h2 id="actuator">actuator</h2>
+
+<p>액츄에이터가 제공하는 프로덕션 준비 기능을 사용하려면 스프링 부트 액츄에이터 라이브러리를 추가해야 한다.</p>
+
+<p>build.gradle</p>
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">implementation</span> <span class="dl">'</span><span class="s1">org.springframework.boot:spring-boot-starter-actuator</span><span class="dl">'</span> <span class="c1">//</span>
+</code></pre></div></div>
+
+<h2 id="reference">Reference</h2>
+
+<p><a href="https://docs.spring.io/spring-boot/reference/features/profiles.html">https://docs.spring.io/spring-boot/reference/features/profiles.html</a></p>
+
+    <br />
+    <br />
+  </div>
   
+
+</article>
+
+<!--<hr class="dingbat" />-->
+<!--
+<div class="share">
+  <h2>Share this post</h2>
+  <div class="share-body">
+    <a href="http://twitter.com/share?text=Spring Basic 16 - Profile Bean&amp;url=http://localhost:4000/framework/2024/12/30/Spring-basic-17/"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="icon-twitter">
+      </span>
+    </a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/framework/2024/12/30/Spring-basic-17/"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="icon-facebook">
+      </span>
+    </a>
+  </div>
+</div>
+-->
+<br />
+
+
+
+
+<aside class="related" role="complementary">
+  <h2 class="hr">Related Posts</h2>
+
+  <ul class="related-posts">
     
-    <h2 id="y2024" class="hr">2024</h2>
-    <ul class="related-posts">
-    
-  
-  
-
-
-<li class="h4">
-  <a href="/framework/2024/12/30/Spring-basic-17/" data-flip="title">
-    <span>Spring Basic 16 - Profile Bean</span>
-  </a>
-  <small><time datetime="2024-12-30T00:00:00+09:00">
-    30 Dec
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
+      
+      
+      
+        
+          
+          
+        
+        
+          
 
 
 <li class="h4">
@@ -229,15 +336,15 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     <span>Spring Basic 16 - Profile Bean</span>
   </a>
   <small><time datetime="2024-12-26T00:00:00+09:00">
-    26 Dec
+    26 Dec 2024
   </time></small>
 </li>
 
-  
-
-  
-  
-  
+        
+      
+        
+        
+          
 
 
 <li class="h4">
@@ -245,15 +352,15 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     <span>Spring Basic 15 - ConfigurationProperties</span>
   </a>
   <small><time datetime="2024-12-20T00:00:00+09:00">
-    20 Dec
+    20 Dec 2024
   </time></small>
 </li>
 
-  
-
-  
-  
-  
+        
+      
+        
+        
+          
 
 
 <li class="h4">
@@ -261,525 +368,31 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     <span>Spring Basic 14 - 라이브러리 직접 만들어 보기</span>
   </a>
   <small><time datetime="2024-12-15T00:00:00+09:00">
-    15 Dec
+    15 Dec 2024
   </time></small>
 </li>
 
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/framework/2024/12/08/Spring-framework-mvc-06/" data-flip="title">
-    <span>Spring MVC 06 - Dispatcher-Servlet</span>
-  </a>
-  <small><time datetime="2024-12-08T00:00:00+09:00">
-    08 Dec
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/framework/2024/12/06/Spring-framework-mvc-05/" data-flip="title">
-    <span>Spring MVC 05 - Query Parameter</span>
-  </a>
-  <small><time datetime="2024-12-06T00:00:00+09:00">
-    06 Dec
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/framework/2024/12/01/Spring-framework-mvc-04/" data-flip="title">
-    <span>Spring MVC 04 - RequestParameter - Query</span>
-  </a>
-  <small><time datetime="2024-12-01T00:00:00+09:00">
-    01 Dec
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/framework/2024/11/29/Spring-framework-mvc-03/" data-flip="title">
-    <span>Spring MVC 03 - Logger</span>
-  </a>
-  <small><time datetime="2024-11-29T00:00:00+09:00">
-    29 Nov
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/framework/2024/11/19/Kotlin-android-01/" data-flip="title">
-    <span>Android 01 - Activity LifeCycle</span>
-  </a>
-  <small><time datetime="2024-11-19T00:00:00+09:00">
-    19 Nov
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/framework/2024/11/15/Spring-framework-mvc-02/" data-flip="title">
-    <span>Spring MVC 02 - Adapter Pattern</span>
-  </a>
-  <small><time datetime="2024-11-15T00:00:00+09:00">
-    15 Nov
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/framework/2024/11/09/Spring-framework-mvc-01/" data-flip="title">
-    <span>Spring MVC 01 - FrontController</span>
-  </a>
-  <small><time datetime="2024-11-09T00:00:00+09:00">
-    09 Nov
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/framework/2024/11/01/Spring-06/" data-flip="title">
-    <span>Spring Profile</span>
-  </a>
-  <small><time datetime="2024-11-01T00:00:00+09:00">
-    01 Nov
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/framework/2024/10/09/Spring-05/" data-flip="title">
-    <span>Simple Library App - Repository</span>
-  </a>
-  <small><time datetime="2024-10-09T00:00:00+09:00">
-    09 Oct
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/framework/2024/10/09/Spring-04/" data-flip="title">
-    <span>Simple Library App - Entity</span>
-  </a>
-  <small><time datetime="2024-10-09T00:00:00+09:00">
-    09 Oct
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/framework/2024/10/04/Spring-03/" data-flip="title">
-    <span>http의 동작방식과 spring이 http를 지원해주는 방식</span>
-  </a>
-  <small><time datetime="2024-10-04T00:00:00+09:00">
-    04 Oct
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/framework/2024/10/02/Spring-Data-jdbc-07/" data-flip="title">
-    <span>Spring JDBC 07 - Transaction 추상화</span>
-  </a>
-  <small><time datetime="2024-10-02T00:00:00+09:00">
-    02 Oct
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/framework/2024/10/01/Spring-Data-jdbc-06/" data-flip="title">
-    <span>Spring JDBC 06 - JDBC Transaction commit, rollback</span>
-  </a>
-  <small><time datetime="2024-10-01T00:00:00+09:00">
-    01 Oct
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/framework/2024/09/30/Spring-Data-jdbc-05/" data-flip="title">
-    <span>Spring JDBC 05 - JDBC Transaction</span>
-  </a>
-  <small><time datetime="2024-09-30T00:00:00+09:00">
-    30 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/framework/2024/09/30/Spring-Data-jdbc-04/" data-flip="title">
-    <span>Spring JDBC 04 - JDBC ConnectionPool</span>
-  </a>
-  <small><time datetime="2024-09-30T00:00:00+09:00">
-    30 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/framework/2024/09/30/Spring-Data-jdbc-03/" data-flip="title">
-    <span>Spring JDBC 03 - JDBC DrivenManager</span>
-  </a>
-  <small><time datetime="2024-09-30T00:00:00+09:00">
-    30 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/framework/2024/09/28/Spring-Data-jdbc-02/" data-flip="title">
-    <span>Spring JDBC 02 - JDBC Connection</span>
-  </a>
-  <small><time datetime="2024-09-28T00:00:00+09:00">
-    28 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/framework/2024/09/28/Spring-Data-jdbc-01/" data-flip="title">
-    <span>Spring JDBC 01 - Hello JDBC</span>
-  </a>
-  <small><time datetime="2024-09-28T00:00:00+09:00">
-    28 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/framework/2024/09/27/Spring-basic-13/" data-flip="title">
-    <span>Spring Basic 13 - Dependency Injection 02</span>
-  </a>
-  <small><time datetime="2024-09-27T00:00:00+09:00">
-    27 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/framework/2024/09/27/Spring-basic-12/" data-flip="title">
-    <span>Spring Basic 12 - Dependency Injection 01</span>
-  </a>
-  <small><time datetime="2024-09-27T00:00:00+09:00">
-    27 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/framework/2024/09/26/Spring-basic-11/" data-flip="title">
-    <span>Spring Basic 11 - Proxy Mode</span>
-  </a>
-  <small><time datetime="2024-09-26T00:00:00+09:00">
-    26 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/framework/2024/09/26/Spring-basic-10/" data-flip="title">
-    <span>Spring Basic 10 - Web Scope</span>
-  </a>
-  <small><time datetime="2024-09-26T00:00:00+09:00">
-    26 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/framework/2024/09/26/Spring-basic-09/" data-flip="title">
-    <span>Spring Basic 09 - Bean Scope 03</span>
-  </a>
-  <small><time datetime="2024-09-26T00:00:00+09:00">
-    26 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/framework/2024/09/26/Spring-basic-08/" data-flip="title">
-    <span>Spring Basic 08 - Bean Scope 02</span>
-  </a>
-  <small><time datetime="2024-09-26T00:00:00+09:00">
-    26 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/framework/2024/09/26/Spring-basic-07/" data-flip="title">
-    <span>Spring Basic 07 - Bean Scope</span>
-  </a>
-  <small><time datetime="2024-09-26T00:00:00+09:00">
-    26 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/framework/2024/09/25/Spring-basic-06/" data-flip="title">
-    <span>Spring Basic 06 - 빈 생명주기 콜백</span>
-  </a>
-  <small><time datetime="2024-09-25T00:00:00+09:00">
-    25 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/framework/2024/09/25/Spring-basic-05/" data-flip="title">
-    <span>Spring Basic 05 - 애노테이션 직접 만들기</span>
-  </a>
-  <small><time datetime="2024-09-25T00:00:00+09:00">
-    25 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/framework/2024/09/25/Spring-basic-04/" data-flip="title">
-    <span>Spring Basic 04 - Autowired 는 타입으로 조회를 한다</span>
-  </a>
-  <small><time datetime="2024-09-25T00:00:00+09:00">
-    25 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/framework/2024/09/24/Spring-basic-03/" data-flip="title">
-    <span>Spring Basic 03 - 생성자 주입을 선택하라</span>
-  </a>
-  <small><time datetime="2024-09-24T00:00:00+09:00">
-    24 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/framework/2024/09/18/Spring-basic-02/" data-flip="title">
-    <span>Spring Basic 02 -싱글톤 패턴 적용해보기-</span>
-  </a>
-  <small><time datetime="2024-09-18T00:00:00+09:00">
-    18 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/framework/2024/09/17/Spring-02/" data-flip="title">
-    <span>DockerFile로 Spring이미지를 만들어보자</span>
-  </a>
-  <small><time datetime="2024-09-17T00:00:00+09:00">
-    17 Sep
-  </time></small>
-</li>
-
-  
-
-  
-  
-  
-
-
-<li class="h4">
-  <a href="/framework/2024/09/16/Spring-basic-01/" data-flip="title">
-    <span>Spring Basic 01 -제어의 역전, ApplicationContext-</span>
-  </a>
-  <small><time datetime="2024-09-16T00:00:00+09:00">
-    16 Sep
-  </time></small>
-</li>
-
+        
+      
+    
   </ul>
+</aside>
+  <aside class="comments" role="complementary">
+  <h2>Comments</h2>
+  <hr/>
 
-  <footer>
+  <script src="https://utteranc.es/client.js"
+          repo="taewoocode/taewoocode.github.io"
+          issue-term="title"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+</aside>
+
+
+       <footer>
   <hr/>
   
     <p>© 2022. by taewoo</p>
@@ -1083,7 +696,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     <li>
       <input type="checkbox" id="list-item-4"/>
       <div  class="list-wrapper">
-      <a class="sidebar-nav-item active" href="/category/framework/">Framework</a>
+      <a class="sidebar-nav-item" href="/category/framework/">Framework</a>
        <label class="folder" for="list-item-4">▾</label>
     </div>
      <ul class="list-body">
