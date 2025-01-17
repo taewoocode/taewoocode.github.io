@@ -6,12 +6,12 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 17 Jan 2025 19:54:30 +0900</pubDate>
-    <lastBuildDate>Fri, 17 Jan 2025 19:54:30 +0900</lastBuildDate>
+    <pubDate>Fri, 17 Jan 2025 20:35:55 +0900</pubDate>
+    <lastBuildDate>Fri, 17 Jan 2025 20:35:55 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
-        <title>Spring Basic 16 - Profile Bean</title>
+        <title>Spring Basic 17 - spring actuator</title>
         <description>&lt;h2 id=&quot;프로덕션-준비&quot;&gt;프로덕션 준비&lt;/h2&gt;
 
 &lt;p&gt;운영 환경에서 서비스할 때 필요한 이런 기능들을 프로덕션 준비 기능이라 한다. 쉽게 이야기해서 프로덕션을 운영에 배포할 때 준비해야 하는 비 기능적 요소들을 뜻한다.
@@ -127,11 +127,31 @@
     &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h2 id=&quot;다양한-엔드포인트&quot;&gt;다양한 엔드포인트&lt;/h2&gt;
+
+&lt;p&gt;각각의 엔드포인트를 통해서 개발자는 애플리케이션 내부의 수 많은 기능을 관리하고 모니터링 할 수 있다.
+스프링 부트가 기본으로 제공하는 다양한 엔드포인트에 대해서 알아보자. 다음은 자주 사용하는 기능 위주로 정리했다.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;beans&lt;/code&gt; : 스프링 컨테이너에 등록된 스프링 빈을 보여준다.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;conditions&lt;/code&gt; : &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;condition&lt;/code&gt; 을 통해서 빈을 등록할 때 평가 조건과 일치하거나 일치하지 않는지 보여준다.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;configprops&lt;/code&gt; : &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@ConfigurationProperties&lt;/code&gt; 를 보여준다.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;env&lt;/code&gt; : &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Environment&lt;/code&gt; 정보를 보여준다.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;health&lt;/code&gt; : 애플리케이션 헬스 정보를 보여준다.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;httpexchanges&lt;/code&gt; : HTTP 호출 응답 정보를 보여준다. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;HttpExchangeRepository&lt;/code&gt; 를 구현한 빈을 별도로 등록해야 한다.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;info&lt;/code&gt; : 애플리케이션 정보를 보여준다.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;loggers&lt;/code&gt; : 애플리케이션 로거 설정을 보여주고 변경도 할 수 있다.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;metrics&lt;/code&gt; : 애플리케이션의 메트릭 정보를 보여준다.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;mappings&lt;/code&gt; : &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@RequestMapping&lt;/code&gt; 정보를 보여준다.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;threaddump&lt;/code&gt; : 쓰레드 덤프를 실행해서 보여준다.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;shutdown&lt;/code&gt; : 애플리케이션을 종료한다. 이 기능은 &lt;strong&gt;기본으로 비활성화&lt;/strong&gt; 되어 있다.&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;p&gt;위와 같은 정보들을 제공받을 수 있다.
 Bean은 등록됬는지 안됬는지도 확인이 가능하다.&lt;/p&gt;
 
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-boot/docs/current/reference/html/&quot;&gt;https://docs.spring.io/spring-boot/docs/current/reference/html/&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-boot/reference/features/profiles.html&quot;&gt;https://docs.spring.io/spring-boot/reference/features/profiles.html&lt;/a&gt;&lt;/p&gt;
 </description>
