@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Spring MVC 03 - Logger" />
+<meta property="og:title" content="Spring Basic 16 - Profile Bean" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,17 +52,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Spring MVC 03 - Logger &middot; 일벌리는 개발자</title>
+<title>Spring Basic 16 - Profile Bean &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="Logging Library
+        content="Profile
 
 "
 />
 <meta
         property="og:description"
-        content="Logging Library
+        content="Profile
 
 "
 />
@@ -72,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/framework/2024/11/29/Spring-framework-mvc-03/" />
-<meta property="og:url" content="http://localhost:4000/framework/2024/11/29/Spring-framework-mvc-03/" />
+<link rel="canonical" href="http://localhost:4000/framework/2024/12/26/Spring-basic-16/" />
+<meta property="og:url" content="http://localhost:4000/framework/2024/12/26/Spring-basic-16/" />
 
 <link
         rel="alternate"
@@ -83,10 +83,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/cs/2024/11/27/Operating-system-02/" />
+<link rel="prev" href="http://localhost:4000/framework/2024/12/20/Spring-basic-15/" />
  
-<link rel="next" href="http://localhost:4000/framework/2024/12/01/Spring-framework-mvc-04/" />
-
 
 <link
         rel="apple-touch-icon"
@@ -183,16 +181,16 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-framework/2024/11/29/Spring-framework-mvc-03" class="post" role="article">
+<article id="post-framework/2024/12/26/Spring-basic-16" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      Spring MVC 03 - Logger
+      Spring Basic 16 - Profile Bean
       
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-11-29T00:00:00+09:00">29 Nov 2024</time>
+      <time datetime="2024-12-26T00:00:00+09:00">26 Dec 2024</time>
       
 
 
@@ -215,7 +213,7 @@ in <a href="/category/framework/" data-flip="title">Framework</a>
 
 
 
-on <a href="/tag/framework-spring-mvc/" data-flip="title">Spring MVC</a>
+on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
 
     </p>
 
@@ -267,52 +265,44 @@ on <a href="/tag/framework-spring-mvc/" data-flip="title">Spring MVC</a>
     </style>
 
     <!--<br />-->
-    <h2 id="logging-library">Logging Library</h2>
+    <h2 id="profile">Profile</h2>
 
-<p>운영 시스템에서는 System.out.println() 같은 시스템 콘솔을 사용해서 필요한 정보를 출력하지 않고, 
-별도의 로깅 라이브러리를 사용해서 로그를 출력한다.</p>
-<ul>
-  <li>로그 라이브러리는 Logback, Log4J, Log4J2등등 수 많은 라이브러리가 있는데, 그것을 통합해서 인터페이스로 제공하는 것이 바로 SLF4J 라이브러리다.</li>
-  <li>쉽게 이야기해서 SLF4J는 인터페이스이고, 그 구현체로 LogBack을 대부분 사용한다.</li>
-</ul>
+<p>값이 다른 정도가 아니라 각 환경마다 서로 다른 빈을 등록해야 한다면 어떻게 해야할까?
+예를 들어서 결제 기능을 붙여야 하는데, 
+로컬 개발 환경에서는 실제 결제가 발생하면 문제가 되니 가짜 결제 기능이 있는 스프링 빈을 등록하고, 
+운영 환경에서는 실제 결제 기능을 제공하는 스프링 빈을 등록한다고 가정해보자.</p>
 
-<h2 id="restcontroller-controller-차이">RestController, Controller 차이?</h2>
+<p><img width="654" alt="Image" src="https://github.com/user-attachments/assets/e8cfd4f3-8625-4ecd-9ca5-a1f266f9ad6c" /></p>
 
-<ul>
-  <li>@RestController
-    <ul>
-      <li>@Controller는 반환 값이 <code class="language-plaintext highlighter-rouge">String</code> 이면 뷰 이름으로 인식된다. 그래서 <code class="language-plaintext highlighter-rouge">뷰를 찾고 렌더링</code> 된다.</li>
-      <li>@RestController는 반환 값을초 뷰를 찾는 것이 아니라, HTTP 메시지 바디에 바로 입력 한다. 따라서 실행 결과로 ok 메시지를 받을 수 있다. @ResponseBody와 관련이 있는데, 뒤에서 더 자세히 설명한다.</li>
-    </ul>
-  </li>
-</ul>
+<p>우선 인터페이스를 하나 정의한다.</p>
 
-<h2 id="올바른-로그-사용법">올바른 로그 사용법</h2>
+<p><img width="654" alt="Image" src="https://github.com/user-attachments/assets/853284fc-20bf-459f-af3c-4190b7fbf366" /></p>
 
-<p><img src="https://github.com/user-attachments/assets/76665cb7-f66e-4866-88bd-24cec95b34fe" alt="image" /></p>
+<p>Reference그 다음 구현체를 통해서 인터페이스를 구현한다.
+스프링 프로필을 공부하기 위함이지 실제 결제기능 서비스를 개발하는 것은 아니기 때문에 log 정도만 남겨준다.</p>
 
-<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">log</span><span class="p">.</span><span class="nf">info</span><span class="p">(</span><span class="s">"info log"</span> <span class="p">+</span> <span class="n">name</span><span class="p">)</span>
-</code></pre></div></div>
+<p><img width="654" alt="Image" src="https://github.com/user-attachments/assets/b6e6ea94-30f3-45f9-9c37-e0b6ff22aeda" />
+<img width="654" alt="Image" src="https://github.com/user-attachments/assets/a30f4804-f68c-4a47-a44d-59557b004d16" /></p>
 
-<p>위와 같은 형식으로 로그를 출력하면 안된다.
-이유는 로그를 출력하기 전에 이미 더해지는 연산이 일어나기 때문이다.</p>
+<p>개발 환경에서 사용할 구현체와, 운영 환경에서 사용할 구현체를 나눠준다.</p>
 
-<h2 id="로그-사용시-장점">로그 사용시 장점</h2>
+<p><img width="654" alt="Image" src="https://github.com/user-attachments/assets/390529b5-a142-439c-8c2f-fe7ef470151a" /></p>
 
-<ul>
-  <li>쓰레드 정보, 클래스 이름 같은 부가 정보를 함께 볼 수 있고, 출력 모양을 조정할 수 있다.</li>
-  <li>로그 레벨에 따라 개발 서버에서는 모든 로그를 출력하고, 운영서버에서는 출력하지 않는 등 로그를 상황에 맞게 조절할 수 있다.</li>
-  <li>시스템 아웃 콘솔에만 출력하는 것이 아니라, 파일이나 네트워크 등, 로그를 별도의 위치에 남길 수 있다. 특히 파일로 남길 때는 일별, 특정 용량에 따라 로그를 분할하는 것도 가능하다.</li>
-  <li>성능도 일반 System.out보다 좋다. (내부 버퍼링, 멀티 쓰레드 등등) 그래서 실무에서는 꼭 로그를 사용해야 한다.</li>
-</ul>
+<p>Config를 통해서 수동으로 빈을 등록해준다.
+개발 환경에서는 default, 운영환경에서는 prod를 사용할 것이기 때문에 역할에 맞게 빈을 등록한다.</p>
+
+<p><img width="654" alt="Image" src="https://github.com/user-attachments/assets/028f920d-e624-46be-b784-720d95deab22" />
+<img width="654" alt="Image" src="https://github.com/user-attachments/assets/b7dd60a2-d045-4b92-90bc-17c103bb125d" /></p>
+
+<p>edit에 들어와서 prod로 적용해준다. 운영환경을 기준으로 애플리케이션을 실행해본다.
+prod 프로필을 적용했다. pr프로필이 사용되면 <code class="language-plaintext highlighter-rouge">ProdPayClient</code> 가 빈으로 등록되는 것을 확인할 수 있다.
+<code class="language-plaintext highlighter-rouge">@Profile</code> 은 특정 조건에 따라서 해당 빈을 등록할지 말지 선택한다. 어디서 많이 본 것 같지 않은가? 바로
+<code class="language-plaintext highlighter-rouge">@Conditional</code> 이다. 코드를 보면 <code class="language-plaintext highlighter-rouge">@Conditional(ProfileCondition.class)</code> 를 확인할 수 있다.
+스프링은 <code class="language-plaintext highlighter-rouge">@Conditional</code> 기능을 활용해서 개발자가 더 편리하게 사용할 수 있는 <code class="language-plaintext highlighter-rouge">@Profile</code> 기능을 제공하는 것이다.</p>
 
 <h2 id="reference">Reference</h2>
 
-<p><a href="http://www.slf4j.org">http://www.slf4j.org</a></p>
-
-<p><a href="http://logback.qos.ch">http://logback.qos.ch</a></p>
-
-<p><a href="https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-logging?">https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-logging?</a></p>
+<p><a href="https://docs.spring.io/spring-boot/reference/features/profiles.html">https://docs.spring.io/spring-boot/reference/features/profiles.html</a></p>
 
     <br />
     <br />
@@ -326,12 +316,12 @@ on <a href="/tag/framework-spring-mvc/" data-flip="title">Spring MVC</a>
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=Spring MVC 03 - Logger&amp;url=http://localhost:4000/framework/2024/11/29/Spring-framework-mvc-03/"
+    <a href="http://twitter.com/share?text=Spring Basic 16 - Profile Bean&amp;url=http://localhost:4000/framework/2024/12/26/Spring-basic-16/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/framework/2024/11/29/Spring-framework-mvc-03/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/framework/2024/12/26/Spring-basic-16/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -353,21 +343,8 @@ on <a href="/tag/framework-spring-mvc/" data-flip="title">Spring MVC</a>
       
       
         
-        
           
-
-
-<li class="h4">
-  <a href="/framework/2024/12/26/Spring-basic-16/" data-flip="title">
-    <span>Spring Basic 16 - Profile Bean</span>
-  </a>
-  <small><time datetime="2024-12-26T00:00:00+09:00">
-    26 Dec 2024
-  </time></small>
-</li>
-
-        
-      
+          
         
         
           
@@ -401,6 +378,19 @@ on <a href="/tag/framework-spring-mvc/" data-flip="title">Spring MVC</a>
         
       
         
+        
+          
+
+
+<li class="h4">
+  <a href="/framework/2024/12/08/Spring-framework-mvc-06/" data-flip="title">
+    <span>Spring MVC 06 - Dispatcher-Servlet</span>
+  </a>
+  <small><time datetime="2024-12-08T00:00:00+09:00">
+    08 Dec 2024
+  </time></small>
+</li>
+
         
       
     
