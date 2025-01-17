@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Spring Basic 16 - Profile Bean
+title: Spring Basic 17 - spring actuator
 subtitle: ""
 categories: framework
 tags: spring

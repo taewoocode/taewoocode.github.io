@@ -281,6 +281,109 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
 <div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">implementation</span> <span class="dl">'</span><span class="s1">org.springframework.boot:spring-boot-starter-actuator</span><span class="dl">'</span> <span class="c1">//</span>
 </code></pre></div></div>
 
+<h2 id="actuator-설정파일-등록">actuator 설정파일 등록</h2>
+
+<p>application.yml</p>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">management</span><span class="p">:</span>
+  <span class="nx">endpoints</span><span class="p">:</span>
+    <span class="nx">web</span><span class="p">:</span>
+      <span class="nx">exposure</span><span class="p">:</span>
+        <span class="nx">include</span><span class="p">:</span> <span class="dl">"</span><span class="s2">*</span><span class="dl">"</span>
+
+</code></pre></div></div>
+
+<p>actuator에서 제공해주는 설정파일을 등록한다.</p>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span>
+    <span class="dl">"</span><span class="s2">_links</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="dl">"</span><span class="s2">self</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">href</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">http://localhost:8080/actuator</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">templated</span><span class="dl">"</span><span class="p">:</span> <span class="kc">false</span>
+        <span class="p">},</span>
+        <span class="dl">"</span><span class="s2">beans</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">href</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">http://localhost:8080/actuator/beans</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">templated</span><span class="dl">"</span><span class="p">:</span> <span class="kc">false</span>
+        <span class="p">},</span>
+        <span class="dl">"</span><span class="s2">caches-cache</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">href</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">http://localhost:8080/actuator/caches/{cache}</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">templated</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span>
+        <span class="p">},</span>
+        <span class="dl">"</span><span class="s2">caches</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">href</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">http://localhost:8080/actuator/caches</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">templated</span><span class="dl">"</span><span class="p">:</span> <span class="kc">false</span>
+        <span class="p">},</span>
+        <span class="dl">"</span><span class="s2">health-path</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">href</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">http://localhost:8080/actuator/health/{*path}</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">templated</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span>
+        <span class="p">},</span>
+        <span class="dl">"</span><span class="s2">health</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">href</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">http://localhost:8080/actuator/health</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">templated</span><span class="dl">"</span><span class="p">:</span> <span class="kc">false</span>
+        <span class="p">},</span>
+        <span class="dl">"</span><span class="s2">info</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">href</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">http://localhost:8080/actuator/info</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">templated</span><span class="dl">"</span><span class="p">:</span> <span class="kc">false</span>
+        <span class="p">},</span>
+        <span class="dl">"</span><span class="s2">conditions</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">href</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">http://localhost:8080/actuator/conditions</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">templated</span><span class="dl">"</span><span class="p">:</span> <span class="kc">false</span>
+        <span class="p">},</span>
+        <span class="dl">"</span><span class="s2">configprops</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">href</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">http://localhost:8080/actuator/configprops</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">templated</span><span class="dl">"</span><span class="p">:</span> <span class="kc">false</span>
+        <span class="p">},</span>
+        <span class="dl">"</span><span class="s2">configprops-prefix</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">href</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">http://localhost:8080/actuator/configprops/{prefix}</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">templated</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span>
+        <span class="p">},</span>
+        <span class="dl">"</span><span class="s2">env</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">href</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">http://localhost:8080/actuator/env</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">templated</span><span class="dl">"</span><span class="p">:</span> <span class="kc">false</span>
+        <span class="p">},</span>
+        <span class="dl">"</span><span class="s2">env-toMatch</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">href</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">http://localhost:8080/actuator/env/{toMatch}</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">templated</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span>
+        <span class="p">},</span>
+        <span class="dl">"</span><span class="s2">loggers</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">href</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">http://localhost:8080/actuator/loggers</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">templated</span><span class="dl">"</span><span class="p">:</span> <span class="kc">false</span>
+        <span class="p">},</span>
+        <span class="dl">"</span><span class="s2">loggers-name</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">href</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">http://localhost:8080/actuator/loggers/{name}</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">templated</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span>
+        <span class="p">},</span>
+        <span class="dl">"</span><span class="s2">heapdump</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">href</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">http://localhost:8080/actuator/heapdump</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">templated</span><span class="dl">"</span><span class="p">:</span> <span class="kc">false</span>
+        <span class="p">},</span>
+        <span class="dl">"</span><span class="s2">threaddump</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">href</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">http://localhost:8080/actuator/threaddump</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">templated</span><span class="dl">"</span><span class="p">:</span> <span class="kc">false</span>
+        <span class="p">},</span>
+        <span class="dl">"</span><span class="s2">metrics-requiredMetricName</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">href</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">http://localhost:8080/actuator/metrics/{requiredMetricName}</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">templated</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span>
+        <span class="p">},</span>
+        <span class="dl">"</span><span class="s2">metrics</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">href</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">http://localhost:8080/actuator/metrics</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">templated</span><span class="dl">"</span><span class="p">:</span> <span class="kc">false</span>
+        <span class="p">},</span>
+        <span class="dl">"</span><span class="s2">scheduledtasks</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">href</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">http://localhost:8080/actuator/scheduledtasks</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">templated</span><span class="dl">"</span><span class="p">:</span> <span class="kc">false</span>
+        <span class="p">},</span>
+        <span class="dl">"</span><span class="s2">mappings</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">href</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">http://localhost:8080/actuator/mappings</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">templated</span><span class="dl">"</span><span class="p">:</span> <span class="kc">false</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>위와 같은 정보들을 제공받을 수 있다.
+Bean은 등록됬는지 안됬는지도 확인이 가능하다.</p>
+
 <h2 id="reference">Reference</h2>
 
 <p><a href="https://docs.spring.io/spring-boot/reference/features/profiles.html">https://docs.spring.io/spring-boot/reference/features/profiles.html</a></p>
