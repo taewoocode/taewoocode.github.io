@@ -7,7 +7,7 @@ tags: spring
 comments: false
 ---
 
-## **프로메테우스** **basic**
+## **Prometheus basic** **basic**
 
 검색창에 `http_server_requests_seconds_count` 를 입력하고 실행해보자
 
