@@ -6,13 +6,13 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 18 Jan 2025 02:37:45 +0900</pubDate>
-    <lastBuildDate>Sat, 18 Jan 2025 02:37:45 +0900</lastBuildDate>
+    <pubDate>Sat, 18 Jan 2025 02:49:23 +0900</pubDate>
+    <lastBuildDate>Sat, 18 Jan 2025 02:49:23 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
         <title>Spring Basic 18 - Prometheus basic</title>
-        <description>&lt;h2 id=&quot;프로메테우스---기본-기능&quot;&gt;&lt;strong&gt;프로메테우스&lt;/strong&gt; - &lt;strong&gt;기본&lt;/strong&gt; &lt;strong&gt;기능&lt;/strong&gt;&lt;/h2&gt;
+        <description>&lt;h2 id=&quot;프로메테우스--&quot;&gt;&lt;strong&gt;프로메테우스&lt;/strong&gt; -&lt;/h2&gt;
 
 &lt;p&gt;검색창에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;http_server_requests_seconds_count&lt;/code&gt; 를 입력하고 실행해보자&lt;/p&gt;
 
