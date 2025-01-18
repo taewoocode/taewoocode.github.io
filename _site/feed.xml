@@ -6,23 +6,15 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 18 Jan 2025 19:02:27 +0900</pubDate>
-    <lastBuildDate>Sat, 18 Jan 2025 19:02:27 +0900</lastBuildDate>
+    <pubDate>Sat, 18 Jan 2025 19:15:24 +0900</pubDate>
+    <lastBuildDate>Sat, 18 Jan 2025 19:15:24 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
         <title>Spring adv 02 - log ProtoType 적용</title>
         <description>&lt;h2 id=&quot;prototype-적용&quot;&gt;ProtoType 적용&lt;/h2&gt;
 
-&lt;div class=&quot;language-jsx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kr&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;hello&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;advanced&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;v1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;hello&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;advanced&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;trace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;TraceStatus&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;hello&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;advanced&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;trace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;hellotrace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;HelloTraceV1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;lombok&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;RequiredArgsConstructor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;org&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;springframework&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;web&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bind&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;annotation&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;GetMapping&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;org&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;springframework&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;web&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bind&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;annotation&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;RestController&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;p&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;RestController&lt;/span&gt;
+&lt;div class=&quot;language-jsx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;RestController&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;RequiredArgsConstructor&lt;/span&gt;
 &lt;span class=&quot;kr&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;OrderControllerV1&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
 
@@ -46,110 +38,81 @@
         &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
     &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h2 id=&quot;진행-요구사항&quot;&gt;진행 요구사항&lt;/h2&gt;
+&lt;p&gt;HelloTraceV1은 로그 추적을 담당하는 클래스이며, @Component 애노테이션을 통해 Spring의 빈으로 등록된다. 
+이로 인해 OrderControllerV1 클래스에서는 HelloTraceV1을 자동으로 주입받을 수 있다. 
+request 메서드는 클라이언트로부터 들어온 요청을 처리하는 컨트롤러 메서드로, 
+trace.begin(“OrderController.request”)로 로그 추적을 시작하고, orderService.orderItem(itemId)로 실제 주문을 처리한다. 
+주문 처리가 완료되면 trace.end(status)로 로그를 종료하며, 예외가 발생할 경우 trace.exception(status, e)로 예외를 추적한다. 
+이러한 방식으로 요청의 흐름을 추적함으로써 요청 처리 과정에서 발생할 수 있는 문제를 빠르게 파악하고 디버깅할 수 있다. 
+그러나 trace.begin()과 trace.end()만으로는 예외 처리가 어렵기 때문에 try-catch 블록을 사용하여 예외를 처리하고, 
+예외가 발생한 경우에도 적절히 로깅을 남긴다.&lt;/p&gt;
 
-&lt;ul&gt;
-  &lt;li&gt;모든 PUBLIC 메서드의 호출과 응답 정보를 로그로 출력&lt;/li&gt;
-  &lt;li&gt;애플리케이션의 흐름을 변경하면 안됨 로그를 남긴다고 해서 비즈니스 로직의 동작에 영향을 주면 안됨&lt;/li&gt;
-  &lt;li&gt;메서드 호출에 걸린 시간 정상 흐름과 예외 흐름 구분 예외 발생시 예외 정보가 남아야 함 메서드 호출의 깊이 표현&lt;/li&gt;
-  &lt;li&gt;HTTP 요청을 구분 HTTP 요청 단위로 특정 ID를 남겨서 어떤 HTTP 요청에서 시작된 것인지 명확하게 구분이 가능해야 함&lt;/li&gt;
-  &lt;li&gt;트랜잭션 ID (DB 트랜잭션X), 여기서는 하나의 HTTP 요청이 시작해서 끝날 때 까지를 하나의 트랜잭션이
-라 함&lt;/li&gt;
-&lt;/ul&gt;
+&lt;h2 id=&quot;troubleshooting&quot;&gt;troubleShooting&lt;/h2&gt;
 
-&lt;div class=&quot;language-jsx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;정상&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;요청&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;796&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bccd9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;OrderController&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;796&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bccd9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|--&amp;gt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;OrderService&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;orderItem&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;796&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bccd9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|--&amp;gt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;OrderRepository&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;796&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bccd9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;--&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;OrderRepository&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;1004ms&lt;/span&gt;
-&lt;span class=&quot;err&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;796bccd9&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;|&amp;lt;--&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;OrderService&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;orderItem&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;1014ms&lt;/span&gt;
-&lt;span class=&quot;err&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;796bccd9&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;OrderController&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;1016ms&lt;/span&gt;
+&lt;p&gt;begin() 의 결과 값으로 받은&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TraceStatus status&lt;/code&gt; 값을 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;end()&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;exception()&lt;/code&gt; 에 넘겨야 한다. 
+결국&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;try&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;catch&lt;/code&gt; 블록 모두에 이 값을 넘겨야헀다.
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;try&lt;/code&gt; 상위에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TraceStatus status&lt;/code&gt; 코드를 선언해야 한다. 
+만약 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;try&lt;/code&gt; 안에서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TraceStatus status&lt;/code&gt; 를 선언하면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;try&lt;/code&gt; 블록안에서만 해당 변수가 유효하기 때문에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;catch&lt;/code&gt; 블록에 넘길 수 없다. 
+따라서 컴파일 오류가 발생한다. 따라서 정상 흐름으로 동작하기 위해서는 throw e로 예외를 던져줘야 애플리케이션 흐름에 영향을 주지 않는다.&lt;/p&gt;
 
-&lt;span class=&quot;err&quot;&gt;예외&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;발생&lt;/span&gt;
-&lt;span class=&quot;err&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;b7119f27&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;OrderController&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;err&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;b7119f27&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;|--&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;OrderService.orderItem()
-[b7119f27] | |--&amp;gt;OrderRepository.save()
-[b7119f27] | |&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;OrderRepository&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;0ms&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;ex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;java&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;lang&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;IllegalStateException&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;예외&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;발생!&lt;/span&gt;
-&lt;span class=&quot;err&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;b7119f27&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;|&amp;lt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;X-OrderService&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;orderItem&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;10ms&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;ex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;java&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;lang&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;IllegalStateException&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;예외&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;발생!&lt;/span&gt;
-&lt;span class=&quot;err&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;b7119f27&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;OrderController&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;11ms&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;ex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;java&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;lang&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;IllegalStateException&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;예외&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;발생!&lt;/span&gt;
+&lt;h2 id=&quot;orderitem2-처럼-메서드를-만들어도-될-것-같은데-왜-굳이-try-catch-구문을-사용했을까&quot;&gt;orderItem2 처럼 메서드를 만들어도 될 것 같은데 왜 굳이 try-catch 구문을 사용했을까?&lt;/h2&gt;
+
+&lt;div class=&quot;language-jsx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; &lt;span class=&quot;kr&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;orderItem2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;itemId&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;TraceStatus&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;status&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;trace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;begin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;OrderService.orderItem&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;trace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;exception&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;IllegalStateException&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;());&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;orderRepository&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;itemId&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;trace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kr&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;orderItem&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;itemId&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;nx&quot;&gt;TraceStatus&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;status&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;cm&quot;&gt;/** 예외가 터져도 실행이 되야함 **/&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;status&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;trace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;begin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;OrderService.orderItem()&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;orderRepository&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;itemId&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;trace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;  &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;trace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;exception&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+        &lt;span class=&quot;cm&quot;&gt;/** 예외는 꼭 던져야 한다. **/&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;HTTP 요청의 사이클을 하나의 트랜잭션으로 기준을 잡고 이러한 형식의 트랜잭션 스팩을 만들 것이다. 
-물론 모니터링을 도입하면 편하지만, 지금은 학습의 목적&lt;/p&gt;
+&lt;p&gt;결론은 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;orderItem2&lt;/code&gt; 메소드에서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;trace.exception(status, new IllegalStateException())&lt;/code&gt;를 사용하여 예외를 명시적으로 기록할 수 있지만, 
+&lt;strong&gt;예외 처리&lt;/strong&gt;와 &lt;strong&gt;트레이싱&lt;/strong&gt;의 역할을 제대로 수행하려면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;try-catch&lt;/code&gt; 구문을 사용하는 것이 더 적합하다.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;TraceId.java&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&quot;예외-발생을-명시적으로-처리하는-역할&quot;&gt;예외 발생을 명시적으로 처리하는 역할&lt;/h3&gt;
 
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/72f2b4ec-f132-46f3-b137-cc8325a5281f&quot; /&gt;
-&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/65bea174-9f66-4213-bd26-fb36ec61a967&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;trace.exception(status, new IllegalStateException())&lt;/code&gt;는 예외가 발생했다는 사실을 추적 시스템에 기록하기 위해 사용되지만, 실제로 예외를 던지거나 처리하는 것이 아니다. 
+이는 &lt;strong&gt;예외를 강제로 발생시키는 것&lt;/strong&gt;일 뿐 실제 예외 흐름을 관리하는 것과는 다르다.
+예를 들어, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;orderItem2&lt;/code&gt;에서 예외를 던지지 않으면, 시스템에서 어떤 예외가 발생했는지 알기 어려워질 수 있다. 
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;try-catch&lt;/code&gt; 구문을 사용하면 예외를 &lt;strong&gt;명확하게 처리하고, 재발생시키거나 다른 방식으로 처리&lt;/strong&gt;할 수 있다.&lt;/p&gt;
 
-&lt;p&gt;로그 추적기는 트랜잭션ID와 깊이를 표현하는 방법이 필요하다.
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TraceId&lt;/code&gt; 는 단순히 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;id&lt;/code&gt; (트랜잭션ID)와 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;level&lt;/code&gt; 정보를 함께 가지고 있다.&lt;/p&gt;
+&lt;h3 id=&quot;추적-상태가-누락될-가능성&quot;&gt;추적 상태가 누락될 가능성&lt;/h3&gt;
 
-&lt;div class=&quot;language-jsx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;796&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bccd9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;OrderController&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//트랜잭션ID:796bccd9, level:0&lt;/span&gt;
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;trace.end(status)&lt;/code&gt;는 정상적으로 메소드가 완료되었을 때 호출되는 코드이다. 
+하지만 예외가 발생하여 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;trace.exception(status, e)&lt;/code&gt;가 호출되더라도 예외가 처리되지 않으면 
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;trace.end(status)&lt;/code&gt;가 호출되지 않고 메소드가 중단될 수 있다. 
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;try-catch&lt;/code&gt; 구문을 사용하면 예외 발생 시에도 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;trace.end(status)&lt;/code&gt;가 호출되도록 보장할 수 있다.&lt;/p&gt;
 
-&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;796&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bccd9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|--&amp;gt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;OrderService&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;orderItem&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//트랜잭션ID:796bccd9, level:1&lt;/span&gt;
+&lt;h2 id=&quot;테스트&quot;&gt;테스트&lt;/h2&gt;
 
-&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;796&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bccd9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|--&amp;gt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;OrderRepository&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;//트랜잭션ID:796bccd9, level:2&lt;/span&gt;
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/89a5e7f9-7228-46cc-9731-9d6efe95a08a&quot; /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-jsx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;//localhost:8080/v1/request?itemId=hello&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;&lt;strong&gt;TraceStatus.java&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img width=&quot;765&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/1cb27c01-8f7f-4319-a7fa-728f1e26c33f&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/83c84235-06c7-4a4d-a702-37d15ddff27d&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TraceStatus&lt;/code&gt; 는 로그를 시작할 때의 상태 정보를 가지고 있다. 이 상태 정보는 로그를 종료할 때 사용된다.&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;traceId: 내부에 트랜잭션ID와 level을 가지고 있다.&lt;/li&gt;
-  &lt;li&gt;startImeMs: 로그 시작시간이다. 로그 종료시 이 시작 시간을 기준으로 시작~종료까지 전체 수행 시간을 구
-할 수 있다.&lt;/li&gt;
-  &lt;li&gt;message 시작시 사용한 메시지이다. 이후 로그 종료시에도 이 메시지를 사용해서 출력한다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;HelloTraceV1.java&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/5b56b64d-1809-4cb2-be8d-bed1687b20f2&quot; /&gt;
-&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/b9f57d96-0744-4ad6-996e-763e5c74c051&quot; /&gt;
-&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/8009f0eb-db90-45a1-8414-b35045538910&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;주요한 메서드만 작성했고, 코드의 자세한 정보는 &lt;a href=&quot;https://github.com/taewoocode/spring_adv_study&quot;&gt;여기&lt;/a&gt;에서 확인할 수 있다.&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;TraceStauts begin(String message)
-    &lt;ul&gt;
-      &lt;li&gt;로그를 시작한다.&lt;/li&gt;
-      &lt;li&gt;로그 메시지를 파라미터로 받아서 시작 로그를 출력한다.&lt;/li&gt;
-      &lt;li&gt;응답 결과로 현재 로그의 상태인 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TraceStatus&lt;/code&gt; 를 반환한다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;void end(TraceStatus status)
-    &lt;ul&gt;
-      &lt;li&gt;로그를 정상 종료한다. 파라미터로 시작 로그의 상태(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TraceStatus&lt;/code&gt; )를 전달 받는다. 이 값을 활용해서 실행 시간을 계산하고, 종료시에도 시작할 때와 동일한 로그 메시지를 출력할 수 있다.&lt;/li&gt;
-      &lt;li&gt;정상 흐름에서 호출한다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;void exception(TraceStatus status, Exception e)
-    &lt;ul&gt;
-      &lt;li&gt;로그를 예외 상황으로 종료한다.&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TraceStatus&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Exception&lt;/code&gt; 정보를 함께 전달 받아서 실행시간, 예외 정보를 포함한 결과 로그를 출력한다.&lt;/li&gt;
-      &lt;li&gt;예외가 발생했을 때 호출한다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;테스트-코드-작성&quot;&gt;테스트 코드 작성&lt;/h2&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/22e6e6dd-cef0-4467-bc81-8e774443b202&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;로그 출력 확인&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/09579b99-8a16-4787-9eb9-2f896b993adb&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;로그 출력 확인&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/c04826ff-f603-4a85-8f08-7fa4ed46cf14&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;HelloTraceV1&lt;/code&gt; 덕분에 직접 로그를 하나하나 남기는 것 보다는 편하게 여러가지 로그를 남길 수 있었다. 
+하지만 로그를 남기기 위한 코드가 생각보다 너무 복잡하다. 
+왜 모니터링을 쓰는지도 알 것 같다. 또 의존성 주입이 많아지면 의존성 관리가 어려워 질 수 있다. (양방향 의존성이 생길 수도 있고)&lt;/p&gt;
 
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
 
