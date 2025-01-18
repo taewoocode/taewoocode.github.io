@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Spring Basic 03 - 생성자 주입을 선택하라" />
+<meta property="og:title" content="Spring adv 01 - log ProtoType" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,17 +52,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Spring Basic 03 - 생성자 주입을 선택하라 &middot; 일벌리는 개발자</title>
+<title>Spring adv 01 - log ProtoType &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="불변
+        content="ProtoType
 
 "
 />
 <meta
         property="og:description"
-        content="불변
+        content="ProtoType
 
 "
 />
@@ -72,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/framework/2024/09/24/Spring-basic-03/" />
-<meta property="og:url" content="http://localhost:4000/framework/2024/09/24/Spring-basic-03/" />
+<link rel="canonical" href="http://localhost:4000/framework/2025/01/04/Spring-adv-01/" />
+<meta property="og:url" content="http://localhost:4000/framework/2025/01/04/Spring-adv-01/" />
 
 <link
         rel="alternate"
@@ -83,10 +83,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/life/2024/09/23/daily-02/" />
+<link rel="prev" href="http://localhost:4000/framework/2025/01/03/Spring-basic-19/" />
  
-<link rel="next" href="http://localhost:4000/devops/2024/09/25/Kubernetes-basic-08/" />
-
 
 <link
         rel="apple-touch-icon"
@@ -183,16 +181,16 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-framework/2024/09/24/Spring-basic-03" class="post" role="article">
+<article id="post-framework/2025/01/04/Spring-adv-01" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      Spring Basic 03 - 생성자 주입을 선택하라
+      Spring adv 01 - log ProtoType
       
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-09-24T00:00:00+09:00">24 Sep 2024</time>
+      <time datetime="2025-01-04T00:00:00+09:00">04 Jan 2025</time>
       
 
 
@@ -267,63 +265,122 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
     </style>
 
     <!--<br />-->
-    <h2 id="불변">불변</h2>
+    <h2 id="prototype">ProtoType</h2>
+
+<p>애플리케이션의 모든 로직에 직접 로그를 남겨도 되지만, 그것보다는 더 효율적인 개발 방법이 필요하다. 
+특히 트랜잭션 ID와 깊이를 표현하는 방법은 기존 정보를 이어 받아야 하기 때문에 단순히 로그만 남긴다고 해결할 수 있는 것은 아니다.
+요구사항에 맞추어 애플리케이션에 효과적으로 로그를 남기기 위한 로그 추적기를 개발해보자. 먼저 프로토타입 버전을 개발해보자. 
+아마 코드를 모두 작성하고 테스트 코드까지 작성해보자
+먼저 로그 추적기를 위한 기반 데이터를 가지고 있는 <code class="language-plaintext highlighter-rouge">TraceId</code> , <code class="language-plaintext highlighter-rouge">TraceStatus</code>, <code class="language-plaintext highlighter-rouge">HelloTraceV1</code> 클래스를 만들어보자.</p>
+
+<h2 id="진행-요구사항">진행 요구사항</h2>
 
 <ul>
-  <li>대부분의 의존관계 주입은 한번 일어나면 애플리케이션 종료시점까지 의존관계를 변경할 일이 없다.</li>
-  <li>의존관계는 애플리케이션 종료 전까지 변하면 안된다.</li>
-  <li>수정자 주입을 사용하면 get, set 메서드를 public으로 열어두어야 한다.</li>
-  <li>누군가 실수로 변경할 수도 있고, 변경하면 안되는 메서드를 열어두는 것은 좋은 설계 방법이 아니다.</li>
-  <li>생성자 주입은 객체를 생성할 때 딱 1번만 호출이 되므로 이후에 호출될 일이 거의 없다. 따라서 불변하게 설계할 수도 있다.</li>
+  <li>모든 PUBLIC 메서드의 호출과 응답 정보를 로그로 출력</li>
+  <li>애플리케이션의 흐름을 변경하면 안됨 로그를 남긴다고 해서 비즈니스 로직의 동작에 영향을 주면 안됨</li>
+  <li>메서드 호출에 걸린 시간 정상 흐름과 예외 흐름 구분 예외 발생시 예외 정보가 남아야 함 메서드 호출의 깊이 표현</li>
+  <li>HTTP 요청을 구분 HTTP 요청 단위로 특정 ID를 남겨서 어떤 HTTP 요청에서 시작된 것인지 명확하게 구분이 가능해야 함</li>
+  <li>트랜잭션 ID (DB 트랜잭션X), 여기서는 하나의 HTTP 요청이 시작해서 끝날 때 까지를 하나의 트랜잭션이
+라 함</li>
 </ul>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Test</span>
-    <span class="kt">void</span> <span class="nf">createOrder2</span><span class="o">()</span> <span class="o">{</span>
-        <span class="nc">OrderServiceImpl</span> <span class="n">orderService</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">OrderServiceImpl</span><span class="o">();</span>
-        <span class="n">orderService</span><span class="o">.</span><span class="na">createOrder</span><span class="o">(</span> <span class="mi">1L</span><span class="o">,</span> <span class="s">"itemA"</span><span class="o">,</span> <span class="mi">10000</span> <span class="o">);</span>
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">정상</span> <span class="nx">요청</span>
+<span class="p">[</span><span class="mi">796</span><span class="nx">bccd9</span><span class="p">]</span> <span class="nx">OrderController</span><span class="p">.</span><span class="nx">request</span><span class="p">()</span>
+<span class="p">[</span><span class="mi">796</span><span class="nx">bccd9</span><span class="p">]</span> <span class="o">|--&gt;</span><span class="nx">OrderService</span><span class="p">.</span><span class="nx">orderItem</span><span class="p">()</span>
+<span class="p">[</span><span class="mi">796</span><span class="nx">bccd9</span><span class="p">]</span> <span class="o">|</span> <span class="o">|--&gt;</span><span class="nx">OrderRepository</span><span class="p">.</span><span class="nx">save</span><span class="p">()</span>
+<span class="p">[</span><span class="mi">796</span><span class="nx">bccd9</span><span class="p">]</span> <span class="o">|</span> <span class="o">|</span><span class="p">&lt;</span><span class="err">--</span><span class="na">OrderRepository</span><span class="err">.</span><span class="na">save</span><span class="err">()</span> <span class="na">time</span><span class="p">=</span><span class="na">1004ms</span>
+<span class="err">[</span><span class="na">796bccd9</span><span class="err">]</span> <span class="err">|&lt;--</span><span class="na">OrderService</span><span class="err">.</span><span class="na">orderItem</span><span class="err">()</span> <span class="na">time</span><span class="p">=</span><span class="na">1014ms</span>
+<span class="err">[</span><span class="na">796bccd9</span><span class="err">]</span> <span class="na">OrderController</span><span class="err">.</span><span class="na">request</span><span class="err">()</span> <span class="na">time</span><span class="p">=</span><span class="na">1016ms</span>
 
-    <span class="o">}</span>
+<span class="err">예외</span> <span class="err">발생</span>
+<span class="err">[</span><span class="na">b7119f27</span><span class="err">]</span> <span class="na">OrderController</span><span class="err">.</span><span class="na">request</span><span class="err">()</span>
+<span class="err">[</span><span class="na">b7119f27</span><span class="err">]</span> <span class="err">|--</span><span class="p">&gt;</span>OrderService.orderItem()
+[b7119f27] | |--&gt;OrderRepository.save()
+[b7119f27] | |<span class="p">&lt;</span><span class="nc">X</span><span class="err">-</span><span class="na">OrderRepository</span><span class="err">.</span><span class="na">save</span><span class="err">()</span> <span class="na">time</span><span class="p">=</span><span class="na">0ms</span>
+<span class="na">ex</span><span class="p">=</span><span class="na">java</span><span class="err">.</span><span class="na">lang</span><span class="err">.</span><span class="na">IllegalStateException</span><span class="err">:</span> <span class="err">예외</span> <span class="err">발생!</span>
+<span class="err">[</span><span class="na">b7119f27</span><span class="err">]</span> <span class="err">|&lt;</span><span class="na">X-OrderService</span><span class="err">.</span><span class="na">orderItem</span><span class="err">()</span> <span class="na">time</span><span class="p">=</span><span class="na">10ms</span>
+<span class="na">ex</span><span class="p">=</span><span class="na">java</span><span class="err">.</span><span class="na">lang</span><span class="err">.</span><span class="na">IllegalStateException</span><span class="err">:</span> <span class="err">예외</span> <span class="err">발생!</span>
+<span class="err">[</span><span class="na">b7119f27</span><span class="err">]</span> <span class="na">OrderController</span><span class="err">.</span><span class="na">request</span><span class="err">()</span> <span class="na">time</span><span class="p">=</span><span class="na">11ms</span>
+<span class="na">ex</span><span class="p">=</span><span class="na">java</span><span class="err">.</span><span class="na">lang</span><span class="err">.</span><span class="na">IllegalStateException</span><span class="err">:</span> <span class="err">예외</span> <span class="err">발생!</span>
 </code></pre></div></div>
 
-<p><img width="697" alt="image" src="https://github.com/user-attachments/assets/f893f6f4-7245-4ca1-a458-9dc8fb34be5a" /></p>
+<p>HTTP 요청의 사이클을 하나의 트랜잭션으로 기준을 잡고 이러한 형식의 트랜잭션 스팩을 만들 것이다. 
+물론 모니터링을 도입하면 편하지만, 지금은 학습의 목적</p>
 
-<p>그런데 막상 실행 결과는 NPE(Null Point Exception)이 발생하는데, memberRepository, discountPolicy 모두의존관계 주입이 누락되었기 때문이다.
-생성자 주입을 사용하면 다음처럼 주입 데이터를 누락 했을 때 <strong>**컴파일 오류</strong>**가 발생한다.
-그리고 IDE에서 바로 어떤 값을 필수로 주입해야 하는지 알 수 있다.</p>
+<p><strong>TraceId.java</strong></p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Component</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">OrderServiceImpl</span> <span class="kd">implements</span> <span class="nc">OrderService</span> <span class="o">{</span>
+<p><img width="654" alt="Image" src="https://github.com/user-attachments/assets/72f2b4ec-f132-46f3-b137-cc8325a5281f" />
+<img width="654" alt="Image" src="https://github.com/user-attachments/assets/65bea174-9f66-4213-bd26-fb36ec61a967" /></p>
 
-    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">MemberRepository</span> <span class="n">memberRepository</span><span class="o">;</span> <span class="c1">//회원 저장소 역할</span>
-    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">DiscountPolicy</span> <span class="n">discountPolicy</span><span class="o">;</span> <span class="c1">//인터페이스만 의존하고 있다.-&gt; 하지만 문제가 있다. -&gt; NullPointException</span>
-	  
-	  <span class="c1">//생성자 주입</span>
-    <span class="kd">public</span> <span class="nf">OrderServiceImpl</span><span class="o">(</span><span class="nc">MemberRepository</span> <span class="n">memberRepository</span><span class="o">,</span> <span class="nc">DiscountPolicy</span> <span class="n">discountPolicy</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">memberRepository</span> <span class="o">=</span> <span class="n">memberRepository</span><span class="o">;</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">discountPolicy</span> <span class="o">=</span> <span class="n">discountPolicy</span><span class="o">;</span>
-    <span class="o">}</span>
+<p>로그 추적기는 트랜잭션ID와 깊이를 표현하는 방법이 필요하다.
+<code class="language-plaintext highlighter-rouge">TraceId</code> 는 단순히 <code class="language-plaintext highlighter-rouge">id</code> (트랜잭션ID)와 <code class="language-plaintext highlighter-rouge">level</code> 정보를 함께 가지고 있다.</p>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="mi">796</span><span class="nx">bccd9</span><span class="p">]</span> <span class="nx">OrderController</span><span class="p">.</span><span class="nx">request</span><span class="p">()</span> <span class="c1">//트랜잭션ID:796bccd9, level:0</span>
+
+<span class="p">[</span><span class="mi">796</span><span class="nx">bccd9</span><span class="p">]</span> <span class="o">|--&gt;</span><span class="nx">OrderService</span><span class="p">.</span><span class="nx">orderItem</span><span class="p">()</span> <span class="c1">//트랜잭션ID:796bccd9, level:1</span>
+
+<span class="p">[</span><span class="mi">796</span><span class="nx">bccd9</span><span class="p">]</span> <span class="o">|</span> <span class="o">|--&gt;</span><span class="nx">OrderRepository</span><span class="p">.</span><span class="nx">save</span><span class="p">()</span><span class="c1">//트랜잭션ID:796bccd9, level:2</span>
 </code></pre></div></div>
 
+<p><strong>TraceStatus.java</strong></p>
+
+<p><img width="654" alt="Image" src="https://github.com/user-attachments/assets/83c84235-06c7-4a4d-a702-37d15ddff27d" /></p>
+
+<p><code class="language-plaintext highlighter-rouge">TraceStatus</code> 는 로그를 시작할 때의 상태 정보를 가지고 있다. 이 상태 정보는 로그를 종료할 때 사용된다.</p>
 <ul>
-  <li>생성자 주입을 선택하면 fianl 키워드를 넣을 수 있다.</li>
-  <li>실수로 생성자를 만드는데 코드를 누락하는 경우 컴파일 에러를 통해서 문제점을 바로 잡을 수 있다.
+  <li>traceId: 내부에 트랜잭션ID와 level을 가지고 있다.</li>
+  <li>startImeMs: 로그 시작시간이다. 로그 종료시 이 시작 시간을 기준으로 시작~종료까지 전체 수행 시간을 구
+할 수 있다.</li>
+  <li>message 시작시 사용한 메시지이다. 이후 로그 종료시에도 이 메시지를 사용해서 출력한다.</li>
+</ul>
+
+<p><strong>HelloTraceV1.java</strong></p>
+
+<p><img width="654" alt="Image" src="https://github.com/user-attachments/assets/5b56b64d-1809-4cb2-be8d-bed1687b20f2" />
+<img width="654" alt="Image" src="https://github.com/user-attachments/assets/b9f57d96-0744-4ad6-996e-763e5c74c051" />
+<img width="654" alt="Image" src="https://github.com/user-attachments/assets/8009f0eb-db90-45a1-8414-b35045538910" /></p>
+
+<p>주요한 메서드만 작성했고, 코드의 자세한 정보는 <a href="https://github.com/taewoocode/spring_adv_study">여기</a>에서 확인할 수 있다.</p>
+<ul>
+  <li>TraceStauts begin(String message)
     <ul>
-      <li>불변과 누락을 방지한다.</li>
+      <li>로그를 시작한다.</li>
+      <li>로그 메시지를 파라미터로 받아서 시작 로그를 출력한다.</li>
+      <li>응답 결과로 현재 로그의 상태인 <code class="language-plaintext highlighter-rouge">TraceStatus</code> 를 반환한다.</li>
+    </ul>
+  </li>
+  <li>void end(TraceStatus status)
+    <ul>
+      <li>로그를 정상 종료한다. 파라미터로 시작 로그의 상태(<code class="language-plaintext highlighter-rouge">TraceStatus</code> )를 전달 받는다. 이 값을 활용해서 실행 시간을 계산하고, 종료시에도 시작할 때와 동일한 로그 메시지를 출력할 수 있다.</li>
+      <li>정상 흐름에서 호출한다.</li>
+    </ul>
+  </li>
+  <li>void exception(TraceStatus status, Exception e)
+    <ul>
+      <li>로그를 예외 상황으로 종료한다.<code class="language-plaintext highlighter-rouge">TraceStatus</code> , <code class="language-plaintext highlighter-rouge">Exception</code> 정보를 함께 전달 받아서 실행시간, 예외 정보를 포함한 결과 로그를 출력한다.</li>
+      <li>예외가 발생했을 때 호출한다.</li>
     </ul>
   </li>
 </ul>
 
-<h2 id="정리">정리</h2>
+<h2 id="테스트-코드-작성">테스트 코드 작성</h2>
 
-<ul>
-  <li>생성자 주입 방식을 선택하는 이유는 여러가지가 있지만, 프레임워크에 의존하지 않고, 순수한 자바 언어의 특징을 잘 살리는 방법이다.</li>
-  <li>기본으로 생성자 주입을 사용하고, 필수 값이 아닌 경우에는 수정자 주입 방식을 옵션으로 부여하면 된다. 생성자 주입과 수정자 주입을 동시에 할 수 있다.</li>
-  <li>항상 생성자 주입을 선택하라, 그리고 가끔 옵션이 필요하면 수정자 주입을 선택하라, 필드 주입은 사용하지 않는게 좋다.</li>
-</ul>
+<p><img width="654" alt="Image" src="https://github.com/user-attachments/assets/22e6e6dd-cef0-4467-bc81-8e774443b202" /></p>
+
+<p>로그 출력 확인</p>
+
+<p><img width="654" alt="Image" src="https://github.com/user-attachments/assets/09579b99-8a16-4787-9eb9-2f896b993adb" /></p>
+
+<p>로그 출력 확인</p>
+
+<p><img width="654" alt="Image" src="https://github.com/user-attachments/assets/c04826ff-f603-4a85-8f08-7fa4ed46cf14" /></p>
 
 <h2 id="reference">Reference</h2>
 
-<p>김영한님의 스프링 강의 + 나의 뇌</p>
+<p>김영한님의 스프링 핵심 원리</p>
+
+<p>나의 뇌</p>
+
 
     <br />
     <br />
@@ -337,12 +394,12 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=Spring Basic 03 - 생성자 주입을 선택하라&amp;url=http://localhost:4000/framework/2024/09/24/Spring-basic-03/"
+    <a href="http://twitter.com/share?text=Spring adv 01 - log ProtoType&amp;url=http://localhost:4000/framework/2025/01/04/Spring-adv-01/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/framework/2024/09/24/Spring-basic-03/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/framework/2025/01/04/Spring-adv-01/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -364,21 +421,8 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
       
       
         
-        
           
-
-
-<li class="h4">
-  <a href="/framework/2025/01/04/Spring-adv-01/" data-flip="title">
-    <span>Spring adv 01 - log ProtoType</span>
-  </a>
-  <small><time datetime="2025-01-04T00:00:00+09:00">
-    04 Jan 2025
-  </time></small>
-</li>
-
-        
-      
+          
         
         
           
@@ -412,6 +456,19 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
         
       
         
+        
+          
+
+
+<li class="h4">
+  <a href="/framework/2024/12/30/Spring-basic-17/" data-flip="title">
+    <span>Spring Basic 17 - spring actuator</span>
+  </a>
+  <small><time datetime="2024-12-30T00:00:00+09:00">
+    30 Dec 2024
+  </time></small>
+</li>
+
         
       
     

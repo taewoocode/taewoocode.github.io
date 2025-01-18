@@ -6,13 +6,143 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 18 Jan 2025 02:49:36 +0900</pubDate>
-    <lastBuildDate>Sat, 18 Jan 2025 02:49:36 +0900</lastBuildDate>
+    <pubDate>Sat, 18 Jan 2025 18:17:21 +0900</pubDate>
+    <lastBuildDate>Sat, 18 Jan 2025 18:17:21 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
+        <title>Spring adv 01 - log ProtoType</title>
+        <description>&lt;h2 id=&quot;prototype&quot;&gt;ProtoType&lt;/h2&gt;
+
+&lt;p&gt;애플리케이션의 모든 로직에 직접 로그를 남겨도 되지만, 그것보다는 더 효율적인 개발 방법이 필요하다. 
+특히 트랜잭션 ID와 깊이를 표현하는 방법은 기존 정보를 이어 받아야 하기 때문에 단순히 로그만 남긴다고 해결할 수 있는 것은 아니다.
+요구사항에 맞추어 애플리케이션에 효과적으로 로그를 남기기 위한 로그 추적기를 개발해보자. 먼저 프로토타입 버전을 개발해보자. 
+아마 코드를 모두 작성하고 테스트 코드까지 작성해보자
+먼저 로그 추적기를 위한 기반 데이터를 가지고 있는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TraceId&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TraceStatus&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;HelloTraceV1&lt;/code&gt; 클래스를 만들어보자.&lt;/p&gt;
+
+&lt;h2 id=&quot;진행-요구사항&quot;&gt;진행 요구사항&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;모든 PUBLIC 메서드의 호출과 응답 정보를 로그로 출력&lt;/li&gt;
+  &lt;li&gt;애플리케이션의 흐름을 변경하면 안됨 로그를 남긴다고 해서 비즈니스 로직의 동작에 영향을 주면 안됨&lt;/li&gt;
+  &lt;li&gt;메서드 호출에 걸린 시간 정상 흐름과 예외 흐름 구분 예외 발생시 예외 정보가 남아야 함 메서드 호출의 깊이 표현&lt;/li&gt;
+  &lt;li&gt;HTTP 요청을 구분 HTTP 요청 단위로 특정 ID를 남겨서 어떤 HTTP 요청에서 시작된 것인지 명확하게 구분이 가능해야 함&lt;/li&gt;
+  &lt;li&gt;트랜잭션 ID (DB 트랜잭션X), 여기서는 하나의 HTTP 요청이 시작해서 끝날 때 까지를 하나의 트랜잭션이
+라 함&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-jsx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;정상&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;요청&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;796&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bccd9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;OrderController&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;796&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bccd9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|--&amp;gt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;OrderService&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;orderItem&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;796&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bccd9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|--&amp;gt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;OrderRepository&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;796&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bccd9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;--&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;OrderRepository&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;1004ms&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;796bccd9&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;|&amp;lt;--&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;OrderService&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;orderItem&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;1014ms&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;796bccd9&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;OrderController&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;1016ms&lt;/span&gt;
+
+&lt;span class=&quot;err&quot;&gt;예외&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;발생&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;b7119f27&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;OrderController&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;b7119f27&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;|--&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;OrderService.orderItem()
+[b7119f27] | |--&amp;gt;OrderRepository.save()
+[b7119f27] | |&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;OrderRepository&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;0ms&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;ex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;java&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;lang&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;IllegalStateException&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;예외&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;발생!&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;b7119f27&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;|&amp;lt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;X-OrderService&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;orderItem&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;10ms&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;ex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;java&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;lang&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;IllegalStateException&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;예외&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;발생!&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;b7119f27&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;OrderController&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;11ms&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;ex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;java&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;lang&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;IllegalStateException&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;예외&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;발생!&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;HTTP 요청의 사이클을 하나의 트랜잭션으로 기준을 잡고 이러한 형식의 트랜잭션 스팩을 만들 것이다. 
+물론 모니터링을 도입하면 편하지만, 지금은 학습의 목적&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;TraceId.java&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/72f2b4ec-f132-46f3-b137-cc8325a5281f&quot; /&gt;
+&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/65bea174-9f66-4213-bd26-fb36ec61a967&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;로그 추적기는 트랜잭션ID와 깊이를 표현하는 방법이 필요하다.
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TraceId&lt;/code&gt; 는 단순히 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;id&lt;/code&gt; (트랜잭션ID)와 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;level&lt;/code&gt; 정보를 함께 가지고 있다.&lt;/p&gt;
+
+&lt;div class=&quot;language-jsx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;796&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bccd9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;OrderController&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//트랜잭션ID:796bccd9, level:0&lt;/span&gt;
+
+&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;796&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bccd9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|--&amp;gt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;OrderService&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;orderItem&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//트랜잭션ID:796bccd9, level:1&lt;/span&gt;
+
+&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;796&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bccd9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|--&amp;gt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;OrderRepository&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;//트랜잭션ID:796bccd9, level:2&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;TraceStatus.java&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/83c84235-06c7-4a4d-a702-37d15ddff27d&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TraceStatus&lt;/code&gt; 는 로그를 시작할 때의 상태 정보를 가지고 있다. 이 상태 정보는 로그를 종료할 때 사용된다.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;traceId: 내부에 트랜잭션ID와 level을 가지고 있다.&lt;/li&gt;
+  &lt;li&gt;startImeMs: 로그 시작시간이다. 로그 종료시 이 시작 시간을 기준으로 시작~종료까지 전체 수행 시간을 구
+할 수 있다.&lt;/li&gt;
+  &lt;li&gt;message 시작시 사용한 메시지이다. 이후 로그 종료시에도 이 메시지를 사용해서 출력한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;HelloTraceV1.java&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/5b56b64d-1809-4cb2-be8d-bed1687b20f2&quot; /&gt;
+&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/b9f57d96-0744-4ad6-996e-763e5c74c051&quot; /&gt;
+&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/8009f0eb-db90-45a1-8414-b35045538910&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;주요한 메서드만 작성했고, 코드의 자세한 정보는 &lt;a href=&quot;https://github.com/taewoocode/spring_adv_study&quot;&gt;여기&lt;/a&gt;에서 확인할 수 있다.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;TraceStauts begin(String message)
+    &lt;ul&gt;
+      &lt;li&gt;로그를 시작한다.&lt;/li&gt;
+      &lt;li&gt;로그 메시지를 파라미터로 받아서 시작 로그를 출력한다.&lt;/li&gt;
+      &lt;li&gt;응답 결과로 현재 로그의 상태인 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TraceStatus&lt;/code&gt; 를 반환한다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;void end(TraceStatus status)
+    &lt;ul&gt;
+      &lt;li&gt;로그를 정상 종료한다. 파라미터로 시작 로그의 상태(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TraceStatus&lt;/code&gt; )를 전달 받는다. 이 값을 활용해서 실행 시간을 계산하고, 종료시에도 시작할 때와 동일한 로그 메시지를 출력할 수 있다.&lt;/li&gt;
+      &lt;li&gt;정상 흐름에서 호출한다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;void exception(TraceStatus status, Exception e)
+    &lt;ul&gt;
+      &lt;li&gt;로그를 예외 상황으로 종료한다.&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TraceStatus&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Exception&lt;/code&gt; 정보를 함께 전달 받아서 실행시간, 예외 정보를 포함한 결과 로그를 출력한다.&lt;/li&gt;
+      &lt;li&gt;예외가 발생했을 때 호출한다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;테스트-코드-작성&quot;&gt;테스트 코드 작성&lt;/h2&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/22e6e6dd-cef0-4467-bc81-8e774443b202&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;로그 출력 확인&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/09579b99-8a16-4787-9eb9-2f896b993adb&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;로그 출력 확인&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/c04826ff-f603-4a85-8f08-7fa4ed46cf14&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;김영한님의 스프링 핵심 원리&lt;/p&gt;
+
+&lt;p&gt;나의 뇌&lt;/p&gt;
+
+</description>
+        <pubDate>Sat, 04 Jan 2025 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/framework/2025/01/04/Spring-adv-01/</link>
+        <guid isPermaLink="true">http://localhost:4000/framework/2025/01/04/Spring-adv-01/</guid>
+        
+        <category>spring</category>
+        
+        
+        <category>framework</category>
+        
+      </item>
+    
+      <item>
         <title>Spring Basic 18 - Prometheus basic</title>
-        <description>&lt;h2 id=&quot;프로메테우스-basic&quot;&gt;&lt;strong&gt;프로메테우스&lt;/strong&gt; &lt;strong&gt;basic&lt;/strong&gt;&lt;/h2&gt;
+        <description>&lt;h2 id=&quot;prometheus-basic-basic&quot;&gt;&lt;strong&gt;Prometheus basic&lt;/strong&gt; &lt;strong&gt;basic&lt;/strong&gt;&lt;/h2&gt;
 
 &lt;p&gt;검색창에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;http_server_requests_seconds_count&lt;/code&gt; 를 입력하고 실행해보자&lt;/p&gt;
 
@@ -2371,86 +2501,6 @@ Executor 프레임워크는 스레드 풀, 스레드 관리, &lt;code class=&quo
         <pubDate>Tue, 22 Oct 2024 00:00:00 +0900</pubDate>
         <link>http://localhost:4000/language/2024/10/22/Java-Adv-18/</link>
         <guid isPermaLink="true">http://localhost:4000/language/2024/10/22/Java-Adv-18/</guid>
-        
-        <category>java</category>
-        
-        
-        <category>language</category>
-        
-      </item>
-    
-      <item>
-        <title>Java Adv 17 - 동시성 컬렉션이 필요한 이유 - 2</title>
-        <description>&lt;h2 id=&quot;멀티스레드-환경에서의-문제-확인&quot;&gt;&lt;strong&gt;멀티스레드 환경에서의&lt;/strong&gt; &lt;strong&gt;문제&lt;/strong&gt; &lt;strong&gt;확인&lt;/strong&gt;&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;em&gt;add() - &lt;strong&gt;원자적이지&lt;/strong&gt; &lt;strong&gt;않은&lt;/strong&gt; &lt;strong&gt;연산&lt;/strong&gt;&lt;/em&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;sleep&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 멀티스레드 문제를 쉽게 확인하는 코드&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;실제-멀티스레드-환경에서-사용&quot;&gt;실제 멀티스레드 환경에서 사용&lt;/h2&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/1df3107a-8019-425b-a3c4-eb93a27f4ffe&quot; /&gt;
-&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/53700c67-e92a-48d9-a3b3-5f64702eeeee&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;테스트 코드를 간단하게 작성해서 각각의 Thread가 A와 B를 list에 저장하게끔 하였다.
-원자적 연산을 지원하지는 않겠지만 어떤 결과를 확인해 볼 수 있을까?&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/23e569ab-ce80-4eaf-a6f4-065b6bb63d8e&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;스레드1 수행: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;elementData[0] = A&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;elementData[0]&lt;/code&gt; 의 값은 A가 된다.
-스레드2 수행: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;elementData[0] = B&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;elementData[0]&lt;/code&gt; 의 값은 A → B가 된다.&lt;/p&gt;
-
-&lt;p&gt;이 말이 무슨말이냐면 스레드1이 elementData[0]에 A를 저장하고, 동시에 B도 0에다가 저장을 하기 때문에
-인덱스 0번에 A가 저장되었다가 B로 바뀌는 것을 말한다.
-그리고 size++을 보면 size++은 size = size + 1이다  Thread-1이 size++; 연산을 실행하면 1이 저장이 되어있고, 
-그 뒤에 thread-2가 1을 더하면 2가 저장이 되는데 이 밖의 상황도 발생할 수가 있다.
-thread-1이 1을 증가시킬 때 동시에 thread-2도 같은 연산을 실행해서 size의 저장되어 있는 값이 0이었기 때문에 
-1로 증가시키는 연산을 진행하면 2가 아닌 1이 출력될 수 있다. 이렇게 되버리면 데이터의 정합성이 모두 깨진다.&lt;/p&gt;
-
-&lt;h2 id=&quot;컬렉션-프레임워크-대부분은-스레드-세이프-하지-않다&quot;&gt;&lt;strong&gt;컬렉션 프레임워크 대부분은 스레드 세이프 하지 않다&lt;/strong&gt;.&lt;/h2&gt;
-
-&lt;p&gt;일반적으로 자주 사용하는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ArrayList&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;LinkedList&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;HashSet&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;HashMap&lt;/code&gt; 등 수 많은 자료 구조들은 단순한 연산을 제공하는 것 처럼 보인다. 
-예를 들어서 데이터를 추가하는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;add()&lt;/code&gt; 와 같은 연산은 마치 원자적인 연산처럼 느껴진다. 
-하지만 그 내부에서는 수 많은 연산들이 함께 사용된다. 
-배열에 데이터를 추가하고, 사이즈를 변경하고, 배열을 새로 만들어서 배열의 크기도 늘리고, 
-노드를 만들어서 링크에 연결하는 등 수 많은 복잡한 연산이 함께 사용된다.
-따라서 일반적인 컬렉션들은 절대로! 스레드 세이프 하지 않다!
-단일 스레드가 컬렉션에 접근하는 경우라면 아무런 문제가 없지만, 
-멀티스레드 상황에서 여러 스레드가 동시에 컬렉션에 접근하는 경우라면 
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;java.util&lt;/code&gt; 패키지가 제공하는 일반적인 컬렉션들은 사용하면 안된다! 
-최악의 경우 실무에서 두 명의 사용자가 동시에 컬렉션에 데이터를 보관했는데, 
-코드에 아무런 문제가 없어 보이는데, 한명의 사용자 데이터가 사라질 수 있다.&lt;/p&gt;
-
-&lt;h2 id=&quot;아주-간단한-동시성-해결&quot;&gt;아주 간단한 동시성 해결&lt;/h2&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/8f76ceae-189b-4f28-b138-dc4024623493&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;사실 synchronized라는 키워드 하나를 걸어주면 동시성이 해결된다.
-멀티스레드 환경에서 안전하게 사용이 가능하다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/185af355-91ff-4969-9f7e-d6cc3e0a3d74&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;구현체를 SyncList로 갈아껴주었다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/ca93b988-cd27-4e3c-9e84-de8bc4950cdf&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;안전한 임계영역을 형성해주면 컬렉션 프레임워크도 멀티스레드 환경에서 안전하게 사용할 수 있다.&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;김영한님의 자바 강의&lt;/p&gt;
-
-</description>
-        <pubDate>Mon, 21 Oct 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/language/2024/10/21/Java-Adv-17/</link>
-        <guid isPermaLink="true">http://localhost:4000/language/2024/10/21/Java-Adv-17/</guid>
         
         <category>java</category>
         
