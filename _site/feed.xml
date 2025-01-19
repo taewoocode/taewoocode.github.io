@@ -6,9 +6,77 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 18 Jan 2025 19:15:24 +0900</pubDate>
-    <lastBuildDate>Sat, 18 Jan 2025 19:15:24 +0900</lastBuildDate>
+    <pubDate>Mon, 20 Jan 2025 03:04:31 +0900</pubDate>
+    <lastBuildDate>Mon, 20 Jan 2025 03:04:31 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
+    
+      <item>
+        <title>Spring adv 03 - Template Method Pattern - 1</title>
+        <description>&lt;h2 id=&quot;template-method-pattern&quot;&gt;template method pattern&lt;/h2&gt;
+
+&lt;p&gt;좋은 설계는 변하는 것과 변하지 않는 것을 분리하는 것이다. 
+여기서 핵심 기능 부분은 변하고, 로그 추적기를 사용하는 부분은 변하지 않는 부분이다. 
+이 둘을 분리해서 모듈화해야 한다. 템플릿 메서드 패턴(Template Method Pattern)은 이런 문제를 해결하는 디자인 패턴이다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/4bc140a3-80ab-4be2-836c-bc8b052102bd&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;템플릿 메서드 패턴을 알아보는 간단한 테스트 코드이다.
+여기서 변하는 부분은 비즈니스 부분이고 변하지 않는 부분은 시간을 측정하는 로직이다.
+변하는 부분과 변하지 않는 부분을 분리해서 모듈화 해보자&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/275974ec-f18f-4dc5-b53d-fa91b022bb57&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;템플릿 메서드 패턴은 이름 그대로 템플릿을 사용하는 방식이다. 템플릿은 기준이 되는 거대한 틀이다. 템플릿이라는 틀에 변하지 않는 부분을 몰아둔다. 그리고 일부 변하는 부분을 별도로 호출해서 해결한다.
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AbstractTemplate&lt;/code&gt; 코드를 보자. 변하지 않는 부분인 시간 측정 로직을 몰아둔 것을 확인할 수 있다. 이제 이것이 하나의 템플릿이 된다. 그리고 템플릿 안에서 변하는 부분은 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;call()&lt;/code&gt; 메서드를 호출해서 처리한다. 템플릿 메서드 패턴은 부모 클래스에 변하지 않는 템플릿 코드를 둔다. 그리고 변하는 부분은 자식 클래스에 두고 상속과 오버라이딩을 사용해서 처리한다.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Slf4j&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SubClassLogic1&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AbstractTemplate&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;비즈니스 로직 1 실행&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nd&quot;&gt;@Slf4j&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SubClassLogic2&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AbstractTemplate&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;비즈니스 로직 2 실행&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/226743a6-7e66-4a7b-8729-48667ca0e5da&quot; /&gt;
+&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/31ce7d8d-efcb-4f09-9184-af11785544d4&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;template1.execute()&lt;/code&gt; 를 호출하면 템플릿 로직인 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AbstractTemplate.execute()&lt;/code&gt; 를 실행한다.
+여기서 중간에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;call()&lt;/code&gt; 메서드를 호출하는데, 이 부분이 오버라이딩 되어있다. 
+따라서 현재 인스턴스인&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SubClassLogic1&lt;/code&gt; 인스턴스의 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SubClassLogic1.call()&lt;/code&gt; 메서드가 호출된다. 
+템플릿 메서드 패턴은 이렇게 다형성을 사용해서 변하는 부분과 변하지 않는 부분을 분리하는 방법이다.
+근데 템플릿 메서드 패턴은 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SubClassLogic1&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SubClassLogic2&lt;/code&gt; 처럼 클래스를 계속 만들어야 하는 단점이 있다. 
+익명 내부 클래스를 사용하면 이런 단점을 보완할 수 있다.
+익명 내부 클래스를 사용하면 객체 인스턴스를 생성하면서 동시에 생성할 클래스를 상속 받은 자식 클래스를 정의할 수 있다. 
+이 클래스는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SubClassLogic1&lt;/code&gt; 처럼 직접 지정하는 이름이 없고 클래스 내부에 선언되는 클래스여서 익명 내부 클래스라 한다.
+익명 내부 클래스를 사용해서 다음 코드를 개선해보자&lt;/p&gt;
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;김영한님의 스프링 핵심 원리&lt;/p&gt;
+
+&lt;p&gt;나의 뇌&lt;/p&gt;
+
+</description>
+        <pubDate>Mon, 06 Jan 2025 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/framework/2025/01/06/Spring-adv-03/</link>
+        <guid isPermaLink="true">http://localhost:4000/framework/2025/01/06/Spring-adv-03/</guid>
+        
+        <category>spring</category>
+        
+        
+        <category>framework</category>
+        
+      </item>
     
       <item>
         <title>Spring adv 02 - log ProtoType 적용</title>
@@ -2481,62 +2549,6 @@ Executor 프레임워크는 스레드 풀, 스레드 관리, &lt;code class=&quo
         <pubDate>Thu, 24 Oct 2024 00:00:00 +0900</pubDate>
         <link>http://localhost:4000/language/2024/10/24/Java-Adv-20/</link>
         <guid isPermaLink="true">http://localhost:4000/language/2024/10/24/Java-Adv-20/</guid>
-        
-        <category>java</category>
-        
-        
-        <category>language</category>
-        
-      </item>
-    
-      <item>
-        <title>Java Adv 19 - 자바 동시성 컬렉션</title>
-        <description>&lt;h2 id=&quot;자바-synchronized-프록시&quot;&gt;&lt;strong&gt;자바&lt;/strong&gt; synchronized &lt;strong&gt;프록시&lt;/strong&gt;&lt;/h2&gt;
-
-&lt;p&gt;자바에서 제공하는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;java.util&lt;/code&gt; 패키지의 컬렉션 프레임워크는 대부분 스레드 안전(Thread Safe)하지 않다. 
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ArrayList&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;LinkedList&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;HashSet&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;HashMap&lt;/code&gt; 등의 기본 자료 구조들은 여러 연산들이 동시에 이루어지기 때문에 동기화가 필요하다. 
-그러나 모든 자료 구조에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt;를 사용하여 동기화를 해두는 것은 성능 저하를 초래할 수 있다. 
-동기화는 스레드 안전을 보장하지만, 멀티스레드 환경에서만 필요한 기능이다. 
-동기화를 미리 적용하면 단일 스레드 환경에서도 불필요한 성능 저하가 발생할 수 있다. 
-따라서 동기화의 필요성을 정확히 판단하고, 꼭 필요한 경우에만 동기화를 적용하는 것이 중요하다.
-&lt;strong&gt;Vector&lt;/strong&gt;는 과거에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ArrayList&lt;/code&gt;와 비슷한 기능을 제공하며, 모든 메서드에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt;를 적용하여 동기화를 보장했다. 
-그러나 이로 인해 단일 스레드 환경에서 성능이 저하되었고, 결국 널리 사용되지 않게 되었다. 지금은 하위 호환성을 위해 남아있지만, 다른 대안들이 존재하기 때문에 사용을 권장하지 않는다.
-대신, 동기화를 필요에 따라 적용할 수 있는 방법으로 &lt;strong&gt;프록시 패턴&lt;/strong&gt;을 사용할 수 있다. 
-예를 들어, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Collections.synchronizedList()&lt;/code&gt; 메서드를 사용하면, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ArrayList&lt;/code&gt;를 동기화된 리스트로 변환할 수 있다. 
-이 메서드는 내부적으로 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SynchronizedRandomAccessList&lt;/code&gt;라는 클래스를 사용하여 동기화를 적용한다. 이렇게 하면 기존 코드의 구조를 유지하면서, 필요한 경우에만 동기화를 적용할 수 있다.&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nc&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Collections&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;synchronizedList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;());&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;img width=&quot;648&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/53881711-199e-4484-9218-40628e5560ce&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;위 코드에서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronizedList()&lt;/code&gt; 메서드는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ArrayList&lt;/code&gt;를 감싸는 동기화된 리스트를 반환한다. 
-이 리스트의 메서드는 내부적으로 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt; 키워드를 사용하여 동기화를 보장한다. 예를 들어, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;add()&lt;/code&gt; 메서드는 다음과 같이 동기화된 코드로 구현된다.&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;E&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;synchronized&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mutex&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Collections&lt;/code&gt;는 이와 같이 여러 종류의 동기화 프록시 메서드를 제공하여, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;List&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Set&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Map&lt;/code&gt; 등의 컬렉션을 동기화된 버전으로 변환할 수 있게 해준다. 
-예를 들어, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronizedMap()&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronizedSet()&lt;/code&gt; 등의 메서드를 통해 동기화된 컬렉션을 생성할 수 있다.
-하지만 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronized&lt;/code&gt; 프록시를 사용하는 방식에는 단점이 있다. 첫째, 동기화 오버헤드가 발생한다. 
-모든 메서드 호출 시마다 동기화가 이루어지기 때문에 성능이 저하될 수 있다. 
-둘째, 전체 컬렉션에 대해 동기화가 이루어지기 때문에 잠금 범위가 넓어지고, 이는 잠금 경합(lock contention)을 증가시켜 병렬 처리의 효율성을 저하시킬 수 있다. 
-셋째, 선택적인 동기화가 어려워, 과도한 동기화로 이어질 수 있다.
-따라서 자바는 이러한 단점을 보완하기 위해 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;java.util.concurrent&lt;/code&gt; 패키지에서 더 정교한 동시성 컬렉션(concurrent collection)을 제공한다. 
-이 컬렉션들은 동기화 오버헤드를 최소화하고, 동기화의 효율성을 높이며, 멀티스레드 환경에서 성능을 극대화할 수 있도록 설계되었다.&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;김영한님의 자바 강의&lt;/p&gt;
-
-</description>
-        <pubDate>Wed, 23 Oct 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/language/2024/10/23/Java-Adv-19/</link>
-        <guid isPermaLink="true">http://localhost:4000/language/2024/10/23/Java-Adv-19/</guid>
         
         <category>java</category>
         

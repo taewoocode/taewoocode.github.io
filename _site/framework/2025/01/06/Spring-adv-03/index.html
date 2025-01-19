@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Spring Basic 09 - Bean Scope 03" />
+<meta property="og:title" content="Spring adv 03 - Template Method Pattern - 1" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,17 +52,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Spring Basic 09 - Bean Scope 03 &middot; 일벌리는 개발자</title>
+<title>Spring adv 03 - Template Method Pattern - 1 &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="싱글톤 빈과 프로토타입 빈을 함께 사용할 때 마다 새로운 빈 형성하기
+        content="template method pattern
 
 "
 />
 <meta
         property="og:description"
-        content="싱글톤 빈과 프로토타입 빈을 함께 사용할 때 마다 새로운 빈 형성하기
+        content="template method pattern
 
 "
 />
@@ -72,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/framework/2024/09/26/Spring-basic-09/" />
-<meta property="og:url" content="http://localhost:4000/framework/2024/09/26/Spring-basic-09/" />
+<link rel="canonical" href="http://localhost:4000/framework/2025/01/06/Spring-adv-03/" />
+<meta property="og:url" content="http://localhost:4000/framework/2025/01/06/Spring-adv-03/" />
 
 <link
         rel="alternate"
@@ -83,10 +83,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/framework/2024/09/26/Spring-basic-08/" />
+<link rel="prev" href="http://localhost:4000/framework/2025/01/05/Spring-adv-02/" />
  
-<link rel="next" href="http://localhost:4000/framework/2024/09/26/Spring-basic-10/" />
-
 
 <link
         rel="apple-touch-icon"
@@ -183,16 +181,16 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-framework/2024/09/26/Spring-basic-09" class="post" role="article">
+<article id="post-framework/2025/01/06/Spring-adv-03" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      Spring Basic 09 - Bean Scope 03
+      Spring adv 03 - Template Method Pattern - 1
       
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-09-26T00:00:00+09:00">26 Sep 2024</time>
+      <time datetime="2025-01-06T00:00:00+09:00">06 Jan 2025</time>
       
 
 
@@ -267,51 +265,60 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
     </style>
 
     <!--<br />-->
-    <h2 id="싱글톤-빈과-프로토타입-빈을-함께-사용할-때-마다-새로운-빈-형성하기">싱글톤 빈과 프로토타입 빈을 함께 사용할 때 마다 새로운 빈 형성하기</h2>
+    <h2 id="template-method-pattern">template method pattern</h2>
 
-<ul>
-  <li>심플하게 생각해보면 싱글톤 빈이 프로토타입을 사용할 때 마다 스프링 컨테이너에게 새로 요청하는 것</li>
-  <li>의존관계를 외부에서 주입(DI) 받는게 아니라 이렇게 직접 필요한 의존관계를 찾는 것을 Dependency Lookup(DL) 의존관계 조회(탐색) 이라한다.</li>
-  <li>그런데 이렇게 스프링의 애플리케이션 컨텍스트 전체를 주입받게 되면, 스프링 컨테이너에 종속적인 코드가 되고,단위 테스트도 어려워진다.</li>
-  <li>지금 필요한 기능은 지정한 프로토타입 빈을 컨테이너에서 대신 찾아주는 딱! <strong>DL</strong> 정도의 기능만 제공하는 무언가가 있으면 된다.</li>
-</ul>
+<p>좋은 설계는 변하는 것과 변하지 않는 것을 분리하는 것이다. 
+여기서 핵심 기능 부분은 변하고, 로그 추적기를 사용하는 부분은 변하지 않는 부분이다. 
+이 둘을 분리해서 모듈화해야 한다. 템플릿 메서드 패턴(Template Method Pattern)은 이런 문제를 해결하는 디자인 패턴이다.</p>
 
-<h2 id="objectfactory-objectprovider">ObjectFactory, ObjectProvider</h2>
+<p><img width="654" alt="Image" src="https://github.com/user-attachments/assets/4bc140a3-80ab-4be2-836c-bc8b052102bd" /></p>
 
-<p>지정한 빈을 컨테이너에서 대신 찾아주는 DL 서비스를 제공하는 것이 바로 <code class="language-plaintext highlighter-rouge">ObjectProvider</code> 이다. 
-참고로 과거에는<code class="language-plaintext highlighter-rouge">ObjectFactory</code> 가 있었는데, 여기에 편의 기능을 추가해서 <code class="language-plaintext highlighter-rouge">ObjectProvider</code> 가 만들어졌다.</p>
+<p>템플릿 메서드 패턴을 알아보는 간단한 테스트 코드이다.
+여기서 변하는 부분은 비즈니스 부분이고 변하지 않는 부분은 시간을 측정하는 로직이다.
+변하는 부분과 변하지 않는 부분을 분리해서 모듈화 해보자</p>
 
-<p><img width="655" alt="image" src="https://github.com/user-attachments/assets/abd97ea9-8dd3-454f-a0d2-6bbc4b1b839f" /></p>
+<p><img width="654" alt="Image" src="https://github.com/user-attachments/assets/275974ec-f18f-4dc5-b53d-fa91b022bb57" /></p>
 
-<ul>
-  <li>실행해보면 <code class="language-plaintext highlighter-rouge">prototypeBeanProvider.getObject()</code> 을 통해서 항상 새로운 프로토타입 빈이 생성되는 것을 확인할 수 있다.</li>
-  <li><code class="language-plaintext highlighter-rouge">ObjectProvider</code> 의 <code class="language-plaintext highlighter-rouge">getObject()</code> 를 호출하면 내부에서는 스프링 컨테이너를 통해 해당 빈을 찾아서 반환한다.</li>
-  <li>스프링이 제공하는 기능을 사용하지만, 기능이 단순하므로 단위테스트를 만들거나 mock 코드를 만들기는 훨씬 쉬워진다.</li>
-</ul>
+<p>템플릿 메서드 패턴은 이름 그대로 템플릿을 사용하는 방식이다. 템플릿은 기준이 되는 거대한 틀이다. 템플릿이라는 틀에 변하지 않는 부분을 몰아둔다. 그리고 일부 변하는 부분을 별도로 호출해서 해결한다.
+<code class="language-plaintext highlighter-rouge">AbstractTemplate</code> 코드를 보자. 변하지 않는 부분인 시간 측정 로직을 몰아둔 것을 확인할 수 있다. 이제 이것이 하나의 템플릿이 된다. 그리고 템플릿 안에서 변하는 부분은 <code class="language-plaintext highlighter-rouge">call()</code> 메서드를 호출해서 처리한다. 템플릿 메서드 패턴은 부모 클래스에 변하지 않는 템플릿 코드를 둔다. 그리고 변하는 부분은 자식 클래스에 두고 상속과 오버라이딩을 사용해서 처리한다.</p>
 
-<p><img width="661" alt="image" src="https://github.com/user-attachments/assets/2e3abcbf-ca36-455a-aa56-319896f8b1f9" /></p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Slf4j</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SubClassLogic1</span> <span class="kd">extends</span> <span class="nc">AbstractTemplate</span> <span class="o">{</span>
 
-<ul>
-  <li>ObjectProvider는 ObjectFactory를 상속받고 있다. 스트림 처리등 편의 기능이 많다. 그리고 스프링에 의존하고 있다.</li>
-</ul>
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">call</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"비즈니스 로직 1 실행"</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 
-<p><img width="691" alt="image" src="https://github.com/user-attachments/assets/1430459e-9584-4ca6-9a46-593668cfee88" />
-<img width="701" alt="image" src="https://github.com/user-attachments/assets/18aab303-e323-45bb-9699-ec4454a484d9" /></p>
+<span class="nd">@Slf4j</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SubClassLogic2</span> <span class="kd">extends</span> <span class="nc">AbstractTemplate</span> <span class="o">{</span>
 
-<p>실행해보면 <code class="language-plaintext highlighter-rouge">provider.get()</code> 을 통해서 항상 새로운 프로토타입 빈이 생성되는 것을 확인할 수 있다.
-<code class="language-plaintext highlighter-rouge">provider</code> 의 <code class="language-plaintext highlighter-rouge">get()</code> 을 호출하면 내부에서는 스프링 컨테이너를 통해 해당 빈을 찾아서 반환한다. (<strong>DL</strong>)
-자바 표준이고, 기능이 단순하므로 단위테스트를 만들거나 mock 코드를 만들기는 훨씬 쉬워진다.
-<code class="language-plaintext highlighter-rouge">Provider</code> 는 지금 딱 필요한 DL 정도의 기능만 제공한다.</p>
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">call</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"비즈니스 로직 2 실행"</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
 
-<h2 id="프로토타입은-그럼-언제-사용할까">프로토타입은 그럼 언제 사용할까?</h2>
+<p><img width="654" alt="Image" src="https://github.com/user-attachments/assets/226743a6-7e66-4a7b-8729-48667ca0e5da" />
+<img width="654" alt="Image" src="https://github.com/user-attachments/assets/31ce7d8d-efcb-4f09-9184-af11785544d4" /></p>
 
-<ul>
-  <li>사용할 때 마다 의존관계 주입이 완료된 새로운 객체가 필요할 때 사용된다.</li>
-</ul>
-
+<p><code class="language-plaintext highlighter-rouge">template1.execute()</code> 를 호출하면 템플릿 로직인 <code class="language-plaintext highlighter-rouge">AbstractTemplate.execute()</code> 를 실행한다.
+여기서 중간에 <code class="language-plaintext highlighter-rouge">call()</code> 메서드를 호출하는데, 이 부분이 오버라이딩 되어있다. 
+따라서 현재 인스턴스인<code class="language-plaintext highlighter-rouge">SubClassLogic1</code> 인스턴스의 <code class="language-plaintext highlighter-rouge">SubClassLogic1.call()</code> 메서드가 호출된다. 
+템플릿 메서드 패턴은 이렇게 다형성을 사용해서 변하는 부분과 변하지 않는 부분을 분리하는 방법이다.
+근데 템플릿 메서드 패턴은 <code class="language-plaintext highlighter-rouge">SubClassLogic1</code> , <code class="language-plaintext highlighter-rouge">SubClassLogic2</code> 처럼 클래스를 계속 만들어야 하는 단점이 있다. 
+익명 내부 클래스를 사용하면 이런 단점을 보완할 수 있다.
+익명 내부 클래스를 사용하면 객체 인스턴스를 생성하면서 동시에 생성할 클래스를 상속 받은 자식 클래스를 정의할 수 있다. 
+이 클래스는 <code class="language-plaintext highlighter-rouge">SubClassLogic1</code> 처럼 직접 지정하는 이름이 없고 클래스 내부에 선언되는 클래스여서 익명 내부 클래스라 한다.
+익명 내부 클래스를 사용해서 다음 코드를 개선해보자</p>
 <h2 id="reference">Reference</h2>
 
-<p>김영한님의 스프링 강의 정리 + 어렵다 스프링</p>
+<p>김영한님의 스프링 핵심 원리</p>
+
+<p>나의 뇌</p>
+
 
     <br />
     <br />
@@ -325,12 +332,12 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=Spring Basic 09 - Bean Scope 03&amp;url=http://localhost:4000/framework/2024/09/26/Spring-basic-09/"
+    <a href="http://twitter.com/share?text=Spring adv 03 - Template Method Pattern - 1&amp;url=http://localhost:4000/framework/2025/01/06/Spring-adv-03/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/framework/2024/09/26/Spring-basic-09/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/framework/2025/01/06/Spring-adv-03/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -352,21 +359,8 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
       
       
         
-        
           
-
-
-<li class="h4">
-  <a href="/framework/2025/01/06/Spring-adv-03/" data-flip="title">
-    <span>Spring adv 03 - Template Method Pattern - 1</span>
-  </a>
-  <small><time datetime="2025-01-06T00:00:00+09:00">
-    06 Jan 2025
-  </time></small>
-</li>
-
-        
-      
+          
         
         
           
@@ -400,6 +394,19 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
         
       
         
+        
+          
+
+
+<li class="h4">
+  <a href="/framework/2025/01/03/Spring-basic-19/" data-flip="title">
+    <span>Spring Basic 18 - Prometheus basic</span>
+  </a>
+  <small><time datetime="2025-01-03T00:00:00+09:00">
+    03 Jan 2025
+  </time></small>
+</li>
+
         
       
     
