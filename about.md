@@ -67,11 +67,11 @@ order: 10
 
 ## Education
 
-## kakao cloud 4th
+## kakao cloud 
 
 2023.12.09 ~ 2024.06.12
 
-- 서비스를 위한 인프라 환경을 구축해보면서 실습하는 교육 과정
+- 서비스를 위한 인프라 환경을 구축 및 실습
     - K8S클러스터 구성하기 & 서비스 배포하기
     - AWS를 이용한 인프라 구축하기
     - ELK Stack: Elasticsearch, Logstash, Kibana를 통한 로그 수집, 분석 및 시각화
