@@ -67,7 +67,7 @@ order: 10
 
 ## Education
 
-## 카카오 클라우드 4기
+## kakao cloud 4th
 
 2023.12.09 ~ 2024.06.12
 
@@ -77,7 +77,7 @@ order: 10
     - ELK Stack: Elasticsearch, Logstash, Kibana를 통한 로그 수집, 분석 및 시각화
     - Prometheus & Grafana를 활용하여 서버 및 애플리케이션의 상태와 성능을 모니터링
 
-## 멘토링
+## mentoring
 
 2023.09 ~ 2024.01
 
