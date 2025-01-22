@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Spring adv 03 - Template Method Pattern - 1" />
+<meta property="og:title" content="Spring adv 04 - Proxy Pattern" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,17 +52,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Spring adv 03 - Template Method Pattern - 1 &middot; 일벌리는 개발자</title>
+<title>Spring adv 04 - Proxy Pattern &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="template method pattern
+        content="Proxy
 
 "
 />
 <meta
         property="og:description"
-        content="template method pattern
+        content="Proxy
 
 "
 />
@@ -72,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/framework/2025/01/07/Spring-adv-04/" />
-<meta property="og:url" content="http://localhost:4000/framework/2025/01/07/Spring-adv-04/" />
+<link rel="canonical" href="http://localhost:4000/framework/2025/01/09/Spring-adv-04/" />
+<meta property="og:url" content="http://localhost:4000/framework/2025/01/09/Spring-adv-04/" />
 
 <link
         rel="alternate"
@@ -83,7 +83,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/life/2025/01/06/books-02/" />
+<link rel="prev" href="http://localhost:4000/framework/2025/01/08/Spring-adv-04/" />
  
 
 <link
@@ -181,16 +181,16 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-framework/2025/01/07/Spring-adv-04" class="post" role="article">
+<article id="post-framework/2025/01/09/Spring-adv-04" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      Spring adv 03 - Template Method Pattern - 1
+      Spring adv 04 - Proxy Pattern
       
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2025-01-07T00:00:00+09:00">07 Jan 2025</time>
+      <time datetime="2025-01-09T00:00:00+09:00">09 Jan 2025</time>
       
 
 
@@ -265,54 +265,73 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
     </style>
 
     <!--<br />-->
-    <h2 id="template-method-pattern">template method pattern</h2>
+    <h2 id="proxy">Proxy</h2>
 
-<p>좋은 설계는 변하는 것과 변하지 않는 것을 분리하는 것이다. 
-여기서 핵심 기능 부분은 변하고, 로그 추적기를 사용하는 부분은 변하지 않는 부분이다. 
-이 둘을 분리해서 모듈화해야 한다. 템플릿 메서드 패턴(Template Method Pattern)은 이런 문제를 해결하는 디자인 패턴이다.</p>
+<p>클라이언트가 요청한 결과를 서버에 직접 요청하는 것이 아니라 어떤 대리자를 통해서 대신 간접적으로 서버에 요청할 수 있다.
+예를 들어서 내가 직접 마트에서 장을 볼 수도 있지만, 누군가에게 대신 장을 봐달라고 부탁할 수도 있다.
+여기서 대신 장을 보는 <strong>**대리자를</strong> <strong>영어로</strong> <strong>프록시</strong>(Proxy)**라 한다.</p>
 
-<p><img width="654" alt="Image" src="https://github.com/user-attachments/assets/4bc140a3-80ab-4be2-836c-bc8b052102bd" /></p>
+<h2 id="예시">예시</h2>
 
-<p>템플릿 메서드 패턴을 알아보는 간단한 테스트 코드이다.
-여기서 변하는 부분은 비즈니스 부분이고 변하지 않는 부분은 시간을 측정하는 로직이다.
-변하는 부분과 변하지 않는 부분을 분리해서 모듈화 해보자</p>
+<p>재미있는 점은 직접 호출과 다르게 간접 호출을 하면 대리자가 중간에서 여러가지 일을 할 수 있다는 점이다.</p>
+<ul>
+  <li>엄마에게 라면을 사달라고 부탁 했는데, 엄마는 그 라면은 이미 집에 있다고 할 수도 있다. 그러면 기대한 것 보다 더 빨리 라면을 먹을 수 있다. (접근 제어, 캐싱)</li>
+  <li>아버지께 자동차 주유를 부탁했는데, 아버지가 주유 뿐만 아니라 세차까지 하고 왔다. 클라이언트가 기대한 것 외에 세차라는 부가 기능까지 얻게 되었다. (부가 기능 추가)</li>
+  <li>대리자가 또 다른 대리자를 부를 수도 있다.
+    <ul>
+      <li>예를 들어서 내가 동생에게 라면을 사달라고 했는데, 동생은 또 다른 누군가에게 라면을 사달라고 다시 요청할 수도 있다.</li>
+      <li>중요한 점은 클라이언트는 대리자를 통해서 요청했기 때문에 그 이후 과정은 모른다는 점이다. 동생을 통해서 라면이 나에게 도착하기만 하면 된다. (프록시 체인)</li>
+    </ul>
+  </li>
+</ul>
 
-<p><img width="654" alt="Image" src="https://github.com/user-attachments/assets/275974ec-f18f-4dc5-b53d-fa91b022bb57" /></p>
+<h2 id="프록시의-주요-기능">프록시의 주요 기능</h2>
 
-<p>템플릿 메서드 패턴은 이름 그대로 템플릿을 사용하는 방식이다. 템플릿은 기준이 되는 거대한 틀이다. 템플릿이라는 틀에 변하지 않는 부분을 몰아둔다. 그리고 일부 변하는 부분을 별도로 호출해서 해결한다.
-<code class="language-plaintext highlighter-rouge">AbstractTemplate</code> 코드를 보자. 변하지 않는 부분인 시간 측정 로직을 몰아둔 것을 확인할 수 있다. 이제 이것이 하나의 템플릿이 된다. 그리고 템플릿 안에서 변하는 부분은 <code class="language-plaintext highlighter-rouge">call()</code> 메서드를 호출해서 처리한다. 템플릿 메서드 패턴은 부모 클래스에 변하지 않는 템플릿 코드를 둔다. 그리고 변하는 부분은 자식 클래스에 두고 상속과 오버라이딩을 사용해서 처리한다.</p>
+<p>프록시를 통해서 할 수 있는 일은 크게 2가지로 구분할 수 있다.</p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Slf4j</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SubClassLogic1</span> <span class="kd">extends</span> <span class="nc">AbstractTemplate</span> <span class="o">{</span>
+<ul>
+  <li>접근 제어</li>
+  <li>권한에 따른 접근 차단</li>
+  <li>캐싱</li>
+  <li>지연 로딩</li>
+  <li>부가 기능 추가</li>
+</ul>
 
-    <span class="nd">@Override</span>
-    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">call</span><span class="o">()</span> <span class="o">{</span>
-        <span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"비즈니스 로직 1 실행"</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+<p>원래 서버가 제공하는 기능에 더해서 부가 기능을 수행한다. 요청 값이나, 응답 값을 중간에 변형한다.
+실행 시간을 측정해서 추가 로그를 남긴다. 
+프록시 객체가 중간에 있으면 크게 접근 제어와 부가 기능 추가를 수행할 수 있다.</p>
 
-<span class="nd">@Slf4j</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SubClassLogic2</span> <span class="kd">extends</span> <span class="nc">AbstractTemplate</span> <span class="o">{</span>
+<ul>
+  <li>프록시 패턴: 접근 제어가 목적</li>
+  <li>데코레이터 패턴: 새로운 기능 추가가 목적</li>
+</ul>
 
-    <span class="nd">@Override</span>
-    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">call</span><span class="o">()</span> <span class="o">{</span>
-        <span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"비즈니스 로직 2 실행"</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
+<p>둘다 프록시를 사용하지만, 의도가 다르다는 점이 핵심이다. 
+용어가 프록시 패턴이라고 해서 이 패턴만 프록시를 사용하는 것은 아니다.
+데코레이터 패턴도 프록시를 사용한다.</p>
 
-<p><img width="654" alt="Image" src="https://github.com/user-attachments/assets/226743a6-7e66-4a7b-8729-48667ca0e5da" />
-<img width="654" alt="Image" src="https://github.com/user-attachments/assets/31ce7d8d-efcb-4f09-9184-af11785544d4" /></p>
+<p><img width="654" alt="Image" src="https://github.com/user-attachments/assets/2548692b-4291-42bf-b71e-e5b45e73ae4f" />
+이와 같은 객체 의존관계를 코드로 구현해보자</p>
 
-<p><code class="language-plaintext highlighter-rouge">template1.execute()</code> 를 호출하면 템플릿 로직인 <code class="language-plaintext highlighter-rouge">AbstractTemplate.execute()</code> 를 실행한다.
-여기서 중간에 <code class="language-plaintext highlighter-rouge">call()</code> 메서드를 호출하는데, 이 부분이 오버라이딩 되어있다. 
-따라서 현재 인스턴스인<code class="language-plaintext highlighter-rouge">SubClassLogic1</code> 인스턴스의 <code class="language-plaintext highlighter-rouge">SubClassLogic1.call()</code> 메서드가 호출된다. 
-템플릿 메서드 패턴은 이렇게 다형성을 사용해서 변하는 부분과 변하지 않는 부분을 분리하는 방법이다.
-근데 템플릿 메서드 패턴은 <code class="language-plaintext highlighter-rouge">SubClassLogic1</code> , <code class="language-plaintext highlighter-rouge">SubClassLogic2</code> 처럼 클래스를 계속 만들어야 하는 단점이 있다. 
-익명 내부 클래스를 사용하면 이런 단점을 보완할 수 있다.
-익명 내부 클래스를 사용하면 객체 인스턴스를 생성하면서 동시에 생성할 클래스를 상속 받은 자식 클래스를 정의할 수 있다. 
-이 클래스는 <code class="language-plaintext highlighter-rouge">SubClassLogic1</code> 처럼 직접 지정하는 이름이 없고 클래스 내부에 선언되는 클래스여서 익명 내부 클래스라 한다.
-익명 내부 클래스를 사용해서 다음 코드를 개선해 보자</p>
+<p><img width="654" alt="Image" src="https://github.com/user-attachments/assets/7b701fb5-7a76-4ca6-a687-ef113fe57a5b" /></p>
+
+<p>앞서 설명한 것 처럼 프록시도 실제 객체와 그 모양이 같아야 하기 때문에 <code class="language-plaintext highlighter-rouge">Subject</code> 인터페이스를 구현해야 한다.</p>
+<ul>
+  <li>private Subject target: 클라이언트가 프록시를 호출하면 프록시가 최종적으로 실제 객체를 호출해야 한다.</li>
+  <li>따라서 내부에 실제 객체의 참조를 가지고 있어야 한다. 이렇게 프록시가 호출하는 대상을 <code class="language-plaintext highlighter-rouge">target</code> 이라 한다.</li>
+  <li>operation():  구현한 코드를 보면 <code class="language-plaintext highlighter-rouge">cacheValue</code> 에 값이 없으면 실제 객체(<code class="language-plaintext highlighter-rouge">target</code> )를 호출해서 값을 구한다.</li>
+  <li>그리고 구한 값을 <code class="language-plaintext highlighter-rouge">cacheValue</code> 에 저장하고 반환한다. 만약 <code class="language-plaintext highlighter-rouge">cacheValue</code> 에 값이 있으면 실제 객체를 전혀 호출하지 않고, 캐시 값을 그대로 반환한다.</li>
+  <li>따라서 처음 조회 이후에는 캐시(<code class="language-plaintext highlighter-rouge">cacheValue</code> )에서 매우 빠르게 데이터를 조회할 수 있다.</li>
+</ul>
+
+<p><img width="654" alt="Image" src="https://github.com/user-attachments/assets/64621bce-e364-4751-94b0-b1fe9f23527d" />
+<img width="654" alt="Image" src="https://github.com/user-attachments/assets/87d1b9a6-38e2-41bf-82d1-763827188051" /></p>
+
+<p>데이터가 엄청 빠르게 조회되는 것을 확인할 수 있다. 처음에는 cacheValue에 데이터가 없기 때문에 실제 데이터를 담아두고 그 다음에 조회할 때는 cacheValue에서 데이터를 매우 빠르게 조회하는 것이 프록시의 역할이다.
+결과적으로 <code class="language-plaintext highlighter-rouge">realSubject</code> 와 <code class="language-plaintext highlighter-rouge">cacheProxy</code> 를 생성하고 둘을 연결한다.<code class="language-plaintext highlighter-rouge">cacheProxy</code> 가 <code class="language-plaintext highlighter-rouge">realSubject</code>를 참조하는 런타임 객체 의존관계가 완성된다.
+그리고 마지막으로 <code class="language-plaintext highlighter-rouge">client</code> 에 <code class="language-plaintext highlighter-rouge">realSubject</code> 가 아<code class="language-plaintext highlighter-rouge">cacheProxy</code> 를 주입한다.
+이 과정을 통해서 <code class="language-plaintext highlighter-rouge">client -&gt; cacheProxy -&gt; realSubject</code> 런타임 객체 의존 관계가 완성된다.</p>
+
 <h2 id="reference">Reference</h2>
 
 <p>김영한님의 스프링 핵심 원리</p>
@@ -332,12 +351,12 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=Spring adv 03 - Template Method Pattern - 1&amp;url=http://localhost:4000/framework/2025/01/07/Spring-adv-04/"
+    <a href="http://twitter.com/share?text=Spring adv 04 - Proxy Pattern&amp;url=http://localhost:4000/framework/2025/01/09/Spring-adv-04/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/framework/2025/01/07/Spring-adv-04/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/framework/2025/01/09/Spring-adv-04/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -367,11 +386,11 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
 
 
 <li class="h4">
-  <a href="/framework/2025/01/06/Spring-adv-03/" data-flip="title">
-    <span>Spring adv 04 - Proxy Pattern</span>
+  <a href="/framework/2025/01/08/Spring-adv-04/" data-flip="title">
+    <span>Spring adv 03 - Template Method Pattern - 1</span>
   </a>
-  <small><time datetime="2025-01-06T00:00:00+09:00">
-    06 Jan 2025
+  <small><time datetime="2025-01-08T00:00:00+09:00">
+    08 Jan 2025
   </time></small>
 </li>
 

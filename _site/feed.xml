@@ -6,125 +6,9 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 23 Jan 2025 02:04:27 +0900</pubDate>
-    <lastBuildDate>Thu, 23 Jan 2025 02:04:27 +0900</lastBuildDate>
+    <pubDate>Thu, 23 Jan 2025 02:06:47 +0900</pubDate>
+    <lastBuildDate>Thu, 23 Jan 2025 02:06:47 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
-    
-      <item>
-        <title>Spring adv 03 - Template Method Pattern - 1</title>
-        <description>&lt;h2 id=&quot;template-method-pattern&quot;&gt;template method pattern&lt;/h2&gt;
-
-&lt;p&gt;좋은 설계는 변하는 것과 변하지 않는 것을 분리하는 것이다. 
-여기서 핵심 기능 부분은 변하고, 로그 추적기를 사용하는 부분은 변하지 않는 부분이다. 
-이 둘을 분리해서 모듈화해야 한다. 템플릿 메서드 패턴(Template Method Pattern)은 이런 문제를 해결하는 디자인 패턴이다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/4bc140a3-80ab-4be2-836c-bc8b052102bd&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;템플릿 메서드 패턴을 알아보는 간단한 테스트 코드이다.
-여기서 변하는 부분은 비즈니스 부분이고 변하지 않는 부분은 시간을 측정하는 로직이다.
-변하는 부분과 변하지 않는 부분을 분리해서 모듈화 해보자&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/275974ec-f18f-4dc5-b53d-fa91b022bb57&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;템플릿 메서드 패턴은 이름 그대로 템플릿을 사용하는 방식이다. 템플릿은 기준이 되는 거대한 틀이다. 템플릿이라는 틀에 변하지 않는 부분을 몰아둔다. 그리고 일부 변하는 부분을 별도로 호출해서 해결한다.
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AbstractTemplate&lt;/code&gt; 코드를 보자. 변하지 않는 부분인 시간 측정 로직을 몰아둔 것을 확인할 수 있다. 이제 이것이 하나의 템플릿이 된다. 그리고 템플릿 안에서 변하는 부분은 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;call()&lt;/code&gt; 메서드를 호출해서 처리한다. 템플릿 메서드 패턴은 부모 클래스에 변하지 않는 템플릿 코드를 둔다. 그리고 변하는 부분은 자식 클래스에 두고 상속과 오버라이딩을 사용해서 처리한다.&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Slf4j&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SubClassLogic1&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AbstractTemplate&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;비즈니스 로직 1 실행&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;nd&quot;&gt;@Slf4j&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SubClassLogic2&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AbstractTemplate&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;비즈니스 로직 2 실행&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/226743a6-7e66-4a7b-8729-48667ca0e5da&quot; /&gt;
-&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/31ce7d8d-efcb-4f09-9184-af11785544d4&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;template1.execute()&lt;/code&gt; 를 호출하면 템플릿 로직인 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AbstractTemplate.execute()&lt;/code&gt; 를 실행한다.
-여기서 중간에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;call()&lt;/code&gt; 메서드를 호출하는데, 이 부분이 오버라이딩 되어있다. 
-따라서 현재 인스턴스인&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SubClassLogic1&lt;/code&gt; 인스턴스의 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SubClassLogic1.call()&lt;/code&gt; 메서드가 호출된다. 
-템플릿 메서드 패턴은 이렇게 다형성을 사용해서 변하는 부분과 변하지 않는 부분을 분리하는 방법이다.
-근데 템플릿 메서드 패턴은 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SubClassLogic1&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SubClassLogic2&lt;/code&gt; 처럼 클래스를 계속 만들어야 하는 단점이 있다. 
-익명 내부 클래스를 사용하면 이런 단점을 보완할 수 있다.
-익명 내부 클래스를 사용하면 객체 인스턴스를 생성하면서 동시에 생성할 클래스를 상속 받은 자식 클래스를 정의할 수 있다. 
-이 클래스는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SubClassLogic1&lt;/code&gt; 처럼 직접 지정하는 이름이 없고 클래스 내부에 선언되는 클래스여서 익명 내부 클래스라 한다.
-익명 내부 클래스를 사용해서 다음 코드를 개선해 보자&lt;/p&gt;
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;김영한님의 스프링 핵심 원리&lt;/p&gt;
-
-&lt;p&gt;나의 뇌&lt;/p&gt;
-
-</description>
-        <pubDate>Tue, 07 Jan 2025 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/framework/2025/01/07/Spring-adv-04/</link>
-        <guid isPermaLink="true">http://localhost:4000/framework/2025/01/07/Spring-adv-04/</guid>
-        
-        <category>spring</category>
-        
-        
-        <category>framework</category>
-        
-      </item>
-    
-      <item>
-        <title>살며 사랑하며 배우며</title>
-        <description>&lt;h2 id=&quot;살며-사랑하며-배우며&quot;&gt;살며 사랑하며 배우며&lt;/h2&gt;
-
-&lt;p&gt;&lt;img width=&quot;360&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/1c86b58c-7d11-4364-9ba1-ea0c8d2d166b&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;나는 책 읽는 것을 좋아했다. 
-내 인생에서 가장 바쁜 시기를 꼽는다면 대학교 시절의 4학년 2학기부터 작년 여름까지일 것이다. 
-4학년의 수업을 전공으로만 30학점을 채워야 했고, 
-4학년 때 개발자의 꿈을 갖게 되어 멘토링을 들으며 졸업작품을 진행했고, 
-카카오에서의 기회가 있어 자소서를 쓰고 면접을 준비하느라 정말 바쁜 시간들을 보내왔었다. 
-워낙에 바쁘고 시간이 없다 보니 책을 꺼내도 도서관에서는 항상 개발 및 전공 관련 서적만 찾아 읽곤 했다.
-이 책을 읽게 된 건 졸업을 앞두고 평소처럼 도서관을 기웃거리다 제목이 눈에 띄어 집어 들어 읽게 되었다.
-그리고 주제도 재밌잖아? 살며 사랑하며 배우며? 제목만 봐도 읽고 싶은 책이다.
-근데 이 글을 쓰면서 느끼는 건 사회에 나와 정신없이 일하고 배우다보니 요즘 읽는 책도 대부분 전공 서적이었는데 
-당시 없는 시간 짜내며 책 읽던 모습이 그리워 지기도 한다.&lt;/p&gt;
-
-&lt;h2 id=&quot;책-내용&quot;&gt;책 내용&lt;/h2&gt;
-
-&lt;p&gt;저자는 직업이 교사답게 삶에서 많이 배운 것들을 바탕으로, 인생에 얻은 교훈들에 대해 많은 사람들에게 널리 사랑을 가르쳐주는 것처럼 
-강의하는 형태로 문체가 형성되어 있고, 그 내용은 물 흐르듯이, 마치 한 편의 영화를 보는 것 같은 진한 감동의 여운이 다가올 정도였다. 
-찾아보니 꽤나 오래된 책으로 미국 사람들에게 유명한 책이라고 해서 어떤 내용일지 궁금했는데 
-말 그대로 ‘사랑’ 관련된 이야기였다. 사랑이라고 하면 흔히 연애로부터 오는 감정을 떠올리게 되는데 이 책은
-자기 자신에 대한 사랑, 가족간의 애정, 친구와의 우정이나 주변 사람, 일상에 대한 관심 같은 것들을 가르쳐 준다. 
-교사의 삶을 살아가면서, 가르치는 사람으로서 살아가면서, 내가 사랑하게 된 것들, 그리고 사랑할 때 알아야하는 것들, 
-배운 것들에 대해 아낌없이 조언해놓은 글이라고 해도 과언이 아닌 책이었다.&lt;/p&gt;
-
-&lt;p&gt;챕터들마다 정말 하나같이 버릴게 없지만 인상깊었던 부분은 죽음에 대한 것과 현재를 살아가는 사람으로서 오늘을 사랑해야 한다는 내용이었다.
-누구에게나 공평하게 다가오는 죽음을 실감하면서 살아가진 않지만, 언젠가 직면하게 될, 
-사람이라면 누구나 겪게 되는 죽음을 받아들인다는 것이 어떤 의미인지 생각해볼 수 있었던 부분이었다. 
-모든 것을 내려 놓을 수 있는 죽음을 맞이할 수 있을까 싶기도 하고. 아직은 먼 이야기인 것 같지만, 
-삶에 대한 의미를 내 나름대로 생각해볼 수 있는 계기가 될 수 있었다. 그리고 ‘오늘’에 대한 이야기. 
-나도 글을 적으면서 어제, 오늘, 내일에 대해 많이 생각해봤었다. 오늘이 가장 중요함을 알고 있으면서도 내일을 위해 시간을 허비한 일도 많았고, 
-어제의 후회에 대한 생각으로 인해 시간을 낭비한 경험도 없지 않았기에, 오늘에 대해 소중히 생각하고, 오늘을 현명하게 살아가야겠다.
-사실 평범한 일상이 가장 행복한 일상이 아닐까 하는 생각도 든다.&lt;/p&gt;
-
-</description>
-        <pubDate>Mon, 06 Jan 2025 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/life/2025/01/06/books-02/</link>
-        <guid isPermaLink="true">http://localhost:4000/life/2025/01/06/books-02/</guid>
-        
-        <category>books</category>
-        
-        
-        <category>life</category>
-        
-      </item>
     
       <item>
         <title>Spring adv 04 - Proxy Pattern</title>
@@ -202,14 +86,130 @@
 &lt;p&gt;나의 뇌&lt;/p&gt;
 
 </description>
-        <pubDate>Mon, 06 Jan 2025 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/framework/2025/01/06/Spring-adv-03/</link>
-        <guid isPermaLink="true">http://localhost:4000/framework/2025/01/06/Spring-adv-03/</guid>
+        <pubDate>Thu, 09 Jan 2025 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/framework/2025/01/09/Spring-adv-04/</link>
+        <guid isPermaLink="true">http://localhost:4000/framework/2025/01/09/Spring-adv-04/</guid>
         
         <category>spring</category>
         
         
         <category>framework</category>
+        
+      </item>
+    
+      <item>
+        <title>Spring adv 03 - Template Method Pattern - 1</title>
+        <description>&lt;h2 id=&quot;template-method-pattern&quot;&gt;template method pattern&lt;/h2&gt;
+
+&lt;p&gt;좋은 설계는 변하는 것과 변하지 않는 것을 분리하는 것이다. 
+여기서 핵심 기능 부분은 변하고, 로그 추적기를 사용하는 부분은 변하지 않는 부분이다. 
+이 둘을 분리해서 모듈화해야 한다. 템플릿 메서드 패턴(Template Method Pattern)은 이런 문제를 해결하는 디자인 패턴이다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/4bc140a3-80ab-4be2-836c-bc8b052102bd&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;템플릿 메서드 패턴을 알아보는 간단한 테스트 코드이다.
+여기서 변하는 부분은 비즈니스 부분이고 변하지 않는 부분은 시간을 측정하는 로직이다.
+변하는 부분과 변하지 않는 부분을 분리해서 모듈화 해보자&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/275974ec-f18f-4dc5-b53d-fa91b022bb57&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;템플릿 메서드 패턴은 이름 그대로 템플릿을 사용하는 방식이다. 템플릿은 기준이 되는 거대한 틀이다. 템플릿이라는 틀에 변하지 않는 부분을 몰아둔다. 그리고 일부 변하는 부분을 별도로 호출해서 해결한다.
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AbstractTemplate&lt;/code&gt; 코드를 보자. 변하지 않는 부분인 시간 측정 로직을 몰아둔 것을 확인할 수 있다. 이제 이것이 하나의 템플릿이 된다. 그리고 템플릿 안에서 변하는 부분은 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;call()&lt;/code&gt; 메서드를 호출해서 처리한다. 템플릿 메서드 패턴은 부모 클래스에 변하지 않는 템플릿 코드를 둔다. 그리고 변하는 부분은 자식 클래스에 두고 상속과 오버라이딩을 사용해서 처리한다.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Slf4j&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SubClassLogic1&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AbstractTemplate&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;비즈니스 로직 1 실행&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nd&quot;&gt;@Slf4j&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SubClassLogic2&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AbstractTemplate&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;비즈니스 로직 2 실행&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/226743a6-7e66-4a7b-8729-48667ca0e5da&quot; /&gt;
+&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/31ce7d8d-efcb-4f09-9184-af11785544d4&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;template1.execute()&lt;/code&gt; 를 호출하면 템플릿 로직인 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AbstractTemplate.execute()&lt;/code&gt; 를 실행한다.
+여기서 중간에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;call()&lt;/code&gt; 메서드를 호출하는데, 이 부분이 오버라이딩 되어있다. 
+따라서 현재 인스턴스인&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SubClassLogic1&lt;/code&gt; 인스턴스의 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SubClassLogic1.call()&lt;/code&gt; 메서드가 호출된다. 
+템플릿 메서드 패턴은 이렇게 다형성을 사용해서 변하는 부분과 변하지 않는 부분을 분리하는 방법이다.
+근데 템플릿 메서드 패턴은 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SubClassLogic1&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SubClassLogic2&lt;/code&gt; 처럼 클래스를 계속 만들어야 하는 단점이 있다. 
+익명 내부 클래스를 사용하면 이런 단점을 보완할 수 있다.
+익명 내부 클래스를 사용하면 객체 인스턴스를 생성하면서 동시에 생성할 클래스를 상속 받은 자식 클래스를 정의할 수 있다. 
+이 클래스는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SubClassLogic1&lt;/code&gt; 처럼 직접 지정하는 이름이 없고 클래스 내부에 선언되는 클래스여서 익명 내부 클래스라 한다.
+익명 내부 클래스를 사용해서 다음 코드를 개선해 보자&lt;/p&gt;
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;김영한님의 스프링 핵심 원리&lt;/p&gt;
+
+&lt;p&gt;나의 뇌&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 08 Jan 2025 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/framework/2025/01/08/Spring-adv-04/</link>
+        <guid isPermaLink="true">http://localhost:4000/framework/2025/01/08/Spring-adv-04/</guid>
+        
+        <category>spring</category>
+        
+        
+        <category>framework</category>
+        
+      </item>
+    
+      <item>
+        <title>살며 사랑하며 배우며</title>
+        <description>&lt;h2 id=&quot;살며-사랑하며-배우며&quot;&gt;살며 사랑하며 배우며&lt;/h2&gt;
+
+&lt;p&gt;&lt;img width=&quot;360&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/1c86b58c-7d11-4364-9ba1-ea0c8d2d166b&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;나는 책 읽는 것을 좋아했다. 
+내 인생에서 가장 바쁜 시기를 꼽는다면 대학교 시절의 4학년 2학기부터 작년 여름까지일 것이다. 
+4학년의 수업을 전공으로만 30학점을 채워야 했고, 
+4학년 때 개발자의 꿈을 갖게 되어 멘토링을 들으며 졸업작품을 진행했고, 
+카카오에서의 기회가 있어 자소서를 쓰고 면접을 준비하느라 정말 바쁜 시간들을 보내왔었다. 
+워낙에 바쁘고 시간이 없다 보니 책을 꺼내도 도서관에서는 항상 개발 및 전공 관련 서적만 찾아 읽곤 했다.
+이 책을 읽게 된 건 졸업을 앞두고 평소처럼 도서관을 기웃거리다 제목이 눈에 띄어 집어 들어 읽게 되었다.
+그리고 주제도 재밌잖아? 살며 사랑하며 배우며? 제목만 봐도 읽고 싶은 책이다.
+근데 이 글을 쓰면서 느끼는 건 사회에 나와 정신없이 일하고 배우다보니 요즘 읽는 책도 대부분 전공 서적이었는데 
+당시 없는 시간 짜내며 책 읽던 모습이 그리워 지기도 한다.&lt;/p&gt;
+
+&lt;h2 id=&quot;책-내용&quot;&gt;책 내용&lt;/h2&gt;
+
+&lt;p&gt;저자는 직업이 교사답게 삶에서 많이 배운 것들을 바탕으로, 인생에 얻은 교훈들에 대해 많은 사람들에게 널리 사랑을 가르쳐주는 것처럼 
+강의하는 형태로 문체가 형성되어 있고, 그 내용은 물 흐르듯이, 마치 한 편의 영화를 보는 것 같은 진한 감동의 여운이 다가올 정도였다. 
+찾아보니 꽤나 오래된 책으로 미국 사람들에게 유명한 책이라고 해서 어떤 내용일지 궁금했는데 
+말 그대로 ‘사랑’ 관련된 이야기였다. 사랑이라고 하면 흔히 연애로부터 오는 감정을 떠올리게 되는데 이 책은
+자기 자신에 대한 사랑, 가족간의 애정, 친구와의 우정이나 주변 사람, 일상에 대한 관심 같은 것들을 가르쳐 준다. 
+교사의 삶을 살아가면서, 가르치는 사람으로서 살아가면서, 내가 사랑하게 된 것들, 그리고 사랑할 때 알아야하는 것들, 
+배운 것들에 대해 아낌없이 조언해놓은 글이라고 해도 과언이 아닌 책이었다.&lt;/p&gt;
+
+&lt;p&gt;챕터들마다 정말 하나같이 버릴게 없지만 인상깊었던 부분은 죽음에 대한 것과 현재를 살아가는 사람으로서 오늘을 사랑해야 한다는 내용이었다.
+누구에게나 공평하게 다가오는 죽음을 실감하면서 살아가진 않지만, 언젠가 직면하게 될, 
+사람이라면 누구나 겪게 되는 죽음을 받아들인다는 것이 어떤 의미인지 생각해볼 수 있었던 부분이었다. 
+모든 것을 내려 놓을 수 있는 죽음을 맞이할 수 있을까 싶기도 하고. 아직은 먼 이야기인 것 같지만, 
+삶에 대한 의미를 내 나름대로 생각해볼 수 있는 계기가 될 수 있었다. 그리고 ‘오늘’에 대한 이야기. 
+나도 글을 적으면서 어제, 오늘, 내일에 대해 많이 생각해봤었다. 오늘이 가장 중요함을 알고 있으면서도 내일을 위해 시간을 허비한 일도 많았고, 
+어제의 후회에 대한 생각으로 인해 시간을 낭비한 경험도 없지 않았기에, 오늘에 대해 소중히 생각하고, 오늘을 현명하게 살아가야겠다.
+사실 평범한 일상이 가장 행복한 일상이 아닐까 하는 생각도 든다.&lt;/p&gt;
+
+</description>
+        <pubDate>Mon, 06 Jan 2025 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/life/2025/01/06/books-02/</link>
+        <guid isPermaLink="true">http://localhost:4000/life/2025/01/06/books-02/</guid>
+        
+        <category>books</category>
+        
+        
+        <category>life</category>
         
       </item>
     
