@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 23 Jan 2025 02:06:47 +0900</pubDate>
-    <lastBuildDate>Thu, 23 Jan 2025 02:06:47 +0900</lastBuildDate>
+    <pubDate>Thu, 23 Jan 2025 02:06:55 +0900</pubDate>
+    <lastBuildDate>Thu, 23 Jan 2025 02:06:55 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
@@ -155,8 +155,8 @@
 
 </description>
         <pubDate>Wed, 08 Jan 2025 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/framework/2025/01/08/Spring-adv-04/</link>
-        <guid isPermaLink="true">http://localhost:4000/framework/2025/01/08/Spring-adv-04/</guid>
+        <link>http://localhost:4000/framework/2025/01/08/Spring-adv-03/</link>
+        <guid isPermaLink="true">http://localhost:4000/framework/2025/01/08/Spring-adv-03/</guid>
         
         <category>spring</category>
         
