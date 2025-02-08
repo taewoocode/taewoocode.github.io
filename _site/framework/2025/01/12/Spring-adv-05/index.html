@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="About" />
+<meta property="og:title" content="Spring adv 05 - CGLIB" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,16 +52,18 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>About &middot; 일벌리는 개발자</title>
+<title>Spring adv 05 - CGLIB &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="일을 벌여놔야 주워 담을 수 있습니다.
+        content="CGLIB
+
 "
 />
 <meta
         property="og:description"
-        content="일을 벌여놔야 주워 담을 수 있습니다.
+        content="CGLIB
+
 "
 />
 
@@ -70,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/about/" />
-<meta property="og:url" content="http://localhost:4000/about/" />
+<link rel="canonical" href="http://localhost:4000/framework/2025/01/12/Spring-adv-05/" />
+<meta property="og:url" content="http://localhost:4000/framework/2025/01/12/Spring-adv-05/" />
 
 <link
         rel="alternate"
@@ -80,6 +82,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         href="http://localhost:4000/feed.xml"
 />
 
+
+<link rel="prev" href="http://localhost:4000/framework/2025/01/09/Spring-adv-04/" />
  
 
 <link
@@ -177,146 +181,257 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article class="page" role="article">
+<article id="post-framework/2025/01/12/Spring-adv-05" class="post" role="article">
+  <header>
+    <h1 class="post-title">
+      
+      Spring adv 05 - CGLIB
+      
+    </h1>
 
-  <h1 class="page-title hr" style="padding-bottom:1rem">About</h1>
+    <p class="post-date heading">
+      <time datetime="2025-01-12T00:00:00+09:00">12 Jan 2025</time>
+      
 
+
+
+
+
+
+
+
+
+in <a href="/category/framework/" data-flip="title">Framework</a>
+
+      
+
+
+
+
+
+
+
+
+
+on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
+
+    </p>
+
+    
+  <div class="hr" style="padding-bottom:0"></div>
+
+
+  </header>
+  
+
+
+  
   <div class="markdown-body">
-    <h2 id="소개">소개</h2>
 
-<p>안녕하세요 개발자 박태우입니다. 개발자가 되기 전부터 몰입하는 즐거움을 따라 살다가 지금은 개발에 푹 빠져 있습니다.
-하나를 공부해도 깊게 공부하려고 노력하고 새로운 기술을 배우는 것을 도전하고 좋아합니다.
-현재는 테스트 코드, <a href="https://github.com/taewoocode/spring_study_reop">Spring 진영</a>에 관심이 많습니다.</p>
+    <!--  -->
+    <style>
+      .myAd1190 {
+        width: 48%;
+        height: 280px;
+      }
 
-<h2 id="관심있는-기술">관심있는 기술</h2>
+      .myAd1290 {
+        width: 48%;
+        height: 280px;
+      }
 
+      @media(max-width: 800px) {
+        .myAd1190 {
+          display: none;
+        }
+
+        .myAd1290 {
+          width: 98%;
+        }
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 300px;
+      }
+
+      .row-center {
+        display: flex;
+        justify-content: center;
+        height: 258px;
+      }
+    </style>
+
+    <!--<br />-->
+    <h2 id="cglib">CGLIB</h2>
+
+<p>CGLIB(Code Generator Library)는 코드 생성 라이브러리로서 런타임에 동적으로 자바 클래스의 프록시를 생성해주는 기능을 제공한다. 
+인터페이스가 아닌 클래스에 대해서 동적 프록시를 생성할 수 있다.
+인터페이스 기반은 JDK Dynamic Proxy로 클래스 기반은 CGLIB를 사용한다.
+CGLIB는 타겟에 대한 정보를 직접적으로 제공 받아 바이트 코드를 조작하여 프록시를 생성한다. 
+때문에 리플렉션을 사용하는 JDK Dynamic Proxy에 비해서 성능이 좋다. 또한 CGLIB는 메소드가 처음 호출 되었을 때 동적으로 타켓 클래스의 바이트 코드를 조작하고, 이후 호출 시엔 조작된 바이트 코드를 재사용한다.</p>
 <ul>
-  <li>SpringBoot</li>
-  <li>SpringAop</li>
-  <li>Spring webFlux</li>
-  <li>Functional Programming</li>
+  <li>인터페이스 없이 단순 클래스만으로 프록시 객체를 동적으로 생성이 가능하다.</li>
+  <li>리플렉션이 아닌 바이트 조작을 사용하며, 타겟에 대한 정보를 알고 있기 때문에 JDK Dynamic Proxy에 비해 성능이 좋다.</li>
 </ul>
 
-<h2 id="프로젝트">프로젝트</h2>
-
-<h2 id="aws-스토리지-서비스">aws 스토리지 서비스</h2>
+<p><img width="654" alt="Image" src="https://github.com/user-attachments/assets/11bfc645-c5a8-4479-9ce6-d04e50ca6a3b" /></p>
 
 <ul>
-  <li>
-    <p><a href="https://github.com/taewoocode/Final_Project">저장소 링크</a></p>
-  </li>
-  <li><strong>Spring Boot 기반 백엔드 서비스 개발</strong>
-    <ul>
-      <li>AWS SDK를 사용하여 S3 버킷과 DynamoDB에 대한 파일 및 데이터의 CRUD 작업을 수행할 수 있는 백엔드 서비스를 구축</li>
-      <li>파일 업로드, 다운로드, 수정, 삭제 기능과 같은 기본적인 CRUD 기능을 통해 대용량 파일을 포함한 데이터를 안전하고 효율적으로 관리</li>
-    </ul>
-  </li>
-  <li><strong>데이터 관리 최적화 및 비용 절감 전략</strong>
-    <ul>
-      <li>AWS Lambda와의 통합을 통해 S3 파일 객체 접근 빈도를 분석</li>
-      <li>접근 빈도가 높은 파일은 S3의 Hot Zone에 저장하고, 빈도가 낮은 파일은 비용 효율이 높은 Glacier의 Cold Zone에 자동으로 이동시키는 알고리즘을 구현</li>
-      <li>이를 통해 스토리지 사용 패턴에 따라 최적의 데이터 분류가 이루어지며, 특히 대규모 파일 데이터 관리 시 비용 절감을 달성</li>
-      <li>요청 수 100,000건 기준으로 45.8%의 비용 절감, 전체적으로 약 23.5%의 비용 절감 달성</li>
-    </ul>
-  </li>
+  <li>TimeMethodInterceptor는 MethodInterceptor 인터페이스를 구현해서 CGLIB 프록시의 실행 로직을 정의한다.</li>
+  <li>JDK 동적 프록시라고 생각하면 편하다</li>
+  <li>method.invoke(target, args) 실제 대상을 동적으로 호출한다.</li>
 </ul>
 
-<h2 id="kubernetes를-활용한-나만의-게시판-만들기">Kubernetes를 활용한 나만의 게시판 만들기</h2>
-<ul>
-  <li>
-    <p><a href="https://github.com/yiminsoo/ToyProject">저장소 링크</a></p>
-  </li>
-  <li><strong>Elastic Kubernetes Service를 통한 수평적 스케일링 및 자동화</strong>
-    <ul>
-      <li>Pod 수를 트래픽에 따라 자동으로 조정하는 수평 확장 기능을 적용</li>
-      <li>이를 통해 트래픽이 급증할 때도 애플리케이션의 성능이 유지되도록 보장</li>
-      <li>Horizontal Pod Autoscaler(HPA)와 EKS Auto Scaling을 조합해 구성하여 동적 스케일링을 구현</li>
-    </ul>
-  </li>
-  <li><strong>Prometheus와 Grafana를 통한 실시간 모니터링 및 시각화</strong>
-    <ul>
-      <li>Prometheus와 Grafana를 사용하여 서버 및 애플리케이션의 상태와 성능을 실시간으로 모니터링하고 시각화</li>
-      <li>주요 메트릭에 대한 경고를 설정하여 시스템의 안정성을 보장</li>
-    </ul>
-  </li>
-</ul>
-
-<h2 id="네트워크-분석기">네트워크 분석기</h2>
+<p><img width="654" alt="Image" src="https://github.com/user-attachments/assets/ccd197b8-4f04-4761-bae4-94222c7ed80e" /></p>
 
 <ul>
-  <li>
-    <p><a href="https://github.com/taewoocode/NetWork-Analyzor">저장소 링크</a></p>
-  </li>
-  <li>
-    <p><strong>MFC 기반 네트워크 분석 도구 개발</strong></p>
+  <li>ConcreteService를 상속받아서 동적으로 프록시를 만들게 된다.
     <ul>
-      <li>비전공자들도 쉽게 네트워크 성능을 분석하고 튜닝할 수 있도록 돕는 네트워크 분석기를 MFC 프로그래밍을 통해 설계</li>
-      <li>MFC의 Document/View 아키텍처를 이용하여 네트워크 데이터를 직관적으로 볼 수 있도록 구성</li>
-      <li>시각적 접근성을 높이기 위해 다양한 그래픽 요소를 활용</li>
-      <li>Message Map을 사용해 메뉴와 도구 등 다양한 이벤트 핸들러를 등록하여, 비전공자도 쉽게 사용할 수 있는 직관적인 UI를 제공</li>
+      <li>따라서 proxy는 ConcreteService로 캐스팅이 가능하다.</li>
     </ul>
   </li>
+  <li>Enhancer: CGLIB는 Enhancer를 사용해서 프록시를 생성한다.</li>
+  <li>CGLIB는 구체 클래스를 상속 받아서 프록시를 생성할 수 있다. 어떤 구체 클래스를 상속 받을지 지정한다.</li>
+  <li>프록시에 적용할 실행 로직을 할당한다.</li>
+  <li>프록시를 생성한다. 앞서 설정한 enhancer.setSuperclass(ConcreteServlce.class)에서 지정한 클래스를 상속 받아서 프록시가 만들어진다.</li>
 </ul>
 
-<h2 id="스킬">스킬</h2>
+<p><img width="654" alt="Image" src="https://github.com/user-attachments/assets/e386d810-f642-4295-b4d1-05ca3236ed27" /></p>
 
 <ul>
-  <li>Programming: Java, Cpp</li>
-  <li>Framework: Spring mvc, Spring Boot, Spring JPA, Spring jdbc, Spring Security, Spring AOP, Spring actuator, JUnit5</li>
-  <li>Cloud: AWS</li>
-  <li>Deployment: Kubernetes</li>
-  <li>DevOps: Grafana, Prometheus, Terraform</li>
-  <li>Virtualization: Docker, VMwareWorkStation</li>
-  <li>Tools: IntelliJ, DataGrip, VSCode, Github, Slack, Confluence, Jira</li>
+  <li>테스트 결과는 동적으로 프록시를 만들게 되는데 ConcreteService를 상속받아서 클래스를 만들게 된다.</li>
 </ul>
 
-<h2 id="education">Education</h2>
+<h2 id="클래스-의존-관계">클래스 의존 관계</h2>
 
-<h2 id="kakao-cloud">kakao cloud</h2>
+<p><img width="654" alt="Image" src="https://github.com/user-attachments/assets/db43e60a-8f09-4ccc-8bb6-6280d813e4bb" /></p>
 
-<p>2023.12.09 ~ 2024.06.12</p>
+<p>여기서 Client는 TestCode를 의미한다.
+우선 동적 프록시는 ConcreteServlce를 상속받아서 만들어진다.
+그리고 동적 프록시는 handlerInterceptor를 뒤에서 호출하게 된다.</p>
 
-<ul>
-  <li>서비스를 위한 인프라 환경을 구축 및 실습
-    <ul>
-      <li>K8S클러스터 구성하기 &amp; 서비스 배포하기</li>
-      <li>AWS를 이용한 인프라 구축하기</li>
-      <li>ELK Stack: Elasticsearch, Logstash, Kibana를 통한 로그 수집, 분석 및 시각화</li>
-      <li>Prometheus &amp; Grafana를 활용하여 서버 및 애플리케이션의 상태와 성능을 모니터링</li>
-    </ul>
-  </li>
-</ul>
+<h2 id="런타임-의존-괸계">런타임 의존 괸계</h2>
 
-<h2 id="mentoring">mentoring</h2>
+<p><img width="654" alt="Image" src="https://github.com/user-attachments/assets/c6ebc15f-70db-4611-995e-96865ac1cc8a" /></p>
 
-<p>2023.09 ~ 2024.01</p>
+<h2 id="reference">Reference</h2>
 
-<ul>
-  <li>멘토, 멘티 시스템
-    <ul>
-      <li>Java, Spring</li>
-      <li>객체지향 설계기반의 개발교육</li>
-      <li>과제 기반의 프로그래밍 교육</li>
-    </ul>
-  </li>
-</ul>
+<p>김영한님의 스프링 핵심 원리</p>
 
-<h2 id="gdscgoogle-development-school-club">GDSC(Google Development School Club)</h2>
-
-<p>2023.08 ~ 2023.12</p>
-
-<ul>
-  <li>학내 동아리 활동
-    <ul>
-      <li>CoreMember</li>
-      <li>활동 LeadMember와 세션 진행 및 CS 스터디 운영</li>
-    </ul>
-  </li>
-</ul>
+<p>나의 뇌</p>
 
 
+    <br />
+    <br />
   </div>
-</article>  <footer>
+  
+
+</article>
+
+<!--<hr class="dingbat" />-->
+<!--
+<div class="share">
+  <h2>Share this post</h2>
+  <div class="share-body">
+    <a href="http://twitter.com/share?text=Spring adv 05 - CGLIB&amp;url=http://localhost:4000/framework/2025/01/12/Spring-adv-05/"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="icon-twitter">
+      </span>
+    </a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/framework/2025/01/12/Spring-adv-05/"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="icon-facebook">
+      </span>
+    </a>
+  </div>
+</div>
+-->
+<br />
+
+
+
+
+<aside class="related" role="complementary">
+  <h2 class="hr">Related Posts</h2>
+
+  <ul class="related-posts">
+    
+      
+      
+      
+        
+          
+          
+        
+        
+          
+
+
+<li class="h4">
+  <a href="/framework/2025/01/09/Spring-adv-04/" data-flip="title">
+    <span>Spring adv 04 - Proxy Pattern</span>
+  </a>
+  <small><time datetime="2025-01-09T00:00:00+09:00">
+    09 Jan 2025
+  </time></small>
+</li>
+
+        
+      
+        
+        
+          
+
+
+<li class="h4">
+  <a href="/framework/2025/01/08/Spring-adv-03/" data-flip="title">
+    <span>Spring adv 03 - Template Method Pattern - 1</span>
+  </a>
+  <small><time datetime="2025-01-08T00:00:00+09:00">
+    08 Jan 2025
+  </time></small>
+</li>
+
+        
+      
+        
+        
+          
+
+
+<li class="h4">
+  <a href="/framework/2025/01/05/Spring-adv-02/" data-flip="title">
+    <span>Spring adv 02 - log ProtoType 적용</span>
+  </a>
+  <small><time datetime="2025-01-05T00:00:00+09:00">
+    05 Jan 2025
+  </time></small>
+</li>
+
+        
+      
+    
+  </ul>
+</aside>
+  <aside class="comments" role="complementary">
+  <h2>Comments</h2>
+  <hr/>
+
+  <script src="https://utteranc.es/client.js"
+          repo="taewoocode/taewoocode.github.io"
+          issue-term="title"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+</aside>
+
+
+       <footer>
   <hr/>
   
     <p>© 2022. by taewoo</p>
@@ -1017,7 +1132,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     <li>
       <input type="checkbox" id="list-item-9"/>
       <div  class="list-wrapper">
-      <a class="sidebar-nav-item active" href="/about/">About</a>
+      <a class="sidebar-nav-item" href="/about/">About</a>
        
     </div>
      <ul class="list-body">

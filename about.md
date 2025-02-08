@@ -93,3 +93,4 @@ order: 10
 - 학내 동아리 활동
   - CoreMember
   - 활동 LeadMember와 세션 진행 및 CS 스터디 운영
+

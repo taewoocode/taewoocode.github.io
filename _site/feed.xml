@@ -6,9 +6,81 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 23 Jan 2025 02:06:55 +0900</pubDate>
-    <lastBuildDate>Thu, 23 Jan 2025 02:06:55 +0900</lastBuildDate>
+    <pubDate>Sun, 09 Feb 2025 04:08:08 +0900</pubDate>
+    <lastBuildDate>Sun, 09 Feb 2025 04:08:08 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
+    
+      <item>
+        <title>Spring adv 05 - CGLIB</title>
+        <description>&lt;h2 id=&quot;cglib&quot;&gt;CGLIB&lt;/h2&gt;
+
+&lt;p&gt;CGLIB(Code Generator Library)는 코드 생성 라이브러리로서 런타임에 동적으로 자바 클래스의 프록시를 생성해주는 기능을 제공한다. 
+인터페이스가 아닌 클래스에 대해서 동적 프록시를 생성할 수 있다.
+인터페이스 기반은 JDK Dynamic Proxy로 클래스 기반은 CGLIB를 사용한다.
+CGLIB는 타겟에 대한 정보를 직접적으로 제공 받아 바이트 코드를 조작하여 프록시를 생성한다. 
+때문에 리플렉션을 사용하는 JDK Dynamic Proxy에 비해서 성능이 좋다. 또한 CGLIB는 메소드가 처음 호출 되었을 때 동적으로 타켓 클래스의 바이트 코드를 조작하고, 이후 호출 시엔 조작된 바이트 코드를 재사용한다.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;인터페이스 없이 단순 클래스만으로 프록시 객체를 동적으로 생성이 가능하다.&lt;/li&gt;
+  &lt;li&gt;리플렉션이 아닌 바이트 조작을 사용하며, 타겟에 대한 정보를 알고 있기 때문에 JDK Dynamic Proxy에 비해 성능이 좋다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/11bfc645-c5a8-4479-9ce6-d04e50ca6a3b&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;TimeMethodInterceptor는 MethodInterceptor 인터페이스를 구현해서 CGLIB 프록시의 실행 로직을 정의한다.&lt;/li&gt;
+  &lt;li&gt;JDK 동적 프록시라고 생각하면 편하다&lt;/li&gt;
+  &lt;li&gt;method.invoke(target, args) 실제 대상을 동적으로 호출한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/ccd197b8-4f04-4761-bae4-94222c7ed80e&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;ConcreteService를 상속받아서 동적으로 프록시를 만들게 된다.
+    &lt;ul&gt;
+      &lt;li&gt;따라서 proxy는 ConcreteService로 캐스팅이 가능하다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Enhancer: CGLIB는 Enhancer를 사용해서 프록시를 생성한다.&lt;/li&gt;
+  &lt;li&gt;CGLIB는 구체 클래스를 상속 받아서 프록시를 생성할 수 있다. 어떤 구체 클래스를 상속 받을지 지정한다.&lt;/li&gt;
+  &lt;li&gt;프록시에 적용할 실행 로직을 할당한다.&lt;/li&gt;
+  &lt;li&gt;프록시를 생성한다. 앞서 설정한 enhancer.setSuperclass(ConcreteServlce.class)에서 지정한 클래스를 상속 받아서 프록시가 만들어진다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/e386d810-f642-4295-b4d1-05ca3236ed27&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;테스트 결과는 동적으로 프록시를 만들게 되는데 ConcreteService를 상속받아서 클래스를 만들게 된다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;클래스-의존-관계&quot;&gt;클래스 의존 관계&lt;/h2&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/db43e60a-8f09-4ccc-8bb6-6280d813e4bb&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;여기서 Client는 TestCode를 의미한다.
+우선 동적 프록시는 ConcreteServlce를 상속받아서 만들어진다.
+그리고 동적 프록시는 handlerInterceptor를 뒤에서 호출하게 된다.&lt;/p&gt;
+
+&lt;h2 id=&quot;런타임-의존-괸계&quot;&gt;런타임 의존 괸계&lt;/h2&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/c6ebc15f-70db-4611-995e-96865ac1cc8a&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;김영한님의 스프링 핵심 원리&lt;/p&gt;
+
+&lt;p&gt;나의 뇌&lt;/p&gt;
+
+</description>
+        <pubDate>Sun, 12 Jan 2025 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/framework/2025/01/12/Spring-adv-05/</link>
+        <guid isPermaLink="true">http://localhost:4000/framework/2025/01/12/Spring-adv-05/</guid>
+        
+        <category>spring</category>
+        
+        
+        <category>framework</category>
+        
+      </item>
     
       <item>
         <title>Spring adv 04 - Proxy Pattern</title>
@@ -16,7 +88,7 @@
 
 &lt;p&gt;클라이언트가 요청한 결과를 서버에 직접 요청하는 것이 아니라 어떤 대리자를 통해서 대신 간접적으로 서버에 요청할 수 있다.
 예를 들어서 내가 직접 마트에서 장을 볼 수도 있지만, 누군가에게 대신 장을 봐달라고 부탁할 수도 있다.
-여기서 대신 장을 보는 &lt;strong&gt;**대리자를&lt;/strong&gt; &lt;strong&gt;영어로&lt;/strong&gt; &lt;strong&gt;프록시&lt;/strong&gt;(Proxy)**라 한다.&lt;/p&gt;
+여기서 대신 장을 보는 &lt;strong&gt;대리자를&lt;/strong&gt; &lt;strong&gt;영어로&lt;/strong&gt; &lt;strong&gt;프록시&lt;/strong&gt;(Proxy)라 한다.&lt;/p&gt;
 
 &lt;h2 id=&quot;예시&quot;&gt;예시&lt;/h2&gt;
 
@@ -2335,106 +2407,6 @@ Executor 프레임워크의 가장 큰 강점은 스레드를 생성하거나 �
         
         
         <category>cs</category>
-        
-      </item>
-    
-      <item>
-        <title>Java Adv 22 - Executor framework</title>
-        <description>&lt;h2 id=&quot;executor-&quot;&gt;Executor ?&lt;/h2&gt;
-
-&lt;p&gt;자바의 Excutor 프레임워크는 멀티스레딩 및 병렬처리를 쉽게 사용할 수 있도록 돕는 기능의 모음이다.
-이 프레임워크는 작업 실행의 관리 및 스레드 풀 관리를 효율적으로 처리해서 개발자가 직접 스레드를 생성하고 관리하는 복잡함을 줄여준다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;701&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/36cca863-d732-4b84-b54f-7a679a910d9f&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;pool: 스레드 풀에서 관리되는 스레드의 숫자&lt;/li&gt;
-  &lt;li&gt;active: 작업을 수행중인 스레드의 숫자&lt;/li&gt;
-  &lt;li&gt;queuedTask: 큐에 대기중인 작업의 숫자&lt;/li&gt;
-  &lt;li&gt;completedTask: 완료된 작업의 숫자&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;16:21:25.327 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;     main] &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; 초기 상태 &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; 
-16:21:25.337 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;     main] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;pool&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0, &lt;span class=&quot;nv&quot;&gt;active&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0, &lt;span class=&quot;nv&quot;&gt;queuedTasks&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0, &lt;span class=&quot;nv&quot;&gt;completedTask&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0]
-16:21:25.338 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;     main] &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; 작업 수행 중 &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; 
-16:21:25.338 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;     main] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;pool&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2, &lt;span class=&quot;nv&quot;&gt;active&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2, &lt;span class=&quot;nv&quot;&gt;queuedTasks&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2, &lt;span class=&quot;nv&quot;&gt;completedTask&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0]
-16:21:25.338 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;pool-1-thread-2] taskB 시작
-16:21:25.338 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;pool-1-thread-1] taskA 시작
-16:21:26.343 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;pool-1-thread-2] taskB 완료
-16:21:26.343 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;pool-1-thread-1] taskA 완료
-16:21:26.344 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;pool-1-thread-2] taskC 시작
-16:21:26.344 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;pool-1-thread-1] taskD 시작
-16:21:27.348 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;pool-1-thread-2] taskC 완료
-16:21:27.349 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;pool-1-thread-1] taskD 완료
-16:21:28.344 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;     main] &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; 작업 수행 완료 &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; 
-16:21:28.345 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;     main] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;pool&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2, &lt;span class=&quot;nv&quot;&gt;active&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0, &lt;span class=&quot;nv&quot;&gt;queuedTasks&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0, &lt;span class=&quot;nv&quot;&gt;completedTask&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;4]
-16:21:28.347 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;     main] &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; shutdown &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; 
-16:21:28.347 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;     main] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;pool&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0, &lt;span class=&quot;nv&quot;&gt;active&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0, &lt;span class=&quot;nv&quot;&gt;queuedTasks&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0, &lt;span class=&quot;nv&quot;&gt;completedTask&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;4]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;threadpoolexecutor의-구성-요소-및-동작-원리&quot;&gt;ThreadPoolExecutor의 구성 요소 및 동작 원리&lt;/h2&gt;
-
-&lt;h2 id=&quot;1-구성-요소&quot;&gt;1. &lt;strong&gt;구성 요소&lt;/strong&gt;&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;스레드 풀&lt;/strong&gt;: 스레드를 생성하고 관리하는 역할을 한다.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;BlockingQueue&lt;/strong&gt;: 작업을 보관하며, 생산자-소비자 문제를 해결하기 위해 단순 큐 대신 사용된다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;2-생산자와-소비자&quot;&gt;2. &lt;strong&gt;생산자와 소비자&lt;/strong&gt;&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;생산자&lt;/strong&gt;: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;main&lt;/code&gt; 스레드가 생산자로, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;es.execute(작업)&lt;/code&gt; 호출 시 작업이 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BlockingQueue&lt;/code&gt;에 저장된다.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;소비자&lt;/strong&gt;: 스레드 풀 내의 스레드가 소비자로, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BlockingQueue&lt;/code&gt;에서 작업을 꺼내어 처리한다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;3-threadpoolexecutor-생성자-주요-속성&quot;&gt;3. &lt;strong&gt;ThreadPoolExecutor 생성자 주요 속성&lt;/strong&gt;&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;corePoolSize: 기본적으로 유지되는 스레드 수.&lt;/li&gt;
-  &lt;li&gt;maximumPoolSize: 허용되는 최대 스레드 수.&lt;/li&gt;
-  &lt;li&gt;keepAliveTime 및 TimeUnit unit: 기본 스레드 수를 초과한 스레드가 유지되는 시간. 시간이 초과되면 스레드가 제거된다.&lt;/li&gt;
-  &lt;li&gt;BlockingQueue workQueue: 작업을 저장하는 블로킹 큐.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;4-구체적인-예&quot;&gt;4. 구체적인 예&lt;/h2&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ThreadPoolExecutor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TimeUnit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;MILLISECONDS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;LinkedBlockingQueue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;());&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;corePoolSize=2, maximumPoolSize=2: 스레드 풀에서 스레드 수는 고정(2개)이다.&lt;/li&gt;
-  &lt;li&gt;keepAliveTime=0 및 TimeUnit.MILLISECONDS: 초과 스레드가 제거될 시간이 없으므로 의미 없음.&lt;/li&gt;
-  &lt;li&gt;LinkedBlockingQueue: 작업을 무한정 저장할 수 있는 블로킹 큐를 사용.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;참고로 당연한 이야기지만 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;main&lt;/code&gt; 스레드는 작업을 전달하고 기다리지 않는다. 전달한 작업은 다른 스레드
-가 실행할 것이다. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;main&lt;/code&gt; 스레드는 작업을 큐에 보관까지만 하고 바로 다음 코드를 수행한다.
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;taskA~D&lt;/code&gt; 요청이 블로킹 큐에 들어온다.
-최초의 작업이 들어오면 이때 작업을 처리하기 위해 스레드를 만든다.
-참고로 스레드 풀에 스레드를 미리 만들어두지는 않는다.
-작업이 들어올 때 마다 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;corePoolSize&lt;/code&gt; 의 크기 까지 스레드를 만든다.
-예를 들어서 최초 작업인 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;taskA&lt;/code&gt; 가 들어오는 시점에 스레드1을 생성하고, 
-다음 작업인 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;taskB&lt;/code&gt; 가 들어오는 시점에 스레드2를 생성한다. 
-이런 방식으로 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;corePoolSize&lt;/code&gt; 에 지정한 수 만큼 스레드를 스레드 풀에 만든다. 
-여기서는 2를 설정했으므로 2개까지 만든다. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;corePoolSize&lt;/code&gt; 까지 스레드가 생성되고 나면, 
-이후에는 스레드를 생성하지 않고 앞서 만든 스레드를 재b사용한다.&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;김영한님의 자바 강의&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://docs.oracle.com/javase/tutorial/essential/concurrency/sync.html&quot;&gt;https://docs.oracle.com/javase/tutorial/essential/concurrency/sync.html&lt;/a&gt;&lt;/p&gt;
-
-</description>
-        <pubDate>Sat, 26 Oct 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/language/2024/10/26/Java-Adv-22/</link>
-        <guid isPermaLink="true">http://localhost:4000/language/2024/10/26/Java-Adv-22/</guid>
-        
-        <category>java</category>
-        
-        
-        <category>language</category>
         
       </item>
     
