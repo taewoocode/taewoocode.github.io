@@ -6,9 +6,226 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 09 Feb 2025 04:29:32 +0900</pubDate>
-    <lastBuildDate>Sun, 09 Feb 2025 04:29:32 +0900</lastBuildDate>
+    <pubDate>Sun, 23 Feb 2025 03:14:09 +0900</pubDate>
+    <lastBuildDate>Sun, 23 Feb 2025 03:14:09 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
+    
+      <item>
+        <title>Kubernetes - 파드와 디플로이먼트 차이</title>
+        <description>&lt;h2 id=&quot;파드와-디플로이먼트는-무슨-차이가-있을까&quot;&gt;파드와 디플로이먼트는 무슨 차이가 있을까?&lt;/h2&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/018405f8-897b-4298-bd29-7bca900f315f&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;run과 create deployment로 파드를 생성하는 것은 무슨차이가 있을까?&lt;/li&gt;
+  &lt;li&gt;run으로 파드를 생성하면 단일 파드 1개만 생성되고 관리된다. 그리고 create deployment로 파드를 생성하면 디플로이먼트(deployment)라는 관리 그룹 내에서 파드가 생성된다. 비유를 들자면, run으로 생성한 파드는 초코파이 1개이고, create deployment로 생성한 파드는 초코파이 상자에 들어있는 초코파이 1개가 된다.&lt;/li&gt;
+  &lt;li&gt;kubectl run은 사실 테스트 목적으로 자주사용된다. 그냥 간편한 목적으로 사용된다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;디플로이먼트로-배포하기&quot;&gt;디플로이먼트로 배포하기&lt;/h2&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@cp-k8s:~# kubectl create deployment deploy-nginx &lt;span class=&quot;nt&quot;&gt;--image&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;nginx
+deployment.apps/deploy-nginx created
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@cp-k8s:~# kubectl get pods
+NAME                            READY   STATUS    RESTARTS   AGE
+deploy-nginx-74d7d6d848-jz428   1/1     Running   0          19s
+nginx                           1/1     Running   0          74m
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;파드가 한개만 있을 수 있는 것은 아니기 때문에 hash 코드를 이용해서 랜덤하게 고유 이름을 지정해준다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@cp-k8s:~# kubectl get pods &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; wide
+NAME                            READY   STATUS    RESTARTS   AGE    IP               NODE     NOMINATED NODE   READINESS GATES
+deploy-nginx-74d7d6d848-jz428   1/1     Running   0          114s   172.16.132.1     w3-k8s   &amp;lt;none&amp;gt;           &amp;lt;none&amp;gt;
+nginx                           1/1     Running   0          75m    172.16.103.129   w2-k8s   &amp;lt;none&amp;gt;           &amp;lt;none&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@cp-k8s:~# curl 172.16.132.1
+&amp;lt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+&amp;lt;&lt;span class=&quot;nb&quot;&gt;head&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+&amp;lt;title&amp;gt;Welcome to nginx!&amp;lt;/title&amp;gt;
+&amp;lt;style&amp;gt;
+html &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; color-scheme: light dark&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+body &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; width: 35em&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; margin: 0 auto&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+font-family: Tahoma, Verdana, Arial, sans-serif&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&amp;lt;/style&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+&amp;lt;h1&amp;gt;Welcome to nginx!&amp;lt;/h1&amp;gt;
+&amp;lt;p&amp;gt;If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.&amp;lt;/p&amp;gt;
+
+&amp;lt;p&amp;gt;For online documentation and support please refer to
+&amp;lt;a &lt;span class=&quot;nv&quot;&gt;href&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://nginx.org/&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;nginx.org&amp;lt;/a&amp;gt;.&amp;lt;br/&amp;gt;
+Commercial support is available at
+&amp;lt;a &lt;span class=&quot;nv&quot;&gt;href&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://nginx.com/&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;nginx.com&amp;lt;/a&amp;gt;.&amp;lt;/p&amp;gt;
+
+&amp;lt;p&amp;gt;&amp;lt;em&amp;gt;Thank you &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;using nginx.&amp;lt;/em&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;여러개-배포한다면서-왜-하나만-배포되는가&quot;&gt;여러개 배포한다면서 왜 하나만 배포되는가?&lt;/h2&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/84135c3f-13c7-4b35-b0cc-3f8cff24bc8a&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;여러개를 배포하기 위해서는 내부에 레플리카 셋이라는 것에 대한 도움을 받아야 한다.&lt;/li&gt;
+  &lt;li&gt;예를 들어 파드를 3개 만들겠다고 레플리카셋에 선언함녀 컨트롤러 매니저와 스케줄러가 워커 노드에 파들 3개를 만들도록 선언한다. 그러나 레플리카셋은 파드 수를 보장하는 기능만 제공하기 때문에 롤링 업데이트 기능 등이 추가된 디플로이먼트를 사용해 파드 수를 관리하기를 권장한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@cp-k8s:~# kubectl scale deployment deploy-nginx &lt;span class=&quot;nt&quot;&gt;--replicas&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;3
+deployment.apps/deploy-nginx scaled
+root@cp-k8s:~# 
+root@cp-k8s:~# 
+root@cp-k8s:~# kubectl get pods
+NAME                            READY   STATUS              RESTARTS   AGE
+deploy-nginx-74d7d6d848-jz428   1/1     Running             0          5m51s
+deploy-nginx-74d7d6d848-rzptz   1/1     Running             0          6s
+deploy-nginx-74d7d6d848-zts8t   1/1     Running             0          6s
+nginx                           1/1     Running             0          79m
+root@cp-k8s:~# 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.redhat.com/ko/topics/containers/what-is-kubernetes&quot;&gt;https://www.redhat.com/ko/topics/containers/what-is-kubernetes&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://cloud.google.com/kubernetes-engine?hl=ko&quot;&gt;https://cloud.google.com/kubernetes-engine?hl=ko&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&amp;lt;&lt;a href=&quot;https://www.openmaru.io/%ea%b5%ac%ea%b8%80%ea%b3%bc-%ec%bf%a0%eb%b2%84%eb%84%a4%ed%8b%b0%ec%8a%a4/&quot;&gt;https://www.openmaru.io/구글과-쿠버네티스/&lt;/a&gt;&amp;gt;&lt;/p&gt;
+</description>
+        <pubDate>Tue, 21 Jan 2025 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/devops/2025/01/21/Kubernetes-basic-10/</link>
+        <guid isPermaLink="true">http://localhost:4000/devops/2025/01/21/Kubernetes-basic-10/</guid>
+        
+        <category>k8s</category>
+        
+        
+        <category>devops</category>
+        
+      </item>
+    
+      <item>
+        <title>Kubernetes - 파드를 외부에서 접속</title>
+        <description>&lt;h2 id=&quot;외부에서-접속하게-하려면&quot;&gt;외부에서 접속하게 하려면?&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;서비스(SVC)&lt;/strong&gt;는 Kubernetes에서 클러스터 내 파드들에 대한 접근 지점을 제공한다.
+서비스는 클러스터 내부의 여러 파드들을 추상화하고, 외부에서 그 서비스에 접근할 수 있도록 연결하는 역할을 한다.&lt;/li&gt;
+  &lt;li&gt;서비스는 파드를 찾는 경로를 제공하며, 외부 요청을 적절한 파드로 로드벨런싱하여 전달한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;nodeport&quot;&gt;NodePort&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;NodePort는 Kubernetes에서 서비스가 외부와 통신할 수 있도록 만드는 방법 중에 하나이다.&lt;/li&gt;
+  &lt;li&gt;클러스터 내 파드는 외부와 직접 연결되지는 않지만, 서비스가 노트포트를 통해 외부 트래픽을 수신한다.
+    &lt;ul&gt;
+      &lt;li&gt;즉 서비스가 파드들로 트래픽을 전달하는 구조를 맡고있다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;서비스를-통해서-외부와-연결되는-파드&quot;&gt;서비스를 통해서 외부와 연결되는 파드&lt;/h2&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@cp-k8s:~# kubectl run nginx &lt;span class=&quot;nt&quot;&gt;--image&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;nginx
+pod/nginx created
+root@cp-k8s:~# k get pods
+NAME    READY   STATUS              RESTARTS   AGE
+nginx   1/1     Running   0          11s
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;배포한-파드의-ip-확인&quot;&gt;배포한 파드의 IP 확인&lt;/h2&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@cp-k8s:~# kubectl get pods &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; wide
+NAME    READY   STATUS    RESTARTS   AGE   IP               NODE     NOMINATED NODE   READINESS GATES
+nginx   1/1     Running   0          77s   172.16.103.129   w2-k8s   &amp;lt;none&amp;gt;           &amp;lt;none&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;파드의 IP는 172.17.103.129임을 확인할 수 있다.&lt;/p&gt;
+
+&lt;h2 id=&quot;curl을-통해-확인&quot;&gt;curl을 통해 확인&lt;/h2&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@cp-k8s:~# curl 172.16.103.129
+&amp;lt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+&amp;lt;&lt;span class=&quot;nb&quot;&gt;head&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+&amp;lt;title&amp;gt;Welcome to nginx!&amp;lt;/title&amp;gt;
+&amp;lt;style&amp;gt;
+html &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; color-scheme: light dark&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+body &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; width: 35em&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; margin: 0 auto&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+font-family: Tahoma, Verdana, Arial, sans-serif&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&amp;lt;/style&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+&amp;lt;h1&amp;gt;Welcome to nginx!&amp;lt;/h1&amp;gt;
+&amp;lt;p&amp;gt;If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.&amp;lt;/p&amp;gt;
+
+&amp;lt;p&amp;gt;For online documentation and support please refer to
+&amp;lt;a &lt;span class=&quot;nv&quot;&gt;href&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://nginx.org/&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;nginx.org&amp;lt;/a&amp;gt;.&amp;lt;br/&amp;gt;
+Commercial support is available at
+&amp;lt;a &lt;span class=&quot;nv&quot;&gt;href&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://nginx.com/&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;nginx.com&amp;lt;/a&amp;gt;.&amp;lt;/p&amp;gt;
+
+&amp;lt;p&amp;gt;&amp;lt;em&amp;gt;Thank you &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;using nginx.&amp;lt;/em&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;파드를-노출&quot;&gt;파드를 노출&lt;/h2&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@cp-k8s:~# kubectl expose pod nginx &lt;span class=&quot;nt&quot;&gt;--type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;NodePort &lt;span class=&quot;nt&quot;&gt;--port&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;80
+service/nginx exposed
+
+root@cp-k8s:~# kubectl get svc
+NAME         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;S&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;        AGE
+kubernetes   ClusterIP   10.96.0.1      &amp;lt;none&amp;gt;        443/TCP        41m
+nginx        NodePort    10.99.57.196   &amp;lt;none&amp;gt;        80:31102/TCP   18s
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;노드에 접속을 해서 파드에 접속한다. 그래서 노드에 대한 정보가 필요하다&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@cp-k8s:~# kubectl get nodes &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; wide
+NAME     STATUS   ROLES           AGE   VERSION   INTERNAL-IP     EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION       CONTAINER-RUNTIME
+cp-k8s   Ready    control-plane   42m   v1.30.1   192.168.1.10    &amp;lt;none&amp;gt;        Ubuntu 22.04.4 LTS   5.15.0-107-generic   containerd://1.6.28
+w1-k8s   Ready    &amp;lt;none&amp;gt;          40m   v1.30.1   192.168.1.101   &amp;lt;none&amp;gt;        Ubuntu 22.04.4 LTS   5.15.0-107-generic   containerd://1.6.28
+w2-k8s   Ready    &amp;lt;none&amp;gt;          38m   v1.30.1   192.168.1.102   &amp;lt;none&amp;gt;        Ubuntu 22.04.4 LTS   5.15.0-107-generic   containerd://1.6.28
+w3-k8s   Ready    &amp;lt;none&amp;gt;          37m   v1.30.1   192.168.1.103   &amp;lt;none&amp;gt;        Ubuntu 22.04.4 LTS   5.15.0-107-generic   containerd://1.6.28
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;80&lt;/strong&gt;: Kubernetes 클러스터 내에서 서비스가 수신하는 &lt;strong&gt;내부 포트이다&lt;/strong&gt;. 클러스터 내부에서 다른 파드나 서비스가 이 포트로 접근한다.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;31102&lt;/strong&gt;: 외부에서 이 서비스를 접근할 때 사용하는 &lt;strong&gt;노드 포트이다(외부포트)&lt;/strong&gt;. 외부에서 클러스터 노드의 IP와 함께 이 포트로 접근할 수 있다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;브라우저외부-접속-확인&quot;&gt;브라우저(외부) 접속 확인&lt;/h2&gt;
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/c1e18538-9536-4988-a70d-44bee911b751&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.redhat.com/ko/topics/containers/what-is-kubernetes&quot;&gt;https://www.redhat.com/ko/topics/containers/what-is-kubernetes&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://cloud.google.com/kubernetes-engine?hl=ko&quot;&gt;https://cloud.google.com/kubernetes-engine?hl=ko&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&amp;lt;&lt;a href=&quot;https://www.openmaru.io/%ea%b5%ac%ea%b8%80%ea%b3%bc-%ec%bf%a0%eb%b2%84%eb%84%a4%ed%8b%b0%ec%8a%a4/&quot;&gt;https://www.openmaru.io/구글과-쿠버네티스/&lt;/a&gt;&amp;gt;&lt;/p&gt;
+</description>
+        <pubDate>Mon, 20 Jan 2025 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/devops/2025/01/20/Kubernetes-basic-09/</link>
+        <guid isPermaLink="true">http://localhost:4000/devops/2025/01/20/Kubernetes-basic-09/</guid>
+        
+        <category>k8s</category>
+        
+        
+        <category>devops</category>
+        
+      </item>
     
       <item>
         <title>Spring adv 05 - CGLIB</title>
@@ -2238,178 +2455,6 @@ include 경로를 제거해줘야 한다.
         
         
         <category>framework</category>
-        
-      </item>
-    
-      <item>
-        <title>Java Adv 23 - Executor framework</title>
-        <description>&lt;h2 id=&quot;callable&quot;&gt;Callable&lt;/h2&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/ad0cac70-aafe-4107-8856-3b28743de4dd&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;java.util.concurrent.Executors&lt;/code&gt; 가 제공하는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;newFixedThreadPool(size)&lt;/code&gt; 을 사용하면 편리하게
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ExecutorService&lt;/code&gt; 를 생성할 수 있다.&lt;/p&gt;
-
-&lt;p&gt;기존 코드&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nc&quot;&gt;ExecutorService&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;es&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ThreadPoolExecutor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TimeUnit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;MILLISECONDS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt;
-
-&lt;span class=&quot;nc&quot;&gt;LinkedBlockingQueue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;());&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;편의 코드&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nc&quot;&gt;ExecutorService&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;es&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Executors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;newFixedThreadPool&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MyCallable&lt;/code&gt;은 숫자를 반환하는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Callable&lt;/code&gt; 인터페이스를 구현한 클래스이다. 
-이 인터페이스를 활용하면 작업 완료 후 결과를 반환할 수 있다는 점에서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Runnable&lt;/code&gt;과 차이가 있다. 
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Runnable&lt;/code&gt;은 작업 결과를 직접 반환할 수 없기 때문에 결과를 저장할 별도의 필드를 만들어야 하지만, 
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Callable&lt;/code&gt;은 결과를 반환하는 기능을 제공하기 때문에 필드 없이 구현이 가능하다.
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ExecutorService&lt;/code&gt;는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;submit()&lt;/code&gt; 메서드를 통해 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Callable&lt;/code&gt; 작업을 스레드 풀에 전달할 수 있게 한다. 
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;submit()&lt;/code&gt; 메서드는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Future&lt;/code&gt;라는 특별한 인터페이스를 반환하며, 이를 통해 비동기적으로 작업 결과를 확인하거나 가져올 수 있다. 
-예를 들어, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MyCallable&lt;/code&gt; 인스턴스를 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;submit()&lt;/code&gt; 메서드에 전달하면 해당 작업은 블로킹 큐에 추가되고, 
-스레드 풀의 스레드 중 하나가 이를 실행한다.&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nc&quot;&gt;Future&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;future&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;es&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;submit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyCallable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;작업의 처리 결과는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Future&lt;/code&gt; 객체를 통해 얻을 수 있다. 
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;get()&lt;/code&gt; 메서드를 호출하면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MyCallable&lt;/code&gt;의 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;call()&lt;/code&gt; 메서드가 반환한 결과를 받을 수 있으며, 
-작업이 완료될 때까지 호출부가 블로킹된다.&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nc&quot;&gt;Integer&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;future&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;이 과정에서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;get()&lt;/code&gt; 메서드는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;InterruptedException&lt;/code&gt;과 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ExecutionException&lt;/code&gt;이라는 체크 예외를 던질 수 있다. 
-예외는 필요에 따라 적절히 처리하거나 호출부로 전달할 수 있다.
-Executor 프레임워크의 가장 큰 강점은 스레드를 생성하거나 제어하는 복잡한 작업을 하지 않아도 멀티스레드 환경을 쉽게 활용할 수 있다는 점이다. 
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Callable&lt;/code&gt;을 사용하면 작업 결과를 반환받아야 하는 상황에서도 편리하며, 
-개발자는 단순히 작업을 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ExecutorService&lt;/code&gt;에 제출하고 결과를 받아 사용하는 방식으로 구현할 수 있다. 
-복잡한 멀티스레드 작업을 간단하게 처리할 수 있도록 해주는 것이 Executor 프레임워크의 핵심적인 장점이다.&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;김영한님의 자바 강의&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://docs.oracle.com/javase/tutorial/essential/concurrency/sync.html&quot;&gt;https://docs.oracle.com/javase/tutorial/essential/concurrency/sync.html&lt;/a&gt;&lt;/p&gt;
-
-</description>
-        <pubDate>Mon, 28 Oct 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/language/2024/10/28/Java-Adv-23/</link>
-        <guid isPermaLink="true">http://localhost:4000/language/2024/10/28/Java-Adv-23/</guid>
-        
-        <category>java</category>
-        
-        
-        <category>language</category>
-        
-      </item>
-    
-      <item>
-        <title>소풍</title>
-        <description>&lt;h2 id=&quot;소풍&quot;&gt;소풍&lt;/h2&gt;
-
-&lt;p&gt;각 학생들의 쌍에 대해 이들이 서로 친구인지 여부가 주어질 때, 학생들을 짝지을 수 있는 방법의 수를 계산하는 프로그램을
-작성하시오. 짝이 되는 학생들이 일부만 다르더라도 다른 방법이라고 가정합니다.&lt;/p&gt;
-
-&lt;p&gt;사실 위의 문제는 백준, 프로그래머스 문제가 아닌, 알고리즘 종만북이라는 책의 내용을 토대로 문제를 풀이하게 되었다.
-계속해서 문제를 양치기 하는 것보다 문제를 어떻게 해결하는가에 중심을 둬서 배우고 싶어서 책을 꺼냈다.&lt;/p&gt;
-
-&lt;h2 id=&quot;접근&quot;&gt;접근&lt;/h2&gt;
-
-&lt;p&gt;책에서는 이 문제를 모든 가능한 조합의 수를 계산하는 방법은 완전 탐색과 재귀호출을 이용하여 문제를 해결하였다.
-재귀호출로 문제를 풀면 고려해야 할 것들이 백트래킹과, 기저사례이다. 사실 위의 두 지식도 알고만 있지 제대로 적절하게
-활용하는 법을 자세히는 알지 못해서 이번기회에 제대로 배워볼까 한다.
-우선 문제의 풀이는 짝을 찾지 못한 학생들의 명단이 주어질 때 친구끼리 둘씩 짝짓는 경우의 수를 계산하라가 된다.
-명단에서 서로 친구인 두 학생을 찾아 이들을 짝지어 주고나면 남는 학생들을 짝지어 주는 문제도 원래 문제와 같은 형태가 된다.&lt;/p&gt;
-
-&lt;h2 id=&quot;코드&quot;&gt;코드&lt;/h2&gt;
-
-&lt;div class=&quot;language-cpp highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#include&lt;/span&gt;&lt;span class=&quot;cpf&quot;&gt;&amp;lt;bits/stdc++.h&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;namespace&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kt&quot;&gt;bool&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;areFriends&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
-&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;countPairings&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;bool&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;taken&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]){&lt;/span&gt;
-    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;firstFree&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;taken&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]){&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;firstFree&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;firstFree&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ret&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pairWith&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;firstFree&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pairWith&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pairWith&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;taken&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pairWith&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;areFriends&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;firstFree&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pairWith&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]){&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;taken&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;firstFree&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;taken&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pairWith&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;ret&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;countPairings&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;taken&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;taken&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;firstFree&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;taken&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pairWith&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ret&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;cin&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;cin&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;fill&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;areFriends&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;areFriends&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;cin&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;areFriends&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;areFriends&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;kt&quot;&gt;bool&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;taken&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;countPairings&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;taken&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&apos;\n&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;기저사례-종료조건&quot;&gt;기저사례 종료조건&lt;/h2&gt;
-
-&lt;p&gt;기저사례로 재귀호출을 종료시킬 때 0을 반환해야할까? 1을 반환해야할까? 어떤 의미가 담겨있을까 고민을 했던 적이 있다.&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;1을 반환: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt;을 반환하는 경우는 일반적으로 “성공” 또는 “올바른 결과”를 의미한다.
-    &lt;ul&gt;
-      &lt;li&gt;예를 들어, “모든 학생이 짝이 지어졌다는” 성공적인 조건이 만족되었을 때 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt;을 반환하는 것은 논리적으로 자연스럽다.&lt;/li&gt;
-      &lt;li&gt;이 값은 함수가 정상적으로 종료되었음을 나타낸다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;0을 반환: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0&lt;/code&gt;을 반환하는 경우는 보통 “실패” 또는 “조건이 만족되지 않음”을 의미한다.
-    &lt;ul&gt;
-      &lt;li&gt;만약 기저 사례에서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0&lt;/code&gt;을 반환하면 “성공적인 종료”를 의미하기 어려울 수 있다.&lt;/li&gt;
-      &lt;li&gt;따라서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0&lt;/code&gt;을 반환하면, 이 부분이 “짝을 모두 지을 수 없었다”는 의미로 해석될 수 있다.
-&lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-1&lt;/code&gt;을 사용하는 이유&lt;/strong&gt;: 보통 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-1&lt;/code&gt;은 “유효하지 않은 인덱스”를 나타내거나, 배열이나 리스트에서 찾을 수 없는 값을 표현할 때 사용된다. 즉, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;firstFree == -1&lt;/code&gt;이 의미하는 바는 “더 이상 짝을 지을 학생이 없다”는 것이다. 일반적으로, 배열의 인덱스나 리스트에서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-1&lt;/code&gt;은 “유효한 값이 없다”는 뜻으로 자주 사용되기 때문에 이를 이용한 표현은 매우 직관적이다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;짝지어주기-반복문&quot;&gt;짝지어주기 반복문&lt;/h2&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;firstFree&lt;/code&gt;는 아직 짝을 짓지 않은 첫 번째 학생을 가리킨다. 
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pairWith&lt;/code&gt;는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;firstFree&lt;/code&gt; 이후의 학생들 중에서 짝을 지을 수 있는 학생을 차례대로 탐색한다. 
-반복문을 통해 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pairWith&lt;/code&gt;가 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;firstFree&lt;/code&gt;와 짝을 지을 수 있는지 확인한다. 
-(즉, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pairWith&lt;/code&gt;가 짝이 안 지어졌고, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;firstFree&lt;/code&gt;와 친구 관계인지 확인) 
-&lt;strong&gt;짝을 지을 수 있으면&lt;/strong&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;firstFree&lt;/code&gt;와 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pairWith&lt;/code&gt;를 짝지은 후, &lt;strong&gt;재귀적으로 나머지 학생들을 짝을 지어 나간다.&lt;/strong&gt; 
-재귀 호출이 끝나면 &lt;strong&gt;백트래킹&lt;/strong&gt;을 통해 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;firstFree&lt;/code&gt;와 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pairWith&lt;/code&gt;의 짝을 다시 풀고, 다른 가능성도 탐색한다.&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;나의 뇌&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://book.algospot.com/&quot;&gt;https://book.algospot.com/&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Sun, 27 Oct 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/cs/2024/10/27/Algorithm-22/</link>
-        <guid isPermaLink="true">http://localhost:4000/cs/2024/10/27/Algorithm-22/</guid>
-        
-        <category>Algorithm</category>
-        
-        
-        <category>cs</category>
         
       </item>
     
