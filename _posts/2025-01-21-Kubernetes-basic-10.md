@@ -1,51 +1,44 @@
 ---
 layout: post
-title: Kubernetes - 파드를 외부에서 접속
+title: Kubernetes - 파드와 디플로이먼트 차이
 subtitle: ''
 categories: devops
 tags: k8s
 comments: false
 ---
+## 파드와 디플로이먼트는 무슨 차이가 있을까?
 
-## 파드를 외부에서 접속하게 하는 서비스
+<img width="654" alt="Image" src="https://github.com/user-attachments/assets/018405f8-897b-4298-bd29-7bca900f315f" />
 
-## 외부에서 접속하게 하려면?
+- run과 create deployment로 파드를 생성하는 것은 무슨차이가 있을까?
+- run으로 파드를 생성하면 단일 파드 1개만 생성되고 관리된다. 그리고 create deployment로 파드를 생성하면 디플로이먼트(deployment)라는 관리 그룹 내에서 파드가 생성된다. 비유를 들자면, run으로 생성한 파드는 초코파이 1개이고, create deployment로 생성한 파드는 초코파이 상자에 들어있는 초코파이 1개가 된다.
+- kubectl run은 사실 테스트 목적으로 자주사용된다. 그냥 간편한 목적으로 사용된다.
 
-- **서비스(SVC)**는 Kubernetes에서 클러스터 내 파드들에 대한 접근 지점을 제공한다.
-서비스는 클러스터 내부의 여러 파드들을 추상화하고, 외부에서 그 서비스에 접근할 수 있도록 연결하는 역할을 한다.
-- 서비스는 파드를 찾는 경로를 제공하며, 외부 요청을 적절한 파드로 로드벨런싱하여 전달한다.
-
-## NodePort
-
-- NodePort는 Kubernetes에서 서비스가 외부와 통신할 수 있도록 만드는 방법 중에 하나이다. 
-- 클러스터 내 파드는 외부와 직접 연결되지는 않지만, 서비스가 노트포트를 통해 외부 트래픽을 수신한다.
-  - 즉 서비스가 파드들로 트래픽을 전달하는 구조를 맡고있다.
-
-## 서비스를 통해서 외부와 연결되는 파드
+## 디플로이먼트로 배포하기
 
 ```bash
-root@cp-k8s:~# kubectl run nginx --image=nginx
-pod/nginx created
-root@cp-k8s:~# k get pods
-NAME    READY   STATUS              RESTARTS   AGE
-nginx   1/1     Running   0          11s
-
+root@cp-k8s:~# kubectl create deployment deploy-nginx --image=nginx
+deployment.apps/deploy-nginx created
 ```
 
-## 배포한 파드의 IP 확인
+```bash
+root@cp-k8s:~# kubectl get pods
+NAME                            READY   STATUS    RESTARTS   AGE
+deploy-nginx-74d7d6d848-jz428   1/1     Running   0          19s
+nginx                           1/1     Running   0          74m
+```
+
+- 파드가 한개만 있을 수 있는 것은 아니기 때문에 hash 코드를 이용해서 랜덤하게 고유 이름을 지정해준다.
 
 ```bash
 root@cp-k8s:~# kubectl get pods -o wide
-NAME    READY   STATUS    RESTARTS   AGE   IP               NODE     NOMINATED NODE   READINESS GATES
-nginx   1/1     Running   0          77s   172.16.103.129   w2-k8s   <none>           <none>
+NAME                            READY   STATUS    RESTARTS   AGE    IP               NODE     NOMINATED NODE   READINESS GATES
+deploy-nginx-74d7d6d848-jz428   1/1     Running   0          114s   172.16.132.1     w3-k8s   <none>           <none>
+nginx                           1/1     Running   0          75m    172.16.103.129   w2-k8s   <none>           <none>
 ```
 
-파드의 IP는 172.17.103.129임을 확인할 수 있다.
-
-## curl을 통해 확인
-
 ```bash
-root@cp-k8s:~# curl 172.16.103.129
+root@cp-k8s:~# curl 172.16.132.1
 <!DOCTYPE html>
 <html>
 <head>
@@ -68,38 +61,29 @@ Commercial support is available at
 
 <p><em>Thank you for using nginx.</em></p>
 </body>
-</html>
+</html
 ```
 
-## 파드를 노출
+## 여러개 배포한다면서 왜 하나만 배포되는가?
+
+<img width="654" alt="Image" src="https://github.com/user-attachments/assets/84135c3f-13c7-4b35-b0cc-3f8cff24bc8a" />
+
+- 여러개를 배포하기 위해서는 내부에 레플리카 셋이라는 것에 대한 도움을 받아야 한다.
+- 예를 들어 파드를 3개 만들겠다고 레플리카셋에 선언함녀 컨트롤러 매니저와 스케줄러가 워커 노드에 파들 3개를 만들도록 선언한다. 그러나 레플리카셋은 파드 수를 보장하는 기능만 제공하기 때문에 롤링 업데이트 기능 등이 추가된 디플로이먼트를 사용해 파드 수를 관리하기를 권장한다.
 
 ```bash
-root@cp-k8s:~# kubectl expose pod nginx --type=NodePort --port=80
-service/nginx exposed
-
-root@cp-k8s:~# kubectl get svc
-NAME         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
-kubernetes   ClusterIP   10.96.0.1      <none>        443/TCP        41m
-nginx        NodePort    10.99.57.196   <none>        80:31102/TCP   18s
+root@cp-k8s:~# kubectl scale deployment deploy-nginx --replicas=3
+deployment.apps/deploy-nginx scaled
+root@cp-k8s:~# 
+root@cp-k8s:~# 
+root@cp-k8s:~# kubectl get pods
+NAME                            READY   STATUS              RESTARTS   AGE
+deploy-nginx-74d7d6d848-jz428   1/1     Running             0          5m51s
+deploy-nginx-74d7d6d848-rzptz   1/1     Running             0          6s
+deploy-nginx-74d7d6d848-zts8t   1/1     Running             0          6s
+nginx                           1/1     Running             0          79m
+root@cp-k8s:~# 
 ```
-
-노드에 접속을 해서 파드에 접속한다. 그래서 노드에 대한 정보가 필요하다
-
-```bash
-root@cp-k8s:~# kubectl get nodes -o wide
-NAME     STATUS   ROLES           AGE   VERSION   INTERNAL-IP     EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION       CONTAINER-RUNTIME
-cp-k8s   Ready    control-plane   42m   v1.30.1   192.168.1.10    <none>        Ubuntu 22.04.4 LTS   5.15.0-107-generic   containerd://1.6.28
-w1-k8s   Ready    <none>          40m   v1.30.1   192.168.1.101   <none>        Ubuntu 22.04.4 LTS   5.15.0-107-generic   containerd://1.6.28
-w2-k8s   Ready    <none>          38m   v1.30.1   192.168.1.102   <none>        Ubuntu 22.04.4 LTS   5.15.0-107-generic   containerd://1.6.28
-w3-k8s   Ready    <none>          37m   v1.30.1   192.168.1.103   <none>        Ubuntu 22.04.4 LTS   5.15.0-107-generic   containerd://1.6.28
-```
-
-- **80**: Kubernetes 클러스터 내에서 서비스가 수신하는 **내부 포트이다**. 클러스터 내부에서 다른 파드나 서비스가 이 포트로 접근한다.
-- **31102**: 외부에서 이 서비스를 접근할 때 사용하는 **노드 포트이다(외부포트)**. 외부에서 클러스터 노드의 IP와 함께 이 포트로 접근할 수 있다.
-
-## 브라우저(외부) 접속 확인
-<img width="654" alt="Image" src="https://github.com/user-attachments/assets/c1e18538-9536-4988-a70d-44bee911b751" />
-
 
 ## Reference
 
