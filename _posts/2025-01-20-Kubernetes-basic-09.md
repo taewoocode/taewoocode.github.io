@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Kubernetes - 파드를 외부에서 접속하게 하는 서비스
+title: Kubernetes - 파드를 외부에서 접속
 subtitle: ''
 categories: devops
 tags: k8s
@@ -96,6 +96,9 @@ w3-k8s   Ready    <none>          37m   v1.30.1   192.168.1.103   <none>        
 
 - **80**: Kubernetes 클러스터 내에서 서비스가 수신하는 **내부 포트이다**. 클러스터 내부에서 다른 파드나 서비스가 이 포트로 접근한다.
 - **31102**: 외부에서 이 서비스를 접근할 때 사용하는 **노드 포트이다(외부포트)**. 외부에서 클러스터 노드의 IP와 함께 이 포트로 접근할 수 있다.
+
+## 브라우저(외부) 접속 확인
+<img width="654" alt="Image" src="https://github.com/user-attachments/assets/c1e18538-9536-4988-a70d-44bee911b751" />
 
 
 ## Reference
