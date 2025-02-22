@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 09 Feb 2025 04:08:08 +0900</pubDate>
-    <lastBuildDate>Sun, 09 Feb 2025 04:08:08 +0900</lastBuildDate>
+    <pubDate>Sun, 09 Feb 2025 04:29:32 +0900</pubDate>
+    <lastBuildDate>Sun, 09 Feb 2025 04:29:32 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
@@ -63,6 +63,9 @@ CGLIB는 타겟에 대한 정보를 직접적으로 제공 받아 바이트 코�
 &lt;h2 id=&quot;런타임-의존-괸계&quot;&gt;런타임 의존 괸계&lt;/h2&gt;
 
 &lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/c6ebc15f-70db-4611-995e-96865ac1cc8a&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;런타임에서는 클라이언트가 cglib에게 메시지를 보내게 되고, 프록시는 timeMethodInterceptor(MethodInterceptor를 상속받은 구현체)에게 메시지를 보내게 된다. 
+그리고 timeMethodInterceptor는 ConcreteService의 target을 호출하게 된다.&lt;/p&gt;
 
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
 

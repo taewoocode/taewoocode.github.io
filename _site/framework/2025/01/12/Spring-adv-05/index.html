@@ -317,6 +317,9 @@ CGLIB는 타겟에 대한 정보를 직접적으로 제공 받아 바이트 코�
 
 <p><img width="654" alt="Image" src="https://github.com/user-attachments/assets/c6ebc15f-70db-4611-995e-96865ac1cc8a" /></p>
 
+<p>런타임에서는 클라이언트가 cglib에게 메시지를 보내게 되고, 프록시는 timeMethodInterceptor(MethodInterceptor를 상속받은 구현체)에게 메시지를 보내게 된다. 
+그리고 timeMethodInterceptor는 ConcreteService의 target을 호출하게 된다.</p>
+
 <h2 id="reference">Reference</h2>
 
 <p>김영한님의 스프링 핵심 원리</p>
