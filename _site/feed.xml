@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 24 Feb 2025 01:28:52 +0900</pubDate>
-    <lastBuildDate>Mon, 24 Feb 2025 01:28:52 +0900</lastBuildDate>
+    <pubDate>Mon, 24 Feb 2025 01:30:15 +0900</pubDate>
+    <lastBuildDate>Mon, 24 Feb 2025 01:30:15 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
@@ -117,8 +117,9 @@ Application이 Kernel에게 메시지를 read라는 메시지를 fd, buff, len�
 &lt;p&gt;리눅스 커널에서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sys_read()&lt;/code&gt; 시스템 호출을 처리하는 함수의 구현이다. 
 이 함수는 사용자가 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;read()&lt;/code&gt;를 호출할 때 파일 디스크립터로부터 데이터를 읽어와 사용자 공간에 복사하고 읽은 바이트 수를 반환한다.
 먼저, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fget(fd)&lt;/code&gt;로 파일을 찾고, 해당 파일이 읽기 모드인지 확인한다. 읽기 모드가 아니면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-EBADF&lt;/code&gt; 오류를 반환한다. 
-그런 다음 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;vfs_read()&lt;/code&gt;를 호출하여 파일에서 데이터를 읽고, 읽은 바이트 수를 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bytes_read&lt;/code&gt;에 저장한다. 
-마지막으로 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fput(file)&lt;/code&gt;로 파일을 닫고, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bytes_read&lt;/code&gt;를 반환한다.&lt;/p&gt;
+그런 다음 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;vfs_read()&lt;/code&gt;를 호출하여 파일에서 데이터를 읽고, 읽은 바이트 수를 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bytes_read&lt;/code&gt;에 저장한다.&lt;/p&gt;
+
+&lt;p&gt;마지막으로 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fput(file)&lt;/code&gt;로 파일을 닫고, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bytes_read&lt;/code&gt;를 반환한다.&lt;/p&gt;
 
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
 
