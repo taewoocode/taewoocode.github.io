@@ -1,7 +1,7 @@
 ---
 layout: tag-blog
 title: Linux
-slug: linux
+slug: Linux
 category: devops
 menu: false
 order: 8

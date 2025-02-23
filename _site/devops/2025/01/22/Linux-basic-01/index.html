@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Home" />
+<meta property="og:title" content="Linux - ifconfig를 누르면?" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,16 +52,18 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Home &middot; 일벌리는 개발자</title>
+<title>Linux - ifconfig를 누르면? &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="일을 벌여놔야 주워 담을 수 있습니다.
+        content="ifconfig
+
 "
 />
 <meta
         property="og:description"
-        content="일을 벌여놔야 주워 담을 수 있습니다.
+        content="ifconfig
+
 "
 />
 
@@ -70,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/page-2/" />
-<meta property="og:url" content="http://localhost:4000/page-2/" />
+<link rel="canonical" href="http://localhost:4000/devops/2025/01/22/Linux-basic-01/" />
+<meta property="og:url" content="http://localhost:4000/devops/2025/01/22/Linux-basic-01/" />
 
 <link
         rel="alternate"
@@ -80,6 +82,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         href="http://localhost:4000/feed.xml"
 />
 
+
+<link rel="prev" href="http://localhost:4000/devops/2025/01/21/Kubernetes-basic-10/" />
  
 
 <link
@@ -176,18 +180,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
             data-image="/assets/img/dp.jpeg"
     >
       
-  
 
-<article id="post-framework/2025/01/04/Spring-adv-01" class="post mb6" role="article">
+<article id="post-devops/2025/01/22/Linux-basic-01" class="post" role="article">
   <header>
     <h1 class="post-title">
-      <a href="/framework/2025/01/04/Spring-adv-01/" data-flip="title">
-      Spring adv 01 - log ProtoType
-      </a>
+      
+      Linux - ifconfig를 누르면?
+      
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2025-01-04T00:00:00+09:00">04 Jan 2025</time>
+      <time datetime="2025-01-22T00:00:00+09:00">22 Jan 2025</time>
       
 
 
@@ -198,7 +201,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 
 
 
-in <a href="/category/framework/" data-flip="title">Framework</a>
+in <a href="/category/devops/" data-flip="title">Devops</a>
 
       
 
@@ -210,7 +213,7 @@ in <a href="/category/framework/" data-flip="title">Framework</a>
 
 
 
-on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
+on <a href="/tag/devops-linux/" data-flip="title">Linux</a>
 
     </p>
 
@@ -223,433 +226,259 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
 
 
   
-  <h2 id="prototype">ProtoType</h2>
+  <div class="markdown-body">
 
+    <!--  -->
+    <style>
+      .myAd1190 {
+        width: 48%;
+        height: 280px;
+      }
 
-  <p class="read-more"><a class="heading" href="/framework/2025/01/04/Spring-adv-01/" data-flip="title">Continue reading </a>
-  </p>
+      .myAd1290 {
+        width: 48%;
+        height: 280px;
+      }
+
+      @media(max-width: 800px) {
+        .myAd1190 {
+          display: none;
+        }
+
+        .myAd1290 {
+          width: 98%;
+        }
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 300px;
+      }
+
+      .row-center {
+        display: flex;
+        justify-content: center;
+        height: 258px;
+      }
+    </style>
+
+    <!--<br />-->
+    <h2 id="ifconfig">ifconfig</h2>
+
+<p>항상 ifconfig를 치는 이유는 해당 ip를 이용하여 외부에서 접속하기 위해서 치게되는 것 같다. 그리고 아이피를 찾고 외부에서 연동하는 것 말고는 딱히 쓰임을 중요하게 여기지 않았던 것 같은데 나머지 외의 정보들은 어떤 정보들을 포함하고 있는 것인지, ifconfig를 통해서 또 알 수 있는 것은 무엇일지 궁금했다.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ifconfig
+</code></pre></div></div>
+
+<p><img width="777" alt="Image" src="https://github.com/user-attachments/assets/caa2d485-c726-46f9-aeb0-c4b44b39217b" /></p>
+
+<p>ifconfig를 입력하게 되면 해당 IP들을 확인할 수 있다.</p>
+
+<h3 id="인터페이스-이름">인터페이스 이름</h3>
+
+<ul>
+  <li>인터페이스의 이름은 cali0c3d08ee2e4이다.</li>
+  <li>이 부분은 네트워크 인터페이스의 이름이다. 예를 들어, <code class="language-plaintext highlighter-rouge">eth0</code>, <code class="language-plaintext highlighter-rouge">eth1</code>, <code class="language-plaintext highlighter-rouge">lo</code> 등과 같은 네트워크 장치 이름이 나타날 수 있다.</li>
+  <li><code class="language-plaintext highlighter-rouge">cali</code>로 시작하는 이름은 보통 Kubernetes 환경에서 사용하는 CNI(Container Network Interface) 플러그인 관련 인터페이스이다.</li>
+</ul>
+
+<h3 id="flags">flags</h3>
+
+<ul>
+  <li>4163&lt;UP, BORADCAST, RUNNING, MULTICAST&gt;</li>
+  <li>네트워크 인터페이스의 상태를 나타낸다. 각 플래그는 다음과 같은 의미를 가진다.
+    <ul>
+      <li><strong>UP</strong>: 인터페이스가 활성화되어 있음을 나타낸다.</li>
+      <li><strong>BROADCAST</strong>: 브로드캐스트를 지원하는 인터페이스이다.</li>
+      <li><strong>RUNNING</strong>: 인터페이스가 현재 운영 중임을 나타낸다.</li>
+      <li><strong>MULTICAST</strong>: 멀티캐스트를 지원하는 인터페이스이다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="mtu">MTU</h3>
+
+<ul>
+  <li>mtu 1480</li>
+  <li><strong>MTU (Maximum Transmission Unit)</strong>: 한 번에 전송할 수 있는 최대 데이터 크기이다.. <code class="language-plaintext highlighter-rouge">1480</code>은 이 인터페이스에서 한 번에 전송할 수 있는 최대 데이터 패킷 크기를 나타낸다.</li>
+</ul>
+
+<h3 id="mac-주소">MAC 주소</h3>
+
+<ul>
+  <li>ether ee:ee:ee:ee:ee:ee</li>
+  <li>이 부분은 인터페이스의 <strong>MAC 주소</strong>를 나타낸다. MAC 주소는 하드웨어 고유의 식별자이다.</li>
+</ul>
+
+<h3 id="tx-queue-length">TX Queue Length</h3>
+
+<ul>
+  <li>txqueuelen 1000</li>
+  <li>전송 대기열 길이이다. 전송 대기열은 전송해야 할 패킷을 저장하는 공간으로, 이 값이 크면 더 많은 패킷을 대기시킬 수 있다.
+    <ul>
+      <li>전송 대기열은 큐를 통해 구현이 되어있는 것을 알 수 있었다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="rx-receive-및-tx-transmit-패킷-및-바이트">RX (Receive) 및 TX (Transmit) 패킷 및 바이트</h3>
+
+<ul>
+  <li><strong>RX packets</strong>: 수신된 패킷의 수.</li>
+  <li><strong>RX bytes</strong>: 수신된 데이터의 크기 (바이트 단위).</li>
+  <li><strong>TX packets</strong>: 전송된 패킷의 수.</li>
+  <li><strong>TX bytes</strong>: 전송된 데이터의 크기 (바이트 단위).</li>
+</ul>
+
+<h3 id="오류-및-드롭된-패킷">오류 및 드롭된 패킷</h3>
+
+<ul>
+  <li><strong>RX errors</strong>: 수신 중 발생한 오류의 수.</li>
+  <li><strong>RX dropped</strong>: 수신한 패킷이 드롭된 수.</li>
+  <li><strong>TX errors</strong>: 전송 중 발생한 오류의 수.</li>
+  <li><strong>TX dropped</strong>: 전송된 패킷이 드롭된 수.</li>
+</ul>
+
+<h3 id="기타-정보">기타 정보</h3>
+
+<ul>
+  <li><strong>overruns</strong>: 패킷이 인터페이스의 버퍼를 초과하여 처리되지 못한 경우의 수.</li>
+  <li><strong>frame</strong>: 프레임 오류 수.</li>
+  <li><strong>carrier</strong>: 네트워크 케이블이 연결되지 않았거나, 통신에 문제가 있는 경우 발생하는 오류 수.</li>
+  <li><strong>collisions</strong>: 두 장치가 동시에 데이터를 전송하여 충돌이 발생한 횟수.</li>
+</ul>
+
+<h3 id="다른-인터페이스들">다른 인터페이스들</h3>
+
+<h3 id="eth0-eth1-lo-tunl0"><code class="language-plaintext highlighter-rouge">eth0</code>, <code class="language-plaintext highlighter-rouge">eth1</code>, <code class="language-plaintext highlighter-rouge">lo</code>, <code class="language-plaintext highlighter-rouge">tunl0</code></h3>
+
+<ul>
+  <li><strong>eth0, eth1</strong>: 물리적 네트워크 인터페이스 카드(PNIC)이다. 주로 서버의 이더넷 인터페이스로, 각각 <code class="language-plaintext highlighter-rouge">172.16.140.169</code>, <code class="language-plaintext highlighter-rouge">192.168.1.10</code> IP 주소를 가지고 있다.</li>
+  <li><strong>lo</strong>: <strong>Loopback 인터페이스이다</strong>. 내부 테스트나 연결을 위해 사용되며, 항상 <code class="language-plaintext highlighter-rouge">127.0.0.1</code> IP 주소를 가지고 있다.</li>
+  <li><strong>tunl0</strong>: <strong>터널 인터페이스</strong>로, IPIP 터널을 통해 다른 네트워크와 연결될 때 사용된다.</li>
+</ul>
+
+<h3 id="ip-주소">IP 주소</h3>
+
+<ul>
+  <li><strong>inet</strong>: 해당 인터페이스에 할당된 <strong>IPv4 주소이다.</strong>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">inet 172.16.140.169</code>와 같은 형식으로 나타난다.</li>
+    </ul>
+  </li>
+  <li><strong>inet6</strong>: 해당 인터페이스에 할당된 <strong>IPv6 주소이다.</strong></li>
+</ul>
+
+    <br />
+    <br />
+  </div>
   
 
 </article>
 
-
-  
-
-<article id="post-framework/2025/01/03/Spring-basic-19" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/framework/2025/01/03/Spring-basic-19/" data-flip="title">
-      Spring Basic 18 - Prometheus basic
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2025-01-03T00:00:00+09:00">03 Jan 2025</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/framework/" data-flip="title">Framework</a>
-
-      
+<!--<hr class="dingbat" />-->
+<!--
+<div class="share">
+  <h2>Share this post</h2>
+  <div class="share-body">
+    <a href="http://twitter.com/share?text=Linux - ifconfig를 누르면?&amp;url=http://localhost:4000/devops/2025/01/22/Linux-basic-01/"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="icon-twitter">
+      </span>
+    </a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/devops/2025/01/22/Linux-basic-01/"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="icon-facebook">
+      </span>
+    </a>
+  </div>
+</div>
+-->
+<br />
 
 
 
 
+<aside class="related" role="complementary">
+  <h2 class="hr">Related Posts</h2>
 
-
-
-
-
-on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
-
-    </p>
-
+  <ul class="related-posts">
     
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="prometheus-basic-basic"><strong>Prometheus basic</strong> <strong>basic</strong></h2>
-
-
-  <p class="read-more"><a class="heading" href="/framework/2025/01/03/Spring-basic-19/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-framework/2025/01/02/Spring-basic-18" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/framework/2025/01/02/Spring-basic-18/" data-flip="title">
-      Spring Basic 17 - Prometheus Config
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2025-01-02T00:00:00+09:00">02 Jan 2025</time>
       
-
-
-
-
-
-
-
-
-
-in <a href="/category/framework/" data-flip="title">Framework</a>
-
       
+      
+        
+          
+          
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/devops/2025/01/21/Kubernetes-basic-10/" data-flip="title">
+    <span>Kubernetes - 파드와 디플로이먼트 차이</span>
+  </a>
+  <small><time datetime="2025-01-21T00:00:00+09:00">
+    21 Jan 2025
+  </time></small>
+</li>
+
+        
+      
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/devops/2025/01/20/Kubernetes-basic-09/" data-flip="title">
+    <span>Kubernetes - 파드를 외부에서 접속</span>
+  </a>
+  <small><time datetime="2025-01-20T00:00:00+09:00">
+    20 Jan 2025
+  </time></small>
+</li>
+
+        
+      
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/devops/2024/11/03/Devops-Docker-03/" data-flip="title">
+    <span>Nginx SpringBoot</span>
+  </a>
+  <small><time datetime="2024-11-03T00:00:00+09:00">
+    03 Nov 2024
+  </time></small>
+</li>
 
-
-
-on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
-
-    </p>
-
+        
+      
     
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="prometheus-config">Prometheus config</h2>
-
-
-  <p class="read-more"><a class="heading" href="/framework/2025/01/02/Spring-basic-18/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-framework/2024/12/30/Spring-basic-17" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/framework/2024/12/30/Spring-basic-17/" data-flip="title">
-      Spring Basic 17 - spring actuator
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-12-30T00:00:00+09:00">30 Dec 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/framework/" data-flip="title">Framework</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="프로덕션-준비">프로덕션 준비</h2>
-
-
-  <p class="read-more"><a class="heading" href="/framework/2024/12/30/Spring-basic-17/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-framework/2024/12/26/Spring-basic-16" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/framework/2024/12/26/Spring-basic-16/" data-flip="title">
-      Spring Basic 16 - Profile Bean
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-12-26T00:00:00+09:00">26 Dec 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/framework/" data-flip="title">Framework</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="profile">Profile</h2>
-
-
-  <p class="read-more"><a class="heading" href="/framework/2024/12/26/Spring-basic-16/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-framework/2024/12/20/Spring-basic-15" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/framework/2024/12/20/Spring-basic-15/" data-flip="title">
-      Spring Basic 15 - ConfigurationProperties
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-12-20T00:00:00+09:00">20 Dec 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/framework/" data-flip="title">Framework</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="spring-configurationproperties">Spring ConfigurationProperties</h2>
-
-
-  <p class="read-more"><a class="heading" href="/framework/2024/12/20/Spring-basic-15/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-framework/2024/12/15/Spring-basic-14" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/framework/2024/12/15/Spring-basic-14/" data-flip="title">
-      Spring Basic 14 - 라이브러리 직접 만들어 보기
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-12-15T00:00:00+09:00">15 Dec 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/framework/" data-flip="title">Framework</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="순수-라이브러리">순수 라이브러리</h2>
-
-
-  <p class="read-more"><a class="heading" href="/framework/2024/12/15/Spring-basic-14/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-framework/2024/12/08/Spring-framework-mvc-06" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/framework/2024/12/08/Spring-framework-mvc-06/" data-flip="title">
-      Spring MVC 06 - Dispatcher-Servlet
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-12-08T00:00:00+09:00">08 Dec 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/framework/" data-flip="title">Framework</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/framework-spring-mvc/" data-flip="title">Spring MVC</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="dispatcher-servlet">Dispatcher Servlet</h2>
-
-
-  <p class="read-more"><a class="heading" href="/framework/2024/12/08/Spring-framework-mvc-06/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-
-<h2 class="sr-only">Pagination</h2>
-<nav class="pagination heading" role="navigation">
-  <ul>
-    <li class="pagination-item older" >
-      
-        <a rel="next" href="/page-3/">Older</a>
-      
-    </li>
-    <li class="pagination-item newer" >
-      
-        <a rel="prev" href="/">Newer</a>
-      
-    </li>
   </ul>
-</nav>
+</aside>
+  <aside class="comments" role="complementary">
+  <h2>Comments</h2>
+  <hr/>
 
-  <footer>
+  <script src="https://utteranc.es/client.js"
+          repo="taewoocode/taewoocode.github.io"
+          issue-term="title"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+</aside>
+
+
+       <footer>
   <hr/>
   
     <p>© 2022. by taewoo</p>

@@ -6,9 +6,128 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 23 Feb 2025 03:14:09 +0900</pubDate>
-    <lastBuildDate>Sun, 23 Feb 2025 03:14:09 +0900</lastBuildDate>
+    <pubDate>Mon, 24 Feb 2025 01:04:50 +0900</pubDate>
+    <lastBuildDate>Mon, 24 Feb 2025 01:04:50 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
+    
+      <item>
+        <title>Linux - ifconfig를 누르면?</title>
+        <description>&lt;h2 id=&quot;ifconfig&quot;&gt;ifconfig&lt;/h2&gt;
+
+&lt;p&gt;항상 ifconfig를 치는 이유는 해당 ip를 이용하여 외부에서 접속하기 위해서 치게되는 것 같다. 그리고 아이피를 찾고 외부에서 연동하는 것 말고는 딱히 쓰임을 중요하게 여기지 않았던 것 같은데 나머지 외의 정보들은 어떤 정보들을 포함하고 있는 것인지, ifconfig를 통해서 또 알 수 있는 것은 무엇일지 궁금했다.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ifconfig
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img width=&quot;777&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/caa2d485-c726-46f9-aeb0-c4b44b39217b&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ifconfig를 입력하게 되면 해당 IP들을 확인할 수 있다.&lt;/p&gt;
+
+&lt;h3 id=&quot;인터페이스-이름&quot;&gt;인터페이스 이름&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;인터페이스의 이름은 cali0c3d08ee2e4이다.&lt;/li&gt;
+  &lt;li&gt;이 부분은 네트워크 인터페이스의 이름이다. 예를 들어, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;eth0&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;eth1&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lo&lt;/code&gt; 등과 같은 네트워크 장치 이름이 나타날 수 있다.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cali&lt;/code&gt;로 시작하는 이름은 보통 Kubernetes 환경에서 사용하는 CNI(Container Network Interface) 플러그인 관련 인터페이스이다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;flags&quot;&gt;flags&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;4163&amp;lt;UP, BORADCAST, RUNNING, MULTICAST&amp;gt;&lt;/li&gt;
+  &lt;li&gt;네트워크 인터페이스의 상태를 나타낸다. 각 플래그는 다음과 같은 의미를 가진다.
+    &lt;ul&gt;
+      &lt;li&gt;&lt;strong&gt;UP&lt;/strong&gt;: 인터페이스가 활성화되어 있음을 나타낸다.&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;BROADCAST&lt;/strong&gt;: 브로드캐스트를 지원하는 인터페이스이다.&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;RUNNING&lt;/strong&gt;: 인터페이스가 현재 운영 중임을 나타낸다.&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;MULTICAST&lt;/strong&gt;: 멀티캐스트를 지원하는 인터페이스이다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;mtu&quot;&gt;MTU&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;mtu 1480&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;MTU (Maximum Transmission Unit)&lt;/strong&gt;: 한 번에 전송할 수 있는 최대 데이터 크기이다.. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1480&lt;/code&gt;은 이 인터페이스에서 한 번에 전송할 수 있는 최대 데이터 패킷 크기를 나타낸다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;mac-주소&quot;&gt;MAC 주소&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;ether ee:ee:ee:ee:ee:ee&lt;/li&gt;
+  &lt;li&gt;이 부분은 인터페이스의 &lt;strong&gt;MAC 주소&lt;/strong&gt;를 나타낸다. MAC 주소는 하드웨어 고유의 식별자이다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;tx-queue-length&quot;&gt;TX Queue Length&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;txqueuelen 1000&lt;/li&gt;
+  &lt;li&gt;전송 대기열 길이이다. 전송 대기열은 전송해야 할 패킷을 저장하는 공간으로, 이 값이 크면 더 많은 패킷을 대기시킬 수 있다.
+    &lt;ul&gt;
+      &lt;li&gt;전송 대기열은 큐를 통해 구현이 되어있는 것을 알 수 있었다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;rx-receive-및-tx-transmit-패킷-및-바이트&quot;&gt;RX (Receive) 및 TX (Transmit) 패킷 및 바이트&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;RX packets&lt;/strong&gt;: 수신된 패킷의 수.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;RX bytes&lt;/strong&gt;: 수신된 데이터의 크기 (바이트 단위).&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;TX packets&lt;/strong&gt;: 전송된 패킷의 수.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;TX bytes&lt;/strong&gt;: 전송된 데이터의 크기 (바이트 단위).&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;오류-및-드롭된-패킷&quot;&gt;오류 및 드롭된 패킷&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;RX errors&lt;/strong&gt;: 수신 중 발생한 오류의 수.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;RX dropped&lt;/strong&gt;: 수신한 패킷이 드롭된 수.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;TX errors&lt;/strong&gt;: 전송 중 발생한 오류의 수.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;TX dropped&lt;/strong&gt;: 전송된 패킷이 드롭된 수.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;기타-정보&quot;&gt;기타 정보&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;overruns&lt;/strong&gt;: 패킷이 인터페이스의 버퍼를 초과하여 처리되지 못한 경우의 수.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;frame&lt;/strong&gt;: 프레임 오류 수.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;carrier&lt;/strong&gt;: 네트워크 케이블이 연결되지 않았거나, 통신에 문제가 있는 경우 발생하는 오류 수.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;collisions&lt;/strong&gt;: 두 장치가 동시에 데이터를 전송하여 충돌이 발생한 횟수.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;다른-인터페이스들&quot;&gt;다른 인터페이스들&lt;/h3&gt;
+
+&lt;h3 id=&quot;eth0-eth1-lo-tunl0&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;eth0&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;eth1&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lo&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tunl0&lt;/code&gt;&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;eth0, eth1&lt;/strong&gt;: 물리적 네트워크 인터페이스 카드(PNIC)이다. 주로 서버의 이더넷 인터페이스로, 각각 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;172.16.140.169&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;192.168.1.10&lt;/code&gt; IP 주소를 가지고 있다.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;lo&lt;/strong&gt;: &lt;strong&gt;Loopback 인터페이스이다&lt;/strong&gt;. 내부 테스트나 연결을 위해 사용되며, 항상 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;127.0.0.1&lt;/code&gt; IP 주소를 가지고 있다.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;tunl0&lt;/strong&gt;: &lt;strong&gt;터널 인터페이스&lt;/strong&gt;로, IPIP 터널을 통해 다른 네트워크와 연결될 때 사용된다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;ip-주소&quot;&gt;IP 주소&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;inet&lt;/strong&gt;: 해당 인터페이스에 할당된 &lt;strong&gt;IPv4 주소이다.&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;inet 172.16.140.169&lt;/code&gt;와 같은 형식으로 나타난다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;inet6&lt;/strong&gt;: 해당 인터페이스에 할당된 &lt;strong&gt;IPv6 주소이다.&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Wed, 22 Jan 2025 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/devops/2025/01/22/Linux-basic-01/</link>
+        <guid isPermaLink="true">http://localhost:4000/devops/2025/01/22/Linux-basic-01/</guid>
+        
+        <category>Linux</category>
+        
+        
+        <category>devops</category>
+        
+      </item>
     
       <item>
         <title>Kubernetes - 파드와 디플로이먼트 차이</title>
@@ -2411,50 +2530,6 @@ include 경로를 제거해줘야 한다.
         
         
         <category>devops</category>
-        
-      </item>
-    
-      <item>
-        <title>Spring Profile</title>
-        <description>&lt;h2 id=&quot;spring-profile&quot;&gt;Spring Profile&lt;/h2&gt;
-
-&lt;p&gt;입사하고 얼마 지나지 않아 서비스를 운영하게 되는데 Spring profile에 대해서 처음알게 되었다.
-항상 하나의 개발 환경세팅만 하다보니 각 환경에 대해서 분리해서 개발을 진행하게 되는지 처음 알았다.
-우선 Spring Profile이란 Spring 애플리케이션에서 환경에 따라 다르게 동작하도록 설정을 분리하는 기능이다. 
-이를 통해 개발, 테스트, 프로덕션 등 여러 환경에 맞게 설정을 관리할 수 있다. Spring Profile을 사용하면, 
-각 환경에 특화된 설정을 선언하고, 애플리케이션이 실행될 때 해당 프로파일에 맞는 설정을 자동으로 로드할 수 있다.&lt;/p&gt;
-
-&lt;h2 id=&quot;왜-중요할까&quot;&gt;왜 중요할까?&lt;/h2&gt;
-
-&lt;p&gt;환경에 맞는 설정을 자동으로 적용한다. 예를 들어, application-dev.properties 파일과 application-prod.properties 파일을 두고, 
-개발 환경에서는 개발용 데이터베이스 설정을, 운영 환경에서는 실제 운영 데이터베이스 설정을 자동으로 읽어올 수 있다.
-환경에 따른 Bean 설정: @Profile 어노테이션을 사용하여 특정 환경에서만 활성화되는 Bean을 정의할 수 있다. 
-예를 들어, 개발 환경에서는 디버깅용으로 로깅 레벨을 높게 설정하고, 운영 환경에서는 성능을 고려한 로깅 설정을 할 수 있다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;576&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/0065b293-deb8-455d-8a58-5eeee16be926&quot; /&gt;
-&lt;img width=&quot;590&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/8c8fd2d2-6a47-4214-8c42-d825c865e839&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;각 프로파일에 따른 설정&lt;/p&gt;
-
-&lt;p&gt;local, prod, dev 세 가지 프로파일로 나뉘어져 있다. 각 프로파일에 대해 다른 설정을 적용할 수 있다.&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;local: 개발자가 로컬 환경에서 실행할 때 사용하는 프로파일로, 로컬 데이터베이스나 디버깅 설정 등을 포함할 수 있다.&lt;/li&gt;
-  &lt;li&gt;prod: 운영 환경에서 사용하는 프로파일로, 실제 서비스에 배포되는 설정을 포함한다. 보통 보안이나 성능 관련 설정이 중요하다.&lt;/li&gt;
-  &lt;li&gt;dev: 개발 환경에서 사용하는 프로파일로, 개발 중에 사용되는 설정이 포함한다. 로깅이나 디버깅을 위해 다양한 설정을 추가할 수 있다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-boot/docs/1.2.0.M1/reference/html/boot-features-profiles.html&quot;&gt;https://docs.spring.io/spring-boot/docs/1.2.0.M1/reference/html/boot-features-profiles.html&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Fri, 01 Nov 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/framework/2024/11/01/Spring-06/</link>
-        <guid isPermaLink="true">http://localhost:4000/framework/2024/11/01/Spring-06/</guid>
-        
-        <category>spring</category>
-        
-        
-        <category>framework</category>
         
       </item>
     
