@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 24 Feb 2025 01:04:50 +0900</pubDate>
-    <lastBuildDate>Mon, 24 Feb 2025 01:04:50 +0900</lastBuildDate>
+    <pubDate>Mon, 24 Feb 2025 01:07:29 +0900</pubDate>
+    <lastBuildDate>Mon, 24 Feb 2025 01:07:29 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
@@ -19,7 +19,7 @@
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ifconfig
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;&lt;img width=&quot;777&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/caa2d485-c726-46f9-aeb0-c4b44b39217b&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/caa2d485-c726-46f9-aeb0-c4b44b39217b&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;ifconfig를 입력하게 되면 해당 IP들을 확인할 수 있다.&lt;/p&gt;
 
@@ -117,6 +117,8 @@
   &lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;inet6&lt;/strong&gt;: 해당 인터페이스에 할당된 &lt;strong&gt;IPv6 주소이다.&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
 </description>
         <pubDate>Wed, 22 Jan 2025 00:00:00 +0900</pubDate>
         <link>http://localhost:4000/devops/2025/01/22/Linux-basic-01/</link>
