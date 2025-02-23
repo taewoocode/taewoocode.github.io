@@ -6,9 +6,134 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 24 Feb 2025 01:07:29 +0900</pubDate>
-    <lastBuildDate>Mon, 24 Feb 2025 01:07:29 +0900</lastBuildDate>
+    <pubDate>Mon, 24 Feb 2025 01:28:52 +0900</pubDate>
+    <lastBuildDate>Mon, 24 Feb 2025 01:28:52 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
+    
+      <item>
+        <title>Linux - System call</title>
+        <description>&lt;h2 id=&quot;컴퓨터-시스템-구조&quot;&gt;컴퓨터 시스템 구조&lt;/h2&gt;
+
+&lt;p&gt;하드웨어는 CPU, Memory, Storage, Peripherals 등으로 구성이 된다.
+운영체제는 이러한 하드웨어를 운영 관리하는 시스템 소프트웨어이며 유닉스/리눅스의 경우 kernel이 하드웨어를 운영 관리하여 서비스를 제공한다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/f9097c9f-4c45-4238-a920-22475c2ea21d&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;프로세스 관리
+    &lt;ul&gt;
+      &lt;li&gt;여러 개의 응용 프로그램이 실행될 수 있도록 프로세스들을 스케줄링하여 동시에 수행되는 것처럼 보이는 효과를 낸다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;파일 관리
+    &lt;ul&gt;
+      &lt;li&gt;디스크와 같은 저장장치 상에 파일 시스템을 구성하여 파일을 관리한다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;메모리 관리
+    &lt;ul&gt;
+      &lt;li&gt;메인 메모리가 효과적으로 사용될 수 있도록 관리한다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;주변장치 관리
+    &lt;ul&gt;
+      &lt;li&gt;모니터, 키보드, 마우스 같은 장치를 사용할 수 있도록 관리한다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;응용 프로그램은 실행하는 중에 운영체제의 서비스가 필요할 때마다 시스템 호출을 통하여 운영체제에 서비스를 요청한다.&lt;/p&gt;
+
+&lt;h2 id=&quot;system-call&quot;&gt;System Call&lt;/h2&gt;
+
+&lt;p&gt;시스템 호출(System Call)은 운영 체제가 제공하는 서비스에 대한 프로그래밍 인터페이스이다. 
+응용 프로그램은 시스템 호출을 통해 필요할 때마다 커널에 서비스를 요청하며 결과적으로 시스템 호출은 응용 프로그램과 커널 사이의 인터페이스 역할을 한다.
+응용 프로그램에서 파일을 사용하기 위해서는 파일에 직접 접근할 수 없으며 반드시 커널에 파일에 대한 서비스 예를 들면 파일 열기, 읽기, 쓰기 등을 요청해야 한다.
+커널은 이러한 서비스 요청을 받으면 요청에 따라 
+파일 열기, 읽기, 쓰기 등을 수행한 후 결과를 응용 프로그램에게 돌려준다.
+응용 프로그램은 사용자 모드(user mode)에서 실행하다가 시스템 호출을 하면 커널 모드(kernel mode)로 이동하여 커널 내의 코드를 실행한 후 다시 사용자 모드로 돌아온다. 
+사용자 모드에서는 실행할 수 있는 기계어 명령어에 제한이 있지만 커널 모드에서는 어떠한 기계어 명령어도 실행이 가능하다. 
+사용자 모드에서 실행중인 프로세스를 사용자 프로세스, 커널 모드로 실행중인 프로세스를 커널 프로세스라고 한다.&lt;/p&gt;
+
+&lt;h2 id=&quot;시스템-호출-동작&quot;&gt;시스템 호출 동작&lt;/h2&gt;
+
+&lt;p&gt;사용자 프로세스에서 만약에 open() 시스템을 호출을 하면 C실행시간 라이브러리(C runtime library)를 통해 커널내의 해당 코드로 점프하게 된다. 
+C 실행시간 라이브러리에서는 커널로 점프하기 위해 필요한 작업을 미리 하는데 가장 대표적인 일이 레지스터를 통해 매개변수를 전달한다. 
+그 후에 trap명령으를 이용해 커널로 점프하고 각 시스템 호출의 시작 주소를 저장하고 있는 벡터 테이블을 통해 해당 시스템 호출의 커널 코드로 점프하게 된다. 
+이후 해당 커널 코드를 실행후 호출의 역순으로 값을 리턴한다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/d0cc3dcf-8bd2-445d-9e20-3ed01602cd5e&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;예를들어 read(fd, buff, len) 함수는 파일 디스크립터로부터 데이터를 읽어서 버퍼에 저장한다.
+Application이 Kernel에게 메시지를 read라는 메시지를 fd, buff, len을 담아 보내고 Kernel이 메시지에 대한 응답을 하게되어있다. 
+이 예시는 read()에서의 예시이지만 다양한 커널이 인터페이스화를 통해 각 시스템 호출단에서의 제공을 해준다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;fd(파일 디스커럽터)
+    &lt;ul&gt;
+      &lt;li&gt;읽을 파일을 식별하는 정수이다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;buff
+    &lt;ul&gt;
+      &lt;li&gt;데이터를 읽어 저장할 메모리 공간이다. 이 매개변수는 char, void*로 전달이 된다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;len
+    &lt;ul&gt;
+      &lt;li&gt;읽을 최대 바이트 수이다. 이 값만큼 데이터를 읽어오며, 실제 읽은 데이터 크기는 read함수가 반환한다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;예시코드&lt;/p&gt;
+
+&lt;div class=&quot;language-c highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;linux/fs.h&amp;gt;&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;      &lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
+#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;linux/uaccess.h&amp;gt;&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
+#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;linux/kernel.h&amp;gt;&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;  &lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
+#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;linux/types.h&amp;gt;&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;   &lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
+&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;ssize_t&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;sys_read&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;unsigned&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;char&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;__user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;buf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;size_t&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;file&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; 
+    &lt;span class=&quot;kt&quot;&gt;ssize_t&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bytes_read&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; 
+
+    &lt;span class=&quot;n&quot;&gt;file&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fget&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;EBADF&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; 
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f_mode&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FMODE_READ&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;fput&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;EBADF&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;bytes_read&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;vfs_read&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;buf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f_pos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;fput&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bytes_read&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;리눅스 커널에서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sys_read()&lt;/code&gt; 시스템 호출을 처리하는 함수의 구현이다. 
+이 함수는 사용자가 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;read()&lt;/code&gt;를 호출할 때 파일 디스크립터로부터 데이터를 읽어와 사용자 공간에 복사하고 읽은 바이트 수를 반환한다.
+먼저, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fget(fd)&lt;/code&gt;로 파일을 찾고, 해당 파일이 읽기 모드인지 확인한다. 읽기 모드가 아니면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-EBADF&lt;/code&gt; 오류를 반환한다. 
+그런 다음 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;vfs_read()&lt;/code&gt;를 호출하여 파일에서 데이터를 읽고, 읽은 바이트 수를 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bytes_read&lt;/code&gt;에 저장한다. 
+마지막으로 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fput(file)&lt;/code&gt;로 파일을 닫고, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bytes_read&lt;/code&gt;를 반환한다.&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://linux-kernel-labs.github.io/refs/heads/master/lectures/syscalls.html&quot;&gt;https://linux-kernel-labs.github.io/refs/heads/master/lectures/syscalls.html&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Thu, 23 Jan 2025 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/devops/2025/01/23/Linux-basic-02/</link>
+        <guid isPermaLink="true">http://localhost:4000/devops/2025/01/23/Linux-basic-02/</guid>
+        
+        <category>Linux</category>
+        
+        
+        <category>devops</category>
+        
+      </item>
     
       <item>
         <title>Linux - ifconfig를 누르면?</title>
@@ -119,6 +244,8 @@
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://docs.oracle.com/cd/E38901_01/html/E38894/ipconfig-141.html&quot;&gt;https://docs.oracle.com/cd/E38901_01/html/E38894/ipconfig-141.html&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Wed, 22 Jan 2025 00:00:00 +0900</pubDate>
         <link>http://localhost:4000/devops/2025/01/22/Linux-basic-01/</link>
@@ -2472,66 +2599,6 @@ CPU 의 속도를 Hz 로 나타내고 이 Hz 가 높으면 속도가 빠른 성�
         
         
         <category>language</category>
-        
-      </item>
-    
-      <item>
-        <title>Nginx SpringBoot</title>
-        <description>&lt;p&gt;사내에서 서비스 개발을 진행하게 될 환경을 구축하는 것을 담당하게 되었다.
-항상 주어진 환경내에서만 세팅을 하다가 직접 세팅을 하게 되니 얻는 것이 많아서 글을 작성하게 되었다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/05efb4bc-8fc1-4384-9a4e-cc0bdda90797&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Nginx 기반의 Springboot 서버를 띄우는 것이 이번 환경 구축의 핵심이다.&lt;/p&gt;
-
-&lt;h2 id=&quot;docker-network-설정&quot;&gt;Docker network 설정&lt;/h2&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/9de2ffc1-5787-4d5f-8f40-8e539af8de4a&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Docker 네트워크가 중요한 이유는 &lt;strong&gt;컨테이너 간의 통신&lt;/strong&gt;을 가능하게 하기 위해서이다. 
-Docker에서 각 컨테이너는 기본적으로 &lt;strong&gt;독립된 네트워크 환경&lt;/strong&gt;을 가지고 있어, 
-서로 다른 네트워크에 있으면 컨테이너 간에 직접적으로 통신할 수 없다. 
-Docker 네트워크를 사용하면 동일한 네트워크 내에 있는 컨테이너들끼리는 서로 쉽게 통신할 수 있다.
-따라서 trusted-net 이라는 네트워크를 하나 만들어 두고 컨테이너들을 매핑시켜 주었다.&lt;/p&gt;
-
-&lt;h2 id=&quot;nginxconf-파일-수정-과정&quot;&gt;Nginx.conf 파일 수정, 과정&lt;/h2&gt;
-
-&lt;p&gt;처음 해보는 것이라 이게 굉장히 애를 많이 먹었는데 일단 과정을 살펴보자&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-it&lt;/span&gt; nginx-proxy-server /bin/bash
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;먼저 Container안에 접속을 해주고&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; /etc/nginx/
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;/etc/nginx에 들어가서 default.conf를 확인한다.
-그리고 이제 nginx.conf 파일을 수정해야 한다.&lt;/p&gt;
-
-&lt;h2 id=&quot;nginxconf&quot;&gt;nginx.conf&lt;/h2&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/e52dd8d9-f261-434c-a525-9f3746372d80&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;포트를 다 내부포트로 변경하고, default로 설정되어 있는 include경로를 제거한다.
-처음에 이것을 제거해주지 않아서 8083으로 입력했을 때 boot가 나오지 않고 
-include에 포함되어 있는 conf파일이 나와서 아래의 경로로 설정한 서버가 나오지 않았었다. 
-include 경로를 제거해줘야 한다.
-이제 8083포트를 입력해주면 해당 서버가 제대로 나오게 된다.&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://velog.io/@18k7102dy/Docker-Spring-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EB%A5%BC-Docker%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%B4%EC%84%9C-%EB%B0%B0%ED%8F%AC%ED%95%B4%EB%B4%85%EC%8B%9C%EB%8B%A4&quot;&gt;https://velog.io/@18k7102dy/Docker-Spring-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EB%A5%BC-Docker%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%B4%EC%84%9C-%EB%B0%B0%ED%8F%AC%ED%95%B4%EB%B4%85%EC%8B%9C%EB%8B%A4&lt;/a&gt;&lt;/p&gt;
-
-</description>
-        <pubDate>Sun, 03 Nov 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/devops/2024/11/03/Devops-Docker-03/</link>
-        <guid isPermaLink="true">http://localhost:4000/devops/2024/11/03/Devops-Docker-03/</guid>
-        
-        <category>docker</category>
-        
-        
-        <category>devops</category>
         
       </item>
     
