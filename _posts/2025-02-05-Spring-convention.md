@@ -2,8 +2,8 @@
 layout: post
 title: 네이버 Java 코딩 컨벤션 적용
 subtitle: ""
-categories: framework
-tags: spring
+categories: language
+tags: java
 comments: false
 ---
 
