@@ -6,9 +6,77 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 24 Feb 2025 01:30:15 +0900</pubDate>
-    <lastBuildDate>Mon, 24 Feb 2025 01:30:15 +0900</lastBuildDate>
+    <pubDate>Tue, 25 Mar 2025 02:46:25 +0900</pubDate>
+    <lastBuildDate>Tue, 25 Mar 2025 02:46:25 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
+    
+      <item>
+        <title>네이버 Java 코딩 컨벤션 적용</title>
+        <description>&lt;h2 id=&quot;개요&quot;&gt;개요&lt;/h2&gt;
+
+&lt;p&gt;프로젝트를 하면서 컨벤션을 적용하지 않고, merge를 요청 했다가 팀원분이 컨벤션이 적용되지 않은 코드라서 컨벤션 적용 후 다시 merge를 해달라는 요청을 받았다.
+해당 프로젝트에서는 Naver 코딩 컨벤션을 적용하고 있었고, 큰 기업들에서는 각각의 코드 스타일에 맞게 컨벤션을 제공해주고 있음을 알 수 있었다.
+코딩 컨벤션이란 가독성이 좋고 관리하기 쉬운 코드를 작성하기 위한 코딩 스타일 규악을 말한다.
+컨벤션에 대한 xml 파일은 아래의 링크에서 확인이 가능하다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;naver-checkstyle-rules&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/naver/hackday-conventions-java/blob/master/rule-config/naver-checkstyle-rules.xml&quot;&gt;https://github.com/naver/hackday-conventions-java/blob/master/rule-config/naver-checkstyle-rules.xml&lt;/a&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;naver-intellij-formatter.xml&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/naver/hackday-conventions-java/blob/master/rule-config/naver-intellij-formatter.xml&quot;&gt;https://github.com/naver/hackday-conventions-java/blob/master/rule-config/naver-intellij-formatter.xml&lt;/a&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;naver-surpression.xml&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/naver/hackday-conventions-java/blob/master/rule-config/naver-checkstyle-suppressions.xml&quot;&gt;https://github.com/naver/hackday-conventions-java/blob/master/rule-config/naver-checkstyle-suppressions.xml&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;컨벤션-적용&quot;&gt;컨벤션 적용&lt;/h2&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/91abb7e6-4c62-4be4-a119-12d8313173f3&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/8a01703f-97e1-41a3-a7b3-4ec22ba4100f&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;File → Settings → Tools에서 Checkstyle 항목을 선택한다.&lt;/li&gt;
+  &lt;li&gt;Scan scope를 All sources including tests로 설정한다.&lt;/li&gt;
+  &lt;li&gt;Treat Checkstyle errors as warnings를 체크한다.&lt;/li&gt;
+  &lt;li&gt;Configuration File에서 + 버튼을 클릭한다.&lt;/li&gt;
+  &lt;li&gt;Description은 Naver Checkstyle Rules으로 지정하는 것이 권장되지만 프로젝트별로 커스터마이징 했다면 프로젝트 이름 등을 붙인다.&lt;/li&gt;
+  &lt;li&gt;Use a Local Checkstyle File을 선택하고 Browse 버튼을 눌러서 naver-checkstyle-rules.xml를 지정하고 Next 버튼을 누른다.&lt;/li&gt;
+  &lt;li&gt;suppressionFile 변수를 설정하라는 창이 뜨면 Value에 &lt;strong&gt;naver-checkstyle-suppressions.xml&lt;/strong&gt;를 입력하고 Next 버튼을 누른다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/54b2d600-1da7-4fe6-8b28-7204b6e13b19&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/3a87badf-5966-417d-92aa-cabe129bcc9f&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/01c1f684-3146-4320-8f62-cf50a94d556d&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/fbc8f68e-1cbf-4a56-aa4b-c19e7ee26f21&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;컨벤션을 적용하면 이와같이 checkstyle error를 확인할 수 있다.&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/naver/hackday-conventions-java/blob/master/rule-config/naver-checkstyle-rules.xml&quot;&gt;https://github.com/naver/hackday-conventions-java/blob/master/rule-config/naver-checkstyle-rules.xml&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Wed, 05 Feb 2025 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/framework/2025/02/05/Spring-convention/</link>
+        <guid isPermaLink="true">http://localhost:4000/framework/2025/02/05/Spring-convention/</guid>
+        
+        <category>spring</category>
+        
+        
+        <category>framework</category>
+        
+      </item>
     
       <item>
         <title>Linux - System call</title>
@@ -117,9 +185,8 @@ Application이 Kernel에게 메시지를 read라는 메시지를 fd, buff, len�
 &lt;p&gt;리눅스 커널에서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sys_read()&lt;/code&gt; 시스템 호출을 처리하는 함수의 구현이다. 
 이 함수는 사용자가 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;read()&lt;/code&gt;를 호출할 때 파일 디스크립터로부터 데이터를 읽어와 사용자 공간에 복사하고 읽은 바이트 수를 반환한다.
 먼저, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fget(fd)&lt;/code&gt;로 파일을 찾고, 해당 파일이 읽기 모드인지 확인한다. 읽기 모드가 아니면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-EBADF&lt;/code&gt; 오류를 반환한다. 
-그런 다음 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;vfs_read()&lt;/code&gt;를 호출하여 파일에서 데이터를 읽고, 읽은 바이트 수를 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bytes_read&lt;/code&gt;에 저장한다.&lt;/p&gt;
-
-&lt;p&gt;마지막으로 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fput(file)&lt;/code&gt;로 파일을 닫고, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bytes_read&lt;/code&gt;를 반환한다.&lt;/p&gt;
+그런 다음 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;vfs_read()&lt;/code&gt;를 호출하여 파일에서 데이터를 읽고, 읽은 바이트 수를 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bytes_read&lt;/code&gt;에 저장한다. 
+마지막으로 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fput(file)&lt;/code&gt;로 파일을 닫고, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bytes_read&lt;/code&gt;를 반환한다.&lt;/p&gt;
 
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
 
@@ -2547,54 +2614,6 @@ CPU 의 속도를 Hz 로 나타내고 이 Hz 가 높으면 속도가 빠른 성�
         <pubDate>Thu, 07 Nov 2024 00:00:00 +0900</pubDate>
         <link>http://localhost:4000/language/2024/11/07/Java-Adv-25/</link>
         <guid isPermaLink="true">http://localhost:4000/language/2024/11/07/Java-Adv-25/</guid>
-        
-        <category>java</category>
-        
-        
-        <category>language</category>
-        
-      </item>
-    
-      <item>
-        <title>Java Adv 24 - ExecutorService</title>
-        <description>&lt;h2 id=&quot;executorservice&quot;&gt;ExecutorService&lt;/h2&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/cbeb4629-5732-4f1f-bc17-6e5cedf23212&quot; /&gt;
-&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/80b6f85f-a1e5-4c76-8782-b568d978ca05&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ExecutorService&lt;/code&gt;를 사용하여 여러 작업을 비동기로 실행하고, 스레드 풀을 안전하게 종료(shutdown)하는 과정을 보여줍니다. 특히, 작업이 끝나지 않거나 
-대기 중인 작업이 있을 경우 이를 강제로 종료하는 로직이다.&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Executors.newFixedThreadPool(2)&lt;/code&gt;는 최대 2개의 스레드를 유지하는 고정 크기의 스레드 풀을 생성한다.&lt;/li&gt;
-  &lt;li&gt;동시에 2개의 작업만 실행되며, 초과하는 작업은 내부 큐에 대기한다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/00dbfd58-2973-49a9-a449-eb248c2f8493&quot; /&gt;
-&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/498d651e-0084-485a-8010-0c2c956f34da&quot; /&gt;
-&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/2ae16ead-34f3-4b6f-9c70-55aafacd5ae9&quot; /&gt;
-&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/9fb04f64-ffc2-4d2a-8986-2bf6cf378eca&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;corePoolsize 2개 maximumPoolSize도 4개 총 6개를 초과하면 task 7개부터 RejectedException이 발생한다. 
-큐에도 작업이 다차면 이때 maximum(초과 스레드)까지 늘리게 된다.
-초과 스레드는 긴급한 상황에서 쓰이고 긴급한 상황이 끝나면 기다리다가 긴급한 상황이 종료되면 스레드를 제거해서 정상적으로 돌아온다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/379d45a2-bab4-4538-93e5-605c325fb349&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Executors에는 초과 스레드인 3을 만든다.&lt;/li&gt;
-  &lt;li&gt;작업을 처리하기 위해 스레드를 하나 생성했기 때문에 작업을 큐에 넣을 필요 없이, 해당 스레드가 바로 작업을 처리한다. 따라서 task5가 task3, task4 보다 먼저 처리된다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;김영한님의 자바 강의&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://docs.oracle.com/javase/tutorial/essential/concurrency/sync.html&quot;&gt;https://docs.oracle.com/javase/tutorial/essential/concurrency/sync.html&lt;/a&gt;&lt;/p&gt;
-
-</description>
-        <pubDate>Tue, 05 Nov 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/language/2024/11/05/Java-Adv-24/</link>
-        <guid isPermaLink="true">http://localhost:4000/language/2024/11/05/Java-Adv-24/</guid>
         
         <category>java</category>
         

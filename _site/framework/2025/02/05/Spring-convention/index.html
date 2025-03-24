@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Spring adv 04 - Proxy Pattern" />
+<meta property="og:title" content="네이버 Java 코딩 컨벤션 적용" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,17 +52,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Spring adv 04 - Proxy Pattern &middot; 일벌리는 개발자</title>
+<title>네이버 Java 코딩 컨벤션 적용 &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="Proxy
+        content="개요
 
 "
 />
 <meta
         property="og:description"
-        content="Proxy
+        content="개요
 
 "
 />
@@ -72,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/framework/2025/01/09/Spring-adv-04/" />
-<meta property="og:url" content="http://localhost:4000/framework/2025/01/09/Spring-adv-04/" />
+<link rel="canonical" href="http://localhost:4000/framework/2025/02/05/Spring-convention/" />
+<meta property="og:url" content="http://localhost:4000/framework/2025/02/05/Spring-convention/" />
 
 <link
         rel="alternate"
@@ -83,10 +83,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/framework/2025/01/08/Spring-adv-03/" />
+<link rel="prev" href="http://localhost:4000/devops/2025/01/23/Linux-basic-02/" />
  
-<link rel="next" href="http://localhost:4000/framework/2025/01/12/Spring-adv-05/" />
-
 
 <link
         rel="apple-touch-icon"
@@ -183,16 +181,16 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-framework/2025/01/09/Spring-adv-04" class="post" role="article">
+<article id="post-framework/2025/02/05/Spring-convention" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      Spring adv 04 - Proxy Pattern
+      네이버 Java 코딩 컨벤션 적용
       
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2025-01-09T00:00:00+09:00">09 Jan 2025</time>
+      <time datetime="2025-02-05T00:00:00+09:00">05 Feb 2025</time>
       
 
 
@@ -267,79 +265,60 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
     </style>
 
     <!--<br />-->
-    <h2 id="proxy">Proxy</h2>
+    <h2 id="개요">개요</h2>
 
-<p>클라이언트가 요청한 결과를 서버에 직접 요청하는 것이 아니라 어떤 대리자를 통해서 대신 간접적으로 서버에 요청할 수 있다.
-예를 들어서 내가 직접 마트에서 장을 볼 수도 있지만, 누군가에게 대신 장을 봐달라고 부탁할 수도 있다.
-여기서 대신 장을 보는 <strong>대리자를</strong> <strong>영어로</strong> <strong>프록시</strong>(Proxy)라 한다.</p>
-
-<h2 id="예시">예시</h2>
-
-<p>재미있는 점은 직접 호출과 다르게 간접 호출을 하면 대리자가 중간에서 여러가지 일을 할 수 있다는 점이다.</p>
-<ul>
-  <li>엄마에게 라면을 사달라고 부탁 했는데, 엄마는 그 라면은 이미 집에 있다고 할 수도 있다. 그러면 기대한 것 보다 더 빨리 라면을 먹을 수 있다. (접근 제어, 캐싱)</li>
-  <li>아버지께 자동차 주유를 부탁했는데, 아버지가 주유 뿐만 아니라 세차까지 하고 왔다. 클라이언트가 기대한 것 외에 세차라는 부가 기능까지 얻게 되었다. (부가 기능 추가)</li>
-  <li>대리자가 또 다른 대리자를 부를 수도 있다.
-    <ul>
-      <li>예를 들어서 내가 동생에게 라면을 사달라고 했는데, 동생은 또 다른 누군가에게 라면을 사달라고 다시 요청할 수도 있다.</li>
-      <li>중요한 점은 클라이언트는 대리자를 통해서 요청했기 때문에 그 이후 과정은 모른다는 점이다. 동생을 통해서 라면이 나에게 도착하기만 하면 된다. (프록시 체인)</li>
-    </ul>
-  </li>
-</ul>
-
-<h2 id="프록시의-주요-기능">프록시의 주요 기능</h2>
-
-<p>프록시를 통해서 할 수 있는 일은 크게 2가지로 구분할 수 있다.</p>
+<p>프로젝트를 하면서 컨벤션을 적용하지 않고, merge를 요청 했다가 팀원분이 컨벤션이 적용되지 않은 코드라서 컨벤션 적용 후 다시 merge를 해달라는 요청을 받았다.
+해당 프로젝트에서는 Naver 코딩 컨벤션을 적용하고 있었고, 큰 기업들에서는 각각의 코드 스타일에 맞게 컨벤션을 제공해주고 있음을 알 수 있었다.
+코딩 컨벤션이란 가독성이 좋고 관리하기 쉬운 코드를 작성하기 위한 코딩 스타일 규악을 말한다.
+컨벤션에 대한 xml 파일은 아래의 링크에서 확인이 가능하다.</p>
 
 <ul>
-  <li>접근 제어</li>
-  <li>권한에 따른 접근 차단</li>
-  <li>캐싱</li>
-  <li>지연 로딩</li>
-  <li>부가 기능 추가</li>
+  <li>naver-checkstyle-rules</li>
 </ul>
 
-<p>원래 서버가 제공하는 기능에 더해서 부가 기능을 수행한다. 요청 값이나, 응답 값을 중간에 변형한다.
-실행 시간을 측정해서 추가 로그를 남긴다. 
-프록시 객체가 중간에 있으면 크게 접근 제어와 부가 기능 추가를 수행할 수 있다.</p>
+<p><a href="https://github.com/naver/hackday-conventions-java/blob/master/rule-config/naver-checkstyle-rules.xml">https://github.com/naver/hackday-conventions-java/blob/master/rule-config/naver-checkstyle-rules.xml</a></p>
 
 <ul>
-  <li>프록시 패턴: 접근 제어가 목적</li>
-  <li>데코레이터 패턴: 새로운 기능 추가가 목적</li>
+  <li>naver-intellij-formatter.xml</li>
 </ul>
 
-<p>둘다 프록시를 사용하지만, 의도가 다르다는 점이 핵심이다. 
-용어가 프록시 패턴이라고 해서 이 패턴만 프록시를 사용하는 것은 아니다.
-데코레이터 패턴도 프록시를 사용한다.</p>
+<p><a href="https://github.com/naver/hackday-conventions-java/blob/master/rule-config/naver-intellij-formatter.xml">https://github.com/naver/hackday-conventions-java/blob/master/rule-config/naver-intellij-formatter.xml</a></p>
 
-<p><img width="654" alt="Image" src="https://github.com/user-attachments/assets/2548692b-4291-42bf-b71e-e5b45e73ae4f" />
-이와 같은 객체 의존관계를 코드로 구현해보자</p>
-
-<p><img width="654" alt="Image" src="https://github.com/user-attachments/assets/7b701fb5-7a76-4ca6-a687-ef113fe57a5b" /></p>
-
-<p>앞서 설명한 것 처럼 프록시도 실제 객체와 그 모양이 같아야 하기 때문에 <code class="language-plaintext highlighter-rouge">Subject</code> 인터페이스를 구현해야 한다.</p>
 <ul>
-  <li>private Subject target: 클라이언트가 프록시를 호출하면 프록시가 최종적으로 실제 객체를 호출해야 한다.</li>
-  <li>따라서 내부에 실제 객체의 참조를 가지고 있어야 한다. 이렇게 프록시가 호출하는 대상을 <code class="language-plaintext highlighter-rouge">target</code> 이라 한다.</li>
-  <li>operation():  구현한 코드를 보면 <code class="language-plaintext highlighter-rouge">cacheValue</code> 에 값이 없으면 실제 객체(<code class="language-plaintext highlighter-rouge">target</code> )를 호출해서 값을 구한다.</li>
-  <li>그리고 구한 값을 <code class="language-plaintext highlighter-rouge">cacheValue</code> 에 저장하고 반환한다. 만약 <code class="language-plaintext highlighter-rouge">cacheValue</code> 에 값이 있으면 실제 객체를 전혀 호출하지 않고, 캐시 값을 그대로 반환한다.</li>
-  <li>따라서 처음 조회 이후에는 캐시(<code class="language-plaintext highlighter-rouge">cacheValue</code> )에서 매우 빠르게 데이터를 조회할 수 있다.</li>
+  <li>naver-surpression.xml</li>
 </ul>
 
-<p><img width="654" alt="Image" src="https://github.com/user-attachments/assets/64621bce-e364-4751-94b0-b1fe9f23527d" />
-<img width="654" alt="Image" src="https://github.com/user-attachments/assets/87d1b9a6-38e2-41bf-82d1-763827188051" /></p>
+<p><a href="https://github.com/naver/hackday-conventions-java/blob/master/rule-config/naver-checkstyle-suppressions.xml">https://github.com/naver/hackday-conventions-java/blob/master/rule-config/naver-checkstyle-suppressions.xml</a></p>
 
-<p>데이터가 엄청 빠르게 조회되는 것을 확인할 수 있다. 처음에는 cacheValue에 데이터가 없기 때문에 실제 데이터를 담아두고 그 다음에 조회할 때는 cacheValue에서 데이터를 매우 빠르게 조회하는 것이 프록시의 역할이다.
-결과적으로 <code class="language-plaintext highlighter-rouge">realSubject</code> 와 <code class="language-plaintext highlighter-rouge">cacheProxy</code> 를 생성하고 둘을 연결한다.<code class="language-plaintext highlighter-rouge">cacheProxy</code> 가 <code class="language-plaintext highlighter-rouge">realSubject</code>를 참조하는 런타임 객체 의존관계가 완성된다.
-그리고 마지막으로 <code class="language-plaintext highlighter-rouge">client</code> 에 <code class="language-plaintext highlighter-rouge">realSubject</code> 가 아<code class="language-plaintext highlighter-rouge">cacheProxy</code> 를 주입한다.
-이 과정을 통해서 <code class="language-plaintext highlighter-rouge">client -&gt; cacheProxy -&gt; realSubject</code> 런타임 객체 의존 관계가 완성된다.</p>
+<h2 id="컨벤션-적용">컨벤션 적용</h2>
+
+<p><img width="654" alt="Image" src="https://github.com/user-attachments/assets/91abb7e6-4c62-4be4-a119-12d8313173f3" /></p>
+
+<p><img width="654" alt="Image" src="https://github.com/user-attachments/assets/8a01703f-97e1-41a3-a7b3-4ec22ba4100f" /></p>
+
+<ul>
+  <li>File → Settings → Tools에서 Checkstyle 항목을 선택한다.</li>
+  <li>Scan scope를 All sources including tests로 설정한다.</li>
+  <li>Treat Checkstyle errors as warnings를 체크한다.</li>
+  <li>Configuration File에서 + 버튼을 클릭한다.</li>
+  <li>Description은 Naver Checkstyle Rules으로 지정하는 것이 권장되지만 프로젝트별로 커스터마이징 했다면 프로젝트 이름 등을 붙인다.</li>
+  <li>Use a Local Checkstyle File을 선택하고 Browse 버튼을 눌러서 naver-checkstyle-rules.xml를 지정하고 Next 버튼을 누른다.</li>
+  <li>suppressionFile 변수를 설정하라는 창이 뜨면 Value에 <strong>naver-checkstyle-suppressions.xml</strong>를 입력하고 Next 버튼을 누른다.</li>
+</ul>
+
+<p><img width="654" alt="Image" src="https://github.com/user-attachments/assets/54b2d600-1da7-4fe6-8b28-7204b6e13b19" /></p>
+
+<p><img width="654" alt="Image" src="https://github.com/user-attachments/assets/3a87badf-5966-417d-92aa-cabe129bcc9f" /></p>
+
+<p><img width="654" alt="Image" src="https://github.com/user-attachments/assets/01c1f684-3146-4320-8f62-cf50a94d556d" /></p>
+
+<p><img width="654" alt="Image" src="https://github.com/user-attachments/assets/fbc8f68e-1cbf-4a56-aa4b-c19e7ee26f21" /></p>
+
+<p>컨벤션을 적용하면 이와같이 checkstyle error를 확인할 수 있다.</p>
 
 <h2 id="reference">Reference</h2>
 
-<p>김영한님의 스프링 핵심 원리</p>
-
-<p>나의 뇌</p>
-
+<p><a href="https://github.com/naver/hackday-conventions-java/blob/master/rule-config/naver-checkstyle-rules.xml">https://github.com/naver/hackday-conventions-java/blob/master/rule-config/naver-checkstyle-rules.xml</a></p>
 
     <br />
     <br />
@@ -353,12 +332,12 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=Spring adv 04 - Proxy Pattern&amp;url=http://localhost:4000/framework/2025/01/09/Spring-adv-04/"
+    <a href="http://twitter.com/share?text=네이버 Java 코딩 컨벤션 적용&amp;url=http://localhost:4000/framework/2025/02/05/Spring-convention/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/framework/2025/01/09/Spring-adv-04/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/framework/2025/02/05/Spring-convention/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -380,21 +359,8 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
       
       
         
-        
           
-
-
-<li class="h4">
-  <a href="/framework/2025/02/05/Spring-convention/" data-flip="title">
-    <span>네이버 Java 코딩 컨벤션 적용</span>
-  </a>
-  <small><time datetime="2025-02-05T00:00:00+09:00">
-    05 Feb 2025
-  </time></small>
-</li>
-
-        
-      
+          
         
         
           
@@ -412,8 +378,21 @@ on <a href="/tag/framework-spring/" data-flip="title">Spring</a>
         
       
         
+        
           
-          
+
+
+<li class="h4">
+  <a href="/framework/2025/01/09/Spring-adv-04/" data-flip="title">
+    <span>Spring adv 04 - Proxy Pattern</span>
+  </a>
+  <small><time datetime="2025-01-09T00:00:00+09:00">
+    09 Jan 2025
+  </time></small>
+</li>
+
+        
+      
         
         
           
