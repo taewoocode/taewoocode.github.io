@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 03 Apr 2025 21:28:43 +0900</pubDate>
-    <lastBuildDate>Thu, 03 Apr 2025 21:28:43 +0900</lastBuildDate>
+    <pubDate>Thu, 03 Apr 2025 21:44:28 +0900</pubDate>
+    <lastBuildDate>Thu, 03 Apr 2025 21:44:28 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
@@ -16,6 +16,63 @@
 
 &lt;p&gt;&lt;img src=&quot;/assets/img/spring/img.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
 
+&lt;h3 id=&quot;api-게이트웨이란&quot;&gt;API 게이트웨이란&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;API 게이트웨이(패턴) 는 마이크로서비스 관리 / 운영을 위한 플랫폼 패턴이며 해당 패턴에 필요한 기능들을 제공하는 서버를 일컫는다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;API 게이트웨이는 개별 서비스의 앞 단에서 모든 서비스들의 엔드포인트를 단일화하고 다음과 같은 필수 기능 요소들을 제공한다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;인증과 인가&lt;/strong&gt; : 모든 서비스들에 대한 접근에 있어서 단일 진입점에서 인증과 인가 처리를 진행&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;API 요청 로드밸런싱 및 라우팅&lt;/strong&gt; : API 요청을 식별하여 적절한 마이크로서비스로 전달&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;QoS(Quality of Service)&lt;/strong&gt; : 안정적인 서비스 제공 및 네트워크 품질을 관리하며 사용자 / 클라이언트 / API 단위로 접속 제어&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;로깅 및 모니터링&lt;/strong&gt; : API 요청에 대한 로깅 / 모니터링 기능 지원&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;입력 유효성 검사&lt;/strong&gt; : API 요청의 적절한 형식과 필수 데이터 포함 여부를 식별 및 관리&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;api-게이트웨이를-왜-쓸까&quot;&gt;API 게이트웨이를 왜 쓸까?&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;애플리케이션 내부 구조를 캡슐화
+    &lt;ul&gt;
+      &lt;li&gt;클라이언트는 특정 서비스를 호출하지 않고 단순히 게이트웨이와 통신하며 API 게이트웨이는 각 종류의 클라이언트 각 종류의 클라이언트에 특정 API를 제공한다.&lt;/li&gt;
+      &lt;li&gt;클라이언트와 애플리케이션의 왕복 횟수가 감소한다. 클라이언트 코드는 최소화 된다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;장점이-있으면-단점도-있다&quot;&gt;장점이 있으면 단점도 있다.&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;개발, 배포 및 관리해야 하는 지점이 증가&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;각 마이크로서비스의 Endpoint를 노출하기 위해 API 게이트웨이를 업데이트해야 하는데 이로 인해 &lt;strong&gt;개발 병목 현상이 발생할 수 있다.&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;그러나 단점이 있음에도 장점이 뚜렷하기 때문에 오늘날 마이크로서비스 아키텍처에서 API 게이트웨이는 반드시 필요한 요소로 존재하고 있다.&lt;/p&gt;
+
+&lt;h2 id=&quot;applicationyaml-예시&quot;&gt;application.yaml 예시&lt;/h2&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;spring&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;cloud&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;gateway&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;routes&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;host_taewoo&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://host-taewoo.com&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;predicates&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Host=host-taewoo.com&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# host-taewoo.com을 Host의 헤더로 요청이 들어오는 경우 해당 uri로 라우팅&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;cookie_taewoo&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://cookie-taewoo.com&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;predicates&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Cookie=TAEWOO_SES, ej*&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# TAEWOO_SES ej* 정규식에 매칭되는 TAEWOO_SES 쿠키로 요청이 들어오는 경우 해당 uri로 라우팅&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;path_mangkyu&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;http://path-taewoo.com&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;predicates&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Path=/hello/{path}&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# /hello/{path} 경로로 요청이 들어오는 경우 해당 uri로 라우팅&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;https://cloud.spring.io/spring-cloud-gateway/reference/html&lt;/p&gt;
 </description>
         <pubDate>Sat, 01 Mar 2025 00:00:00 +0900</pubDate>
         <link>http://localhost:4000/framework/2025/03/01/Spring-Cloud-01/</link>
