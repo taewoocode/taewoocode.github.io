@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 03 Apr 2025 22:13:22 +0900</pubDate>
-    <lastBuildDate>Thu, 03 Apr 2025 22:13:22 +0900</lastBuildDate>
+    <pubDate>Thu, 03 Apr 2025 22:34:29 +0900</pubDate>
+    <lastBuildDate>Thu, 03 Apr 2025 22:34:29 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
@@ -64,11 +64,13 @@
           &lt;span class=&quot;na&quot;&gt;uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://cookie-taewoo.com&lt;/span&gt;
           &lt;span class=&quot;na&quot;&gt;predicates&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
             &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Cookie=TAEWOO_SES, ej*&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# TAEWOO_SES ej* 정규식에 매칭되는 TAEWOO_SES 쿠키로 요청이 들어오는 경우 해당 uri로 라우팅&lt;/span&gt;
-        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;path_mangkyu&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;path_taewoo&lt;/span&gt;
           &lt;span class=&quot;na&quot;&gt;uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;http://path-taewoo.com&lt;/span&gt;
           &lt;span class=&quot;na&quot;&gt;predicates&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
             &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Path=/hello/{path}&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# /hello/{path} 경로로 요청이 들어오는 경우 해당 uri로 라우팅&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img width=&quot;676&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/10786d42-bed7-4c63-a0d4-5b5a0b3284a8&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
 

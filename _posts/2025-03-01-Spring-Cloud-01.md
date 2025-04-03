@@ -51,13 +51,14 @@ spring:
           uri: https://cookie-taewoo.com
           predicates:
             - Cookie=TAEWOO_SES, ej* # TAEWOO_SES ej* 정규식에 매칭되는 TAEWOO_SES 쿠키로 요청이 들어오는 경우 해당 uri로 라우팅
-        - id: path_mangkyu
+        - id: path_taewoo
           uri: http://path-taewoo.com
           predicates:
             - Path=/hello/{path} # /hello/{path} 경로로 요청이 들어오는 경우 해당 uri로 라우팅
 ```
 
 <img width="676" alt="Image" src="https://github.com/user-attachments/assets/10786d42-bed7-4c63-a0d4-5b5a0b3284a8" />
+
 
 ## Reference
 
