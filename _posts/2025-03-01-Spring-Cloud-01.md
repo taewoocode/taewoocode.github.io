@@ -57,8 +57,6 @@ spring:
             - Path=/hello/{path} # /hello/{path} 경로로 요청이 들어오는 경우 해당 uri로 라우팅
 ```
 
-<img width="676" alt="Image" src="https://github.com/user-attachments/assets/10786d42-bed7-4c63-a0d4-5b5a0b3284a8" />
-
 
 ## Reference
 
