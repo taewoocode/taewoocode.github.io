@@ -6,9 +6,27 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 25 Mar 2025 02:46:25 +0900</pubDate>
-    <lastBuildDate>Tue, 25 Mar 2025 02:46:25 +0900</lastBuildDate>
+    <pubDate>Thu, 03 Apr 2025 21:28:43 +0900</pubDate>
+    <lastBuildDate>Thu, 03 Apr 2025 21:28:43 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
+    
+      <item>
+        <title>spring cloud 개요</title>
+        <description>&lt;h2 id=&quot;개요&quot;&gt;개요&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/spring/img.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Sat, 01 Mar 2025 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/framework/2025/03/01/Spring-Cloud-01/</link>
+        <guid isPermaLink="true">http://localhost:4000/framework/2025/03/01/Spring-Cloud-01/</guid>
+        
+        <category>spring</category>
+        
+        
+        <category>framework</category>
+        
+      </item>
     
       <item>
         <title>네이버 Java 코딩 컨벤션 적용</title>
@@ -39,10 +57,6 @@
 
 &lt;h2 id=&quot;컨벤션-적용&quot;&gt;컨벤션 적용&lt;/h2&gt;
 
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/91abb7e6-4c62-4be4-a119-12d8313173f3&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/8a01703f-97e1-41a3-a7b3-4ec22ba4100f&quot; /&gt;&lt;/p&gt;
-
 &lt;ul&gt;
   &lt;li&gt;File → Settings → Tools에서 Checkstyle 항목을 선택한다.&lt;/li&gt;
   &lt;li&gt;Scan scope를 All sources including tests로 설정한다.&lt;/li&gt;
@@ -53,14 +67,6 @@
   &lt;li&gt;suppressionFile 변수를 설정하라는 창이 뜨면 Value에 &lt;strong&gt;naver-checkstyle-suppressions.xml&lt;/strong&gt;를 입력하고 Next 버튼을 누른다.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/54b2d600-1da7-4fe6-8b28-7204b6e13b19&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/3a87badf-5966-417d-92aa-cabe129bcc9f&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/01c1f684-3146-4320-8f62-cf50a94d556d&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/fbc8f68e-1cbf-4a56-aa4b-c19e7ee26f21&quot; /&gt;&lt;/p&gt;
-
 &lt;p&gt;컨벤션을 적용하면 이와같이 checkstyle error를 확인할 수 있다.&lt;/p&gt;
 
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
@@ -68,13 +74,13 @@
 &lt;p&gt;&lt;a href=&quot;https://github.com/naver/hackday-conventions-java/blob/master/rule-config/naver-checkstyle-rules.xml&quot;&gt;https://github.com/naver/hackday-conventions-java/blob/master/rule-config/naver-checkstyle-rules.xml&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Wed, 05 Feb 2025 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/framework/2025/02/05/Spring-convention/</link>
-        <guid isPermaLink="true">http://localhost:4000/framework/2025/02/05/Spring-convention/</guid>
+        <link>http://localhost:4000/language/2025/02/05/Spring-convention/</link>
+        <guid isPermaLink="true">http://localhost:4000/language/2025/02/05/Spring-convention/</guid>
         
-        <category>spring</category>
+        <category>java</category>
         
         
-        <category>framework</category>
+        <category>language</category>
         
       </item>
     
@@ -2446,179 +2452,6 @@ CPU 의 속도를 Hz 로 나타내고 이 Hz 가 높으면 속도가 빠른 성�
         
         
         <category>framework</category>
-        
-      </item>
-    
-      <item>
-        <title>Java Adv 25 - ThreadPool 전략</title>
-        <description>&lt;h2 id=&quot;executor-스레드-풀-관리---고정-풀-전략&quot;&gt;Executor 스레드 풀 관리 - 고정 풀 전략&lt;/h2&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/ed2c7546-af1d-4ae1-9521-4af2038d7f1c&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;executor-스레드-풀-관리---캐시-풀-전략&quot;&gt;Executor 스레드 풀 관리 - 캐시 풀 전략&lt;/h2&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/8db6e252-07e7-4129-9809-b4d901abdde6&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;newCachedThreadPool()
-    &lt;ul&gt;
-      &lt;li&gt;기본 스레드를 사용하지 않고, 60초 생존 주기를 가진 초과 스레드만 사용하낟&lt;/li&gt;
-      &lt;li&gt;초과 스레드의 수는 제한이 없다.&lt;/li&gt;
-      &lt;li&gt;큐에 작접을 저장하지 않는다.
-        &lt;ul&gt;
-          &lt;li&gt;대신에 생산자 요청을 스레드 풀의 소비자 스레드가 직접 받아서 바로 처리한다.&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-      &lt;li&gt;모든 요청이 대기하지 않고 스레드가 바로바로 처리한다. 따라서 빠른 처리가 가능하다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/ef6b16cb-7b5d-4d87-9d58-1704068268d7&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;캐시 스레드 풀 전략은 매우 빠르고, 유연한 전략이다.
-이 전략은 기본 스레드도 없고, 대기 큐에 작업도 쌓이지 않는다. 
-대신에 작업 요청이 오면 초과 스레드로 작업을 바로바로 처리한다.
-초과 스레드의 수도 제한이 없기 때문에 CPU, 메모리 자원만 허용한다면 시스템의 자원을 최대로 활용할 수 있다. 
-추가로 초과 스레드도 갑자기 증가하고, 요청이 줄어들면 스레드도 점점 줄어든다.&lt;/p&gt;
-
-&lt;h3 id=&quot;주의&quot;&gt;주의&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;이 방식은 작업 수에 맞춰서 스레드 수가 변하기 때문에, 작업의 처리 속도가 빠르고 CPU, 메모리를 유연하게 사용할 수 있다는 장점이 있다. 하지만 상황에 따라서 가장 큰 단점이 되기도 한다.&lt;/li&gt;
-  &lt;li&gt;캐시 스레드 전략은 사용자가 점점 증가하면서 스레드 사용량도 함께 늘어나게 된다. 따라서 CPU 메모리의 사용량도 자연스럽게 증가 된다.
-    &lt;ul&gt;
-      &lt;li&gt;캐시 스레드 풀 전략은 스레드가 무한으로 생성될 수 있기 때문에 너무 많은 스레드가 작업을 처리하면서 시스템 전체가 느려지는 상황을 맞이할 수도 있다.&lt;/li&gt;
-      &lt;li&gt;시스템이 멈추는 장애도 발생할 가능성이 있다. 주의해서 사용해야 한다.&lt;/li&gt;
-      &lt;li&gt;갑작스럽게 작업량이 늘어나서 작업을 처리해야할 때 사용하는 것이 좋을 것 같다.&lt;/li&gt;
-      &lt;li&gt;잠깐의 급한불을 끄는 정도?&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;executor-스레드-풀-관리---사용자-정의-풀-전략&quot;&gt;Executor 스레드 풀 관리 - 사용자 정의 풀 전략&lt;/h2&gt;
-
-&lt;h2 id=&quot;상황1---점진적인-사용자-확대&quot;&gt;&lt;strong&gt;상황&lt;/strong&gt;1 - &lt;strong&gt;점진적인&lt;/strong&gt; &lt;strong&gt;사용자&lt;/strong&gt; &lt;strong&gt;확대&lt;/strong&gt;&lt;/h2&gt;
-
-&lt;p&gt;개발한 서비스가 잘 되어서 사용자가 점점 늘어난다.&lt;/p&gt;
-
-&lt;h2 id=&quot;상황2---갑작스런-요청-증가&quot;&gt;&lt;strong&gt;상황&lt;/strong&gt;2 - &lt;strong&gt;갑작스런&lt;/strong&gt; &lt;strong&gt;요청&lt;/strong&gt; &lt;strong&gt;증가&lt;/strong&gt;&lt;/h2&gt;
-
-&lt;p&gt;마케팅 팀의 이벤트가 대성공 하면서 갑자기 사용자가 폭증했다.
-다음과 같이 세분화된 전략을 사용하면 상황1, 상황2를 모두 어느정도 대응할 수 있다.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;일반&lt;/strong&gt;: 일반적인 상황에는 CPU, 메모리 자원을 예측할 수 있도록 고정 크기의 스레드로 서비스를 안정적으로 운영한다.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;긴급&lt;/strong&gt;: 사용자의 요청이 갑자기 증가하면 긴급하게 스레드를 추가로 투입해서 작업을 빠르게 처리한다.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;거절&lt;/strong&gt;: 사용자의 요청이 폭증해서 긴급 대응도 어렵다면 사용자의 요청을 거절한다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;이 방법은 평소에는 안정적으로 운영하다가, 사용자의 요청이 갑자기 증가하면 긴급하게 스레드를 더 투입해서 급한 불을 끄는 방법이다. 
-물론 긴급 상황에는 CPU, 메모리 자원을 더 사용하기 때문에 적정 수준을 찾아야 한다. 
-일반적으로는 여기까지 대응이 되겠지만, 시스템이 감당할 수 없을 정도로 사용자의 요청이 폭증하면, 
-처리 가능한 수준의 사용자 요청만 처리하고 나머지 요청은 거절해야 한다. 
-어떤 경우에도 시스템이 다운되는 최악의 상황은 피해야 한다.&lt;/p&gt;
-
-&lt;h2 id=&quot;실무에서-자주-하는-실수&quot;&gt;&lt;strong&gt;실무에서&lt;/strong&gt; &lt;strong&gt;자주&lt;/strong&gt; &lt;strong&gt;하는&lt;/strong&gt; &lt;strong&gt;실수&lt;/strong&gt;&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;참고&lt;/strong&gt; - &lt;strong&gt;만약&lt;/strong&gt; &lt;strong&gt;다음과&lt;/strong&gt; &lt;strong&gt;같이&lt;/strong&gt; &lt;strong&gt;설정하면&lt;/strong&gt;?&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ThreadPoolExecutor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;60&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TimeUnit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;SECONDS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt;
-
-&lt;span class=&quot;nc&quot;&gt;LinkedBlockingQueue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;기본 스레드 100개&lt;/li&gt;
-  &lt;li&gt;최대 스레드 200개&lt;/li&gt;
-  &lt;li&gt;큐 사이즈: 무한대&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;이렇게 설정하면 절대로 최대 사이즈 만큼 늘어나지 않는다. 왜냐하면 큐가 가득차야 긴급 상황으로 인지 되는데,
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;LinkedBlockingQueue&lt;/code&gt; 를 기본 생성자를 통해 무한대의 사이즈로 사용하게 되면, 큐가 가득찰 수 가 없다. 결국 기본 스레드 100개만으로 무한대의 작업을 처리해야 하는 문제가 발생한다. 실무에서 자주하는 실수 중에 하나이다.&lt;/p&gt;
-
-&lt;h2 id=&quot;executor-예외-정책&quot;&gt;Executor &lt;strong&gt;예외&lt;/strong&gt; &lt;strong&gt;정책&lt;/strong&gt;&lt;/h2&gt;
-
-&lt;p&gt;생산자 소비자 문제를 실무에서 사용할 때는, 결국 소비자가 처리할 수 없을 정도로 생산 요청이 가득 차면 어떻게 할지를 정해야 한다. 
-개발자가 인지할 수 있게 로그도 남겨야 하고, 사용자에게 현재 시스템에 문제가 있다고 알리는 것도 필요하다. 
-이런 것을 위해 예외 정책이 필요하다. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ThreadPoolExecutor&lt;/code&gt; 에 작업을 요청할 때, 큐도 가득차고, 초과 스레드도 더는 할당할 수 없다면 작업을 거절한다.
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ThreadPoolExecutor&lt;/code&gt; 는 작업을 거절하는 다양한 정책을 제공한다.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;AbortPolicy: 새로운 작업을 제출할 때 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RejectedExecutionException&lt;/code&gt; 을 발생시킨다. 기본 정책이다.&lt;/li&gt;
-  &lt;li&gt;DiscardPolicy: 새로운 작업을 조용히 버린다.&lt;/li&gt;
-  &lt;li&gt;CallerRunsPolicy: 새로운 작업을 제출한 스레드가 대신해서 직접 작업을 실행한다.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;사용자&lt;/strong&gt; &lt;strong&gt;정의&lt;/strong&gt;(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RejectedExecutionHandler&lt;/code&gt; ): 개발자가 직접 정의한 거절 정책을 사용할 수 있다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;참고로 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ThreadPoolExecutor&lt;/code&gt; 를 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;shutdown()&lt;/code&gt; 하면 이후에 요청하는 작업을 거절하는데, 이때도 같은 정책이 적용된다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/1c84b96b-6b44-48c1-84a3-66d6cd32434e&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;작업이 거절되면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RejectedExecutionException&lt;/code&gt; 을 던진다. 기본적으로 설정되어 있는 정책이다.
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;task1&lt;/code&gt; 은 풀의 스레드가 수행한다. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;task2&lt;/code&gt; 를 요청하면 허용 작업을 초과한다. 
-따라서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RejectedExecutionException&lt;/code&gt; 이 발생한다. 
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RejectedExecutionException&lt;/code&gt; 예외를 잡아서 작업을 포기하거나, 사용자에게 알리거나, 다시 시도하면 된다. 
-이렇게 예외를 잡아서 필요한 코드를 직접 구현해도 되고, 아니면 다음에 설명한 다른 정책들을 사용해도 된다.&lt;/p&gt;
-
-&lt;h2 id=&quot;rejectedexecutionhandler&quot;&gt;RejectedExecutionHandler&lt;/h2&gt;
-
-&lt;p&gt;마지막에 전달한 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AbortPolicy&lt;/code&gt; 는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RejectedExecutionHandler&lt;/code&gt; 의 구현체이다.
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ThreadPoolExecutor&lt;/code&gt; 생성자는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RejectedExecutionHandler&lt;/code&gt; 의 구현체를 전달 받는다.&lt;/p&gt;
-
-&lt;h2 id=&quot;discardpolicy&quot;&gt;DiscardPolicy&lt;/h2&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/1d5a4d45-84d3-45e3-a064-3d33d1f2bf28&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;거절된 작업을 무시하고 아무런 예외도 발생시키지 않는다. 
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ThreadPoolExecutor&lt;/code&gt; 생성자 마지막에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;new ThreadPoolExecutor.DiscardPolicy()&lt;/code&gt; 를 제공하면 된다.
-코드를 확인해보면 비어있는 것을 확인할 수 있다.&lt;/p&gt;
-
-&lt;h2 id=&quot;callerrunspolicy&quot;&gt;CallerRunsPolicy&lt;/h2&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/79548339-d306-461b-b68e-4eaadaee4c02&quot; /&gt;
-&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/aafc1e76-ac58-4b1d-bcf6-f11365c87b2d&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;task2&lt;/code&gt; 는 스레드 풀에 보관할 큐도 없고, 작업할 스레드가 없다. 거절해야 한다. 
-이때 작업을 거절하는 대신에, 작업을 요청한 스레드에 대신 일을 시킨다.
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;task2&lt;/code&gt; 의 작업을 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;main&lt;/code&gt; 스레드가 수행하는 것을 확인할 수 있다.
-이 정책의 특징은 생산자 스레드가 소비자 대신 일을 수행하는 것도 있지만, 
-생산자 스레드가 대신 일을 수행하는 덕분에 작업의 생산 자체가 느려진다는 점이다. 
-덕분에 작업의 생산 속도가 너무 빠르다면, 생산 속도를 조절할 수 있다. 
-원래대로 하면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;main&lt;/code&gt; 스레드가 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;task1&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;task2&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;task3&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;task4&lt;/code&gt; 를 연속해서 바로 생산해야 한다.
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CallerRunsPolicy&lt;/code&gt; 정책 덕분에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;main&lt;/code&gt; 스레드는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;task2&lt;/code&gt; 를 본인이 직접 완료하고 나서야 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;task3&lt;/code&gt; 을 생산할 수 있다. 
-결과적으로 생산 속도가 조절되었다.&lt;/p&gt;
-
-&lt;h2 id=&quot;가장-좋은-최적화는-최적화하지-않는-것이다&quot;&gt;가장 좋은 최적화는 최적화하지 않는 것이다&lt;/h2&gt;
-
-&lt;p&gt;많은 개발자가 미래에 발생하지 않을 일 때문에 코드를 최적화하는 경우가 많다. 예를 들어서 초기 서비스이고, 아직 사용자가 많을지 예측이 되지 않는 상황인데, 코드 최적화에 너무 많은 시간을 사용할 수 있다. 이것은 사용자는 얼마 없는데 매우 비싼 서버를 구매하는 것과 같다. 물론 이 이야기가 극단적으로 최적화를 하지 말자는 말이 아니다. 예를 들어서 A와 관련된 기능을 매우 많이 최적화 했는데, 사용자가 없어서 결국 버리게 되는 경우도 있다. 반면에 별로 신경쓰지 않은 B와 관련된 기능에 사용자가 많이 늘어날 수도 있다. 
-중요한 것은 예측 불가능한 너무 먼 미래 보다는 현재 상황에 맞는 최적화가 필요하다는 점이다.
-시스템의 상황을 잘 모니터링 하고 있다가, 최적화가 필요한 부분들이 발생하면, 그때 필요한 부분들을 개선하는 것이다.
-우리가 만든 서비스가 잘 되어서 많은 요청이 들어오면 좋겠지만, 대부분의 서비스는 트래픽이 어느정도 예측 가능하다. 
-그리고 성장하는 서비스라도 어느정도 성장이 예측 가능하다. 
-그래서 일반적인 상황이라면 고정 스레드 풀 전략이나, 캐시 스레드 풀 전략을 사용하면 충분하다. 
-한번에 처리할 수 있는 수를 제안하고 안정적으로 처리하고 싶다면 고정 풀 전략을 선택하고, 
-사용자의 요청을 빠르게 대응하고 싶다면 캐시 스레드 풀 전략을 사용하면 된다. 
-물론 자원만 충분하다면 고정 풀 전략을 선택하면서 풀의 수를 많이 늘려서 사용자의 요청도 빠르게 대응하면서 안정적인 서비스 운영도 가능하다. 
-그러다가 일반적인 상황을 벋어날 정도로 서비스가 잘 운영되면 그때 더 나은 최적화 방법을 선택하면 된다.&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;김영한님의 자바 강의&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://docs.oracle.com/javase/tutorial/essential/concurrency/sync.html&quot;&gt;https://docs.oracle.com/javase/tutorial/essential/concurrency/sync.html&lt;/a&gt;&lt;/p&gt;
-
-</description>
-        <pubDate>Thu, 07 Nov 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/language/2024/11/07/Java-Adv-25/</link>
-        <guid isPermaLink="true">http://localhost:4000/language/2024/11/07/Java-Adv-25/</guid>
-        
-        <category>java</category>
-        
-        
-        <category>language</category>
         
       </item>
     
