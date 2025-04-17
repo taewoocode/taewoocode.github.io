@@ -18,6 +18,22 @@
     </url>
   
     <url>
+      <loc>http://localhost:4000/project/2025/04/01/BidMall-Spring-Project-01/</loc>
+      
+        <lastmod>2025-04-01T00:00:00+09:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>1.0</priority>
+      
+
+    </url>
+  
+    <url>
       <loc>http://localhost:4000/framework/2025/03/01/Spring-Cloud-01/</loc>
       
         <lastmod>2025-03-01T00:00:00+09:00</lastmod>
