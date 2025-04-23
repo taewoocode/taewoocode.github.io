@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Home" />
+<meta property="og:title" content="Golf- 테이블 설계 - 01" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,16 +52,18 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Home &middot; 일벌리는 개발자</title>
+<title>Golf- 테이블 설계 - 01 &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="일을 벌여놔야 주워 담을 수 있습니다.
+        content="개요
+
 "
 />
 <meta
         property="og:description"
-        content="일을 벌여놔야 주워 담을 수 있습니다.
+        content="개요
+
 "
 />
 
@@ -70,8 +72,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/page-6/" />
-<meta property="og:url" content="http://localhost:4000/page-6/" />
+<link rel="canonical" href="http://localhost:4000/project/2025/04/20/Golf-Spring-Project-01/" />
+<meta property="og:url" content="http://localhost:4000/project/2025/04/20/Golf-Spring-Project-01/" />
 
 <link
         rel="alternate"
@@ -80,6 +82,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         href="http://localhost:4000/feed.xml"
 />
 
+
+<link rel="prev" href="http://localhost:4000/cs/2025/04/11/Algorithm-23/" />
  
 
 <link
@@ -176,18 +180,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
             data-image="/assets/img/dp.jpeg"
     >
       
-  
 
-<article id="post-language/2024/10/25/Java-Adv-21" class="post mb6" role="article">
+<article id="post-project/2025/04/20/Golf-Spring-Project-01" class="post" role="article">
   <header>
     <h1 class="post-title">
-      <a href="/language/2024/10/25/Java-Adv-21/" data-flip="title">
-      Java Adv 21 - 스레드를 직접 사용할 때의 문제점
-      </a>
+      
+      Golf- 테이블 설계 - 01
+      
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-10-25T00:00:00+09:00">25 Oct 2024</time>
+      <time datetime="2025-04-20T00:00:00+09:00">20 Apr 2025</time>
       
 
 
@@ -198,7 +201,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 
 
 
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
+in <a href="/category/project/" data-flip="title">Project</a>
 
       
 
@@ -210,7 +213,7 @@ in <a href="/category/programming-language/" data-flip="title">Programming Langu
 
 
 
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
+on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 
     </p>
 
@@ -223,433 +226,194 @@ on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
 
 
   
-  <h2 id="스레드-생성-비용으로-인한-성능-문제">스레드 생성 비용으로 인한 성능 문제</h2>
+  <div class="markdown-body">
 
+    <!--  -->
+    <style>
+      .myAd1190 {
+        width: 48%;
+        height: 280px;
+      }
 
-  <p class="read-more"><a class="heading" href="/language/2024/10/25/Java-Adv-21/" data-flip="title">Continue reading </a>
-  </p>
+      .myAd1290 {
+        width: 48%;
+        height: 280px;
+      }
+
+      @media(max-width: 800px) {
+        .myAd1190 {
+          display: none;
+        }
+
+        .myAd1290 {
+          width: 98%;
+        }
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 300px;
+      }
+
+      .row-center {
+        display: flex;
+        justify-content: center;
+        height: 258px;
+      }
+    </style>
+
+    <!--<br />-->
+    <h2 id="개요">개요</h2>
+
+<p>본격적인 코드 작성에 앞서, <strong>스크린골프 서비스 관리 플랫폼</strong>의 도메인 설계를 어떻게 할지 고민해보았습니다. 
+서비스의 요구사항을 바탕으로 필요한 도메인들을 정의하고, 그들 간의 관계를 설정하였습니다. 
+이번 글에서는 이러한 설계를 어떻게 했는지 간략히 설명드리고자 합니다.</p>
+
+<h2 id="도메인-설계의-시작">도메인 설계의 시작</h2>
+
+<p>스크린골프 서비스는 사용자가 매장을 예약하고, 룸에서 골프를 즐기며, 그에 대한 결제 및 기록을 관리하는 시스템입니다. 
+이를 위해서는 사용자의 정보뿐만 아니라 예약, 매장, 룸, 결제, 골프 기록 등 다양한 도메인들이 필요합니다. 
+스크린골프 서비스 관리 플랫폼에서 필요한 도메인을 생각나는 대로 우선 도출해보았습니다.
+가장 먼저 떠오른 것은 <strong>User</strong>, <strong>Reservation</strong>, <strong>Room</strong>, <strong>Payment</strong>, <strong>GolfRecord</strong> 같은 핵심 도메인들이었습니다. 
+사용자는 예약을 만들고, 예약은 특정 룸에서 이루어지며, 결제 정보와 골프 기록이 이에 연결되는 형태로 매우 직관적인 관계를 형성하고 있었습니다.</p>
+
+<p><img src="/assets/img/projects/golf/img.png" alt="img.png" /></p>
+
+<p>하지만 당장 떠오르는 도메인은 여기까지였고, 실제 서비스를 만들기 위해서는 훨씬 더 많은 기능과 구조가 필요할 것이라 생각되었습니다. 
+그래서 추가적인 도메인 구성을 바로 진행하기보다는, 실제 서비스에서는 어떤 기능들이 필요한지, 어떤 데이터가 오가고 관리되는지를 먼저 이해하려 했습니다.
+확실히, <strong>도메인 지식이 부족한 상태에서는 테이블 구조의 확장도 한계가 있었고</strong>, 
+각 도메인이 어떤 기능을 제공해주는지에 대해 어느 정도 감을 잡아야 적절한 테이블을 설계할 수 있겠다는 생각이 들었습니다.
+그래서 레퍼런스로 활용할 수 있는 실제 골프 관련 서비스들을 참고해보기로 했습니다.</p>
+
+<ul>
+  <li>김캐디(https://kimcaddie.com/)</li>
+  <li>곤지암 골프클럽(https://www.konjiamgolfclub.co.kr/index.dev)</li>
+</ul>
+
+<p>이 사이트들을 참고하며 필요한 추가적인 도메인을 더 구체화할 수 있었습니다.</p>
+
+<p><img src="/assets/img/projects/golf/img_1.png" alt="img.png" /></p>
+
+<ul>
+  <li><strong>Store</strong>: 매장을 의미하며, 여러 개의 룸과 리뷰, 이벤트, 공지사항 등을 포함할 수 있습니다.</li>
+  <li><strong>StoreReview</strong>, <strong>ReviewImage</strong>: 사용자들이 매장을 평가하고, 이미지를 첨부할 수 있도록 구성됩니다.</li>
+  <li><strong>StoreImage</strong>: 매장 자체에 대한 이미지들을 따로 관리합니다.</li>
+  <li><strong>Event</strong>, <strong>Notice</strong>: 각 매장에서 주최하는 이벤트나 공지사항 정보를 담는 테이블입니다.</li>
+  <li><strong>RoomEquipment</strong>: 룸 내 장비들을 관리하기 위한 테이블로, 각 룸은 여러 개의 장비를 포함할 수 있습니다.</li>
+  <li><strong>Hole</strong>, <strong>Course</strong>, <strong>HoleRecord</strong>: 골프 게임의 기록을 위한 테이블들로, 실제 게임 진행에 대한 세부 정보들을 저장합니다.</li>
+</ul>
+
+<p>스크린골프 서비스는 사용자가 매장을 예약하고, 룸에서 골프를 즐기며, 그에 대한 결제 및 기록을 관리하는 시스템입니다. 
+이를 위해서는 사용자의 정보뿐만 아니라 예약, 매장, 룸, 결제, 골프 기록 등 다양한 도메인들이 필요합니다. 
+이러한 도메인 간의 관계를 설정하면서, 서비스가 유기적으로 작동할 수 있도록 설계하는 것이 중요합니다.
+서비스의 핵심은 사용자가 여러 예약을 진행할 수 있다는 점입니다. 
+각 예약은 하나의 사용자가 생성하며, 예약된 시간에 특정 룸을 이용하게 됩니다.</p>
+
+<h2 id="테이블-관계-설정">테이블 관계 설정</h2>
+
+<p>스크린골프 서비스는 사용자 예약부터 룸 이용, 결제, 골프 기록 관리까지 여러 도메인이 서로 유기적으로 연결된 구조로 설계되었습니다. 
+User와 Reservation(예약)은 1:N 관계로 설정하여, 사용자가 여러 번 예약을 할 수 있도록 하였습니다. 
+각 예약은 반드시 한 사용자에 속하므로, 사용자는 자신이 만든 모든 예약을 조회할 수 있습니다.
+Store(매장)과 Room(룸)은 1:N 관계로, 매장은 여러 룸을 가질 수 있으며, 이를 통해 매장 내 룸의 예약 현황을 효율적으로 관리할 수 있습니다. 
+또한, Room(룸)과 Reservation(예약)도 1:N 관계로 설정하여 각 룸에 대한 예약 정보를 쉽게 조회할 수 있게 하였습니다.
+Reservation(예약)과 Payment(결제)는 1:1 관계로 설계하여, 예약이 완료되면 해당 예약에 대한 결제를 바로 연결할 수 있도록 하였습니다. 
+마찬가지로 Reservation과 GolfRecord(골프 기록)도 1:1 관계로, 각 예약에 대한 골프 기록을 정확히 추적할 수 있도록 하였습니다. 
+골프 기록은 여러 개의 HoleRecord(홀 기록)을 포함할 수 있게 되어, 플레이한 홀에 대한 세부 기록을 관리할 수 있습니다.
+HoleRecord(홀 기록)과 Hole(홀)은 N:1 관계로 설계하여, 여러 홀 기록이 하나의 홀에 속하게 하였고, 이는 각 홀에 대한 세부적인 데이터를 쉽게 추적할 수 있게 합니다. 
+한편, Hole과 Course(코스)는 N:1 관계로 설정되어, 여러 홀이 하나의 코스를 형성하고, 코스별 홀 관리가 용이하도록 했습니다.
+매장 관련 리뷰와 이미지를 관리하는 Store와 StoreReview(매장 리뷰), StoreReview와 ReviewImage(리뷰 이미지), 
+Store와 StoreImage(매장 이미지)는 모두 1:N 관계로 설정하여, 
+매장에 대한 다각적인 피드백과 시각적 정보를 제공하고 관리할 수 있게 하였습니다.
+매장에 대한 공지사항과 이벤트도 Store와 Notice(공지사항), Store와 Event(이벤트) 간에 1:N 관계로 설정하여, 
+매장과 관련된 정보를 체계적으로 관리하고, 매장별 이벤트 및 공지사항을 쉽게 조회할 수 있습니다.
+마지막으로, Room(룸)과 RoomEquipment(룸 장비)는 1:N 관계로, 각 룸에 배치된 여러 장비들을 효율적으로 관리할 수 있도록 설계되었습니다.</p>
+
+<h2 id="reference">Reference</h2>
+
+<p>나의 뇌</p>
+
+<p><a href="https://kimcaddie.com">https://kimcaddie.com</a></p>
+
+<p><a href="https://www.konjiamgolfclub.co.kr/index.dev">https://www.konjiamgolfclub.co.kr/index.dev</a></p>
+
+    <br />
+    <br />
+  </div>
   
 
 </article>
 
-
-  
-
-<article id="post-language/2024/10/24/Java-Adv-20" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/10/24/Java-Adv-20/" data-flip="title">
-      Java Adv 20 - 자바 동시성 컬렉션 - 2
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-10-24T00:00:00+09:00">24 Oct 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
+<!--<hr class="dingbat" />-->
+<!--
+<div class="share">
+  <h2>Share this post</h2>
+  <div class="share-body">
+    <a href="http://twitter.com/share?text=Golf- 테이블 설계 - 01&amp;url=http://localhost:4000/project/2025/04/20/Golf-Spring-Project-01/"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="icon-twitter">
+      </span>
+    </a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/project/2025/04/20/Golf-Spring-Project-01/"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="icon-facebook">
+      </span>
+    </a>
+  </div>
+</div>
+-->
+<br />
 
 
 
 
+<aside class="related" role="complementary">
+  <h2 class="hr">Related Posts</h2>
 
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
+  <ul class="related-posts">
     
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="동시성-컬렉션concurrent-collections"><strong>동시성 컬렉션(Concurrent Collections)</strong></h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/10/24/Java-Adv-20/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/10/23/Java-Adv-19" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/10/23/Java-Adv-19/" data-flip="title">
-      Java Adv 19 - 자바 동시성 컬렉션
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-10-23T00:00:00+09:00">23 Oct 2024</time>
       
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
       
+      
+        
+          
+          
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/project/2025/04/01/BidMall-Spring-Project-01/" data-flip="title">
+    <span>BIDMALL- auction_status_check - 01</span>
+  </a>
+  <small><time datetime="2025-04-01T00:00:00+09:00">
+    01 Apr 2025
+  </time></small>
+</li>
 
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
+        
+      
     
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="자바-synchronized-프록시"><strong>자바</strong> synchronized <strong>프록시</strong></h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/10/23/Java-Adv-19/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/10/22/Java-Adv-18" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/10/22/Java-Adv-18/" data-flip="title">
-      Java Adv 18 - 동시성 컬렉션이 필요한 이유 - 3
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-10-22T00:00:00+09:00">22 Oct 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="프록시proxy"><strong>프록시</strong>(Proxy)</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/10/22/Java-Adv-18/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/10/21/Java-Adv-17" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/10/21/Java-Adv-17/" data-flip="title">
-      Java Adv 17 - 동시성 컬렉션이 필요한 이유 - 2
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-10-21T00:00:00+09:00">21 Oct 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="멀티스레드-환경에서의-문제-확인"><strong>멀티스레드 환경에서의</strong> <strong>문제</strong> <strong>확인</strong></h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/10/21/Java-Adv-17/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-language/2024/10/20/Java-Adv-16" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/language/2024/10/20/Java-Adv-16/" data-flip="title">
-      Java Adv 16 - 동시성 컬렉션이 필요한 이유
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-10-20T00:00:00+09:00">20 Oct 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/programming-language/" data-flip="title">Programming Language</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/programming-language-java/" data-flip="title">Java</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="컬렉션-프레임워크는-원자적인-연산을-제공할까">컬렉션 프레임워크는 원자적인 연산을 제공할까?</h2>
-
-
-  <p class="read-more"><a class="heading" href="/language/2024/10/20/Java-Adv-16/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-cs/2024/10/19/Algorithm-21" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/cs/2024/10/19/Algorithm-21/" data-flip="title">
-      백준 2636 문제풀이
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-10-19T00:00:00+09:00">19 Oct 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="문제-링크">문제 링크</h2>
-
-
-  <p class="read-more"><a class="heading" href="/cs/2024/10/19/Algorithm-21/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-cs/2024/10/18/Algorithm-20" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/cs/2024/10/18/Algorithm-20/" data-flip="title">
-      백준 4949 문제풀이
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2024-10-18T00:00:00+09:00">18 Oct 2024</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="문제-링크">문제 링크</h2>
-
-
-  <p class="read-more"><a class="heading" href="/cs/2024/10/18/Algorithm-20/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-
-<h2 class="sr-only">Pagination</h2>
-<nav class="pagination heading" role="navigation">
-  <ul>
-    <li class="pagination-item older" >
-      
-        <a rel="next" href="/page-7/">Older</a>
-      
-    </li>
-    <li class="pagination-item newer" >
-      
-        <a rel="prev" href="/page-5/">Newer</a>
-      
-    </li>
   </ul>
-</nav>
+</aside>
+  <aside class="comments" role="complementary">
+  <h2>Comments</h2>
+  <hr/>
 
-  <footer>
+  <script src="https://utteranc.es/client.js"
+          repo="taewoocode/taewoocode.github.io"
+          issue-term="title"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+</aside>
+
+
+       <footer>
   <hr/>
   
     <p>© 2022. by taewoo</p>

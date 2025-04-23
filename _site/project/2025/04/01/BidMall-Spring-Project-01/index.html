@@ -396,9 +396,11 @@ Detail: Failing row contains (9, 2025-04-25 00:00:00, 0, null, null, null, 2025-
 
 </code></pre></div></div>
 
-<p>경매를 처음 생성하고 등록할 때는 <strong>서버에게 상태값 관리의 책임을 위임</strong>하도록 설계했습니다. 클라이언트가 직접 경매 상태를 지정하는 방식은 다양한 예외 상황을 유발할 수 있었기 때문에, <strong>경매 등록 시 상태값은 서버에서 자동으로 <code class="language-plaintext highlighter-rouge">ONGOING</code>으로 설정</strong>되도록 리팩토링을 진행했습니다.</p>
+<p>경매를 처음 생성하고 등록할 때는 서버에게 상태값을 할당하도록 설계했습니다. 
+클라이언트가 직접 경매 상태를 지정하는 방식은 다양한 예외 상황을 유발할 수 있었기 때문에, 
+<strong>경매 등록 시 상태값은 서버에서 자동으로 <code class="language-plaintext highlighter-rouge">ONGOING</code>으로 설정</strong>되도록 리팩토링을 진행했습니다.</p>
 
-<p>요청포맷</p>
+<p>Respuest.JSON</p>
 
 <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"product"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
@@ -415,7 +417,7 @@ Detail: Failing row contains (9, 2025-04-25 00:00:00, 0, null, null, null, 2025-
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div></div>
 
-<p>응답포맷</p>
+<p>Response.JSON</p>
 
 <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
     </span><span class="nl">"auctionId"</span><span class="p">:</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span><span class="w">
@@ -480,6 +482,22 @@ Detail: Failing row contains (9, 2025-04-25 00:00:00, 0, null, null, null, 2025-
     
       
       
+      
+        
+        
+          
+
+
+<li class="h4">
+  <a href="/project/2025/04/20/Golf-Spring-Project-01/" data-flip="title">
+    <span>Golf- 테이블 설계 - 01</span>
+  </a>
+  <small><time datetime="2025-04-20T00:00:00+09:00">
+    20 Apr 2025
+  </time></small>
+</li>
+
+        
       
         
           
