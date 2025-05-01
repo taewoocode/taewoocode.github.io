@@ -6,9 +6,120 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 23 Apr 2025 19:22:18 +0900</pubDate>
-    <lastBuildDate>Wed, 23 Apr 2025 19:22:18 +0900</lastBuildDate>
+    <pubDate>Thu, 01 May 2025 21:55:38 +0900</pubDate>
+    <lastBuildDate>Thu, 01 May 2025 21:55:38 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
+    
+      <item>
+        <title>주소 지정 방식</title>
+        <description>&lt;h2 id=&quot;주소-지정-방식&quot;&gt;주소 지정 방식&lt;/h2&gt;
+
+&lt;p&gt;명렁어의 오퍼랜드 필드에 메모리나 레지스터의 주소를 담는다.
+명령어는 오퍼랜드와 연산 코드로 이루어져 있는데 여기서 오퍼랜드란 연산에 사용할 데이터가 저장된 위치를 의미한다.&lt;/p&gt;
+
+&lt;h2 id=&quot;오퍼랜드-필드에-메모리나-레지스터의-주소를-담는-이유가-뭘까&quot;&gt;오퍼랜드 필드에 메모리나 레지스터의 주소를 담는 이유가 뭘까?&lt;/h2&gt;
+
+&lt;p&gt;그냥 연산코드, 연산에 사용될 데이터를 직접 추가하면 되는데 굳이 왜 주소를 담을까?&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;이유는 명령어 길이 때문이다.&lt;/li&gt;
+  &lt;li&gt;명령어는 n개의 비트로 구성되어있고, 연산 코드 필드가 m비트라고 가정하면 오퍼랜드 필드의 길이는 n - m이 된다.&lt;/li&gt;
+  &lt;li&gt;또한 메모리 낭비 이슈를 줄일 수 있다.
+    &lt;ul&gt;
+      &lt;li&gt;메모리 주소만 참조하면 알아서 반복적인 연산을 지속하기 때문에 직접 데이터 포함 방식보다 유지보수가 좋아진다.(Java의 참조)를 생각하면 쉽게 이해가 된다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;1-즉시-주소-지정-방식-immediate-addressing&quot;&gt;1. 즉시 주소 지정 방식 (Immediate Addressing)&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/cs/operation/img.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;연산에 사용할 데이터를 명령어의 오퍼랜드 필드에 &lt;strong&gt;직접 명시하는 방식&lt;/strong&gt;이다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;메모리 접근이 필요 없기 때문에 가장 빠르다.&lt;/li&gt;
+  &lt;li&gt;오퍼랜드 필드에 값을 직접 넣기 때문에 표현할 수 있는 데이터 크기에 제한이 있다.&lt;/li&gt;
+  &lt;li&gt;주로 상수를 처리할 때 사용된다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;비유:&lt;/strong&gt; “R1에 숫자 5를 써라.” → 데이터를 어디서 가져오는 것이 아니라, 그 자리에서 말한 값을 바로 적는 것이다.&lt;/p&gt;
+
+&lt;h3 id=&quot;2-직접-주소-지정-방식-direct-addressing&quot;&gt;2. 직접 주소 지정 방식 (Direct Addressing)&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/cs/operation/img_1.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;오퍼랜드 필드에 연산에 사용할 데이터가 저장된 &lt;strong&gt;메모리의 실제 주소를 명시하는 방식&lt;/strong&gt;이다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;메모리에 한 번 접근하여 데이터를 가져오기 때문에 즉시 주소 방식보다는 느리다.&lt;/li&gt;
+  &lt;li&gt;표현할 수 있는 데이터 크기가 즉시 방식보다 크다.&lt;/li&gt;
+  &lt;li&gt;주소가 고정되어 있기 때문에 구조가 단순하지만 유연성은 낮다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;비유:&lt;/strong&gt; “100번지 서랍을 열어서 그 안에 든 것을 R1에 저장하라.” → 주소가 바로 주어지고, 거기서 값을 가져오는 방식이다.&lt;/p&gt;
+
+&lt;h3 id=&quot;3-간접-주소-지정-방식-indirect-addressing&quot;&gt;3. 간접 주소 지정 방식 (Indirect Addressing)&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/cs/operation/img_2.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;오퍼랜드 필드에 연산에 사용할 데이터가 저장된 &lt;strong&gt;메모리 주소의 주소를 명시하는 방식&lt;/strong&gt;이다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;메모리를 두 번 접근해야 하기 때문에 직접 주소 방식보다 느리다.&lt;/li&gt;
+  &lt;li&gt;표현할 수 있는 주소 공간이 넓기 때문에 유연성이 크다.&lt;/li&gt;
+  &lt;li&gt;포인터나 동적 자료 구조에 자주 사용된다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;비유:&lt;/strong&gt; “100번지 서랍 안에 적힌 주소를 보고, 그 주소에 가서 값을 가져와라.”&lt;/p&gt;
+
+&lt;p&gt;→ 주소를 한번 더 참조해야 하므로 한 단계 더 돌아가는 방식이다.&lt;/p&gt;
+
+&lt;h3 id=&quot;4-레지스터-주소-지정-방식-register-addressing&quot;&gt;4. 레지스터 주소 지정 방식 (Register Addressing)&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/cs/operation/img_3.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;오퍼랜드 필드에 연산에 사용할 데이터를 담고 있는 &lt;strong&gt;레지스터의 이름(주소)를 명시하는 방식&lt;/strong&gt;이다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;메모리 대신 레지스터를 사용하므로 접근 속도가 매우 빠르다.&lt;/li&gt;
+  &lt;li&gt;레지스터 수가 제한되어 있어 데이터 표현 범위는 작다.&lt;/li&gt;
+  &lt;li&gt;연산이 빈번하게 수행되는 변수나 임시 값 처리에 적합하다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;비유:&lt;/strong&gt; “내 손에 들고 있는 계산기 메모리에서 바로 꺼내 써라.”&lt;/p&gt;
+
+&lt;p&gt;→ 가까운 공간에서 바로 꺼내 쓰는 개념이다.&lt;/p&gt;
+
+&lt;h3 id=&quot;5-레지스터-간접-주소-지정-방식-register-indirect-addressing&quot;&gt;5. 레지스터 간접 주소 지정 방식 (Register Indirect Addressing)&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/cs/operation/img_4.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;오퍼랜드 필드에 &lt;strong&gt;데이터가 저장된 메모리 주소를 담고 있는 레지스터를 명시하는 방식&lt;/strong&gt;이다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;메모리에 한 번 접근하므로 간접 주소 지정 방식보다 빠르다.&lt;/li&gt;
+  &lt;li&gt;주소를 유동적으로 관리할 수 있어 포인터 처리에 적합하다.&lt;/li&gt;
+  &lt;li&gt;레지스터를 통해 메모리 주소를 간접적으로 다룰 수 있다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;비유:&lt;/strong&gt; “R2 레지스터에 적힌 주소를 보고, 해당 위치에서 값을 가져와라.”&lt;/p&gt;
+
+&lt;p&gt;→ 주소가 적힌 쪽지를 들고 해당 장소에 가서 값을 가져오는 느낌이다.&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://m.yes24.com/Goods/Detail/111378840&quot;&gt;https://m.yes24.com/Goods/Detail/111378840&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Thu, 01 May 2025 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/cs/2025/05/01/Operating-system-03/</link>
+        <guid isPermaLink="true">http://localhost:4000/cs/2025/05/01/Operating-system-03/</guid>
+        
+        <category>OS</category>
+        
+        
+        <category>cs</category>
+        
+      </item>
     
       <item>
         <title>Golf- 테이블 설계 - 01</title>
@@ -2912,81 +3023,6 @@ if문을 바로 변수에 할당하거나 다른 표현식의 일부로 사용�
         <pubDate>Mon, 25 Nov 2024 00:00:00 +0900</pubDate>
         <link>http://localhost:4000/language/2024/11/25/Kotlin-basic-02/</link>
         <guid isPermaLink="true">http://localhost:4000/language/2024/11/25/Kotlin-basic-02/</guid>
-        
-        <category>kotlin</category>
-        
-        
-        <category>language</category>
-        
-      </item>
-    
-      <item>
-        <title>Kotlin In Action 01 - 코틀린 철학</title>
-        <description>&lt;p&gt;프로그래밍 언어, 프레임워크를 공부하다 보면 왜 배워야 하는지, 
-어떤 목적으로 만들어졌는지에 대한 생각이 가장 많이 난다. 
-굳이 왜 잘쓰고 있는 자바를 대체하면서 Kotlin으로 마이그레이션을 하는지 궁금했다. 
-그래서 Kotlin in Action이라는 책을 읽으며 왜 Kotlin을 써야하는지 어떤 부분에서 좋은지 알고 싶었다.
-회사에서 안드로이드 개발도 해야하니 Kotlin을 주언어로 써야하기도 한다. (사실 이게 가장 큼)&lt;/p&gt;
-
-&lt;h2 id=&quot;실용성&quot;&gt;실용성&lt;/h2&gt;
-
-&lt;h3 id=&quot;코틀린은-실전-문제를-해결하기-위해-만든-실용적인-언어&quot;&gt;코틀린은 실전 문제를 해결하기 위해 만든 실용적인 언어&lt;/h3&gt;
-
-&lt;p&gt;코틀린은 연구를 위한 언어가 아니기 때문에, 
-최신 프로그래밍에 앞서 채택하지 않고, 
-다른 프로그래밍 언어가 채택한 이미 성공적으로 검증된 해법과 기능에 의존한다고 한다. 
-이러한 장점이 언어의 복잡도가 줄어들고 이미 알고 있는 기존 개념을 통해 쉽게 배울 수가 있다. 
-기존 자바의 라이브러리 기능을 그대로 사용할 수 있다는 말 인 것 같다.&lt;/p&gt;
-
-&lt;h3 id=&quot;코틀린은-어느-특정-프로그래밍-스타일이나-패러다임을-사용하는-것을-강제로-요구x&quot;&gt;코틀린은 어느 특정 프로그래밍 스타일이나 패러다임을 사용하는 것을 강제로 요구X&lt;/h3&gt;
-
-&lt;p&gt;코틀린을 처음 배우는 사람은 자바에서 사용해 온 익숙한 프로그래밍 스타일이나 기법을 활용할 수 있고, 
-나중에 코틀린의 강력한 특성을 발견하고 적응 해나가 더 간결한 코드를 작성하라고 한다.&lt;/p&gt;
-
-&lt;h2 id=&quot;간결성&quot;&gt;&lt;strong&gt;간결성&lt;/strong&gt;&lt;/h2&gt;
-
-&lt;h3 id=&quot;코틀린은-코드가-더-간단하고-간결할수록-내용을-파악하기-더-좋다&quot;&gt;&lt;strong&gt;코틀린은 코드가 더 간단하고 간결할수록 내용을 파악하기 더 좋다&lt;/strong&gt;&lt;/h3&gt;
-
-&lt;p&gt;어떤 언어가 간결하다는 말은 그 언어로 작성된 코드를 읽을 때 의도를 쉽게 파악할 수 있는 구문 구조를 제공하고, 
-그 의도를 달성하는 방법을 이해할 때 방해가 될 수 있는 부가적인 준비 코드가 적다는 뜻이다.&lt;/p&gt;
-
-&lt;h3 id=&quot;코틀린은-boiler-plate-코드를-줄임&quot;&gt;&lt;strong&gt;코틀린은 boiler plate 코드를 줄임&lt;/strong&gt;&lt;/h3&gt;
-
-&lt;p&gt;코틀린은 &lt;strong&gt;Setter, Setter, Constructor&lt;/strong&gt; 묵시적으로 제공하기 때문에 코틀린 소스코드는 boiler plate 코드를 줄였다고 한다.&lt;/p&gt;
-
-&lt;h2 id=&quot;안정성&quot;&gt;안정성&lt;/h2&gt;
-
-&lt;h3 id=&quot;jvm에서-실행되는-정적-타입-지정-언어&quot;&gt;&lt;strong&gt;JVM에서 실행되는 정적 타입 지정 언어&lt;/strong&gt;&lt;/h3&gt;
-
-&lt;p&gt;JVM을 사용하면 메모리 안전성을 보장하고, 버퍼 오버플로우를 방지하며, 동적으로 할당한 메모리를 잘못 사용함으로 인해 발생할 수 있는 다양한 문제를 예방할 수 있다.&lt;/p&gt;
-
-&lt;h3 id=&quot;컴파일-시점-검사를-통해-오류를-더-많이-방지&quot;&gt;&lt;strong&gt;컴파일 시점 검사를 통해 오류를 더 많이 방지&lt;/strong&gt;&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;NullPointerException을 없애주기 위해 노력했다고 한다.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;코틀린의 타입 시스템은 null이 될 수 없는 값을 추적하며, 실행 시점에 NullPointerException이 발생할 수 있는 연산을 사용하는 코드를 금지한다.&lt;/p&gt;
-
-&lt;h3 id=&quot;classcastexception을-방지해준다&quot;&gt;&lt;strong&gt;ClassCastException을 방지해준다.&lt;/strong&gt;&lt;/h3&gt;
-
-&lt;p&gt;코틀린은 어떤 객체를 다른 타입으로 캐스트하기 전에 타입을 미리 검사하지 않으면 ClassCastException이 발생한다.&lt;/p&gt;
-
-&lt;h2 id=&quot;상호운용성&quot;&gt;&lt;strong&gt;상호운용성&lt;/strong&gt;&lt;/h2&gt;
-
-&lt;h3 id=&quot;코틀린은-자바-표준-라이브러리-클래스에-의존하기-때문에-자바와-상호운용성이-좋다&quot;&gt;&lt;strong&gt;코틀린은 자바 표준 라이브러리 클래스에 의존하기 때문에 자바와 상호운용성이 좋다.&lt;/strong&gt;&lt;/h3&gt;
-
-&lt;p&gt;자바와 코틀린 소스 파일을 자유롭게 내비게이션 할 수 있다.
-자바 메서드를 리팩터링 해도 그 메소드와 관련 있는 코틀린 코드까지 제대로 변경된다. 
-역으로 코틀린 메소드를 리팩토링해도 자바 코드까지 모두 자동으로 변경된다고 한다.&lt;/p&gt;
-
-&lt;p&gt;가자 Kotlin Deep Dive~~&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.yes24.com/product/goods/55148593&quot;&gt;https://www.yes24.com/product/goods/55148593&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Sat, 23 Nov 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/language/2024/11/23/Kotlin-basic-01/</link>
-        <guid isPermaLink="true">http://localhost:4000/language/2024/11/23/Kotlin-basic-01/</guid>
         
         <category>kotlin</category>
         
