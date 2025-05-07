@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Golf- 테이블 설계 - 01
+title: Golf - 테이블 설계
 subtitle: ""
 categories: project
 tags: project

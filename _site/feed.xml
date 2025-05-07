@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 01 May 2025 21:55:38 +0900</pubDate>
-    <lastBuildDate>Thu, 01 May 2025 21:55:38 +0900</lastBuildDate>
+    <pubDate>Wed, 07 May 2025 18:22:04 +0900</pubDate>
+    <lastBuildDate>Wed, 07 May 2025 18:22:04 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
@@ -122,7 +122,98 @@
       </item>
     
       <item>
-        <title>Golf- 테이블 설계 - 01</title>
+        <title>Golf - Jmeter를 이용한 회원조회 성능 테스트</title>
+        <description>&lt;h2 id=&quot;개요&quot;&gt;개요&lt;/h2&gt;
+
+&lt;p&gt;주변에서 들어본 성능 테스트 도구로는 k6, nGrinder, JMeter가 있습니다.
+JMeter를 선택하게 된 이유는 테스트 후 자동으로 생성되는 HTML 형식의 보고서는 성능 결과를 시각적으로 
+빠르게 파악할 수 있게 해주며, 결과를 팀원들과 공유하거나 문서화하는 데도 유용합니다.&lt;/p&gt;
+
+&lt;p&gt;또한 기존의 테스트 케이스뿐만이 아닌 실제 가상의 요청을 받아보며 
+실제 서비스 운영 환경에서 여러 사용자가 동시에 요청을 보낼 때 시스템이 이를 얼마나 안정적으로 처리할 수 있는지를 검증하는 것이었습니다.&lt;/p&gt;
+
+&lt;p&gt;동시성 처리는 실 운영에서 발생할 수 있는 병목 상황이나 과부하 상태를 사전에 파악하기 위해 반드시 필요한 테스트 항목이었고, 
+JMeter는 쓰레드 수, 루프 횟수, Ramp-up 시간 등을 손쉽게 조절하여 다양한 상황을 시뮬레이션할 수 있는 기능을 제공하고 있었습니다.&lt;/p&gt;
+
+&lt;h2 id=&quot;active-파일-다운로드&quot;&gt;Active 파일 다운로드&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://jmeter.apache.org/download_jmeter.cgi&quot;&gt;https://jmeter.apache.org/download_jmeter.cgi&lt;/a&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;해당 사이트에 접속해서 파일을 다운로드 받습니다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;homebrew&quot;&gt;Homebrew&lt;/h2&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;brew &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;jmeter
+
+&lt;span class=&quot;c&quot;&gt;# 실행&lt;/span&gt;
+jmeter
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Homebrew로 다운을 받으면 비교적 편해 저는 Homebrew로 다운을 받았습니다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;test-plan&quot;&gt;Test Plan&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/golf/img_5.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;우선 Test를 하나 만들어줍니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/golf/img_6.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/golf/img_7.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/golf/img_8.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;100명의 사용자 수(쓰레드 수) 세팅&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/golf/img_9.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;HTTP HeaderManager에서 Content-Type을 지정해준 이유 Value는 application/json으로 설정합니다.&lt;/li&gt;
+  &lt;li&gt;저는 사용자 조회를 Post로 설정했기 때문에 이와같이 설정을 하였습니다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/golf/img_10.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Body Data도 설정해줍니다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/golf/img_11.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/golf/img_12.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/golf/img_13.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;100명의 요청 평균 응답 시간은 &lt;strong&gt;2초&lt;/strong&gt;로, 웹 애플리케이션에서 정상적인 응답 속도에 비해 빠른 속도를 기록했습니다. &lt;strong&gt;최소 응답 시간&lt;/strong&gt;은 1초로, 대부분의 요청이 빠르게 처리되었음을 알 수 있습니다.&lt;/li&gt;
+  &lt;li&gt;또한 AOP로 측정한 개별처리 요청 또한 2ms 평균 0.002초 정도의 처리속도를 확인할 수 있습니다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;나의 뇌&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://jmeter.apache.org/download_jmeter.cgi&quot;&gt;https://jmeter.apache.org/download_jmeter.cgi&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Wed, 23 Apr 2025 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/project/2025/04/23/Golf-Spring-Project-02/</link>
+        <guid isPermaLink="true">http://localhost:4000/project/2025/04/23/Golf-Spring-Project-02/</guid>
+        
+        <category>project</category>
+        
+        
+        <category>project</category>
+        
+      </item>
+    
+      <item>
+        <title>Golf - 테이블 설계</title>
         <description>&lt;h2 id=&quot;개요&quot;&gt;개요&lt;/h2&gt;
 
 &lt;p&gt;본격적인 코드 작성에 앞서, &lt;strong&gt;스크린골프 서비스 관리 플랫폼&lt;/strong&gt;의 도메인 설계를 어떻게 할지 고민해보았습니다. 
@@ -2962,72 +3053,6 @@ SpringBoot 같은 경우에는 &lt;a href=&quot;https://tbaggery.com/2008/04/19/
         
         
         <category>cs</category>
-        
-      </item>
-    
-      <item>
-        <title>Kotlin In Action 02 - Statement, Expression</title>
-        <description>&lt;h2 id=&quot;statement-expression&quot;&gt;Statement, Expression&lt;/h2&gt;
-
-&lt;p&gt;코틀린은 satement보다 expression을 지양하는 언어이다. 
-이때 이 둘의 차이는 무엇일까? Expression은 ‘수식’이라는 뜻이다. 
-Expression들은 평가(evaluate)가 가능하기 때문에 하나 이상의 값으로 환원될 수 있다. 
-Expression은 값을 가지기 때문에 다른 expression의 일부분으로 사용될 수 있다. 
-그러나 satement는 ‘서술’이라는 뜻으로, 프로그래밍에서는 실행 가능한(executable) 최소의 독립적인 코드 조각을 일컫는다. 
-스스로 값을 가지지 않는다는 점이 expression과의 차이점이 된다.&lt;/p&gt;
-
-&lt;h2 id=&quot;자바의-if-statement&quot;&gt;&lt;strong&gt;자바의 if (Statement)&lt;/strong&gt;&lt;/h2&gt;
-
-&lt;p&gt;자바에서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;if&lt;/code&gt;는 &lt;strong&gt;Statement&lt;/strong&gt;이다. 
-즉, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;if&lt;/code&gt;는 단순히 조건에 따라 &lt;strong&gt;코드를 실행&lt;/strong&gt;하거나 &lt;strong&gt;다른 코드 블록을 선택&lt;/strong&gt;하는 역할만 하고, 
-그 자체로 값을 반환하지 않는다.&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;max&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;max&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;max&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;위 코드에서 if문은 조건에 따라 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;max&lt;/code&gt; 값을 결정하지만, if문 자체는 아무런 값을 반환하지 않는다.
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;max&lt;/code&gt;는 if문을 사용하여 계산된 결과로 결정되며, 
-if는 단지 &lt;strong&gt;코드를 실행하는 역할&lt;/strong&gt;만 한다. 흐름만 제어하는 정도라고 생각하면 된다.&lt;/p&gt;
-
-&lt;h2 id=&quot;코틀린의-if-expression&quot;&gt;&lt;strong&gt;코틀린의 if (Expression)&lt;/strong&gt;&lt;/h2&gt;
-
-&lt;p&gt;반면, 코틀린에서 if는 Expression&lt;strong&gt;이다&lt;/strong&gt;. 즉, if는 조건에 따라 &lt;strong&gt;결과값을 반환&lt;/strong&gt;할 수 있다. 
-코틀린에서는 if가 &lt;strong&gt;값을 가지는 표현식&lt;/strong&gt;으로 취급되기 때문에, 
-if문을 바로 변수에 할당하거나 다른 표현식의 일부로 사용할 수 있다.&lt;/p&gt;
-
-&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;max&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;max&lt;/code&gt; 변수는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;if&lt;/code&gt;문이 반환한 값을 그대로 받는다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;왜-이런-차이가-있을까&quot;&gt;왜 이런 차이가 있을까?&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;자바는 기본적으로 모든 조건문이 &lt;strong&gt;Statement&lt;/strong&gt;로 작동하며, 실행의 흐름을 제어하는 데 초점을 맞추기 때문에 if문이 값을 반환하지 않는다.&lt;/li&gt;
-  &lt;li&gt;코틀린은 &lt;strong&gt;Expression 중심&lt;/strong&gt; 언어로 설계되었다. 그래서 if와 같은 조건문도 하나의 &lt;strong&gt;값&lt;/strong&gt;으로 취급하여 코드가 더 간결하고, 표현식으로 값을 바로 처리할 수 있도록 한다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.yes24.com/product/goods/55148593&quot;&gt;https://www.yes24.com/product/goods/55148593&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Mon, 25 Nov 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/language/2024/11/25/Kotlin-basic-02/</link>
-        <guid isPermaLink="true">http://localhost:4000/language/2024/11/25/Kotlin-basic-02/</guid>
-        
-        <category>kotlin</category>
-        
-        
-        <category>language</category>
         
       </item>
     
