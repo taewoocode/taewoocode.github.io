@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Home" />
+<meta property="og:title" content="명령어 병렬 처리 기법" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -46,22 +46,28 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 ></script>
 
  
-<meta property="og:image" content="http://localhost:4000/assets/img/logo.png" />
+<meta
+        property="og:image"
+        content="http://localhost:4000/assets//img/network-logo.png"
+/>
+<br />
 
 
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>일벌리는 개발자 &middot;</title>
+<title>명령어 병렬 처리 기법 &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="일을 벌여놔야 주워 담을 수 있습니다.
+        content="명령어 파이프라인
+
 "
 />
 <meta
         property="og:description"
-        content="일을 벌여놔야 주워 담을 수 있습니다.
+        content="명령어 파이프라인
+
 "
 />
 
@@ -70,8 +76,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/" />
-<meta property="og:url" content="http://localhost:4000/" />
+<link rel="canonical" href="http://localhost:4000/cs/2025/05/07/Operating-system-04/" />
+<meta property="og:url" content="http://localhost:4000/cs/2025/05/07/Operating-system-04/" />
 
 <link
         rel="alternate"
@@ -80,7 +86,11 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         href="http://localhost:4000/feed.xml"
 />
 
+
+<link rel="prev" href="http://localhost:4000/cs/2025/05/01/Operating-system-03/" />
  
+<link rel="next" href="http://localhost:4000/cs/2025/05/12/Operating-system-05/" />
+
 
 <link
         rel="apple-touch-icon"
@@ -176,71 +186,13 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
             data-image="/assets/img/dp.jpeg"
     >
       
-  
 
-<article id="post-cs/2025/05/12/Operating-system-05" class="post mb6" role="article">
+<article id="post-cs/2025/05/07/Operating-system-04" class="post" role="article">
   <header>
     <h1 class="post-title">
-      <a href="/cs/2025/05/12/Operating-system-05/" data-flip="title">
-      커널과 인터페이스
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2025-05-12T00:00:00+09:00">12 May 2025</time>
       
-
-
-
-
-
-
-
-
-
-in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/cs-operatingsystem/" data-flip="title">Operating System</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="커널과-인터페이스">커널과 인터페이스</h2>
-
-
-  <p class="read-more"><a class="heading" href="/cs/2025/05/12/Operating-system-05/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-cs/2025/05/07/Operating-system-04" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/cs/2025/05/07/Operating-system-04/" data-flip="title">
       명령어 병렬 처리 기법
-      </a>
+      
     </h1>
 
     <p class="post-date heading">
@@ -280,376 +232,228 @@ on <a href="/tag/cs-operatingsystem/" data-flip="title">Operating System</a>
 
 
   
-  <h2 id="명령어-파이프라인">명령어 파이프라인</h2>
+  <div class="markdown-body">
 
+    <!-- 
+    <div class="head-image"><img src="http://localhost:4000/assets//img/network-logo.png" /></div>
+    <br /> -->
+    <style>
+      .myAd1190 {
+        width: 48%;
+        height: 280px;
+      }
 
-  <p class="read-more"><a class="heading" href="/cs/2025/05/07/Operating-system-04/" data-flip="title">Continue reading </a>
-  </p>
+      .myAd1290 {
+        width: 48%;
+        height: 280px;
+      }
+
+      @media(max-width: 800px) {
+        .myAd1190 {
+          display: none;
+        }
+
+        .myAd1290 {
+          width: 98%;
+        }
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 300px;
+      }
+
+      .row-center {
+        display: flex;
+        justify-content: center;
+        height: 258px;
+      }
+    </style>
+
+    <!--<br />-->
+    <h2 id="명령어-파이프라인">명령어 파이프라인</h2>
+
+<ul>
+  <li>명령어 인출 → 명령어 해석 → 명령어 실행 → 결과 저장</li>
+  <li>단계가 겹치지만 않는다면 CPU는 각 단계를 동시에 실행할 수 있다.
+    <ul>
+      <li>예를 들어 CPU는 한 명령어를 ‘인출’하는 동안에 ‘실행’을 할 수 있고, 실행을 하는 중에는 ‘저장’을 할 수 있다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/assets/img/cs/operation/img_5.png" alt="img.png" /></p>
+
+<ul>
+  <li>그림으로 나타내면 이러하다</li>
+  <li>명령어를 겹쳐서 수행하면 명령어를 하나하나 실행하는 것보다 더 효율적으로 처리를 할 수 있다.</li>
+  <li>이렇게 파이프라인에 넣고, 동시 처리하는 기법을 명령어 파이프라인 기법이라고 한다.</li>
+</ul>
+
+<h2 id="파이프라인-위험">파이프라인 위험</h2>
+
+<ul>
+  <li>파이프 라인을 통해서 일을 병렬처리 하면 빠르게 처리할 수는 있지만 3가지 위험이 있다.</li>
+</ul>
+
+<h3 id="데이터-위험">데이터 위험</h3>
+
+<ul>
+  <li>데이터 위험은 명령어 간 데이터 의존성 때문에 발생하게 된다.
+    <ul>
+      <li>예를 들어 명령어1, 명령어2가 있다고 해보자
+        <ul>
+          <li>명령어2는 명령어1이 끝나야 실행이 가능하다.</li>
+          <li>따라서 명령어 1 실행이 끝나기 전에 명령어 2를 인출하면 원치 않는 값이 출력되므로 명령어2는 명령어1에 의존한다고 볼 수 있다.</li>
+          <li>따라서 의존적인 두 명령어를 동시에 실행하는 것은 파이프라인이 제대로 작동하지 않을 수 있다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="제어위험">제어위험</h3>
+
+<ul>
+  <li>분기 여부가 결정되기 전에 파이프라인이 다음 명령어를 잘못 가져오면 문제 발생</li>
+</ul>
+
+<h3 id="구조적-위험">구조적 위험</h3>
+
+<ul>
+  <li>하드웨어 자원이 부족해서 명령어들이 동시에 실행될 수 없는 경우
+    <ul>
+      <li>하나의 메모리를 명령어 fetch와 데이터 read/write가 동시에 사용하려고 할 때 충돌</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="비순차적-명령어-처리">비순차적 명령어 처리</h2>
+
+<ul>
+  <li><strong>순차적 명령어 순서와 달리</strong>, <strong>의존성이 없는 명령어를 먼저 실행</strong>함으로써 파이프라인 정지를 방지하고 CPU 자원을 효율적으로 활용하는 기법
+    <ul>
+      <li>파이프라인 구조에서는 어떤 명령어가 <strong>데이터를 기다리거나 메모리 접근 때문에 지연</strong>되면, 뒤에 있는 명령어들까지 멈추는 일이 생긴다.</li>
+      <li>이런 <strong>스톨</strong>을 방지하고 성능을 유지하기 위해 등장한 기술이 비순차적 실행</li>
+      <li>의존성이 있는 명령어는 기다리고, 독립적인 다른 명령어를 먼저 실행한다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="reference">Reference</h2>
+
+<p><a href="https://m.yes24.com/Goods/Detail/111378840">https://m.yes24.com/Goods/Detail/111378840</a></p>
+
+    <br />
+    <br />
+  </div>
   
 
 </article>
 
-
-  
-
-<article id="post-cs/2025/05/01/Operating-system-03" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/cs/2025/05/01/Operating-system-03/" data-flip="title">
-      주소 지정 방식
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2025-05-01T00:00:00+09:00">01 May 2025</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
-
-      
+<!--<hr class="dingbat" />-->
+<!--
+<div class="share">
+  <h2>Share this post</h2>
+  <div class="share-body">
+    <a href="http://twitter.com/share?text=명령어 병렬 처리 기법&amp;url=http://localhost:4000/cs/2025/05/07/Operating-system-04/"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="icon-twitter">
+      </span>
+    </a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/cs/2025/05/07/Operating-system-04/"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="icon-facebook">
+      </span>
+    </a>
+  </div>
+</div>
+-->
+<br />
 
 
 
 
+<aside class="related" role="complementary">
+  <h2 class="hr">Related Posts</h2>
 
-
-
-
-
-on <a href="/tag/cs-operatingsystem/" data-flip="title">Operating System</a>
-
-    </p>
-
+  <ul class="related-posts">
     
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="주소-지정-방식">주소 지정 방식</h2>
-
-
-  <p class="read-more"><a class="heading" href="/cs/2025/05/01/Operating-system-03/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-project/2025/04/23/Golf-Spring-Project-02" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/project/2025/04/23/Golf-Spring-Project-02/" data-flip="title">
-      Golf - Jmeter를 이용한 회원조회 성능 테스트
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2025-04-23T00:00:00+09:00">23 Apr 2025</time>
       
-
-
-
-
-
-
-
-
-
-in <a href="/category/project/" data-flip="title">Project</a>
-
       
+      
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/cs/2025/05/12/Operating-system-05/" data-flip="title">
+    <span>커널과 인터페이스</span>
+  </a>
+  <small><time datetime="2025-05-12T00:00:00+09:00">
+    12 May 2025
+  </time></small>
+</li>
+
+        
+      
+        
+          
+          
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/cs/2025/05/01/Operating-system-03/" data-flip="title">
+    <span>주소 지정 방식</span>
+  </a>
+  <small><time datetime="2025-05-01T00:00:00+09:00">
+    01 May 2025
+  </time></small>
+</li>
+
+        
+      
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/cs/2025/04/11/Algorithm-23/" data-flip="title">
+    <span>진격의 거인 문제</span>
+  </a>
+  <small><time datetime="2025-04-11T00:00:00+09:00">
+    11 Apr 2025
+  </time></small>
+</li>
 
-
-
-on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
-
-    </p>
-
+        
+      
     
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="개요">개요</h2>
-
-
-  <p class="read-more"><a class="heading" href="/project/2025/04/23/Golf-Spring-Project-02/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-project/2025/04/20/Golf-Spring-Project-01" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/project/2025/04/20/Golf-Spring-Project-01/" data-flip="title">
-      Golf - 테이블 설계
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2025-04-20T00:00:00+09:00">20 Apr 2025</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/project/" data-flip="title">Project</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="개요">개요</h2>
-
-
-  <p class="read-more"><a class="heading" href="/project/2025/04/20/Golf-Spring-Project-01/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-cs/2025/04/11/Algorithm-23" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/cs/2025/04/11/Algorithm-23/" data-flip="title">
-      진격의 거인 문제
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2025-04-11T00:00:00+09:00">11 Apr 2025</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="개요">개요</h2>
-
-
-  <p class="read-more"><a class="heading" href="/cs/2025/04/11/Algorithm-23/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-project/2025/04/01/BidMall-Spring-Project-01" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/project/2025/04/01/BidMall-Spring-Project-01/" data-flip="title">
-      BIDMALL- auction_status_check - 01
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2025-04-01T00:00:00+09:00">01 Apr 2025</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/project/" data-flip="title">Project</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="개요">개요</h2>
-
-
-  <p class="read-more"><a class="heading" href="/project/2025/04/01/BidMall-Spring-Project-01/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-project/2025/03/24/profit-Spring-Project-01" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/project/2025/03/24/profit-Spring-Project-01/" data-flip="title">
-      profit- Spring Batch 적용기
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2025-03-24T00:00:00+09:00">24 Mar 2025</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/project/" data-flip="title">Project</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="한국수출입은행-open-api-발급-방법">한국수출입은행 Open API 발급 방법</h2>
-
-
-  <p class="read-more"><a class="heading" href="/project/2025/03/24/profit-Spring-Project-01/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-
-<h2 class="sr-only">Pagination</h2>
-<nav class="pagination heading" role="navigation">
-  <ul>
-    <li class="pagination-item older" >
-      
-        <a rel="next" href="/page-2/">Older</a>
-      
-    </li>
-    <li class="pagination-item newer" >
-      
-        <span>Newer</span>
-      
-    </li>
   </ul>
-</nav>
+</aside>
+  <aside class="comments" role="complementary">
+  <h2>Comments</h2>
+  <hr/>
 
-  <footer>
+  <script src="https://utteranc.es/client.js"
+          repo="taewoocode/taewoocode.github.io"
+          issue-term="title"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+</aside>
+
+
+       <footer>
   <hr/>
   
     <p>© 2022. by taewoo</p>

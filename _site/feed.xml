@@ -6,9 +6,216 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 07 May 2025 18:23:02 +0900</pubDate>
-    <lastBuildDate>Wed, 07 May 2025 18:23:02 +0900</lastBuildDate>
+    <pubDate>Mon, 12 May 2025 16:34:40 +0900</pubDate>
+    <lastBuildDate>Mon, 12 May 2025 16:34:40 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
+    
+      <item>
+        <title>커널과 인터페이스</title>
+        <description>&lt;h2 id=&quot;커널과-인터페이스&quot;&gt;커널과 인터페이스&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/cs/operation/img_6.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Kernel
+    &lt;ul&gt;
+      &lt;li&gt;프로세스 관리, 메모리 관리, 저장장치 관리와 같은 운영체제의 핵심적인 기능을 모아놓은 것이다.&lt;/li&gt;
+      &lt;li&gt;kernel의 성능에 따라 운영체제의 성능이 좌우된다. 자동차로 치면 엔진이라고 할 수 있다.&lt;/li&gt;
+      &lt;li&gt;스마트폰의 운영체제에도 커널이 있다.
+        &lt;ul&gt;
+          &lt;li&gt;안드로이드는 커널이 공개되어 있다(리눅스 기반) 하지만 IOS는 커널이 공개되어 있지 않다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;인터페이스
+    &lt;ul&gt;
+      &lt;li&gt;자동차가 움직이는 데에는 핸들과 브레이크가 필요하다. 자동차를 올바르게 제어하기 위해서는 현재 시속, 기어의 상태, 엔진의 온도 등을 알려주는 계기판이 있어야 하는데 이를 인터페이스라고 한다.&lt;/li&gt;
+      &lt;li&gt;커널에 사용자의 명령을 전달하고 실행 결과를 사용자에게 알려준다.&lt;/li&gt;
+      &lt;li&gt;유닉스의 사용자 인터페이스는 shell, bashshell 등 여러 종류의 셸이 있다. 셸은 명령어 기반이라 일반인이 사용하기 불편하여 유닉스 운영체제를 어렵게 느끼는 사람들이 많다.(개발자에겐 참 편하다.) GUI 속 눈으로 파일 찾는게 더 힘들다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;시스템-호출과-디바이스-드라이버&quot;&gt;시스템 호출과 디바이스 드라이버&lt;/h2&gt;
+
+&lt;h3 id=&quot;시스템-호출&quot;&gt;시스템 호출&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;system call은 커널이 자신을 보고하기 위해 만든 인터페이스다. 커널은 사용자나 응용 프로그램으로부터 컴퓨터 자원을 보호하기 위해 자원에 직접 접근하는 것을 차단한다.&lt;/li&gt;
+  &lt;li&gt;자원을 이용하려면 시스템 호출이라는 인터페이스를 이용하여 접근해야 한다.&lt;/li&gt;
+  &lt;li&gt;직접 접근하는 예시와, 시스템 콜을 통한 접근의 차이를 커피를 먹는 경우에 비유해보자
+    &lt;ul&gt;
+      &lt;li&gt;직접 접근
+        &lt;ul&gt;
+          &lt;li&gt;사용자가 직접 컴퓨터 자원에 접근하여 작업하는 방식이다. 사용자는 커피머신이 어떻게 작동하는지, 커피와 설탕이 어딨는지, 모든 것을 다 알아야 한다. 이 경우는 자신이 원하는 커피를 만들 수는 있겠지만, 사용자의 부주의로 커피머신을 망가뜨릴 수도, 커피와 설탕을 찾느라 주변을 더럽힐 수도 있다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;시스템 호출을 통한 접근
+        &lt;ul&gt;
+          &lt;li&gt;누군가에게 요청하여 작업의 결과만 받는 방식이다. 사용자는 어떤 커피머신을 쓰는지, 어떻게 커피를 만드는지 등을 신경 쓸 필요 없이 결과값만 받으면 된다(추상화)
+            &lt;ul&gt;
+              &lt;li&gt;우리가 메서드를 호출하고 사용하는 방식이 우리는 모든 메서드의 내부구현을 알 필요 없이 결과만 리턴 받으면 되는 구조와 비슷하다. 뭐.. 메서드의 모든 내부 구조와 구현을 안다면 좋겠지만, 수많은 메서드들의 내부구현을 기억하기는 힘들다.&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li&gt;이와 마찬가지로 운영체제는 사용자나 응용 프로그램이 하드웨어 직접 접근하지 않는다. 그리고 대신 하드웨어와 같은 시스템 자원을 사용할 수 있도록 인터페이스를 제공해주는데 이것이 바로 시스템 콜이다.&lt;/li&gt;
+          &lt;li&gt;
+            &lt;h2 id=&quot;운영체제는-커널이-제공하는-서비스를-시스템-호출로-제한하고-다른-방법으로-커널에-들어오지-못하게-막음으로써-컴퓨터-자원을-보호한다&quot;&gt;운영체제는 커널이 제공하는 서비스를 시스템 호출로 제한하고, 다른 방법으로 커널에 들어오지 못하게 막음으로써 컴퓨터 자원을 보호한다.&lt;/h2&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;h2 id=&quot;api와-sdk&quot;&gt;API와 SDK&lt;/h2&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;API(Application Programming Interface(응용 프로그램 인터페이스)와 SDK(System Development Kit)(개발자용 키트)가 있다. API는 응용 프로그램이 자신과 연관된 프로그램을 만들 수 있도록 제공하는 인터페이스다. 포토샵을 예로들면 매우 강력한 그래픽 프로그램이지만, 수백 가지의 필터를 모두 제공하지는 않는다. 따라서 포토샵은 필터를 개발하려는 사람들을 위해 다양한 프로그래밍 인터페이스를 제공하는데 이 인터페이스가 바로 API이다.&lt;/li&gt;
+      &lt;li&gt;운영체제의 API를 시스템 콜이라고 한다.&lt;/li&gt;
+      &lt;li&gt;SDK는 프로그램 개발자를 위해 API or API 사용 메뉴얼 뿐만 아니라 프로그램 개발에 필요한 코드 편집기, 에뮬레이터 같은 각종 개발용 응용 프로그램까지 묶어서 배포하는 개발 툴을 말한다.
+        &lt;ul&gt;
+          &lt;li&gt;대표적인 예로 안드로이드 SDK Android Studio가 있다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;h2 id=&quot;드라이버&quot;&gt;드라이버&lt;/h2&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;응용 프로그램, 커널의 인터페이스가 시스템콜이면, 하드웨어의 인터페이스는 드라이버&lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;h2 id=&quot;커널의-구성&quot;&gt;커널의 구성&lt;/h2&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;프로세스 관리
+        &lt;ul&gt;
+          &lt;li&gt;프로세스에 CPU를 배분하고 작업에 필요한 환경을 제공한다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;메모리 관리
+        &lt;ul&gt;
+          &lt;li&gt;프로세스에 작업 공간을 배치하고, 실제 메모리보다 더 큰 가상공간을 제공한다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;파일 시스템 관리
+        &lt;ul&gt;
+          &lt;li&gt;데이터를 저장하고 접근할 수 있는 인터페이스를 제공한다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;입출력 관리
+        &lt;ul&gt;
+          &lt;li&gt;필요한 입력과 출력 서비스를 제공한다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;프로세스 간 통신 관리
+        &lt;ul&gt;
+          &lt;li&gt;공동 작업을 위한 프로세스 간 통신 환경을 지원한다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://m.yes24.com/Goods/Detail/111378840&quot;&gt;https://m.yes24.com/Goods/Detail/111378840&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Mon, 12 May 2025 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/cs/2025/05/12/Operating-system-05/</link>
+        <guid isPermaLink="true">http://localhost:4000/cs/2025/05/12/Operating-system-05/</guid>
+        
+        <category>OS</category>
+        
+        
+        <category>cs</category>
+        
+      </item>
+    
+      <item>
+        <title>명령어 병렬 처리 기법</title>
+        <description>&lt;h2 id=&quot;명령어-파이프라인&quot;&gt;명령어 파이프라인&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;명령어 인출 → 명령어 해석 → 명령어 실행 → 결과 저장&lt;/li&gt;
+  &lt;li&gt;단계가 겹치지만 않는다면 CPU는 각 단계를 동시에 실행할 수 있다.
+    &lt;ul&gt;
+      &lt;li&gt;예를 들어 CPU는 한 명령어를 ‘인출’하는 동안에 ‘실행’을 할 수 있고, 실행을 하는 중에는 ‘저장’을 할 수 있다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/cs/operation/img_5.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;그림으로 나타내면 이러하다&lt;/li&gt;
+  &lt;li&gt;명령어를 겹쳐서 수행하면 명령어를 하나하나 실행하는 것보다 더 효율적으로 처리를 할 수 있다.&lt;/li&gt;
+  &lt;li&gt;이렇게 파이프라인에 넣고, 동시 처리하는 기법을 명령어 파이프라인 기법이라고 한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;파이프라인-위험&quot;&gt;파이프라인 위험&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;파이프 라인을 통해서 일을 병렬처리 하면 빠르게 처리할 수는 있지만 3가지 위험이 있다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;데이터-위험&quot;&gt;데이터 위험&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;데이터 위험은 명령어 간 데이터 의존성 때문에 발생하게 된다.
+    &lt;ul&gt;
+      &lt;li&gt;예를 들어 명령어1, 명령어2가 있다고 해보자
+        &lt;ul&gt;
+          &lt;li&gt;명령어2는 명령어1이 끝나야 실행이 가능하다.&lt;/li&gt;
+          &lt;li&gt;따라서 명령어 1 실행이 끝나기 전에 명령어 2를 인출하면 원치 않는 값이 출력되므로 명령어2는 명령어1에 의존한다고 볼 수 있다.&lt;/li&gt;
+          &lt;li&gt;따라서 의존적인 두 명령어를 동시에 실행하는 것은 파이프라인이 제대로 작동하지 않을 수 있다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;제어위험&quot;&gt;제어위험&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;분기 여부가 결정되기 전에 파이프라인이 다음 명령어를 잘못 가져오면 문제 발생&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;구조적-위험&quot;&gt;구조적 위험&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;하드웨어 자원이 부족해서 명령어들이 동시에 실행될 수 없는 경우
+    &lt;ul&gt;
+      &lt;li&gt;하나의 메모리를 명령어 fetch와 데이터 read/write가 동시에 사용하려고 할 때 충돌&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;비순차적-명령어-처리&quot;&gt;비순차적 명령어 처리&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;순차적 명령어 순서와 달리&lt;/strong&gt;, &lt;strong&gt;의존성이 없는 명령어를 먼저 실행&lt;/strong&gt;함으로써 파이프라인 정지를 방지하고 CPU 자원을 효율적으로 활용하는 기법
+    &lt;ul&gt;
+      &lt;li&gt;파이프라인 구조에서는 어떤 명령어가 &lt;strong&gt;데이터를 기다리거나 메모리 접근 때문에 지연&lt;/strong&gt;되면, 뒤에 있는 명령어들까지 멈추는 일이 생긴다.&lt;/li&gt;
+      &lt;li&gt;이런 &lt;strong&gt;스톨&lt;/strong&gt;을 방지하고 성능을 유지하기 위해 등장한 기술이 비순차적 실행&lt;/li&gt;
+      &lt;li&gt;의존성이 있는 명령어는 기다리고, 독립적인 다른 명령어를 먼저 실행한다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://m.yes24.com/Goods/Detail/111378840&quot;&gt;https://m.yes24.com/Goods/Detail/111378840&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Wed, 07 May 2025 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/cs/2025/05/07/Operating-system-04/</link>
+        <guid isPermaLink="true">http://localhost:4000/cs/2025/05/07/Operating-system-04/</guid>
+        
+        <category>OS</category>
+        
+        
+        <category>cs</category>
+        
+      </item>
     
       <item>
         <title>주소 지정 방식</title>
@@ -2885,171 +3092,6 @@ SpringBoot 같은 경우에는 &lt;a href=&quot;https://tbaggery.com/2008/04/19/
         
         
         <category>framework</category>
-        
-      </item>
-    
-      <item>
-        <title>Spring MVC 03 - Logger</title>
-        <description>&lt;h2 id=&quot;logging-library&quot;&gt;Logging Library&lt;/h2&gt;
-
-&lt;p&gt;운영 시스템에서는 System.out.println() 같은 시스템 콘솔을 사용해서 필요한 정보를 출력하지 않고, 
-별도의 로깅 라이브러리를 사용해서 로그를 출력한다.&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;로그 라이브러리는 Logback, Log4J, Log4J2등등 수 많은 라이브러리가 있는데, 그것을 통합해서 인터페이스로 제공하는 것이 바로 SLF4J 라이브러리다.&lt;/li&gt;
-  &lt;li&gt;쉽게 이야기해서 SLF4J는 인터페이스이고, 그 구현체로 LogBack을 대부분 사용한다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;restcontroller-controller-차이&quot;&gt;RestController, Controller 차이?&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;@RestController
-    &lt;ul&gt;
-      &lt;li&gt;@Controller는 반환 값이 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;String&lt;/code&gt; 이면 뷰 이름으로 인식된다. 그래서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;뷰를 찾고 렌더링&lt;/code&gt; 된다.&lt;/li&gt;
-      &lt;li&gt;@RestController는 반환 값을초 뷰를 찾는 것이 아니라, HTTP 메시지 바디에 바로 입력 한다. 따라서 실행 결과로 ok 메시지를 받을 수 있다. @ResponseBody와 관련이 있는데, 뒤에서 더 자세히 설명한다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;올바른-로그-사용법&quot;&gt;올바른 로그 사용법&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://github.com/user-attachments/assets/76665cb7-f66e-4866-88bd-24cec95b34fe&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
-
-&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;info log&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;위와 같은 형식으로 로그를 출력하면 안된다.
-이유는 로그를 출력하기 전에 이미 더해지는 연산이 일어나기 때문이다.&lt;/p&gt;
-
-&lt;h2 id=&quot;로그-사용시-장점&quot;&gt;로그 사용시 장점&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;쓰레드 정보, 클래스 이름 같은 부가 정보를 함께 볼 수 있고, 출력 모양을 조정할 수 있다.&lt;/li&gt;
-  &lt;li&gt;로그 레벨에 따라 개발 서버에서는 모든 로그를 출력하고, 운영서버에서는 출력하지 않는 등 로그를 상황에 맞게 조절할 수 있다.&lt;/li&gt;
-  &lt;li&gt;시스템 아웃 콘솔에만 출력하는 것이 아니라, 파일이나 네트워크 등, 로그를 별도의 위치에 남길 수 있다. 특히 파일로 남길 때는 일별, 특정 용량에 따라 로그를 분할하는 것도 가능하다.&lt;/li&gt;
-  &lt;li&gt;성능도 일반 System.out보다 좋다. (내부 버퍼링, 멀티 쓰레드 등등) 그래서 실무에서는 꼭 로그를 사용해야 한다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://www.slf4j.org&quot;&gt;http://www.slf4j.org&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://logback.qos.ch&quot;&gt;http://logback.qos.ch&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-logging?&quot;&gt;https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-logging?&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Fri, 29 Nov 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/framework/2024/11/29/Spring-framework-mvc-03/</link>
-        <guid isPermaLink="true">http://localhost:4000/framework/2024/11/29/Spring-framework-mvc-03/</guid>
-        
-        <category>mvc</category>
-        
-        
-        <category>framework</category>
-        
-      </item>
-    
-      <item>
-        <title>운영체제의 역사</title>
-        <description>&lt;h2 id=&quot;운영체제-역사&quot;&gt;운영체제 역사&lt;/h2&gt;
-
-&lt;p&gt;운영체제 역사를 아는 것은 지금의 컴퓨터를 이해하는데 있어서 밑거름이 된다고 한다.&lt;/p&gt;
-
-&lt;h2 id=&quot;1940년대---초창기-컴퓨터&quot;&gt;1940년대 - 초창기 컴퓨터&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://github.com/user-attachments/assets/0fdaeedd-6269-4fa5-aee5-9470ff51323f&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;에니악은 펜실베이니아대학의 존 모클리John Mauclily 와 존 에커트Jolin Eckert 가 만들었다. 전선을 잭에 꼽아 회로를 연결하여 구성한 에니악은 30톤 규모의 거대한 계산기로 미사일 탄도를 계산하기 위해 제작&lt;/li&gt;
-  &lt;li&gt;진공관이 켜지면 1, 진공관이 꺼지면 0 진공관은 백열전구를 말한다.&lt;/li&gt;
-  &lt;li&gt;하드어와이링 방식&lt;/li&gt;
-  &lt;li&gt;전선이 18000여개 정도 이어짐&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;1950년대---일괄-작업-시스템&quot;&gt;1950년대 - 일괄 작업 시스템&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://github.com/user-attachments/assets/c8908e34-6dd8-42ec-9170-79191b1db9ff&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;옛날 컴퓨터들이라 사진이 다 흑백임..&lt;/li&gt;
-  &lt;li&gt;일괄작업시스템(batch-job-system)
-    &lt;ul&gt;
-      &lt;li&gt;현대는 여러가지 작업이 가능하지만 당시에는 한 번에 한 가지 작업만 가능했음
-        &lt;ul&gt;
-          &lt;li&gt;batch-job-system, batch-processing-system이라 하는데 프로그램 실행 중간에 사용자는 데이터를 수정할 수 없게 되어있음&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;CPU와 메인메모리가 있었으나, 키보드와 모니터와 같은 출력장치가 존재하지 않았음&lt;/li&gt;
-  &lt;li&gt;천공카드 리더를 입력장치로 라인 프린터를 출력장치로 사용함
-    &lt;ul&gt;
-      &lt;li&gt;천공카드 리더는 펜으로 표시하여 데이터를 수집하는 방식과는 달리 구멍을 뚫어 숫자를 표현했다.&lt;/li&gt;
-      &lt;li&gt;라인 프린터는 문자만 출력하는 프린터로 한 번에 한 줄씩 출력하기 때문에 라인 프린터라는 이름이 붙여졌다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;1960---대화형-시스템&quot;&gt;1960 - 대화형 시스템&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;옛날 컴퓨터의 방식은 천공 카드에 구멍을 뚫어 데이터를 적재하고 그 데이터를 읽는 방식으로 작업을 수행했다 따라서 중간에 데이터를 수정할 수가 없었다. 하지만 컴퓨터와 모니터가 등장한 이후에는 중간에 데이터를 수정할 수 있었다. 또한 중간 결과값을 출력하여 프로그램에 이상이 있는지 혹은 프로그램이 정상적으로 진행되고 있는지도 확인할 수 있게 되었다. 이러한 시스템은 컴퓨터와 사용자의 대화를 통해 작업이 이루어지므로 대화형 시스템(interactive system)이라고 일컫는다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;1960-후반---시분할-시스템&quot;&gt;1960 후반 - 시분할 시스템&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;컴퓨터의 크기가 작아지고 계산 능력이 향상되었다. 하지만 허가받은 몇몇 사용자만 사용할 수 있는 데다 고가였다. 값비싼 기계로 한 번에 하나의 작업만 수행하는 것은 낭비라 효율적으로 사용하기 위한 연구가 진행된 결과 다중 프로그래밍multiprogramming 기술이 개발되었다.&lt;/li&gt;
-  &lt;li&gt;일괄 작업 시스템은 CPU에서 한번에 하나의 작업만이 가능했지만 후반에는 CPU로 여러 작업을 동시에 실행할 수 있었다. 어떻게 ? 시간을 분할하는 방법으로&lt;/li&gt;
-  &lt;li&gt;다중 프로그래밍 시스템에서는 CPU 사용 시간을 아즈 잘게 쪼개어 여러 작업으로 나누어 준다.&lt;/li&gt;
-  &lt;li&gt;영화 필름을 생각해보면 된다. 작은 시퀸스 조각으로 여럿 쪼개서 이어 붙이면 동영상이 되듯이 모든 작업을 조금씩 처리하여 작업이 동시에 이루어지는 것처럼 보이게 하는 것이다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;1970년대---분산-시스템&quot;&gt;1970년대 - 분산 시스템&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;개인용 컴퓨터와 인터넷이 보급되면서 값이 싸고 크기가 작은 컴퓨터들을 하나로 묶어
-대형 컴퓨터에 버금가는 시스템을 만들게 되었는데 이를 분산 시스템distributed system이라고 부
-른다. 분산 시스템은 네트워크상에 분산되어 있는 여러 컴퓨터로 작업을 처리하고 그 결과를
-상호 교환하도록 구성한 시스템이다.&lt;/li&gt;
-  &lt;li&gt;TCP/IP라는 프로토콜을 정의했다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;1990---클라이언트---서버-시스템&quot;&gt;1990 - 클라이언트 - 서버 시스템&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;작업을 요청하는 클라이언트와 거기에 응답하여 요청받은 작업을 처리하는 서버의 이중
-구조로 나뉜다.&lt;/li&gt;
-  &lt;li&gt;클라이언트/서버 구조가 일반인들에게 알려진 것은 웹 시스템이 보급된 이후이다.&lt;/li&gt;
-  &lt;li&gt;웹 시스템의 등장으로 그림이나 링크를 통한 다양한 응용 서비스가 가능해졌다.&lt;/li&gt;
-  &lt;li&gt;클라이언트/서버 구조의 문제점으로는 서버 과부하가 있다. 모든 요청이 서버로 집중되기 때문에 수십만 명의 클라이언트를 처리하기 위해서는 많은 서버와 큰 용량의 네트워크가 필요하다.&lt;/li&gt;
-  &lt;li&gt;NOTE_DAEMON
-    &lt;ul&gt;
-      &lt;li&gt;클라이언트/서버 시스템 구조에서 서버가 멈추지 않고 계속 동작하여 클라이언트의 요청을 처리해야 하는데, 이렇게 멈추지 않고 계속 동작하는 프로그램을 데몬이라고 한다. 보통은 데몬을 가진 컴퓨터를 서버라고 부르며, 웹 데몬이 설치된 컴퓨터는 웹 서버, FTP 데몬이 설치된 컴퓨터는 FTP 서버, 이메일 데몬이 설치된 컴퓨터는 이메일 서버라고 한다. 웹 데몬의 역할을 하는 프로그램은 아파티 톰캣, Internet Informantion Service등이 있다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;2000년대-초반---현재---p2p-시스템&quot;&gt;2000년대 초반 - 현재 - P2P 시스템&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;1990년대 말에 전 세계의 MP3 음악 파일을 공유하려는 시도가 있었는데 문제는 클라이언트/서버 시스템의 서버 과부하였다. 웹 페이지는 한 페이지가 수 킬로바이트이지만 MP3 파일은 수 메가바이트에 달하기 때문에 기존의 클라이언트/서버 구조로 MP3 파일 공유 시스템을 구현하면 서버 과부하가 걸림&lt;/li&gt;
-  &lt;li&gt;서버의 부하를 줄일 수 있는 새로운 시스템은 P2P 시스템이다.&lt;/li&gt;
-  &lt;li&gt;peer는 말단 노드, 즉 사용자의 PC를 가르키고, P2P는 서버를 거치지 않고, 사용자와 사용자를 직접 연결을 한다. P2P 시스템에서는 서버가 파일 검색만 맡고 사용자 간에 파일 전송이 이루어지기 때문에 서버의 부하가 적다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Arithmetic_logic_unit&quot;&gt;https://en.wikipedia.org/wiki/Arithmetic_logic_unit&lt;/a&gt;
-&lt;a href=&quot;https://www.techtarget.com/whatis/definition/arithmetic-logic-unit-ALU&quot;&gt;https://www.techtarget.com/whatis/definition/arithmetic-logic-unit-ALU&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Wed, 27 Nov 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/cs/2024/11/27/Operating-system-02/</link>
-        <guid isPermaLink="true">http://localhost:4000/cs/2024/11/27/Operating-system-02/</guid>
-        
-        <category>OS</category>
-        
-        
-        <category>cs</category>
         
       </item>
     

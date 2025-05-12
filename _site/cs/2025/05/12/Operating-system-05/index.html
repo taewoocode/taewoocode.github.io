@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Home" />
+<meta property="og:title" content="커널과 인터페이스" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -46,22 +46,28 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 ></script>
 
  
-<meta property="og:image" content="http://localhost:4000/assets/img/logo.png" />
+<meta
+        property="og:image"
+        content="http://localhost:4000/assets//img/network-logo.png"
+/>
+<br />
 
 
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>일벌리는 개발자 &middot;</title>
+<title>커널과 인터페이스 &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="일을 벌여놔야 주워 담을 수 있습니다.
+        content="커널과 인터페이스
+
 "
 />
 <meta
         property="og:description"
-        content="일을 벌여놔야 주워 담을 수 있습니다.
+        content="커널과 인터페이스
+
 "
 />
 
@@ -70,8 +76,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/" />
-<meta property="og:url" content="http://localhost:4000/" />
+<link rel="canonical" href="http://localhost:4000/cs/2025/05/12/Operating-system-05/" />
+<meta property="og:url" content="http://localhost:4000/cs/2025/05/12/Operating-system-05/" />
 
 <link
         rel="alternate"
@@ -80,6 +86,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         href="http://localhost:4000/feed.xml"
 />
 
+
+<link rel="prev" href="http://localhost:4000/cs/2025/05/07/Operating-system-04/" />
  
 
 <link
@@ -176,14 +184,13 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
             data-image="/assets/img/dp.jpeg"
     >
       
-  
 
-<article id="post-cs/2025/05/12/Operating-system-05" class="post mb6" role="article">
+<article id="post-cs/2025/05/12/Operating-system-05" class="post" role="article">
   <header>
     <h1 class="post-title">
-      <a href="/cs/2025/05/12/Operating-system-05/" data-flip="title">
+      
       커널과 인터페이스
-      </a>
+      
     </h1>
 
     <p class="post-date heading">
@@ -223,433 +230,263 @@ on <a href="/tag/cs-operatingsystem/" data-flip="title">Operating System</a>
 
 
   
-  <h2 id="커널과-인터페이스">커널과 인터페이스</h2>
+  <div class="markdown-body">
 
+    <!-- 
+    <div class="head-image"><img src="http://localhost:4000/assets//img/network-logo.png" /></div>
+    <br /> -->
+    <style>
+      .myAd1190 {
+        width: 48%;
+        height: 280px;
+      }
 
-  <p class="read-more"><a class="heading" href="/cs/2025/05/12/Operating-system-05/" data-flip="title">Continue reading </a>
-  </p>
+      .myAd1290 {
+        width: 48%;
+        height: 280px;
+      }
+
+      @media(max-width: 800px) {
+        .myAd1190 {
+          display: none;
+        }
+
+        .myAd1290 {
+          width: 98%;
+        }
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 300px;
+      }
+
+      .row-center {
+        display: flex;
+        justify-content: center;
+        height: 258px;
+      }
+    </style>
+
+    <!--<br />-->
+    <h2 id="커널과-인터페이스">커널과 인터페이스</h2>
+
+<p><img src="/assets/img/cs/operation/img_6.png" alt="img.png" /></p>
+
+<ul>
+  <li>Kernel
+    <ul>
+      <li>프로세스 관리, 메모리 관리, 저장장치 관리와 같은 운영체제의 핵심적인 기능을 모아놓은 것이다.</li>
+      <li>kernel의 성능에 따라 운영체제의 성능이 좌우된다. 자동차로 치면 엔진이라고 할 수 있다.</li>
+      <li>스마트폰의 운영체제에도 커널이 있다.
+        <ul>
+          <li>안드로이드는 커널이 공개되어 있다(리눅스 기반) 하지만 IOS는 커널이 공개되어 있지 않다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>인터페이스
+    <ul>
+      <li>자동차가 움직이는 데에는 핸들과 브레이크가 필요하다. 자동차를 올바르게 제어하기 위해서는 현재 시속, 기어의 상태, 엔진의 온도 등을 알려주는 계기판이 있어야 하는데 이를 인터페이스라고 한다.</li>
+      <li>커널에 사용자의 명령을 전달하고 실행 결과를 사용자에게 알려준다.</li>
+      <li>유닉스의 사용자 인터페이스는 shell, bashshell 등 여러 종류의 셸이 있다. 셸은 명령어 기반이라 일반인이 사용하기 불편하여 유닉스 운영체제를 어렵게 느끼는 사람들이 많다.(개발자에겐 참 편하다.) GUI 속 눈으로 파일 찾는게 더 힘들다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="시스템-호출과-디바이스-드라이버">시스템 호출과 디바이스 드라이버</h2>
+
+<h3 id="시스템-호출">시스템 호출</h3>
+
+<ul>
+  <li>system call은 커널이 자신을 보고하기 위해 만든 인터페이스다. 커널은 사용자나 응용 프로그램으로부터 컴퓨터 자원을 보호하기 위해 자원에 직접 접근하는 것을 차단한다.</li>
+  <li>자원을 이용하려면 시스템 호출이라는 인터페이스를 이용하여 접근해야 한다.</li>
+  <li>직접 접근하는 예시와, 시스템 콜을 통한 접근의 차이를 커피를 먹는 경우에 비유해보자
+    <ul>
+      <li>직접 접근
+        <ul>
+          <li>사용자가 직접 컴퓨터 자원에 접근하여 작업하는 방식이다. 사용자는 커피머신이 어떻게 작동하는지, 커피와 설탕이 어딨는지, 모든 것을 다 알아야 한다. 이 경우는 자신이 원하는 커피를 만들 수는 있겠지만, 사용자의 부주의로 커피머신을 망가뜨릴 수도, 커피와 설탕을 찾느라 주변을 더럽힐 수도 있다.</li>
+        </ul>
+      </li>
+      <li>시스템 호출을 통한 접근
+        <ul>
+          <li>누군가에게 요청하여 작업의 결과만 받는 방식이다. 사용자는 어떤 커피머신을 쓰는지, 어떻게 커피를 만드는지 등을 신경 쓸 필요 없이 결과값만 받으면 된다(추상화)
+            <ul>
+              <li>우리가 메서드를 호출하고 사용하는 방식이 우리는 모든 메서드의 내부구현을 알 필요 없이 결과만 리턴 받으면 되는 구조와 비슷하다. 뭐.. 메서드의 모든 내부 구조와 구현을 안다면 좋겠지만, 수많은 메서드들의 내부구현을 기억하기는 힘들다.</li>
+            </ul>
+          </li>
+          <li>이와 마찬가지로 운영체제는 사용자나 응용 프로그램이 하드웨어 직접 접근하지 않는다. 그리고 대신 하드웨어와 같은 시스템 자원을 사용할 수 있도록 인터페이스를 제공해주는데 이것이 바로 시스템 콜이다.</li>
+          <li>
+            <h2 id="운영체제는-커널이-제공하는-서비스를-시스템-호출로-제한하고-다른-방법으로-커널에-들어오지-못하게-막음으로써-컴퓨터-자원을-보호한다">운영체제는 커널이 제공하는 서비스를 시스템 호출로 제한하고, 다른 방법으로 커널에 들어오지 못하게 막음으로써 컴퓨터 자원을 보호한다.</h2>
+          </li>
+        </ul>
+      </li>
+    </ul>
+
+    <h2 id="api와-sdk">API와 SDK</h2>
+
+    <ul>
+      <li>API(Application Programming Interface(응용 프로그램 인터페이스)와 SDK(System Development Kit)(개발자용 키트)가 있다. API는 응용 프로그램이 자신과 연관된 프로그램을 만들 수 있도록 제공하는 인터페이스다. 포토샵을 예로들면 매우 강력한 그래픽 프로그램이지만, 수백 가지의 필터를 모두 제공하지는 않는다. 따라서 포토샵은 필터를 개발하려는 사람들을 위해 다양한 프로그래밍 인터페이스를 제공하는데 이 인터페이스가 바로 API이다.</li>
+      <li>운영체제의 API를 시스템 콜이라고 한다.</li>
+      <li>SDK는 프로그램 개발자를 위해 API or API 사용 메뉴얼 뿐만 아니라 프로그램 개발에 필요한 코드 편집기, 에뮬레이터 같은 각종 개발용 응용 프로그램까지 묶어서 배포하는 개발 툴을 말한다.
+        <ul>
+          <li>대표적인 예로 안드로이드 SDK Android Studio가 있다.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h2 id="드라이버">드라이버</h2>
+
+    <ul>
+      <li>응용 프로그램, 커널의 인터페이스가 시스템콜이면, 하드웨어의 인터페이스는 드라이버</li>
+    </ul>
+
+    <h2 id="커널의-구성">커널의 구성</h2>
+
+    <ul>
+      <li>프로세스 관리
+        <ul>
+          <li>프로세스에 CPU를 배분하고 작업에 필요한 환경을 제공한다.</li>
+        </ul>
+      </li>
+      <li>메모리 관리
+        <ul>
+          <li>프로세스에 작업 공간을 배치하고, 실제 메모리보다 더 큰 가상공간을 제공한다.</li>
+        </ul>
+      </li>
+      <li>파일 시스템 관리
+        <ul>
+          <li>데이터를 저장하고 접근할 수 있는 인터페이스를 제공한다.</li>
+        </ul>
+      </li>
+      <li>입출력 관리
+        <ul>
+          <li>필요한 입력과 출력 서비스를 제공한다.</li>
+        </ul>
+      </li>
+      <li>프로세스 간 통신 관리
+        <ul>
+          <li>공동 작업을 위한 프로세스 간 통신 환경을 지원한다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="reference">Reference</h2>
+
+<p><a href="https://m.yes24.com/Goods/Detail/111378840">https://m.yes24.com/Goods/Detail/111378840</a></p>
+
+    <br />
+    <br />
+  </div>
   
 
 </article>
 
-
-  
-
-<article id="post-cs/2025/05/07/Operating-system-04" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/cs/2025/05/07/Operating-system-04/" data-flip="title">
-      명령어 병렬 처리 기법
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2025-05-07T00:00:00+09:00">07 May 2025</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
-
-      
+<!--<hr class="dingbat" />-->
+<!--
+<div class="share">
+  <h2>Share this post</h2>
+  <div class="share-body">
+    <a href="http://twitter.com/share?text=커널과 인터페이스&amp;url=http://localhost:4000/cs/2025/05/12/Operating-system-05/"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="icon-twitter">
+      </span>
+    </a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/cs/2025/05/12/Operating-system-05/"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="icon-facebook">
+      </span>
+    </a>
+  </div>
+</div>
+-->
+<br />
 
 
 
 
+<aside class="related" role="complementary">
+  <h2 class="hr">Related Posts</h2>
 
-
-
-
-
-on <a href="/tag/cs-operatingsystem/" data-flip="title">Operating System</a>
-
-    </p>
-
+  <ul class="related-posts">
     
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="명령어-파이프라인">명령어 파이프라인</h2>
-
-
-  <p class="read-more"><a class="heading" href="/cs/2025/05/07/Operating-system-04/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-cs/2025/05/01/Operating-system-03" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/cs/2025/05/01/Operating-system-03/" data-flip="title">
-      주소 지정 방식
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2025-05-01T00:00:00+09:00">01 May 2025</time>
       
-
-
-
-
-
-
-
-
-
-in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
-
       
+      
+        
+          
+          
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/cs/2025/05/07/Operating-system-04/" data-flip="title">
+    <span>명령어 병렬 처리 기법</span>
+  </a>
+  <small><time datetime="2025-05-07T00:00:00+09:00">
+    07 May 2025
+  </time></small>
+</li>
+
+        
+      
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/cs/2025/05/01/Operating-system-03/" data-flip="title">
+    <span>주소 지정 방식</span>
+  </a>
+  <small><time datetime="2025-05-01T00:00:00+09:00">
+    01 May 2025
+  </time></small>
+</li>
+
+        
+      
+        
+        
+          
 
 
+<li class="h4">
+  <a href="/cs/2025/04/11/Algorithm-23/" data-flip="title">
+    <span>진격의 거인 문제</span>
+  </a>
+  <small><time datetime="2025-04-11T00:00:00+09:00">
+    11 Apr 2025
+  </time></small>
+</li>
 
-
-
-on <a href="/tag/cs-operatingsystem/" data-flip="title">Operating System</a>
-
-    </p>
-
+        
+      
     
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="주소-지정-방식">주소 지정 방식</h2>
-
-
-  <p class="read-more"><a class="heading" href="/cs/2025/05/01/Operating-system-03/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-project/2025/04/23/Golf-Spring-Project-02" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/project/2025/04/23/Golf-Spring-Project-02/" data-flip="title">
-      Golf - Jmeter를 이용한 회원조회 성능 테스트
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2025-04-23T00:00:00+09:00">23 Apr 2025</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/project/" data-flip="title">Project</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="개요">개요</h2>
-
-
-  <p class="read-more"><a class="heading" href="/project/2025/04/23/Golf-Spring-Project-02/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-project/2025/04/20/Golf-Spring-Project-01" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/project/2025/04/20/Golf-Spring-Project-01/" data-flip="title">
-      Golf - 테이블 설계
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2025-04-20T00:00:00+09:00">20 Apr 2025</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/project/" data-flip="title">Project</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="개요">개요</h2>
-
-
-  <p class="read-more"><a class="heading" href="/project/2025/04/20/Golf-Spring-Project-01/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-cs/2025/04/11/Algorithm-23" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/cs/2025/04/11/Algorithm-23/" data-flip="title">
-      진격의 거인 문제
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2025-04-11T00:00:00+09:00">11 Apr 2025</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="개요">개요</h2>
-
-
-  <p class="read-more"><a class="heading" href="/cs/2025/04/11/Algorithm-23/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-project/2025/04/01/BidMall-Spring-Project-01" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/project/2025/04/01/BidMall-Spring-Project-01/" data-flip="title">
-      BIDMALL- auction_status_check - 01
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2025-04-01T00:00:00+09:00">01 Apr 2025</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/project/" data-flip="title">Project</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="개요">개요</h2>
-
-
-  <p class="read-more"><a class="heading" href="/project/2025/04/01/BidMall-Spring-Project-01/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-  
-
-<article id="post-project/2025/03/24/profit-Spring-Project-01" class="post mb6" role="article">
-  <header>
-    <h1 class="post-title">
-      <a href="/project/2025/03/24/profit-Spring-Project-01/" data-flip="title">
-      profit- Spring Batch 적용기
-      </a>
-    </h1>
-
-    <p class="post-date heading">
-      <time datetime="2025-03-24T00:00:00+09:00">24 Mar 2025</time>
-      
-
-
-
-
-
-
-
-
-
-in <a href="/category/project/" data-flip="title">Project</a>
-
-      
-
-
-
-
-
-
-
-
-
-on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
-
-    </p>
-
-    
-  <div class="hr" style="padding-bottom:0"></div>
-
-
-  </header>
-  
-
-
-  
-  <h2 id="한국수출입은행-open-api-발급-방법">한국수출입은행 Open API 발급 방법</h2>
-
-
-  <p class="read-more"><a class="heading" href="/project/2025/03/24/profit-Spring-Project-01/" data-flip="title">Continue reading </a>
-  </p>
-  
-
-</article>
-
-
-
-<h2 class="sr-only">Pagination</h2>
-<nav class="pagination heading" role="navigation">
-  <ul>
-    <li class="pagination-item older" >
-      
-        <a rel="next" href="/page-2/">Older</a>
-      
-    </li>
-    <li class="pagination-item newer" >
-      
-        <span>Newer</span>
-      
-    </li>
   </ul>
-</nav>
+</aside>
+  <aside class="comments" role="complementary">
+  <h2>Comments</h2>
+  <hr/>
 
-  <footer>
+  <script src="https://utteranc.es/client.js"
+          repo="taewoocode/taewoocode.github.io"
+          issue-term="title"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+</aside>
+
+
+       <footer>
   <hr/>
   
     <p>© 2022. by taewoo</p>
