@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="BFS - Breadth First Search" />
+<meta property="og:title" content="Home" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -46,28 +46,22 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 ></script>
 
  
-<meta
-        property="og:image"
-        content="http://localhost:4000/assets//img/algorithm-logo.png"
-/>
-<br />
+<meta property="og:image" content="http://localhost:4000/assets/img/logo.png" />
 
 
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>BFS - Breadth First Search &middot; 일벌리는 개발자</title>
+<title>Home &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="Breadth First Search
-
+        content="일을 벌여놔야 주워 담을 수 있습니다.
 "
 />
 <meta
         property="og:description"
-        content="Breadth First Search
-
+        content="일을 벌여놔야 주워 담을 수 있습니다.
 "
 />
 
@@ -76,8 +70,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/cs/2024/10/06/Algorithm-08/" />
-<meta property="og:url" content="http://localhost:4000/cs/2024/10/06/Algorithm-08/" />
+<link rel="canonical" href="http://localhost:4000/page-20/" />
+<meta property="og:url" content="http://localhost:4000/page-20/" />
 
 <link
         rel="alternate"
@@ -86,11 +80,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         href="http://localhost:4000/feed.xml"
 />
 
-
-<link rel="prev" href="http://localhost:4000/language/2024/10/05/Java-Adv-10/" />
  
-<link rel="next" href="http://localhost:4000/cs/2024/10/06/Algorithm-09/" />
-
 
 <link
         rel="apple-touch-icon"
@@ -186,17 +176,18 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
             data-image="/assets/img/dp.jpeg"
     >
       
+  
 
-<article id="post-cs/2024/10/06/Algorithm-08" class="post" role="article">
+<article id="post-life/2024/06/12/daily-03" class="post mb6" role="article">
   <header>
     <h1 class="post-title">
-      
-      BFS - Breadth First Search
-      
+      <a href="/life/2024/06/12/daily-03/" data-flip="title">
+      졸업작품 이야기
+      </a>
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-10-06T00:00:00+09:00">06 Oct 2024</time>
+      <time datetime="2024-06-12T00:00:00+09:00">12 Jun 2024</time>
       
 
 
@@ -207,7 +198,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 
 
 
-in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
+in <a href="/category/life/" data-flip="title">Life</a>
 
       
 
@@ -219,7 +210,7 @@ in <a href="/category/computer-science/" data-flip="title">Computer Science</a>
 
 
 
-on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
+on <a href="/tag/daily-daily/" data-flip="title">Daily</a>
 
     </p>
 
@@ -232,216 +223,34 @@ on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
 
 
   
-  <div class="markdown-body">
+  <h2 id="들어가기에-앞서-mfc-프로그래밍이란">들어가기에 앞서 MFC 프로그래밍이란?</h2>
 
-    <!-- 
-    <div class="head-image"><img src="http://localhost:4000/assets//img/algorithm-logo.png" /></div>
-    <br /> -->
-    <style>
-      .myAd1190 {
-        width: 48%;
-        height: 280px;
-      }
 
-      .myAd1290 {
-        width: 48%;
-        height: 280px;
-      }
-
-      @media(max-width: 800px) {
-        .myAd1190 {
-          display: none;
-        }
-
-        .myAd1290 {
-          width: 98%;
-        }
-      }
-
-      .row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        height: 300px;
-      }
-
-      .row-center {
-        display: flex;
-        justify-content: center;
-        height: 258px;
-      }
-    </style>
-
-    <!--<br />-->
-    <h2 id="breadth-first-search">Breadth First Search</h2>
-
-<p>BFS는 그래프를 탐색하는 알고리즘이며 어떤 정점에서 시작해 다음 깊이의 정점으로 이동하기전 현재 깊이의 모든 정점을 탐색하며 방문한 정점은 다시 방문하지 않는 알고리즘이다.
-같은 가중치를 가진 그래프에서 최단거리알고리즘으로 쓰인다.
-BFS로 탐색을 한다는 것은 이런식으로 레이어별, 레벨별로 탐색한다는 뜻이다.</p>
-
-<p><img width="435" alt="image" src="https://github.com/user-attachments/assets/462b7d11-611f-4bac-9ce4-460968508def" /></p>
-
-<h2 id="bfs-구현">BFS 구현</h2>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span><span class="cpf">&lt;bits/stdc++.h&gt;</span><span class="cp">
-</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
-<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">adj</span><span class="p">[</span><span class="mi">100</span><span class="p">];</span>
-<span class="kt">int</span> <span class="n">visited</span><span class="p">[</span><span class="mi">100</span><span class="p">];</span>
-<span class="kt">int</span> <span class="n">nodeList</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">10</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mi">18</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">22</span><span class="p">,</span><span class="mi">24</span><span class="p">};</span>
-<span class="kt">void</span> <span class="n">bfs</span><span class="p">(</span><span class="kt">int</span> <span class="n">here</span><span class="p">){</span>
-    <span class="n">queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">q</span><span class="p">;</span>
-    <span class="n">visited</span><span class="p">[</span><span class="n">here</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">here</span><span class="p">);</span>
-    <span class="k">while</span><span class="p">(</span><span class="n">q</span><span class="p">.</span><span class="n">size</span><span class="p">()){</span>
-        <span class="kt">int</span> <span class="n">here</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
-        <span class="n">q</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
-
-        <span class="c1">//adj의 각요소들을 there에 저</span>
-        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">there</span> <span class="o">:</span> <span class="n">adj</span><span class="p">[</span><span class="n">here</span><span class="p">]){</span>
-            <span class="k">if</span><span class="p">(</span><span class="n">visited</span><span class="p">[</span><span class="n">there</span><span class="p">]){</span>
-                <span class="k">continue</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="n">visited</span><span class="p">[</span><span class="n">there</span><span class="p">]</span> <span class="o">=</span> <span class="n">visited</span><span class="p">[</span><span class="n">here</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-            <span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">there</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="kt">int</span> <span class="n">main</span><span class="p">(){</span>
-    <span class="n">adj</span><span class="p">[</span><span class="mi">10</span><span class="p">].</span><span class="n">push_back</span><span class="p">(</span><span class="mi">12</span><span class="p">);</span>
-    <span class="n">adj</span><span class="p">[</span><span class="mi">10</span><span class="p">].</span><span class="n">push_back</span><span class="p">(</span><span class="mi">14</span><span class="p">);</span>
-    <span class="n">adj</span><span class="p">[</span><span class="mi">10</span><span class="p">].</span><span class="n">push_back</span><span class="p">(</span><span class="mi">16</span><span class="p">);</span>
-    <span class="n">adj</span><span class="p">[</span><span class="mi">12</span><span class="p">].</span><span class="n">push_back</span><span class="p">(</span><span class="mi">18</span><span class="p">);</span>
-    <span class="n">adj</span><span class="p">[</span><span class="mi">12</span><span class="p">].</span><span class="n">push_back</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>
-    <span class="n">adj</span><span class="p">[</span><span class="mi">20</span><span class="p">].</span><span class="n">push_back</span><span class="p">(</span><span class="mi">23</span><span class="p">);</span>
-    <span class="n">adj</span><span class="p">[</span><span class="mi">20</span><span class="p">].</span><span class="n">push_back</span><span class="p">(</span><span class="mi">24</span><span class="p">);</span>
-    <span class="n">bfs</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">:</span> <span class="n">nodeList</span><span class="p">){</span>
-        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="s">" : "</span> <span class="o">&lt;&lt;</span> <span class="n">visited</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"10번으로부터 24번까지 최단거리는 : "</span>  <span class="o">&lt;&lt;</span> <span class="n">visited</span><span class="p">[</span><span class="mi">24</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>큐 <code class="language-plaintext highlighter-rouge">q</code>는 BFS 탐색을 위한 큐로 사용된다. <code class="language-plaintext highlighter-rouge">visited[here] = 1</code>은 현재 노드를 방문 처리하면서 거리를 1로 설정한다. 
-<code class="language-plaintext highlighter-rouge">q.push(here)</code>는 큐에 현재 노드를 추가한다.
-<code class="language-plaintext highlighter-rouge">while(q.size())</code>는 큐에 노드가 있는 동안 반복하며, 각 반복에서 큐의 맨 앞 노드를 가져온다.
-인접 노드 <code class="language-plaintext highlighter-rouge">there</code>를 검사하고, 방문하지 않은 노드에 대해 <code class="language-plaintext highlighter-rouge">visited[there] = visited[here] + 1</code>로 거리를 업데이트하며, 큐에 추가한다.
-BFS는 레이어별로 탐색을 하기에 Queue에 대한 이해가 있어야 쉽게 이해할 수 있다.</p>
-
-<h2 id="reference">Reference</h2>
-
-<p><a href="https://stackoverflow.com/questions/2505431/breadth-first-search-and-depth-first-search">https://stackoverflow.com/questions/2505431/breadth-first-search-and-depth-first-search</a></p>
-
-    <br />
-    <br />
-  </div>
+  <p class="read-more"><a class="heading" href="/life/2024/06/12/daily-03/" data-flip="title">Continue reading </a>
+  </p>
   
 
 </article>
 
-<!--<hr class="dingbat" />-->
-<!--
-<div class="share">
-  <h2>Share this post</h2>
-  <div class="share-body">
-    <a href="http://twitter.com/share?text=BFS - Breadth First Search&amp;url=http://localhost:4000/cs/2024/10/06/Algorithm-08/"
-      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-      <span class="icon-twitter">
-      </span>
-    </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/cs/2024/10/06/Algorithm-08/"
-      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-      <span class="icon-facebook">
-      </span>
-    </a>
-  </div>
-</div>
--->
-<br />
 
 
-
-
-<aside class="related" role="complementary">
-  <h2 class="hr">Related Posts</h2>
-
-  <ul class="related-posts">
-    
+<h2 class="sr-only">Pagination</h2>
+<nav class="pagination heading" role="navigation">
+  <ul>
+    <li class="pagination-item older" >
       
+        <span>Older</span>
       
+    </li>
+    <li class="pagination-item newer" >
       
-        
-        
-          
-
-
-<li class="h4">
-  <a href="/cs/2025/05/12/Operating-system-06/" data-flip="title">
-    <span>프로세스</span>
-  </a>
-  <small><time datetime="2025-05-12T00:00:00+09:00">
-    12 May 2025
-  </time></small>
-</li>
-
-        
+        <a rel="prev" href="/page-19/">Newer</a>
       
-        
-        
-          
-
-
-<li class="h4">
-  <a href="/cs/2025/05/12/Operating-system-05/" data-flip="title">
-    <span>커널과 인터페이스</span>
-  </a>
-  <small><time datetime="2025-05-12T00:00:00+09:00">
-    12 May 2025
-  </time></small>
-</li>
-
-        
-      
-        
-        
-          
-
-
-<li class="h4">
-  <a href="/cs/2025/05/07/Operating-system-04/" data-flip="title">
-    <span>명령어 병렬 처리 기법</span>
-  </a>
-  <small><time datetime="2025-05-07T00:00:00+09:00">
-    07 May 2025
-  </time></small>
-</li>
-
-        
-      
-        
-        
-      
-    
+    </li>
   </ul>
-</aside>
-  <aside class="comments" role="complementary">
-  <h2>Comments</h2>
-  <hr/>
+</nav>
 
-  <script src="https://utteranc.es/client.js"
-          repo="taewoocode/taewoocode.github.io"
-          issue-term="title"
-          theme="github-light"
-          crossorigin="anonymous"
-          async>
-  </script>
-  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
-</aside>
-
-
-       <footer>
+  <footer>
   <hr/>
   
     <p>© 2022. by taewoo</p>

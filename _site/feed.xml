@@ -6,9 +6,60 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 12 May 2025 16:34:40 +0900</pubDate>
-    <lastBuildDate>Mon, 12 May 2025 16:34:40 +0900</lastBuildDate>
+    <pubDate>Mon, 12 May 2025 16:56:56 +0900</pubDate>
+    <lastBuildDate>Mon, 12 May 2025 16:56:56 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
+    
+      <item>
+        <title>프로세스</title>
+        <description>&lt;h2 id=&quot;프로세스란&quot;&gt;프로세스란?&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;프로세스는 프로그이 실행 중인 상태로 특정 메리 공간에 프로그의 코드가 적재되고 CPU 가 해당 명령어를 하나씩 수행하고 있는 상태를 의미한다. 운영 체제에서는 프로세스를 사용하여 프로그램을 수행한다. 쓰레드는 운영 체제에서 프로세서 시간을 할당하는 기본 단위로 하나 이상의 쓰레드가 해당 프로세스 내에서 코드를 실행한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;프로세스의-구성요소&quot;&gt;프로세스의 구성요소&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;프로세스의 구조체에는 프로세스마다 독립적으로 관리해야 하는 유저 메리 영역이나 프로세스가 사용하는 각종 객체들의 포인터를 관리하는 핸들 테이블을 가지고 있다.&lt;/li&gt;
+  &lt;li&gt;*프로세스(Process)&lt;strong&gt;란, 단순히 실행 가능한 코드(blob of code)를 넘어, **프로그램의 실행을 위해 운영체제가 생성하고 관리하는 실행 단위(Execution Context)&lt;/strong&gt;다. 이는 CPU 스케줄링, 메모리 보호, 입출력 자원 관리 등 운영체제의 다양한 자원 관리 정책의 핵심 단위로 작동한다.
+    &lt;ul&gt;
+      &lt;li&gt;&lt;strong&gt;코드(Context of Code):&lt;/strong&gt; 실행 대상이 되는 명령어들의 집합.&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;자원(Resource Set):&lt;/strong&gt; 실행에 필요한 메모리 공간, 파일 핸들, I/O 장치 핸들 등.&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;실행 상태(Execution State):&lt;/strong&gt; CPU 레지스터 정보, 프로그램 카운터, 스택 포인터 등 현재 실행의 문맥을 구성하는 정보.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;유저-메모리-영역-관리-virtual-address-descriptors&quot;&gt;유저 메모리 영역 관리 (Virtual Address Descriptors)&lt;/h3&gt;
+
+&lt;p&gt;프로세스별로 독립된 영역을 가지게 되는 곳은 유저 메모리 공간이다. 커널 메모리 공간의 경우 모든 프로세스가 공유하여 사용하지만, 유저 메모리 영역은 각 프로세스에 고유하게 할당된다. 이 유저 메모리 영역을 효율적으로 관리하기 위해 운영체제는 VAD(Virtual Address Descriptors)라는 관리 테이블을 사용한다.
+VAD는 프로세스에서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;VirtualAlloc&lt;/code&gt; 또는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MapViewOfFile&lt;/code&gt;과 같은 가상 메모리 할당 함수를 통해 할당된 영역이나, 파일 매핑을 통해 생성된 메모리 블록 등의 정보를 &lt;strong&gt;이진 트리(Binary Tree)&lt;/strong&gt; 구조로 관리한다. 이 구조를 통해 프로세스가 어떤 가상 주소 범위를 어떻게 사용하는지 추적할 수 있으며, 메모리 해제 시에도 이를 참조하여 정확한 영역을 회수할 수 있다.&lt;/p&gt;
+
+&lt;h3 id=&quot;핸들-테이블-handle-table&quot;&gt;핸들 테이블 (Handle Table)&lt;/h3&gt;
+
+&lt;p&gt;핸들 테이블은 프로세스에서 사용하는 모든 핸들에 대한 &lt;strong&gt;커널 객체 포인터&lt;/strong&gt; 정보를 배열 형태로 저장하고 있는 공간이다. 여기서 핸들이란 파일, 이벤트, 세마포어, 쓰레드, 프로세스 등 커널 리소스에 접근하기 위한 추상화된 식별자이다.
+핸들 테이블은 각 프로세스마다 독립적으로 유지되며, 운영체제는 이 테이블을 통해 프로세스가 접근 가능한 커널 객체들을 추적하고 관리한다. 프로세스가 종료할 경우, 이 테이블의 정보를 기반으로 프로세스가 보유하고 있던 커널 객체들을 자동으로 정리하고 자원을 반환한다.&lt;/p&gt;
+
+&lt;h3 id=&quot;독립적인-메모리-공간&quot;&gt;독립적인 메모리 공간&lt;/h3&gt;
+
+&lt;p&gt;프로세스 단위로 관리되는 자원 중 가장 중요한 특징은 바로 &lt;strong&gt;독립적인 가상 메모리 공간&lt;/strong&gt;이다. 현대 운영체제에서는 &lt;strong&gt;페이징 기법&lt;/strong&gt;을 활용하여 각 프로세스마다 고유한 가상 주소 공간을 부여하며, 이를 통해 다른 프로세스의 메모리에 직접 접근하지 못하도록 보호한다.
+이러한 구조는 메모리 보호뿐 아니라, 동일한 물리 메모리를 각 프로세스가 서로 다른 주소로 매핑하여 사용할 수 있는 유연성도 제공한다. 특히 Windows 운영체제에서는 사용자 공간과 커널 공간을 명확히 구분하여, 안정성과 보안성을 확보하고 있다.&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://m.yes24.com/Goods/Detail/111378840&quot;&gt;https://m.yes24.com/Goods/Detail/111378840&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Mon, 12 May 2025 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/cs/2025/05/12/Operating-system-06/</link>
+        <guid isPermaLink="true">http://localhost:4000/cs/2025/05/12/Operating-system-06/</guid>
+        
+        <category>OS</category>
+        
+        
+        <category>cs</category>
+        
+      </item>
     
       <item>
         <title>커널과 인터페이스</title>
@@ -2968,130 +3019,6 @@ SpringBoot 같은 경우에는 &lt;a href=&quot;https://tbaggery.com/2008/04/19/
         
         
         <category>opensource</category>
-        
-      </item>
-    
-      <item>
-        <title>Spring MVC 04 - RequestParameter - Query</title>
-        <description>&lt;h2 id=&quot;client-to-server&quot;&gt;Client to Server&lt;/h2&gt;
-
-&lt;h3 id=&quot;get---쿼리-파라미터&quot;&gt;GET - 쿼리 파라미터&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;/url ?username = hello&amp;amp;age=20
-    &lt;ul&gt;
-      &lt;li&gt;메시지 바디 없이 URL의 쿼리 파라미터에 데이터를 포함해서 전달&lt;/li&gt;
-      &lt;li&gt;검색 필터, 페이징등에서 많이 사용하는 방식&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;post---html-form&quot;&gt;POST - HTML Form&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;content-type: application/x-www.form-urlencoded
-    &lt;ul&gt;
-      &lt;li&gt;회원 가입, 상품 주문, HTML Form 사용&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;http-message-body&quot;&gt;HTTP Message body&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;HTTP API에서 주로 사용, JSON, XML, TEXT
-    &lt;ul&gt;
-      &lt;li&gt;데이터 형식은 주로 JSON 사용&lt;/li&gt;
-      &lt;li&gt;POST, PUT, PATCH&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;http으로-요청-파라미터-조회&quot;&gt;HTTP으로 요청 파라미터 조회&lt;/h2&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/44d90888-6c4c-41f7-bfbf-753c695734f2&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/6e7f3bde-4900-4aca-ada0-cc25aef49aa4&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;spring으로-요청-파라미터-조회&quot;&gt;Spring으로 요청 파라미터 조회&lt;/h2&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/0d004f0c-0196-4650-93bc-66cdce712724&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;RequestParam을 사용하면 요청 파리미터를 쉽게 사용할 수 있다.&lt;/li&gt;
-  &lt;li&gt;@Controller이면서 반환타입이 String 이면 ok라는 뷰를 찾게 된다.&lt;/li&gt;
-  &lt;li&gt;따라서 클래스 레벨에서 @RestController로 변경해주거나, 메소드 레벨에서 @ReponseBody를 사용한다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/8420783a-23ca-48ac-b6b2-6ed155fb4d7c&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;String, int 등의 단순 타입이면 @RequestParam 도 생략 가능&lt;/li&gt;
-  &lt;li&gt;String, int, Integer 등의  단순 타입이면 @RequestParam 도 생략가능
-    &lt;ul&gt;
-      &lt;li&gt;이렇게 애노테이션을 완전히 생략해도 되는데, 너무 없는 것도 약간 과하다는 주관적 생각이 있다.
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@RequestParam&lt;/code&gt; 이 있으면 명확하게 요청 파리미터에서 데이터를 읽는 다는 것을 알 수 있다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/6445a22e-592e-437a-bc40-4c2285a46102&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;(와중에 FHD, MAC 화질차이가..)&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;RequiredParam 속성에서 기본값은 true이다. 아무것도 명시해주지 않는다면 false로 적용이 되어있다.&lt;/li&gt;
-  &lt;li&gt;위의코드는 age는 필수값이 되어있고, username은 필수가 아니다.&lt;/li&gt;
-  &lt;li&gt;또한 자바에서는 기본형은 null을 허용하지 않고, Integer(객체)는 null을 허용한다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;modelattribute&quot;&gt;ModelAttribute&lt;/h2&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/40b5bb13-6c54-4485-94e0-ecff9255615e&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;ModelAttribute를 활용해보기 위해서 HelloData 객체 생성&lt;/li&gt;
-  &lt;li&gt;Lombok이 제공해주는 @Data로 @Getter, @Setter, @ToString, @EqualsAndHashCode, @RequiredArgsConstructor를 자동으로 적용해준다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/3bcf608d-0322-4665-984f-958497c1ab4f&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;위에 두 코드는 같은 기능을 하는 코드이다.&lt;/li&gt;
-  &lt;li&gt;@ModelAttribute를 사용하면 @ModelAttribute는 HelloData 객체를 생성하고 요청 파라미터 이름으로 HelloData 객체의 프로퍼티를 찾는다. 그리고 해당 프로퍼티의 setter를 호출해서 파라미터 값을 입력한다.
-    &lt;ul&gt;
-      &lt;li&gt;파라미터 이름이 username이라면 setUsername() 메서드를 찾아서 호출하면서 값을 입력해준다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/ef23de6e-38e9-4ce8-b14c-b5581cd1ceff&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@ModelAttribute&lt;/code&gt; 는 생략할 수 있다. 그런데 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@RequestParam&lt;/code&gt;도 생략할 수 있으니 혼란이 발생할 수 있다.&lt;/li&gt;
-  &lt;li&gt;스프링은 해당 생략시 다음과 같은 규칙을 적용한다.
-    &lt;ul&gt;
-      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;String&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;int&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Integer&lt;/code&gt; 같은 단순 타입 = &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@RequestParam&lt;/code&gt;&lt;/li&gt;
-      &lt;li&gt;나머지 = &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@ModelAttribute&lt;/code&gt; (argument resolver 로 지정해둔 타입 외)&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://www.slf4j.org&quot;&gt;http://www.slf4j.org&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://logback.qos.ch&quot;&gt;http://logback.qos.ch&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-logging?&quot;&gt;https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-logging?&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Sun, 01 Dec 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/framework/2024/12/01/Spring-framework-mvc-04/</link>
-        <guid isPermaLink="true">http://localhost:4000/framework/2024/12/01/Spring-framework-mvc-04/</guid>
-        
-        <category>mvc</category>
-        
-        
-        <category>framework</category>
         
       </item>
     
