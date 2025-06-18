@@ -6,9 +6,103 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 12 May 2025 16:56:56 +0900</pubDate>
-    <lastBuildDate>Mon, 12 May 2025 16:56:56 +0900</lastBuildDate>
+    <pubDate>Wed, 18 Jun 2025 17:18:22 +0900</pubDate>
+    <lastBuildDate>Wed, 18 Jun 2025 17:18:22 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
+    
+      <item>
+        <title>프로그래머스 Lv1 대충 만든 자판</title>
+        <description>&lt;h2 id=&quot;문제&quot;&gt;문제&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://school.programmers.co.kr/learn/courses/30/lessons/160586?language=cpp&quot;&gt;https://school.programmers.co.kr/learn/courses/30/lessons/160586?language=cpp&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;휴대폰의 자판은 컴퓨터 키보드 자판과는 다르게 하나의 키에 여러 개의 문자가 할당될 수 있습니다. 키 하나에 여러 문자가 할당된 경우, 동일한 키를 연속해서 빠르게 누르면 할당된 순서대로 문자가 바뀝니다.
+예를 들어, 1번 키에 “A”, “B”, “C” 순서대로 문자가 할당되어 있다면 1번 키를 한 번 누르면 “A”, 두 번 누르면 “B”, 세 번 누르면 “C”가 되는 식입니다.
+같은 규칙을 적용해 아무렇게나 만든 휴대폰 자판이 있습니다. 이 휴대폰 자판은 키의 개수가 1개부터 최대 100개까지 있을 수 있으며, 특정 키를 눌렀을 때 입력되는 문자들도 무작위로 배열되어 있습니다. 또, 같은 문자가 자판 전체에 여러 번 할당된 경우도 있고, 키 하나에 같은 문자가 여러 번 할당된 경우도 있습니다. 심지어 아예 할당되지 않은 경우도 있습니다. 따라서 몇몇 문자열은 작성할 수 없을 수도 있습니다.
+이 휴대폰 자판을 이용해 특정 문자열을 작성할 때, 키를 최소 몇 번 눌러야 그 문자열을 작성할 수 있는지 알아보고자 합니다.
+1번 키부터 차례대로 할당된 문자들이 순서대로 담긴 문자열배열 keymap과 입력하려는 문자열들이 담긴 문자열 배열 targets가 주어질 때, 각 문자열을 작성하기 위해 키를 최소 몇 번씩 눌러야 하는지 순서대로 배열에 담아 return 하는 solution 함수를 완성해 주세요.
+단, 목표 문자열을 작성할 수 없을 때는 -1을 저장합니다.&lt;/p&gt;
+
+&lt;h2 id=&quot;수도-코드&quot;&gt;수도 코드&lt;/h2&gt;
+
+&lt;div class=&quot;language-markdown highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;1.&lt;/span&gt; 문자별 최소 누름 횟수를 저장할 빈 해시맵(char_min_press)을 만든다.
+&lt;span class=&quot;p&quot;&gt;
+2.&lt;/span&gt; 모든 keymap을 순회하면서,
+   각 키(key)에 대해 다음을 수행한다
+&lt;span class=&quot;p&quot;&gt;    -&lt;/span&gt; key에 있는 문자를 한 글자씩 확인하면서
+&lt;span class=&quot;p&quot;&gt;    -&lt;/span&gt; 해당 문자가 처음 나온 경우, i + 1 (i는 인덱스 → 누름 횟수)을 저장한다.
+&lt;span class=&quot;p&quot;&gt;    -&lt;/span&gt; 이미 저장된 문자가 다시 나오면, 기존 값과 비교해서 더 작은 값으로 갱신한다.
+      (즉, 해당 문자를 누르기 위한 최소 누름 횟수를 저장)
+&lt;span class=&quot;p&quot;&gt;
+3.&lt;/span&gt; 각 target 문자열을 순회하면서
+&lt;span class=&quot;p&quot;&gt;    -&lt;/span&gt; 각 문자열마다 누름 수 총합(total)을 0으로 초기화하고,
+&lt;span class=&quot;p&quot;&gt;    -&lt;/span&gt; 문자열을 구성하는 모든 문자를 하나씩 확인한다
+&lt;span class=&quot;p&quot;&gt;        -&lt;/span&gt; 해당 문자가 char_min_press에 있다면
+&lt;span class=&quot;p&quot;&gt;            -&lt;/span&gt; 저장된 누름 횟수를 total에 누적한다.
+&lt;span class=&quot;p&quot;&gt;        -&lt;/span&gt; 없다면:
+&lt;span class=&quot;p&quot;&gt;            -&lt;/span&gt; 해당 문자열은 입력할 수 없으므로 can_type = false로 설정하고, 중단한다.&lt;span class=&quot;sb&quot;&gt;
+
+    - 문자열을 끝까지 확인한 뒤,
+        - can_type이 true면 total을 answer에 추가하고,
+        - false면 -1을 추가한다.
+
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;4.&lt;/span&gt; answer를 반환한다.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;코드&quot;&gt;코드&lt;/h2&gt;
+
+&lt;div class=&quot;language-cpp highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#include&lt;/span&gt;&lt;span class=&quot;cpf&quot;&gt;&amp;lt;bits/stdc++.h&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;namespace&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;unordered_map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;char&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;char_min_press&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;vector&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;solution&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;vector&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;keymap&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;vector&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;targets&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;vector&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;answer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;auto&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;keymap&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+            &lt;span class=&quot;kt&quot;&gt;char&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+            &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;press_count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;char_min_press&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)){&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;char_min_press&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;min&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;char_min_press&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;press_count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;char_min_press&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;press_count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;auto&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;targets&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;total&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;bool&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;can_type&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;auto&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;char_min_press&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)){&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;total&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;char_min_press&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;can_type&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;answer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;push_back&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;can_type&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;total&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;answer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/cs/algorithm/img.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;나의 뇌&lt;/p&gt;
+</description>
+        <pubDate>Tue, 10 Jun 2025 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/cs/2025/06/10/Algorithm-24/</link>
+        <guid isPermaLink="true">http://localhost:4000/cs/2025/06/10/Algorithm-24/</guid>
+        
+        <category>Algorithm</category>
+        
+        
+        <category>cs</category>
+        
+      </item>
     
       <item>
         <title>프로세스</title>
@@ -2980,45 +3074,6 @@ API를 매번 새롭게 생성하는 것은 비효율적이다. 따라서 필요
         
         
         <category>framework</category>
-        
-      </item>
-    
-      <item>
-        <title>SpringBoot Contribute</title>
-        <description>&lt;h2 id=&quot;issue&quot;&gt;Issue&lt;/h2&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/79f345b0-d55c-497f-8e86-06ad21f9bf04&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;스프링에서 Open되어있는 이슈들에서 task를 받아서 기여할 수도 있지만 나는 평소 스프링이 어떻게 구조화 되어있는지 내심 궁금했기에 
-하나하나 소스코드들을 읽어 보았다. 그러던 와중에 스프링에 문제아닌 문제? 마이너한 문제를 찾을 수 있었다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/07134b6a-2b24-4bd5-a93e-dde1c7d2e906&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;SpringBoot/http/client에 ReflectiveComponentsClientHttpRequestFactoryBuilder의 생성자에서 assert 오류 메시지 포맷을 개선한 변경 하였다.
-기존의 오류 메시지가 문자열이 하드코딩되어 있어, 메시지 수정이나 로컬라이징 작업이 어려워 보였고 String.format()을 사용하여 동적으로 생성되도록 수정하였다.
-사실 개선사항이 크게 필요는 없는 부분이지만 장기적으로 보았을 땐 변경되는 코드에 따라서 메시지의 포맷이 일관되게 유지되면 좋겠다고 생각했다.
-그리고 무엇보다 오픈소스 생태계 그것도 스프링 오픈소스 생태계에 기여해볼 수 있다는 것이 가장 큰 동기부여가 되었다.&lt;/p&gt;
-
-&lt;h2 id=&quot;변경&quot;&gt;변경&lt;/h2&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/80281847-748a-4534-9549-0d8e99939b56&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;매우 작고 간단했던 작업 내용이였지만 내가 직접 세계적인 오픈소스의 컨트리뷰터가 되기 위한 첫 걸음을 나아갔다는 점에서 상당히 뿌듯하다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/5c2992cb-3b2c-4abb-a4a3-5da7e1eb0b2e&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;그리고 오픈소스들이라면 코딩 및 커밋 컨벤션을 가지고 있다. 해당 규칙을 만족해야 커밋이 반영이 된다. 
-SpringBoot 같은 경우에는 &lt;a href=&quot;https://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html&quot;&gt;여기&lt;/a&gt;에서 컨벤션 규칙을 정리해두었다. 꼭 읽고 커밋하자&lt;/p&gt;
-
-</description>
-        <pubDate>Tue, 03 Dec 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/opensource/2024/12/03/SpringBoot-contribute-01/</link>
-        <guid isPermaLink="true">http://localhost:4000/opensource/2024/12/03/SpringBoot-contribute-01/</guid>
-        
-        <category>opensource</category>
-        
-        
-        <category>opensource</category>
         
       </item>
     

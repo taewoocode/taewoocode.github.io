@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="Greedy Algorithm" />
+<meta property="og:title" content="프로그래머스 Lv1 대충 만든 자판" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -56,17 +56,17 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>Greedy Algorithm &middot; 일벌리는 개발자</title>
+<title>프로그래머스 Lv1 대충 만든 자판 &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
-        content="그리디 알고리즘
+        content="문제
 
 "
 />
 <meta
         property="og:description"
-        content="그리디 알고리즘
+        content="문제
 
 "
 />
@@ -76,8 +76,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <!-- =============== -->
 <!-- LINKS           -->
 <!-- =============== -->
-<link rel="canonical" href="http://localhost:4000/cs/2024/09/29/Algorithm-05/" />
-<meta property="og:url" content="http://localhost:4000/cs/2024/09/29/Algorithm-05/" />
+<link rel="canonical" href="http://localhost:4000/cs/2025/06/10/Algorithm-24/" />
+<meta property="og:url" content="http://localhost:4000/cs/2025/06/10/Algorithm-24/" />
 
 <link
         rel="alternate"
@@ -87,10 +87,8 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 />
 
 
-<link rel="prev" href="http://localhost:4000/language/2024/09/28/Java-Adv-05/" />
+<link rel="prev" href="http://localhost:4000/cs/2025/05/12/Operating-system-06/" />
  
-<link rel="next" href="http://localhost:4000/cs/2024/09/29/Algorithm-06/" />
-
 
 <link
         rel="apple-touch-icon"
@@ -187,16 +185,16 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
     >
       
 
-<article id="post-cs/2024/09/29/Algorithm-05" class="post" role="article">
+<article id="post-cs/2025/06/10/Algorithm-24" class="post" role="article">
   <header>
     <h1 class="post-title">
       
-      Greedy Algorithm
+      프로그래머스 Lv1 대충 만든 자판
       
     </h1>
 
     <p class="post-date heading">
-      <time datetime="2024-09-29T00:00:00+09:00">29 Sep 2024</time>
+      <time datetime="2025-06-10T00:00:00+09:00">10 Jun 2025</time>
       
 
 
@@ -273,53 +271,82 @@ on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
     </style>
 
     <!--<br />-->
-    <h2 id="그리디-알고리즘">그리디 알고리즘</h2>
+    <h2 id="문제">문제</h2>
 
-<p>최적의 해를 구하는 데에 사용되는 근사적인 방법으로, 여러 경우 중 하나를 결정해야 할 때마다 그 순간에 최적이라고 생각되는 것을 선택해 나가는 방식으로 진행하여 최종적인 해답에 도달.</p>
+<p><a href="https://school.programmers.co.kr/learn/courses/30/lessons/160586?language=cpp">https://school.programmers.co.kr/learn/courses/30/lessons/160586?language=cpp</a></p>
 
-<h2 id="그리디-알고리즘의-문제">그리디 알고리즘의 문제</h2>
+<p>휴대폰의 자판은 컴퓨터 키보드 자판과는 다르게 하나의 키에 여러 개의 문자가 할당될 수 있습니다. 키 하나에 여러 문자가 할당된 경우, 동일한 키를 연속해서 빠르게 누르면 할당된 순서대로 문자가 바뀝니다.
+예를 들어, 1번 키에 “A”, “B”, “C” 순서대로 문자가 할당되어 있다면 1번 키를 한 번 누르면 “A”, 두 번 누르면 “B”, 세 번 누르면 “C”가 되는 식입니다.
+같은 규칙을 적용해 아무렇게나 만든 휴대폰 자판이 있습니다. 이 휴대폰 자판은 키의 개수가 1개부터 최대 100개까지 있을 수 있으며, 특정 키를 눌렀을 때 입력되는 문자들도 무작위로 배열되어 있습니다. 또, 같은 문자가 자판 전체에 여러 번 할당된 경우도 있고, 키 하나에 같은 문자가 여러 번 할당된 경우도 있습니다. 심지어 아예 할당되지 않은 경우도 있습니다. 따라서 몇몇 문자열은 작성할 수 없을 수도 있습니다.
+이 휴대폰 자판을 이용해 특정 문자열을 작성할 때, 키를 최소 몇 번 눌러야 그 문자열을 작성할 수 있는지 알아보고자 합니다.
+1번 키부터 차례대로 할당된 문자들이 순서대로 담긴 문자열배열 keymap과 입력하려는 문자열들이 담긴 문자열 배열 targets가 주어질 때, 각 문자열을 작성하기 위해 키를 최소 몇 번씩 눌러야 하는지 순서대로 배열에 담아 return 하는 solution 함수를 완성해 주세요.
+단, 목표 문자열을 작성할 수 없을 때는 -1을 저장합니다.</p>
 
-<p>문제: 12100원을 지불하기 위한 최적의 화폐 사용 방법을 찾기</p>
+<h2 id="수도-코드">수도 코드</h2>
+
+<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">1.</span> 문자별 최소 누름 횟수를 저장할 빈 해시맵(char_min_press)을 만든다.
+<span class="p">
+2.</span> 모든 keymap을 순회하면서,
+   각 키(key)에 대해 다음을 수행한다
+<span class="p">    -</span> key에 있는 문자를 한 글자씩 확인하면서
+<span class="p">    -</span> 해당 문자가 처음 나온 경우, i + 1 (i는 인덱스 → 누름 횟수)을 저장한다.
+<span class="p">    -</span> 이미 저장된 문자가 다시 나오면, 기존 값과 비교해서 더 작은 값으로 갱신한다.
+      (즉, 해당 문자를 누르기 위한 최소 누름 횟수를 저장)
+<span class="p">
+3.</span> 각 target 문자열을 순회하면서
+<span class="p">    -</span> 각 문자열마다 누름 수 총합(total)을 0으로 초기화하고,
+<span class="p">    -</span> 문자열을 구성하는 모든 문자를 하나씩 확인한다
+<span class="p">        -</span> 해당 문자가 char_min_press에 있다면
+<span class="p">            -</span> 저장된 누름 횟수를 total에 누적한다.
+<span class="p">        -</span> 없다면:
+<span class="p">            -</span> 해당 문자열은 입력할 수 없으므로 can_type = false로 설정하고, 중단한다.<span class="sb">
+
+    - 문자열을 끝까지 확인한 뒤,
+        - can_type이 true면 total을 answer에 추가하고,
+        - false면 -1을 추가한다.
+
+</span><span class="p">4.</span> answer를 반환한다.
+</code></pre></div></div>
 
 <h2 id="코드">코드</h2>
 
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span><span class="cpf">&lt;bits/stdc++.h&gt;</span><span class="cp">
 </span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
-<span class="kt">int</span> <span class="n">ret</span><span class="p">,</span> <span class="n">totalAmount</span> <span class="o">=</span> <span class="mi">12100</span><span class="p">;</span>
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
-    <span class="n">ios_base</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
-    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="nb">NULL</span><span class="p">),</span> <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+<span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">char_min_press</span><span class="p">;</span>
 
-    <span class="n">vector</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">currency</span> <span class="o">=</span> <span class="p">{{</span><span class="mi">10000</span><span class="p">,</span><span class="mi">5</span><span class="p">},{</span><span class="mi">5000</span><span class="p">,</span><span class="mi">5</span><span class="p">},{</span><span class="mi">1000</span><span class="p">,</span><span class="mi">5</span><span class="p">},{</span><span class="mi">100</span><span class="p">,</span><span class="mi">5</span><span class="p">}};</span>
-
-    <span class="c1">// 내림차순으로 정렬</span>
-    <span class="n">sort</span><span class="p">(</span><span class="n">currency</span><span class="p">.</span><span class="n">rbegin</span><span class="p">(),</span> <span class="n">currency</span><span class="p">.</span><span class="n">rend</span><span class="p">());</span>
-
-    <span class="c1">// debugging</span>
-    <span class="k">for</span><span class="p">(</span><span class="k">auto</span> <span class="n">i</span> <span class="o">:</span> <span class="n">currency</span><span class="p">){</span>
-        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">i</span><span class="p">.</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span> <span class="o">&lt;&lt;</span> <span class="n">i</span><span class="p">.</span><span class="n">second</span> <span class="o">&lt;&lt;</span> <span class="sc">' '</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="k">for</span><span class="p">(</span><span class="k">auto</span> <span class="n">c</span> <span class="o">:</span> <span class="n">currency</span><span class="p">){</span>
-        <span class="k">while</span><span class="p">(</span><span class="n">totalAmount</span> <span class="o">&gt;=</span> <span class="n">c</span><span class="p">.</span><span class="n">first</span><span class="p">){</span>
-            <span class="n">totalAmount</span> <span class="o">-=</span> <span class="n">c</span><span class="p">.</span><span class="n">first</span><span class="p">;</span>
-            <span class="n">c</span><span class="p">.</span><span class="n">second</span><span class="o">--</span><span class="p">;</span>
-            <span class="n">ret</span><span class="o">++</span><span class="p">;</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">solution</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">keymap</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">targets</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">answer</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="k">auto</span> <span class="n">key</span> <span class="o">:</span> <span class="n">keymap</span><span class="p">){</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">key</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+            <span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="n">key</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="kt">int</span> <span class="n">press_count</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">char_min_press</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">c</span><span class="p">)){</span>
+                <span class="n">char_min_press</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">char_min_press</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="n">press_count</span><span class="p">);</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">char_min_press</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">press_count</span><span class="p">;</span>
+            <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">}</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">totalAmount</span> <span class="o">==</span> <span class="mi">0</span><span class="p">){</span>
-        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">ret</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
-    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"불가능 합니다."</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+
+    <span class="k">for</span><span class="p">(</span><span class="k">auto</span> <span class="n">a</span> <span class="o">:</span> <span class="n">targets</span><span class="p">){</span>
+        <span class="kt">int</span> <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">bool</span> <span class="n">can_type</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="k">auto</span> <span class="n">c</span> <span class="o">:</span> <span class="n">a</span><span class="p">){</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">char_min_press</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">c</span><span class="p">)){</span>
+                <span class="n">total</span> <span class="o">+=</span> <span class="n">char_min_press</span><span class="p">[</span><span class="n">c</span><span class="p">];</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">can_type</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">answer</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">can_type</span> <span class="o">?</span> <span class="n">total</span> <span class="o">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span>
     <span class="p">}</span>
 
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-    
+    <span class="k">return</span> <span class="n">answer</span><span class="p">;</span>
+<span class="p">}</span>
 </code></pre></div></div>
 
-<p>문제는 10000원 5장, 5000원 5장, 1000원 5장, 100원 5개가 있다.
-화폐의 단위가 큰 것부터 사용하기 위해서 내림차순으로 정렬을 하고 벡터를 순회하면서 첫번 째 반복에서 12100- 10000을 차감하고 ret을 1증가 2100은 5000보다 작으므로 5000단위는 사용할 수 없다.
-1000원 단위는 사용할 수 있으므로 2100 - 2000 = 100이 되고 100원 단위도 사용할 수 있으므로 100이 되서 ret은 총 4번 증가하게 된다.</p>
+<p><img src="/assets/img/cs/algorithm/img.png" alt="img.png" /></p>
 
 <h2 id="reference">Reference</h2>
 
@@ -337,12 +364,12 @@ on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=Greedy Algorithm&amp;url=http://localhost:4000/cs/2024/09/29/Algorithm-05/"
+    <a href="http://twitter.com/share?text=프로그래머스 Lv1 대충 만든 자판&amp;url=http://localhost:4000/cs/2025/06/10/Algorithm-24/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/cs/2024/09/29/Algorithm-05/"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/cs/2025/06/10/Algorithm-24/"
       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
       <span class="icon-facebook">
       </span>
@@ -364,21 +391,8 @@ on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
       
       
         
-        
           
-
-
-<li class="h4">
-  <a href="/cs/2025/06/10/Algorithm-24/" data-flip="title">
-    <span>프로그래머스 Lv1 대충 만든 자판</span>
-  </a>
-  <small><time datetime="2025-06-10T00:00:00+09:00">
-    10 Jun 2025
-  </time></small>
-</li>
-
-        
-      
+          
         
         
           
@@ -412,6 +426,19 @@ on <a href="/tag/cs-algorithm/" data-flip="title">Algorithm</a>
         
       
         
+        
+          
+
+
+<li class="h4">
+  <a href="/cs/2025/05/07/Operating-system-04/" data-flip="title">
+    <span>명령어 병렬 처리 기법</span>
+  </a>
+  <small><time datetime="2025-05-07T00:00:00+09:00">
+    07 May 2025
+  </time></small>
+</li>
+
         
       
     
