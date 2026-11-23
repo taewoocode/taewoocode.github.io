@@ -3,7 +3,8 @@
   (function () {
     var base = 'https://{{ site.goatcounter }}.goatcounter.com';
 
-    // Pages are swapped in by push-state, so count and fill counters manually on every page.
+    /* Pages are swapped in by push-state, so count and fill counters manually on every page.
+       Use block comments only: compress_html joins this script into one line, so a // comment would swallow the rest. */
     window.goatcounter = { no_onload: true };
 
     function fill(el, path) {
