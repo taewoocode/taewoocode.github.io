@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="우린 - 에러 없이 실패하는 버그들 (진짜 원인을 찾기까지)" />
+<meta property="og:title" content="우린 - 에러 없이 실패하는 서버 버그들 (진짜 원인을 찾기까지)" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,7 +52,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>우린 - 에러 없이 실패하는 버그들 (진짜 원인을 찾기까지) &middot; 일벌리는 개발자</title>
+<title>우린 - 에러 없이 실패하는 서버 버그들 (진짜 원인을 찾기까지) &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
@@ -187,7 +187,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
   <header>
     <h1 class="post-title">
       
-      우린 - 에러 없이 실패하는 버그들 (진짜 원인을 찾기까지)
+      우린 - 에러 없이 실패하는 서버 버그들 (진짜 원인을 찾기까지)
       
     </h1>
 
@@ -217,8 +217,6 @@ in <a href="/category/project/" data-flip="title">Project</a>
 
 on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 
-      
-      <span class="post-views">· 조회수 <span data-gc-views>-</span></span>
       
     </p>
 
@@ -273,22 +271,19 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
     <h2 id="개요">개요</h2>
 
 <ul>
-  <li>우린을 만들면서 커밋 메시지에 <strong>“진짜 원인”</strong> 이라고 적은 버그가 여럿 있다.
+  <li>우린 서버를 운영하면서 가장 오래 헤맨 버그들은 공통점이 있었다. <strong>에러가 안 났다.</strong>
     <ul>
-      <li>첫 번째로 고친 게 원인이 아니었고, 한 번 더 파고 나서야 찾았다는 뜻이다.</li>
+      <li>예외도, 빨간 로그도, 서버 다운도 없이 “그냥 안 되는” 상태였다.</li>
     </ul>
   </li>
-  <li>돌아보니 셋 다 공통점이 있었다. <strong>에러가 안 났다.</strong>
-    <ul>
-      <li>예외도, 빨간 로그도, 크래시도 없이 “그냥 안 되는” 상태였다.</li>
-    </ul>
-  </li>
-  <li>이번 글은 그 세 가지를 어떻게 찾았는지 정리한다.
-    <ul>
-      <li>문화행사 동기화가 매번 <strong>0건</strong></li>
-      <li>채팅에서 상대 프로필이 <strong>안 바뀜</strong></li>
-      <li>채팅 프로필 사진이 <strong>첫 줄만</strong> 안 뜸</li>
-    </ul>
+  <li>이번 글은 그런 버그 다섯 가지를 어떻게 찾았는지 정리한다.
+    <ol>
+      <li>외부 API 응답은 잘 오는데 저장이 <strong>0건</strong></li>
+      <li>배포할 때마다 <strong>푸시가 조용히 꺼졌다</strong></li>
+      <li>모든 시각이 <strong>9시간씩 밀렸다</strong></li>
+      <li>저장은 됐는데 앱에는 <strong>“실패”</strong>로 떴다</li>
+      <li>상대 프로필이 <strong>안 바뀐다</strong> → 사실은 403</li>
+    </ol>
   </li>
 </ul>
 
@@ -299,10 +294,10 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 <ul>
   <li>우린에는 서울시 문화행사를 데이트 후보로 보여주는 기능이 있다.
     <ul>
-      <li>서울 열린데이터광장 API에서 매일 행사를 받아와 DB에 저장한다.</li>
+      <li>서울 열린데이터광장 API에서 행사를 받아와 DB에 저장한다. (서버 첫 기동 때 한 번, 이후 매일 새벽 3시)</li>
     </ul>
   </li>
-  <li>연동을 붙이고(9/14 22:23) 동기화를 돌려 보니, 에러 로그도 없이 끝나는데 <strong>저장은 늘 0건</strong>이었다.</li>
+  <li>동기화를 돌려 보니, 에러 로그도 없이 끝나는데 <strong>저장은 늘 0건</strong>이었다.</li>
 </ul>
 
 <h3 id="찾기">찾기</h3>
@@ -342,205 +337,222 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
       <li>그래서 Jackson이 기다리는 키는 <code class="language-plaintext highlighter-rouge">title</code>이고, JSON의 <code class="language-plaintext highlighter-rouge">TITLE</code>은 “모르는 필드”가 된다.</li>
     </ul>
   </li>
-  <li>여기에 <code class="language-plaintext highlighter-rouge">ignoreUnknown = true</code>가 붙어 있었다.
+  <li>여기에 <code class="language-plaintext highlighter-rouge">@JsonIgnoreProperties(ignoreUnknown = true)</code>가 붙어 있었다.
     <ul>
       <li>모르는 필드는 <strong>조용히 버린다.</strong> 예외가 없으니 모든 필드가 null인 객체가 정상적으로 만들어졌다.</li>
     </ul>
   </li>
-  <li>외부 API 응답이 바뀌어도 안 깨지게 하려고 넣은 설정이, 이번엔 매핑 실패를 숨겼다.</li>
+  <li>외부 API 응답에 필드가 추가돼도 안 깨지게 하려고 넣은 설정이, 이번엔 매핑 실패를 숨겼다.</li>
 </ul>
 
 <h3 id="해결">해결</h3>
 
-<ul>
-  <li>필드마다 JSON 이름을 명시했다.</li>
-  <li>디버그 로그를 넣은 커밋(22:35)과 고친 커밋(22:37)이 <strong>2분</strong> 차이다. 로그 한 줄이 원인을 바로 가리켰다.
-    <ul>
-      <li>반대로 말하면, 로그를 넣기 전까지는 “API 키가 틀렸나”만 의심하며 원인을 볼 방법이 없었다.</li>
-    </ul>
-  </li>
-</ul>
-
 <p><img src="/assets/img/projects/woorin/silent/img_2.png" alt="img.png" /></p>
 
-<h2 id="2-상대-프로필이-안-바뀐다--사실은-403">2. 상대 프로필이 안 바뀐다 → 사실은 403</h2>
+<ul>
+  <li>필드마다 JSON 이름을 <code class="language-plaintext highlighter-rouge">@JsonProperty</code>로 명시했다.</li>
+  <li>로그 한 줄로 “응답은 왔다 / 값이 비었다”를 나누고 나서야 원인이 바로 보였다. 그 전까지는 “API 키가 틀렸나”만 의심했다.</li>
+</ul>
+
+<h2 id="2-배포할-때마다-푸시가-조용히-꺼졌다">2. 배포할 때마다 푸시가 조용히 꺼졌다</h2>
 
 <h3 id="증상-1">증상</h3>
 
 <ul>
-  <li>상대가 프로필 사진과 닉네임을 바꿔도, 내 채팅 화면엔 예전 것이 그대로였다.</li>
+  <li>어느 순간부터 푸시가 하나도 안 왔다. 채팅, 추억, 일정 전부.</li>
+  <li>서버 로그에는 푸시 관련 에러가 <strong>한 줄도</strong> 없었다.</li>
 </ul>
 
-<h3 id="배경-90분-전에-넣은-인증">배경: 90분 전에 넣은 인증</h3>
+<h3 id="원인-배포가-firebase-키를-지웠다">원인: 배포가 Firebase 키를 지웠다</h3>
 
 <ul>
-  <li>이 버그는 9월 14일 새벽에 몰려서 생기고 고쳐졌다. 커밋 시각을 순서대로 놓으면 이렇다.</li>
+  <li>배포는 GitLab CI가 소스를 <code class="language-plaintext highlighter-rouge">rsync</code>로 서버에 올리고, 서버에서 빌드해서 재시작한다.</li>
 </ul>
-
-<table>
-  <thead>
-    <tr>
-      <th>시각</th>
-      <th>커밋</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>00:19</td>
-      <td>API 인증(토큰) 도입. 유저 API에 <strong>“본인 정보만 조회”</strong> 제한 추가</td>
-    </tr>
-    <tr>
-      <td>01:38</td>
-      <td>프로필 사진/닉네임 수정 기능 + 채팅에서 상대 식별</td>
-    </tr>
-    <tr>
-      <td>01:43</td>
-      <td>가설 1: 상대 정보를 한 번만 불러와서 → 들어올 때마다 다시 불러오기</td>
-    </tr>
-    <tr>
-      <td>01:50</td>
-      <td>가설 2: GET 응답이 <code class="language-plaintext highlighter-rouge">URLSession</code> 디스크 캐시에 남아서 → 캐시 정책 명시</td>
-    </tr>
-    <tr>
-      <td>01:55</td>
-      <td><strong>진짜 원인: 403.</strong> 상대 프로필 전용 API 추가 (서버·앱 같은 분에 커밋)</td>
-    </tr>
-  </tbody>
-</table>
-
-<ul>
-  <li>17분 동안 세 번 고쳤다. 원인은 90분 전에 내가 넣은 인증 제한이었다.</li>
-</ul>
-
-<h3 id="첫-번째-가설-한-번만-불러와서">첫 번째 가설: 한 번만 불러와서</h3>
-
-<ul>
-  <li>코드를 보니 상대 정보를 <strong>채팅 첫 진입 때 한 번만</strong> 불러오고 있었다.
-    <ul>
-      <li>소켓 중복 연결을 막으려고 “같은 커플이면 다시 설정 안 함” 가드를 넣었는데, 상대 정보 로딩도 그 안에 들어가 있었다.</li>
-    </ul>
-  </li>
-  <li>채팅 탭에 들어올 때마다 상대 정보를 새로 받게 고쳤다.</li>
-  <li><strong>그래도 안 바뀌었다.</strong></li>
-</ul>
-
-<h3 id="두-번째-가설-예전-응답이-캐시에-남아서">두 번째 가설: 예전 응답이 캐시에 남아서</h3>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">URLSession</code>은 캐시 정책을 따로 정하지 않으면 GET 응답을 <strong>디스크에 캐시</strong>한다.
-    <ul>
-      <li>앱을 다시 빌드해도 이 캐시는 안 지워져서, 상대가 프로필을 바꿔도 예전 응답이 나올 수 있다.</li>
-    </ul>
-  </li>
-  <li>모든 요청이 항상 네트워크로 새로 받아오게 캐시 정책을 명시했다.</li>
-  <li>이것도 실제로 있던 문제다. 하지만 <strong>여전히 안 바뀌었다.</strong></li>
-</ul>
-
-<h3 id="진짜-원인">진짜 원인</h3>
 
 <p><img src="/assets/img/projects/woorin/silent/img_3.png" alt="img.png" /></p>
 
 <ul>
-  <li>이 <code class="language-plaintext highlighter-rouge">catch</code>가 에러를 삼키고 있었다. 찍어 보니 매번 <strong>403</strong>이었다.</li>
-  <li><code class="language-plaintext highlighter-rouge">GET /api/users/{userId}</code>는 <strong>본인만</strong> 조회할 수 있게 막아 둔 API다.
+  <li><code class="language-plaintext highlighter-rouge">rsync --delete</code>는 “소스에 없는 파일은 서버에서도 지운다”는 옵션이다.</li>
+  <li>Firebase 서비스 계정 키(<code class="language-plaintext highlighter-rouge">secrets/firebase-service-account.json</code>)는 git에 올리면 안 되는 파일이라 <code class="language-plaintext highlighter-rouge">.gitignore</code>에 있고, 서버에만 직접 넣어 뒀다.
     <ul>
-      <li>이메일, 인증 토큰 같은 민감한 정보가 들어 있어서 당연한 제한이다.</li>
-      <li>상대 id로 부르니 매번 거부됐고, 화면엔 처음 회원가입 때 받은 값이 남아 있었다.</li>
+      <li>CI가 올리는 소스(git 저장소)에는 이 파일이 없다.</li>
+      <li>그래서 <code class="language-plaintext highlighter-rouge">rsync --delete</code>는 배포할 때마다 이 파일을 “있으면 안 되는 파일”로 보고 <strong>지웠다.</strong></li>
     </ul>
   </li>
-  <li>두 가설 모두 틀린 건 아니었지만, 그걸 고쳐도 <strong>불러오는 요청 자체가 실패</strong>하고 있었다.</li>
-  <li>이 제한은 00:19 인증 커밋에서 넣었다. 그 커밋 메시지에 이렇게 적혀 있다. “지금까지는 userId/coupleId만 알면 아무나 남의 데이터를 조회/수정/삭제할 수 있었음”. 막은 건 맞았는데, 그 API를 상대 조회에 쓰던 곳이 있었다.</li>
+  <li>지금 설정에는 <code class="language-plaintext highlighter-rouge">--exclude='secrets'</code>가 들어가 있다. 업로드 파일(<code class="language-plaintext highlighter-rouge">uploads</code>)처럼 서버에만 있는 폴더는 전부 제외 목록에 넣어야 한다.</li>
 </ul>
 
-<h3 id="해결-1">해결</h3>
+<h3 id="왜-에러가-안-났나">왜 에러가 안 났나</h3>
 
 <ul>
-  <li>상대 프로필 전용 API를 만들었다. 닉네임과 사진만 내려준다.</li>
-</ul>
-
-<p><img src="/assets/img/projects/woorin/silent/img_4.png" alt="img.png" /></p>
-
-<ul>
-  <li>권한을 풀어서 해결하지 않았다. 필요한 것만 담은 <strong>다른 창구</strong>를 만들었다.</li>
-</ul>
-
-<h2 id="3-프로필-사진이-첫-줄만-안-뜬다">3. 프로필 사진이 첫 줄만 안 뜬다</h2>
-
-<h3 id="증상-2">증상</h3>
-
-<ul>
-  <li>채팅방을 열면 상대 프로필 사진이 <strong>어떤 줄은 뜨고 어떤 줄은 빈 원</strong>이었다. 특히 첫 줄이 자주 비었다.</li>
-</ul>
-
-<p><img src="/assets/img/projects/woorin/silent/app_1.png" alt="img.png" /></p>
-
-<ul>
-  <li>같은 채팅방을 3분 간격으로 연 화면이다.
-    <ul>
-      <li>왼쪽은 위 두 줄이, 오른쪽은 첫 줄만 빈 원이다. 열 때마다 비는 줄이 달라졌다.</li>
-    </ul>
-  </li>
-  <li>프로필 사진을 제대로 설정해도 재현됐다.</li>
-</ul>
-
-<h3 id="첫-번째-가설-캐시가-작아서">첫 번째 가설: 캐시가 작아서</h3>
-
-<ul>
-  <li>프로필 사진은 메시지 줄마다 따로 그린다. 같은 URL이 수십 번 나온다.</li>
-  <li>SwiftUI <code class="language-plaintext highlighter-rouge">AsyncImage</code>는 <code class="language-plaintext highlighter-rouge">URLCache.shared</code>를 쓰는데, 기본 용량이 <strong>메모리 512KB / 디스크 10MB</strong>다.
-    <ul>
-      <li>사진 몇 장이면 밀려나서, 같은 사진을 줄마다 다시 요청하고, 요청이 몰리면 일부가 실패한다.</li>
-    </ul>
-  </li>
-  <li>캐시를 50MB / 200MB로 키웠다.</li>
-  <li>서버도 같이 고쳤다. 업로드 파일(<code class="language-plaintext highlighter-rouge">/uploads/**</code>)에 <code class="language-plaintext highlighter-rouge">Cache-Control</code>이 <strong>아예 없어서</strong>, 같은 사진을 그릴 때마다 서버에 다시 요청하고 있었다.
-    <ul>
-      <li>파일명이 UUID라 같은 URL의 내용은 절대 안 바뀐다. 그래서 7일 캐시를 걸어도 안전하다.</li>
-      <li>서버 커밋 메시지에도 “프사 일부가 안 보이던 문제 원인 <strong>중 하나</strong>“라고 적었다. 하나뿐이 아니라는 걸 그때도 알고 있었다.</li>
-    </ul>
-  </li>
-  <li>빈 원이 줄었지만 <strong>첫 줄은 여전히 가끔 비었다.</strong></li>
-</ul>
-
-<h3 id="진짜-원인-1">진짜 원인</h3>
-
-<ul>
-  <li>채팅방을 막 열면 여러 줄의 프로필 요청이 <strong>한꺼번에</strong> 나간다. 캐시가 아직 비어 있는 첫 순간이다.</li>
-  <li>이때 하나가 실패하면, <code class="language-plaintext highlighter-rouge">AsyncImage</code>는 <strong>다시 시도하지 않는다.</strong>
-    <ul>
-      <li>실패 상태(<code class="language-plaintext highlighter-rouge">.failure</code>)로 끝나고, 화면을 다시 그릴 때까지(앱 재실행 등) 빈 채로 남는다.</li>
-    </ul>
-  </li>
-  <li>실패하면 1초 뒤에 최대 3번 다시 시도하는 <code class="language-plaintext highlighter-rouge">RetryingAsyncImage</code>로 감쌌다.</li>
+  <li>키가 없을 때 서버가 <strong>죽지 않도록</strong> 일부러 만들어 둔 구조 때문이다.</li>
 </ul>
 
 <p><img src="/assets/img/projects/woorin/silent/img_5.png" alt="img.png" /></p>
 
 <ul>
-  <li>9/20 23:28에 캐시(앱·서버)를 고치고, 12분 뒤인 23:40에 재시도를 넣었다.</li>
-  <li>10/7에는 채팅 사진이 많아지면서 사진을 화면 크기로 줄여 풀고 메모리에 캐시하는 <code class="language-plaintext highlighter-rouge">CachedAsyncImage</code>로 한 번 더 바꿨다. 스크롤할 때 깜빡임과 버벅임도 같이 줄었다.</li>
+  <li>키 파일을 못 읽으면 <code class="language-plaintext highlighter-rouge">FirebaseApp</code> 빈을 만들지 않고(null) 서버는 정상 기동한다. 로컬에서 키 없이 개발할 때 편하라고 이렇게 했다.</li>
+</ul>
+
+<p><img src="/assets/img/projects/woorin/silent/img_6.png" alt="img.png" /></p>
+
+<ul>
+  <li>보내는 쪽은 <code class="language-plaintext highlighter-rouge">FirebaseApp</code>을 <code class="language-plaintext highlighter-rouge">ObjectProvider</code>로 받아서, 없으면 <strong>아무것도 안 하고 돌아간다.</strong></li>
+  <li>“푸시는 부가 기능이니, 없어도 핵심 기능은 돌아가야 한다”는 의도대로 동작한 것이다. 문제는 그 상태가 <strong>운영에서도 조용했다</strong>는 것이다.
+    <ul>
+      <li>개발 환경에서 “키가 없으니 푸시는 끈다”는 정상이지만, 운영에서 “키가 없다”는 사고다. 같은 코드 경로가 두 상황을 구분하지 않았다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="3-모든-시각이-9시간씩-밀렸다">3. 모든 시각이 9시간씩 밀렸다</h2>
+
+<h3 id="증상-2">증상</h3>
+
+<ul>
+  <li>운영 서버에 배포했더니 채팅 보낸 시각, 일정 시각이 <strong>전부 9시간씩</strong> 어긋나 보였다.</li>
+  <li>로컬에서는 멀쩡했다.</li>
+</ul>
+
+<h3 id="원인-servertimezone">원인: <code class="language-plaintext highlighter-rouge">serverTimezone</code></h3>
+
+<p><img src="/assets/img/projects/woorin/silent/img_7.png" alt="img.png" /></p>
+
+<ul>
+  <li>MySQL JDBC URL의 <code class="language-plaintext highlighter-rouge">serverTimezone</code>은 “<strong>DB에 저장된 값이 어느 시간대 기준인지</strong>“를 드라이버에 알려주는 값이다.
+    <ul>
+      <li>화면에 보여줄 시간대(한국)가 아니라, <strong>DB 서버가 실제로 쓰는 시간대</strong>와 맞춰야 한다.</li>
+      <li>둘이 다르면 드라이버가 저장할 때와 읽을 때 그 차이만큼 시각을 옮겨서, 정확히 9시간이 밀린다.</li>
+    </ul>
+  </li>
+  <li>처음엔 <code class="language-plaintext highlighter-rouge">serverTimezone=Asia/Seoul</code>이었다.
+    <ul>
+      <li>로컬 개발 환경(맥)은 시간대가 한국이라, MySQL도 한국 시간으로 돌았다. 설정과 실제가 <strong>우연히</strong> 맞았다.</li>
+      <li>운영 서버(GCP VM)는 기본 시간대가 <strong>UTC</strong>였다. 설정은 한국인데 DB는 UTC라 9시간이 밀렸다.</li>
+    </ul>
+  </li>
+  <li>설정을 <code class="language-plaintext highlighter-rouge">serverTimezone=UTC</code>로 바꿔 맞췄다.</li>
+</ul>
+
+<h3 id="한-번-더-서버-시간대를-한국으로-옮길-때">한 번 더: 서버 시간대를 한국으로 옮길 때</h3>
+
+<p><img src="/assets/img/projects/woorin/silent/app_2.png" alt="img.png" /></p>
+
+<ul>
+  <li>나중에 운영 VM의 시간대를 아예 한국 시간으로 옮겼다. 로그와 스케줄 시각을 한국 시간으로 보는 게 편해서다.</li>
+  <li>이때는 세 가지를 <strong>같이</strong> 바꿔야 한다.
+    <ul>
+      <li>VM 시간대 (<code class="language-plaintext highlighter-rouge">timedatectl set-timezone Asia/Seoul</code>)</li>
+      <li>MySQL 재시작 (MySQL은 기동할 때 OS 시간대를 읽는다)</li>
+      <li><code class="language-plaintext highlighter-rouge">serverTimezone=Asia/Seoul</code>로 바꾼 서버 배포</li>
+    </ul>
+  </li>
+  <li>하나라도 순서가 어긋나면 그 사이에는 또 9시간이 밀린다. 위 채팅은 그 전환 작업을 하던 날 테스트하며 주고받은 메시지다.</li>
+  <li><code class="language-plaintext highlighter-rouge">DATETIME</code> 컬럼에는 시간대 정보가 없다. 저장된 건 “2026-10-05 13:14:00” 같은 <strong>벽시계 값</strong>뿐이고, 그게 어느 시간대 기준인지는 이 설정이 정한다. 그래서 설정만 바뀌어도 이미 저장된 값의 의미가 바뀐다.</li>
+  <li>이 일 이후로 시각이 의미 있는 코드(예: 리마인드 스케줄러의 cron)에는 <code class="language-plaintext highlighter-rouge">zone = "Asia/Seoul"</code>처럼 시간대를 코드에 적어 둔다.</li>
+</ul>
+
+<h2 id="4-저장은-됐는데-앱에는-실패로-떴다">4. 저장은 됐는데 앱에는 “실패”로 떴다</h2>
+
+<h3 id="증상-3">증상</h3>
+
+<ul>
+  <li>우린로그(짧은 영상)를 올리면 서버에는 잘 저장되는데, 앱에는 <strong>“실패했어요”</strong>가 떴다.</li>
+  <li>서버 로그에는 에러가 없다. 응답도 200이다.</li>
+</ul>
+
+<h3 id="원인-응답에-db-기본값이-빠져-있었다">원인: 응답에 DB 기본값이 빠져 있었다</h3>
+
+<ul>
+  <li>등록 API는 이렇게 생겼었다.
+    <ol>
+      <li>요청 VO를 그대로 <code class="language-plaintext highlighter-rouge">INSERT</code></li>
+      <li>MyBatis <code class="language-plaintext highlighter-rouge">useGeneratedKeys</code>로 새 ID를 요청 VO에 채운다</li>
+      <li><strong>그 요청 VO를 그대로 응답</strong></li>
+    </ol>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">useGeneratedKeys</code>가 채워주는 건 <strong>ID 하나뿐</strong>이다.
+    <ul>
+      <li>등록 시각(<code class="language-plaintext highlighter-rouge">FST_RG_DTM</code>)처럼 DB <code class="language-plaintext highlighter-rouge">DEFAULT</code>로 찍히는 값은 요청 VO에 없다. 응답 JSON에는 이 값이 <code class="language-plaintext highlighter-rouge">null</code>로 나간다.</li>
+    </ul>
+  </li>
+  <li>앱은 등록 시각을 필수 값으로 읽게 되어 있어서, <code class="language-plaintext highlighter-rouge">null</code>을 만나면 응답 해석 자체가 실패했다. 그래서 저장은 됐는데 “실패”로 보였다.</li>
+  <li>같은 모양의 문제가 맛집 수정 API에도 있었다. 요청 VO를 그대로 돌려줘서 작성자와 등록 시각이 빠졌다.</li>
+</ul>
+
+<h3 id="해결-저장한-행을-다시-읽어서-돌려준다">해결: 저장한 행을 다시 읽어서 돌려준다</h3>
+
+<p><img src="/assets/img/projects/woorin/silent/img_9.png" alt="img.png" /></p>
+
+<ul>
+  <li>채팅 메시지 저장은 처음부터 이렇게 하고 있었다.</li>
+</ul>
+
+<p><img src="/assets/img/projects/woorin/silent/img_8.png" alt="img.png" /></p>
+
+<ul>
+  <li>요청 VO는 “앱이 보낸 값”이고, 응답은 “<strong>DB에 실제로 저장된 값</strong>“이어야 한다. 둘은 다르다.
+    <ul>
+      <li>DB 기본값, 트리거, 다른 컬럼과의 조인 결과는 다시 읽어야만 알 수 있다.</li>
+      <li>조회가 한 번 늘지만, PK 조회라 비용은 거의 없다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="5-상대-프로필이-안-바뀐다--사실은-403">5. 상대 프로필이 안 바뀐다 → 사실은 403</h2>
+
+<h3 id="증상-4">증상</h3>
+
+<ul>
+  <li>상대가 프로필 사진과 닉네임을 바꿔도, 내 채팅 화면엔 예전 것이 그대로였다.</li>
+</ul>
+
+<h3 id="원인">원인</h3>
+
+<ul>
+  <li>앱은 상대 정보를 <code class="language-plaintext highlighter-rouge">GET /api/users/{userId}</code>로, <strong>상대의 userId</strong>를 넣어서 불러오고 있었다.</li>
+  <li>이 API는 API 인증을 넣으면서 <strong>본인만</strong> 조회할 수 있게 막아 둔 API다.
+    <ul>
+      <li>이메일, 인증 토큰 같은 민감한 정보가 들어 있어서 당연한 제한이다.</li>
+      <li>그래서 상대 id로 부르면 매번 <strong>403</strong>이었다.</li>
+    </ul>
+  </li>
+  <li>앱은 “상대 정보는 부가 정보라 실패해도 채팅은 써야 한다”며 에러를 조용히 넘기고 있었다. 화면에는 예전에 받아 둔 값이 남아 있었다.</li>
+  <li>서버 쪽에서 보면, 권한을 막는 변경을 하면서 <strong>그 API를 부르던 곳</strong>을 다 확인하지 않은 게 원인이다.</li>
+</ul>
+
+<h3 id="해결-권한을-풀지-않고-창구를-하나-더-만든다">해결: 권한을 풀지 않고 창구를 하나 더 만든다</h3>
+
+<p><img src="/assets/img/projects/woorin/silent/img_4.png" alt="img.png" /></p>
+
+<ul>
+  <li>상대 프로필 전용 API를 만들었다. <strong>닉네임과 사진만</strong> 내려준다.
+    <ul>
+      <li>“내 커플인가”만 확인하고, 커플에서 상대 id를 서버가 찾는다. 앱이 상대 id를 넘길 필요도 없다.</li>
+    </ul>
+  </li>
+  <li>기존 API의 “본인만” 제한을 풀면 문제는 바로 사라진다. 하지만 그러면 상대의 이메일과 토큰까지 내려간다. 필요한 것만 담은 <strong>다른 창구</strong>를 만드는 게 맞다.</li>
 </ul>
 
 <h2 id="정리">정리</h2>
 
 <ul>
-  <li>셋 다 <strong>실패가 조용했다.</strong>
+  <li>다섯 가지 모두 <strong>실패가 조용했다.</strong>
     <ul>
       <li><code class="language-plaintext highlighter-rouge">ignoreUnknown = true</code>가 매핑 실패를 삼켰다.</li>
-      <li>빈 <code class="language-plaintext highlighter-rouge">catch</code>가 403을 삼켰다.</li>
-      <li><code class="language-plaintext highlighter-rouge">AsyncImage</code>가 실패를 빈 원으로 바꾸고 끝냈다.</li>
+      <li>“키가 없으면 푸시는 끈다”가 운영 사고를 삼켰다.</li>
+      <li>로컬 시간대가 설정 오류를 우연히 가렸다.</li>
+      <li>200 응답 안에 빠진 값이 숨어 있었다.</li>
+      <li>403이 “부가 정보”라는 이유로 삼켜졌다.</li>
     </ul>
   </li>
-  <li>그래서 첫 번째 가설은 그럴듯했지만 틀렸거나, 절반만 맞았다.
+  <li>그래서 지키게 된 것
     <ul>
-      <li>2번과 3번은 첫 수정이 <strong>실제로 있던 다른 문제</strong>를 고쳤다. 그래서 “고쳤다”고 착각하기 쉬웠다.</li>
-    </ul>
-  </li>
-  <li>그 뒤로 지키는 것
-    <ul>
-      <li>“부가 기능이라 실패해도 괜찮다”는 <code class="language-plaintext highlighter-rouge">catch</code>라도 <strong>로그는 남긴다.</strong> 화면을 안 깨뜨리는 것과 실패를 숨기는 건 다르다.</li>
       <li>외부 응답을 받는 클래스는 이름이 같아 보여도 <strong><code class="language-plaintext highlighter-rouge">@JsonProperty</code>로 명시한다.</strong></li>
-      <li>증상을 고친 뒤엔 <strong>원래 재현 조건으로 다시</strong> 확인한다. 줄었다고 사라진 건 아니다.</li>
+      <li>서버에만 있는 파일(키, 업로드)은 배포 도구의 삭제 대상에서 <strong>명시적으로 뺀다.</strong></li>
+      <li>시간대는 우연에 맡기지 않는다. DB, JDBC 설정, 코드(cron)에 <strong>같은 시간대를 명시한다.</strong></li>
+      <li>응답은 요청 VO가 아니라 <strong>저장된 행</strong>으로 만든다.</li>
+      <li>권한을 좁힐 때는 그 API를 부르는 곳을 먼저 찾는다.</li>
     </ul>
   </li>
 </ul>
@@ -549,9 +561,11 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 
 <p><a href="https://github.com/FasterXML/jackson-databind/wiki/Mapper-Features">https://github.com/FasterXML/jackson-databind/wiki/Mapper-Features</a></p>
 
-<p><a href="https://developer.apple.com/documentation/swiftui/asyncimage">https://developer.apple.com/documentation/swiftui/asyncimage</a></p>
+<p><a href="https://download.samba.org/pub/rsync/rsync.1#opt--delete">https://download.samba.org/pub/rsync/rsync.1#opt--delete</a></p>
 
-<p><a href="https://developer.apple.com/documentation/foundation/urlcache">https://developer.apple.com/documentation/foundation/urlcache</a></p>
+<p><a href="https://dev.mysql.com/doc/connector-j/en/connector-j-time-instants.html">https://dev.mysql.com/doc/connector-j/en/connector-j-time-instants.html</a></p>
+
+<p><a href="https://mybatis.org/mybatis-3/sqlmap-xml.html#insert-update-and-delete">https://mybatis.org/mybatis-3/sqlmap-xml.html#insert-update-and-delete</a></p>
 
     <br />
     <br />
@@ -565,7 +579,7 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=우린 - 에러 없이 실패하는 버그들 (진짜 원인을 찾기까지)&amp;url=http://localhost:4000/project/2026/11/23/Woorin-Silent-Failures/"
+    <a href="http://twitter.com/share?text=우린 - 에러 없이 실패하는 서버 버그들 (진짜 원인을 찾기까지)&amp;url=http://localhost:4000/project/2026/11/23/Woorin-Silent-Failures/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
@@ -617,7 +631,7 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 
 <li class="h4">
   <a href="/project/2026/11/23/Woorin-FCM-Push/" data-flip="title">
-    <span>우린 - 알림이 두 번 오고, 안 오고, 안 사라지고 (FCM 푸시)</span>
+    <span>우린 - 푸시 알림 서버 (중복 알림, 느려진 전송, 보고 있는데 오는 알림)</span>
   </a>
   <small><time datetime="2026-11-23T00:00:00+09:00">
     23 Nov 2026
@@ -633,7 +647,7 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 
 <li class="h4">
   <a href="/project/2026/11/23/Woorin-Chat-WebSocket-Resync/" data-flip="title">
-    <span>우린 - 소켓은 열려 있는데 메시지가 안 온다 (웹소켓 재연결과 재동기화)</span>
+    <span>우린 - 채팅 웹소켓 서버 (방 관리, 동시 전송, 끊긴 세션, 놓친 메시지)</span>
   </a>
   <small><time datetime="2026-11-23T00:00:00+09:00">
     23 Nov 2026
@@ -1570,8 +1584,6 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
       <p>일을 벌여놔야 주워 담을 수 있습니다.</p>
 
       
-        <p class="sidebar-visits">누적 방문 <span data-gc-total>-</span></p>
-      
       
       
         <div class="sidebar-social">
@@ -1648,42 +1660,28 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 
 <script>
   (function () {
-    var base = 'https://taewoocode.goatcounter.com';
-
-    // Pages are swapped in by push-state, so count and fill counters manually on every page.
+    /* GoatCounter only records visits for the dashboard. The numbers on the page come from busuanzi below.
+       Pages are swapped in by push-state, so count manually on every page.
+       Use block comments only: compress_html joins this script into one line, so a // comment would swallow the rest. */
     window.goatcounter = { no_onload: true };
-
-    function fill(el, path) {
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', base + '/counter/' + encodeURIComponent(path) + '.json');
-      xhr.onload = function () {
-        var count = '0';
-        try { if (xhr.status === 200) count = JSON.parse(xhr.responseText).count; } catch (e) {}
-        el.textContent = count;
-      };
-      xhr.send();
-    }
 
     function onPage() {
       if (window.goatcounter.count) window.goatcounter.count({ path: location.pathname });
-      var views = document.querySelectorAll('[data-gc-views]');
-      for (var i = 0; i < views.length; i++) fill(views[i], location.pathname);
     }
 
     var script = document.createElement('script');
     script.async = true;
     script.src = '//gc.zgo.at/count.js';
-    script.setAttribute('data-goatcounter', base + '/count');
+    script.setAttribute('data-goatcounter', 'https://taewoocode.goatcounter.com/count');
     script.onload = onPage;
     document.head.appendChild(script);
-
-    var total = document.querySelector('[data-gc-total]');
-    if (total) fill(total, 'TOTAL');
 
     var pushState = document.getElementById('_yPushState');
     if (pushState) pushState.addEventListener('y-push-state-after', onPage);
   })();
 </script>
+
+
 
 
 

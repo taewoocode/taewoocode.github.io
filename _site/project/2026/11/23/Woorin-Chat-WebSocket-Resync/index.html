@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="우린 - 소켓은 열려 있는데 메시지가 안 온다 (웹소켓 재연결과 재동기화)" />
+<meta property="og:title" content="우린 - 채팅 웹소켓 서버 (방 관리, 동시 전송, 끊긴 세션, 놓친 메시지)" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,7 +52,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>우린 - 소켓은 열려 있는데 메시지가 안 온다 (웹소켓 재연결과 재동기화) &middot; 일벌리는 개발자</title>
+<title>우린 - 채팅 웹소켓 서버 (방 관리, 동시 전송, 끊긴 세션, 놓친 메시지) &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
@@ -187,7 +187,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
   <header>
     <h1 class="post-title">
       
-      우린 - 소켓은 열려 있는데 메시지가 안 온다 (웹소켓 재연결과 재동기화)
+      우린 - 채팅 웹소켓 서버 (방 관리, 동시 전송, 끊긴 세션, 놓친 메시지)
       
     </h1>
 
@@ -217,8 +217,6 @@ in <a href="/category/project/" data-flip="title">Project</a>
 
 on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 
-      
-      <span class="post-views">· 조회수 <span data-gc-views>-</span></span>
       
     </p>
 
@@ -273,257 +271,213 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
     <h2 id="개요">개요</h2>
 
 <ul>
-  <li>우린 채팅을 쓰다 보면 이런 일이 있었다.
+  <li>우린 채팅의 실시간 전송은 Spring의 <code class="language-plaintext highlighter-rouge">TextWebSocketHandler</code> 하나로 돌아간다.</li>
+  <li>처음엔 단순했다. 커플별로 연결된 세션을 모아 두고, 메시지가 저장되면 그 세션들에 뿌린다.</li>
+  <li>그런데 쓰다 보니, 그리고 <a href="/project/2026/11/23/Woorin-Chat-Load-Test/">부하 테스트</a>를 하다 보니 서버 쪽에서 네 가지 문제가 나왔다.
     <ul>
-      <li>상대가 보낸 메시지의 <strong>푸시 알림은 왔는데</strong>, 채팅 화면을 열어 보면 그 메시지가 없다.</li>
-      <li>채팅방을 나갔다 들어오거나 앱을 껐다 켜야 보인다.</li>
-    </ul>
-  </li>
-  <li>처음엔 서버가 메시지를 늦게 보내는 줄 알았다. 그런데 푸시는 제때 왔으니 서버는 정상이다.</li>
-  <li>문제는 <strong>웹소켓이 끊긴 걸 앱이 모르고 있던 것</strong>, 그리고 다시 붙어도 <strong>끊긴 동안의 메시지를 채우지 않은 것</strong>이었다.</li>
-  <li>고치다 보니 같은 뿌리의 문제가 둘 더 나왔다.
-    <ul>
-      <li>상대가 입력을 멈췄는데 “입력 중(…)”이 계속 떠 있다.</li>
-      <li>상대가 읽었는데 “1”이 안 사라진다.</li>
+      <li>세션 <strong>하나</strong>에서 전송이 실패하면 같은 방의 <strong>상대도</strong> 못 받았다.</li>
+      <li>둘이 거의 동시에 보내면 전송 자체가 <strong>예외로 깨졌다.</strong></li>
+      <li>조용히 끊긴 연결은 서버도 <strong>끊긴 줄 모른다.</strong></li>
+      <li>끊겨 있던 동안의 메시지는 웹소켓으로는 <strong>다시 오지 않는다.</strong></li>
     </ul>
   </li>
 </ul>
 
-<h2 id="구조">구조</h2>
+<h2 id="구조-보내기는-rest-받기는-웹소켓">구조: 보내기는 REST, 받기는 웹소켓</h2>
 
 <ul>
-  <li>보내기는 REST, 받기는 웹소켓이다.
+  <li>앱이 메시지를 보낼 때는 웹소켓이 아니라 <strong>REST</strong>(<code class="language-plaintext highlighter-rouge">POST /api/chat/messages</code>)를 쓴다.</li>
+  <li>웹소켓은 서버 → 앱 방향으로 <strong>결과를 알려주는 용도</strong>다.
     <ul>
-      <li>앱은 커플 방(<code class="language-plaintext highlighter-rouge">/ws/chat?coupleId=N</code>)에 소켓을 붙여 두고 <code class="language-plaintext highlighter-rouge">MESSAGE</code>, <code class="language-plaintext highlighter-rouge">READ</code>, <code class="language-plaintext highlighter-rouge">TYPING</code> 이벤트를 받는다.</li>
-      <li>푸시(FCM)는 소켓과 <strong>별개의 경로</strong>다. 그래서 소켓이 죽어 있어도 푸시는 온다.</li>
+      <li><code class="language-plaintext highlighter-rouge">MESSAGE</code>(새 메시지), <code class="language-plaintext highlighter-rouge">READ</code>(읽음), <code class="language-plaintext highlighter-rouge">REACTION</code>(반응), <code class="language-plaintext highlighter-rouge">WOORIN_LOG</code>(우린로그 올림/삭제)</li>
+    </ul>
+  </li>
+  <li>앱이 웹소켓으로 보내는 건 “입력 중(<code class="language-plaintext highlighter-rouge">TYPING</code>)” 하나뿐이다. REST로 보내기엔 너무 잦고 가볍기 때문이다.</li>
+  <li>왜 보내기를 REST로 했나?
+    <ul>
+      <li>인증, 입력 검증, 에러 응답, <a href="/project/2026/11/23/Woorin-Chat-Idempotency/">재전송 중복 방지</a>를 이미 있는 REST 구조 그대로 쓸 수 있다.</li>
+      <li>웹소켓으로 받으면 이걸 다 소켓 메시지 위에서 다시 만들어야 한다.</li>
+      <li>저장이 성공했는지를 앱이 <strong>응답 코드로</strong> 바로 안다.</li>
     </ul>
   </li>
 </ul>
 
-<h2 id="0-처음엔-재연결-자체가-없었다">0. 처음엔 재연결 자체가 없었다</h2>
+<h3 id="커플--방">커플 = 방</h3>
 
 <ul>
-  <li>채팅을 만든 다음 날(9/13) 먼저 부딪힌 건 <strong>서버 쪽에서 끊기는</strong> 경우였다.
-    <ul>
-      <li>개발 중이라 서버가 devtools로 자동 재시작되거나, 당시 쓰던 ngrok 터널이 잠깐 끊기면 소켓이 죽었다.</li>
-      <li>재연결 로직이 없어서, 앱을 <strong>완전히 껐다 켜야</strong> 실시간 수신이 돌아왔다.</li>
-      <li>화면에 다시 들어와도 소용없었다. 같은 커플이면 <code class="language-plaintext highlighter-rouge">connect()</code>를 다시 부르지 않게 막아 뒀기 때문이다.</li>
-    </ul>
-  </li>
-  <li>그래서 <code class="language-plaintext highlighter-rouge">receive()</code>가 실패하면 3초 뒤 소켓 스스로 다시 붙게 했다.</li>
-  <li>이건 서버가 연결을 <strong>닫아 줄 때</strong>만 동작한다. 아래 원인 1은 닫아 주지도 않고 사라지는 경우다.</li>
+  <li>커플은 항상 두 명뿐이라, 채팅방 테이블을 따로 두지 않고 <code class="language-plaintext highlighter-rouge">COUPLE_ID</code>를 그대로 방으로 쓴다.</li>
+  <li>서버는 메모리에 “커플 → 그 커플에 연결된 세션들”을 들고 있다.</li>
 </ul>
 
-<h2 id="원인-1-끊겼는데-끊긴-줄-모른다">원인 1. 끊겼는데 끊긴 줄 모른다</h2>
+<p><img src="/assets/img/projects/woorin/ws/img_3.png" alt="img.png" /></p>
 
 <ul>
-  <li>셀룰러망이나 공유기(NAT)는 한동안 아무것도 안 오가는 연결을 <strong>양쪽에 알리지 않고</strong> 정리해 버리는 경우가 많다.
-    <ul>
-      <li>연결을 끊을 때 보내는 신호(FIN)가 없으니, 앱의 소켓은 여전히 “열림” 상태다.</li>
-      <li><code class="language-plaintext highlighter-rouge">receive()</code>는 에러 없이 다음 메시지를 기다리기만 한다. 다음 메시지는 오지 않는다.</li>
-    </ul>
-  </li>
-  <li>이른바 반쯤 열린(half-open) 연결이다. 무언가를 <strong>보내 봐야</strong> 끊긴 걸 알 수 있다.</li>
-  <li>그래서 25초마다 ping을 보낸다. 실패하면 3초 뒤에 다시 붙는다. (9/14)
-    <ul>
-      <li>첫 재연결 로직을 넣은 지 하루 만이다. <code class="language-plaintext highlighter-rouge">receive()</code> 실패만 기다려서는 이 경우를 못 잡았다.</li>
-    </ul>
-  </li>
+  <li>한 커플에 세션이 둘보다 많을 수 있다. 한 사람이 폰과 다른 기기로 동시에 붙거나, 재연결하면서 잠깐 옛 세션과 새 세션이 겹칠 때다.</li>
+  <li>세션은 핸드셰이크에서 검증된 <code class="language-plaintext highlighter-rouge">coupleId</code>로만 방에 들어간다. (<a href="/project/2026/11/23/Woorin-WebSocket-Auth/">웹소켓 인증</a>)</li>
 </ul>
 
-<p><img src="/assets/img/projects/woorin/resync/img_1.png" alt="img.png" /></p>
+<h2 id="1-세션-하나가-실패하면-상대도-못-받았다">1. 세션 하나가 실패하면 상대도 못 받았다</h2>
 
 <ul>
-  <li>ping 실패와 <code class="language-plaintext highlighter-rouge">receive()</code> 실패가 거의 동시에 나면 재연결이 두 번 걸린다. <code class="language-plaintext highlighter-rouge">isReconnecting</code> 플래그로 한 번만 예약되게 막았다.</li>
+  <li>처음 <code class="language-plaintext highlighter-rouge">broadcast</code>는 이랬다.</li>
 </ul>
 
-<h2 id="원인-2-다시-붙어도-놓친-메시지는-안-온다">원인 2. 다시 붙어도 놓친 메시지는 안 온다</h2>
+<p><img src="/assets/img/projects/woorin/ws/img_1.png" alt="img.png" /></p>
 
 <ul>
-  <li>ping을 넣고 나서도 “나갔다 들어와야 보이는” 일이 남았다.</li>
-  <li>소켓은 <strong>지금 이 순간</strong> 일어나는 일만 전해 준다. 끊겨 있던 동안 서버가 뿌린 메시지는 다시 붙어도 돌아오지 않는다.</li>
-  <li>게다가 iOS는 앱이 백그라운드로 가면 소켓을 오래 살려 두지 않는다. 앱으로 돌아오는 순간이 가장 많이 놓치는 순간이다.</li>
-  <li>그래서 원칙을 하나 세웠다. <strong>소켓은 “새 소식이 있다”를 빨리 알려주는 용도, 진짜 목록은 REST.</strong>
+  <li><code class="language-plaintext highlighter-rouge">try</code>가 <strong>반복문 바깥</strong>에 있다.
     <ul>
-      <li>다시 붙을 때마다 REST로 최근 메시지를 다시 받아 채운다.</li>
-      <li>다시 붙는 시점은 세 가지다.</li>
+      <li>방에 세션이 둘(나, 상대) 있을 때, 내 세션이 먼저 돌았는데 내 연결이 막 끊긴 상태라 <code class="language-plaintext highlighter-rouge">sendMessage</code>가 예외를 던지면</li>
+      <li>반복문이 거기서 끝나고 <strong>상대 세션에는 보내지도 않는다.</strong></li>
     </ul>
   </li>
-</ul>
-
-<p><img src="/assets/img/projects/woorin/resync/img_3.png" alt="img.png" /></p>
-
-<p><img src="/assets/img/projects/woorin/resync/img_2.png" alt="img.png" /></p>
-
-<ul>
-  <li>최초 연결 때는 <code class="language-plaintext highlighter-rouge">onReconnect</code>를 부르지 않는다. 처음 화면을 열 때 이미 히스토리를 받아오니까 중복이다.</li>
-  <li>REST로 받은 목록과 소켓으로 받은 메시지가 겹칠 수 있는데, 이건 <a href="/project/2026/11/23/Woorin-Chat-Idempotency/">clientMessageId 글</a>에서 만든 짝짓기로 걸러진다.</li>
-</ul>
-
-<h2 id="원인-3-끄기-신호를-놓치면-영원히-켜져-있다">원인 3. “끄기” 신호를 놓치면 영원히 켜져 있다</h2>
-
-<ul>
-  <li>“입력 중(…)”은 이렇게 동작했다.
+  <li>메시지 저장은 성공했고, 에러 로그도 남는다. 그런데 상대 화면에는 메시지가 안 뜬다.
     <ul>
-      <li>입력을 시작하면 <code class="language-plaintext highlighter-rouge">TYPING isTyping=true</code>, 3초간 입력이 없으면 <code class="language-plaintext highlighter-rouge">isTyping=false</code>를 보낸다.</li>
-      <li>받는 쪽은 <code class="language-plaintext highlighter-rouge">false</code>가 올 때까지 …을 보여준다.</li>
+      <li>로그만 보면 “보낸 사람 쪽 연결이 끊겼다”로 읽혀서, 상대가 못 받았다는 게 바로 드러나지 않는다.</li>
     </ul>
   </li>
-  <li>문제는 <code class="language-plaintext highlighter-rouge">false</code>가 <strong>안 오는</strong> 경우다.
-    <ul>
-      <li>상대가 입력하다가 앱을 나가거나, 네트워크가 끊기거나, 내 소켓이 재연결하는 사이에 신호가 지나가면</li>
-      <li>…이 다음에 상대가 입력할 때까지 계속 떠 있다.</li>
-    </ul>
-  </li>
-  <li>켜기/끄기 신호 쌍에 의존하는 대신, <strong>유효기간이 있는 상태</strong>로 바꿨다.</li>
+  <li>세션마다 따로 처리하도록 바꿨다.</li>
 </ul>
 
-<p><img src="/assets/img/projects/woorin/resync/img_4.png" alt="img.png" /></p>
+<p><img src="/assets/img/projects/woorin/ws/img_2.png" alt="img.png" /></p>
 
 <ul>
-  <li>보내는 쪽은 계속 입력 중이면 <strong>3초마다 “켜기”를 다시 보낸다.</strong> 만료(6초)보다 짧아서 길게 써도 중간에 꺼지지 않는다.</li>
-  <li>그 밖에 바로 끄는 경우
+  <li>JSON 변환은 세션과 상관없으니 반복문 <strong>밖</strong>에서 한 번만 하고, 실패하면 그때는 아무에게도 안 보낸다.</li>
+  <li>전송은 세션마다 <code class="language-plaintext highlighter-rouge">try</code>를 따로 걸어서, 한 세션의 실패가 다른 세션에 번지지 않게 했다.</li>
+</ul>
+
+<h2 id="2-둘이-동시에-보내면-전송이-깨졌다">2. 둘이 동시에 보내면 전송이 깨졌다</h2>
+
+<ul>
+  <li>부하 테스트에서 이런 예외가 나왔다.</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>java.lang.IllegalStateException: The remote endpoint was in state [TEXT_PARTIAL_WRITING]
+which is an invalid state for called method
+</code></pre></div></div>
+
+<ul>
+  <li>원인은 <code class="language-plaintext highlighter-rouge">WebSocketSession.sendMessage</code>가 <strong>스레드 안전하지 않은 것</strong>이다.
     <ul>
-      <li>상대 메시지가 도착했을 때, 내 소켓이 재연결될 때 → 받는 쪽에서 끈다.</li>
-      <li>채팅 화면을 벗어나거나 앱이 백그라운드로 갈 때 → 보내는 쪽이 소켓이 끊기기 전에 “끄기”를 보낸다.</li>
+      <li>메시지 전송은 REST 요청이라, 요청마다 다른 톰캣 스레드에서 <code class="language-plaintext highlighter-rouge">broadcast</code>가 돈다.</li>
+      <li>커플 두 사람이 거의 동시에 보내면, 두 스레드가 <strong>같은 세션에 동시에</strong> 쓰려고 한다. 한쪽이 쓰는 중에 다른 쪽이 끼어들면 위 예외가 난다.</li>
+      <li>새 메시지와 읽음 이벤트가 겹쳐도 똑같다. 둘이 쓸 땐 동시에 보낼 일이 드물어서 몰랐다.</li>
+    </ul>
+  </li>
+  <li>Spring이 제공하는 <code class="language-plaintext highlighter-rouge">ConcurrentWebSocketSessionDecorator</code>로 세션을 감쌌다.</li>
+</ul>
+
+<p><img src="/assets/img/projects/woorin/ws/img_3.png" alt="img.png" /></p>
+
+<ul>
+  <li>데코레이터는 같은 세션으로 가는 전송을 <strong>줄 세워서</strong> 한 번에 하나씩 보낸다. 다른 스레드가 쓰는 중이면 버퍼에 넣고 돌아간다.</li>
+  <li>두 가지 한도를 줬다.
+    <ul>
+      <li><strong>5초</strong> 넘게 한 세션의 전송이 밀리거나, <strong>512KB</strong> 넘게 쌓이면 그 세션만 끊는다.</li>
+      <li>느린(또는 반쯤 죽은) 클라이언트 하나 때문에 요청 스레드가 붙잡혀 있지 않게 하려는 것이다.</li>
+    </ul>
+  </li>
+  <li>방 안의 세션 저장 방식도 같이 바꿨다.
+    <ul>
+      <li>예전엔 <code class="language-plaintext highlighter-rouge">Set&lt;WebSocketSession&gt;</code>에 세션을 그대로 넣었다.</li>
+      <li>이제 방에 넣는 건 <strong>데코레이터로 감싼 세션</strong>인데, 연결이 끊길 때 Spring이 넘겨주는 건 <strong>원래 세션</strong>이다. 둘은 서로 다른 객체라 <code class="language-plaintext highlighter-rouge">Set</code>에서 지울 수가 없다.</li>
+      <li>그래서 세션 ID를 키로 하는 <code class="language-plaintext highlighter-rouge">Map</code>으로 바꿨다. 감싼 세션이든 원래 세션이든 ID는 같다.</li>
     </ul>
   </li>
 </ul>
 
-<h2 id="원인-4-이벤트는-왔는데-화면이-안-바뀐다">원인 4. 이벤트는 왔는데 화면이 안 바뀐다</h2>
+<p><img src="/assets/img/projects/woorin/ws/img_4.png" alt="img.png" /></p>
 
-<p><img src="/assets/img/projects/woorin/resync/app_1.png" alt="img.png" /></p>
+<h2 id="3-끊긴-세션은-서버도-모른다">3. 끊긴 세션은 서버도 모른다</h2>
 
 <ul>
-  <li>내가 보낸 메시지 옆의 “1”은 상대가 아직 안 읽었다는 표시다. 상대가 읽으면 <code class="language-plaintext highlighter-rouge">READ</code> 이벤트가 와서 사라져야 한다.</li>
-  <li>읽음 “1”이 안 사라지는 문제도 소켓을 의심했는데, 이번엔 소켓이 아니었다.
+  <li>모바일 셀룰러망이나 공유기(NAT)는 한동안 아무것도 안 오가는 연결을 <strong>양쪽에 알리지 않고</strong> 정리해 버리는 경우가 많다.
     <ul>
-      <li><code class="language-plaintext highlighter-rouge">READ</code> 이벤트는 잘 왔고, 메시지의 <code class="language-plaintext highlighter-rouge">isRead</code>도 <code class="language-plaintext highlighter-rouge">true</code>로 바뀌어 있었다.</li>
+      <li>연결을 끊을 때 보내는 신호가 없으니, 서버 입장에서 그 세션은 여전히 “열림”이다.</li>
+      <li><code class="language-plaintext highlighter-rouge">afterConnectionClosed</code>가 불리지 않으니 방에서도 안 빠진다. 서버는 계속 그 세션에 메시지를 보낸다.</li>
     </ul>
   </li>
-  <li>원인은 직전에 넣은 <strong>목록 최적화</strong>였다.
+  <li>이 상태에서 서버가 할 수 있는 건 <strong>잘못 보내도 피해가 번지지 않게</strong> 하는 것이다.
     <ul>
-      <li>그 전날 밤(9/25 23:00~9/26 05:30) 채팅 화면의 <strong>키보드 문제</strong>와 씨름했다. 키보드를 열면 보던 메시지가 가려지거나 밀려나는 문제다.</li>
-      <li>그 6시간 반 동안 커밋이 10개 넘게 쌓였다. 수정 → Revert → 재시도 → “마지막으로 확실히 동작하던 상태로 롤백” → 다시 시도.</li>
-      <li>결국 05:30에 메시지 목록을 SwiftUI <code class="language-plaintext highlighter-rouge">ScrollView</code>에서 UIKit <code class="language-plaintext highlighter-rouge">UICollectionView</code>로 <strong>통째로 바꿨다.</strong> 스크롤 위치를 SwiftUI로는 정확히 잴 수 없었기 때문이다. (+337줄 / -135줄)</li>
-      <li>이 전환에 같이 들어간 게 아래 최적화다. 읽음 “1” 회귀는 그로부터 <strong>8시간 뒤</strong>(13:22)에 고쳤다.</li>
-      <li>채팅 목록은 diffable data source로 그린다. 스크롤 성능을 위해 “행 구성(rows)이 그대로면 apply를 건너뛰기”를 넣었다.</li>
-      <li>그런데 행은 <code class="language-plaintext highlighter-rouge">(메시지 id, 헤더 표시 여부)</code>만 담고 있어서, <strong><code class="language-plaintext highlighter-rouge">isRead</code>만 바뀌면 rows는 그대로</strong>다. 그래서 갱신 자체를 건너뛰었다.</li>
-      <li>같은 스냅샷으로 apply를 다시 불러도 소용없다. diffable은 식별자가 같은 항목은 다시 그리지 않는다.</li>
+      <li>1번처럼 세션마다 따로 보내니, 죽은 세션이 있어도 살아 있는 상대는 받는다.</li>
+      <li>2번의 한도 덕분에, 죽은 세션으로 가는 전송이 계속 밀리면 그 세션은 끊기고 방에서 빠진다.</li>
     </ul>
   </li>
-  <li>이전 상태와 비교해 <code class="language-plaintext highlighter-rouge">isRead</code>가 바뀐 메시지만 골라 <code class="language-plaintext highlighter-rouge">reconfigureItems</code>로 그 셀만 다시 그리게 했다.</li>
+  <li>죽은 연결을 <strong>알아채는</strong> 건 앱 쪽이 맡는다. 앱은 25초마다 ping을 보내고, 실패하면 새로 연결한다.</li>
 </ul>
 
-<p><img src="/assets/img/projects/woorin/resync/img_5.png" alt="img.png" /></p>
-
-<p><img src="/assets/img/projects/woorin/resync/img_6.png" alt="img.png" /></p>
-
-<h2 id="반대-방향-버그-안-봤는데-읽음-처리">반대 방향 버그: 안 봤는데 읽음 처리</h2>
+<h2 id="4-놓친-메시지는-rest가-책임진다">4. 놓친 메시지는 REST가 책임진다</h2>
 
 <ul>
-  <li>읽음은 “안 사라지는” 문제 전에 “너무 빨리 생기는” 문제도 있었다. (9/13)</li>
-  <li>탭 화면(<code class="language-plaintext highlighter-rouge">TabView</code>)은 채팅 탭을 안 보고 있어도 채팅 화면과 소켓을 살려 둔다.
+  <li>웹소켓은 <strong>지금 이 순간</strong> 일어난 일만 전해 준다.
     <ul>
-      <li>그런데 메시지가 소켓으로 도착하기만 하면 무조건 읽음 처리를 보내고 있었다. 홈 탭에 있어도 상대 화면에선 “1”이 바로 사라졌다.</li>
+      <li>앱이 백그라운드에 있거나 연결이 끊겨 있던 동안 서버가 뿌린 메시지는, 다시 연결해도 돌아오지 않는다.</li>
+      <li>서버는 세션별로 “어디까지 받았는지”를 기억하지 않는다. 기억하게 만들 수도 있지만, 그러면 메시지 큐를 하나 만드는 셈이다.</li>
     </ul>
   </li>
-  <li>앱이 포그라운드이고 채팅 탭이 실제로 보일 때만 읽음 처리하도록 <code class="language-plaintext highlighter-rouge">isViewingChat</code>으로 구분했다.
+  <li>그래서 원칙을 세웠다. <strong>웹소켓은 “새 소식이 있다”를 빨리 알려주는 용도, 진짜 목록은 REST.</strong>
     <ul>
-      <li>위 <code class="language-plaintext highlighter-rouge">resync()</code>도 이 값으로 “다시 나타났을 때”를 판단한다.</li>
+      <li>앱은 다시 연결할 때마다, 그리고 앱으로 돌아올 때마다 REST로 최근 메시지를 다시 받는다.</li>
+      <li>서버는 “최근 N건”과 “이 메시지보다 오래된 N건”을 주는 페이징 API만 잘 만들어 두면 된다.</li>
     </ul>
   </li>
 </ul>
 
-<h2 id="커밋으로-본-흐름">커밋으로 본 흐름</h2>
-
-<table>
-  <thead>
-    <tr>
-      <th>날짜</th>
-      <th>어디</th>
-      <th>커밋</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>9/13 03:44</td>
-      <td>iOS</td>
-      <td>소켓 끊기면 3초 뒤 자동 재연결</td>
-    </tr>
-    <tr>
-      <td>9/13 18:11</td>
-      <td>iOS</td>
-      <td>다른 탭에 있을 때 잘못 읽음 처리되던 버그 수정 (<code class="language-plaintext highlighter-rouge">isViewingChat</code>)</td>
-    </tr>
-    <tr>
-      <td>9/14 21:26</td>
-      <td>iOS</td>
-      <td>25초 ping으로 조용히 끊긴 연결 감지</td>
-    </tr>
-    <tr>
-      <td>9/17 23:24</td>
-      <td>iOS</td>
-      <td>포그라운드 복귀/탭 재진입/재연결 때 REST로 재동기화</td>
-    </tr>
-    <tr>
-      <td>9/19 23:39</td>
-      <td>서버+iOS</td>
-      <td>입력 중(TYPING) 이벤트 중계, 입력 중 표시</td>
-    </tr>
-    <tr>
-      <td>9/26 05:30</td>
-      <td>iOS</td>
-      <td>키보드 문제 끝에 메시지 목록을 <code class="language-plaintext highlighter-rouge">UICollectionView</code>로 전환</td>
-    </tr>
-    <tr>
-      <td>9/26 13:22</td>
-      <td>iOS</td>
-      <td>읽음 “1” 안 사라지던 회귀 수정 (<code class="language-plaintext highlighter-rouge">reconfigureItems</code>)</td>
-    </tr>
-    <tr>
-      <td>10/1 02:20</td>
-      <td>iOS</td>
-      <td>입력 중 표시에 6초 만료, 3초마다 재전송</td>
-    </tr>
-    <tr>
-      <td>10/1 02:38</td>
-      <td>iOS</td>
-      <td>입력 중 표시가 뜨면 맨 아래로 스크롤</td>
-    </tr>
-    <tr>
-      <td>10/12 23:31</td>
-      <td>Android</td>
-      <td>채팅 화면/실시간 통신 포팅</td>
-    </tr>
-    <tr>
-      <td>10/18 22:10</td>
-      <td>서버</td>
-      <td>우린로그 올림/삭제도 커플 웹소켓으로 알림</td>
-    </tr>
-  </tbody>
-</table>
+<p><img src="/assets/img/projects/woorin/ws/img_5.png" alt="img.png" /></p>
 
 <ul>
-  <li>채팅 소켓은 이제 채팅 전용이 아니다. 10/18부터 우린로그 이벤트도 같은 커플 채널로 받는다. <strong>“커플 둘만의 실시간 채널”</strong> 이 된 셈이다.</li>
+  <li>커서는 시간이 아니라 <strong><code class="language-plaintext highlighter-rouge">MESSAGE_ID</code></strong>로 잡았다. (<code class="language-plaintext highlighter-rouge">WHERE MESSAGE_ID &lt; ? ORDER BY MESSAGE_ID DESC LIMIT ?</code>)
+    <ul>
+      <li>AUTO_INCREMENT라 계속 커지고 겹치지 않는다. 같은 초에 온 메시지 두 개도 순서가 정확하다.</li>
+      <li>인덱스도 그 순서에 맞춰 <code class="language-plaintext highlighter-rouge">(COUPLE_ID, MESSAGE_ID)</code>로 걸었다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/assets/img/projects/woorin/ws/img_6.png" alt="img.png" /></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">limit</code>을 안 보내는 예전 버전 앱에는 예전처럼 전체 목록을 준다. 페이징을 모르는 앱이 첫 페이지만 받고 나머지를 잃지 않게 하기 위해서다.</li>
+  <li>이 페이징 쿼리가 대화가 쌓이면 느려졌던 이야기는 <a href="/project/2026/11/23/Woorin-Chat-Load-Test/">부하 테스트 글</a>에 정리했다.</li>
+  <li>REST로 받은 목록과 웹소켓으로 받은 메시지가 겹칠 수 있는데, 앱이 <code class="language-plaintext highlighter-rouge">message_id</code>와 <a href="/project/2026/11/23/Woorin-Chat-Idempotency/"><code class="language-plaintext highlighter-rouge">clientMessageId</code></a>로 거른다.</li>
+</ul>
+
+<h2 id="5-입력-중은-저장하지-않는다">5. “입력 중”은 저장하지 않는다</h2>
+
+<ul>
+  <li>앱이 웹소켓으로 보내는 유일한 메시지가 <code class="language-plaintext highlighter-rouge">TYPING</code>이다. 서버는 이걸 <strong>저장하지 않고 같은 방에 그대로 중계</strong>만 한다.
+    <ul>
+      <li>저장할 이유가 없는 순간적인 상태라서다. DB를 거치지 않으니 가볍다.</li>
+    </ul>
+  </li>
+  <li>중계하기 전에 <code class="language-plaintext highlighter-rouge">userId</code>, <code class="language-plaintext highlighter-rouge">coupleId</code>는 핸드셰이크에서 검증된 값으로 덮어쓴다. 남인 척 “입력 중”을 띄우지 못하게 하기 위해서다. (<a href="/project/2026/11/23/Woorin-WebSocket-Auth/">웹소켓 인증</a>)</li>
+  <li>“입력 중 끄기” 신호가 유실되는 경우(상대가 입력하다 앱을 닫는 등)는 앱이 받은 지 6초가 지나면 저절로 끄는 식으로 처리한다. 서버는 끄기 신호를 보장하지 않는다.</li>
+</ul>
+
+<h2 id="서버를-여러-대로-늘린다면">서버를 여러 대로 늘린다면</h2>
+
+<ul>
+  <li>방 목록(<code class="language-plaintext highlighter-rouge">rooms</code>)이 <strong>서버 메모리</strong>에 있다.</li>
+  <li>커플 두 사람이 서로 다른 서버에 붙으면, A 서버의 방에는 B 서버에 붙은 상대가 없다. 실시간 메시지가 상대에게 안 간다.</li>
+  <li>메시지를 저장한 서버가 Redis Pub/Sub 같은 곳에 “커플 N에 메시지”를 발행하고, 모든 서버가 구독해서 자기한테 붙은 세션에만 보내는 구조가 필요하다. 이 부분은 <a href="/project/2026/11/23/Woorin-Chat-Load-Test/">부하 테스트 글</a>의 “서버를 늘리려면 바꿔야 하는 것”에 정리했다.</li>
 </ul>
 
 <h2 id="정리">정리</h2>
 
 <ul>
-  <li>모바일에서 소켓은 <strong>조용히 끊긴다.</strong> 끊긴 걸 알려면 보내 봐야 한다. (ping)</li>
-  <li>소켓은 놓친 걸 다시 주지 않는다. 다시 붙을 때마다 <strong>REST로 다시 맞춘다.</strong> 소켓은 빠른 알림, 진실은 REST.</li>
-  <li>켜기/끄기 쌍으로 된 상태는 끄기를 놓치면 영원히 남는다. <strong>유효기간을 두고 주기적으로 갱신</strong>하면 신호를 놓쳐도 스스로 회복한다.</li>
-  <li>“실시간이 안 된다”의 원인이 항상 실시간 쪽에 있는 건 아니다. 읽음 표시는 화면 갱신 최적화가 원인이었다.</li>
+  <li>방송(broadcast)은 <strong>세션마다 따로</strong> 보내야 한다. 하나의 실패가 같은 방 전체를 막으면 안 된다.</li>
+  <li><code class="language-plaintext highlighter-rouge">WebSocketSession.sendMessage</code>는 스레드 안전하지 않다. 여러 요청 스레드가 같은 세션에 쓸 수 있다면 <code class="language-plaintext highlighter-rouge">ConcurrentWebSocketSessionDecorator</code>로 감싼다. 한도를 줘서 느린 세션은 끊는다.</li>
+  <li>서버는 조용히 끊긴 연결을 바로 알 수 없다. 대신 죽은 세션이 있어도 피해가 번지지 않게 만든다.</li>
+  <li>웹소켓은 놓친 걸 다시 주지 않는다. <strong>웹소켓은 빠른 알림, 진실은 REST.</strong> 서버는 재동기화에 쓸 페이징 API를 잘 만들어 두면 된다.</li>
 </ul>
 
 <h2 id="reference">Reference</h2>
 
-<p><a href="https://developer.apple.com/documentation/foundation/urlsessionwebsockettask">https://developer.apple.com/documentation/foundation/urlsessionwebsockettask</a></p>
+<p><a href="https://docs.spring.io/spring-framework/reference/web/websocket/server.html">https://docs.spring.io/spring-framework/reference/web/websocket/server.html</a></p>
+
+<p><a href="https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/socket/handler/ConcurrentWebSocketSessionDecorator.html">https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/socket/handler/ConcurrentWebSocketSessionDecorator.html</a></p>
 
 <p><a href="https://datatracker.ietf.org/doc/html/rfc6455#section-5.5.2">https://datatracker.ietf.org/doc/html/rfc6455#section-5.5.2</a></p>
-
-<p><a href="https://developer.apple.com/documentation/uikit/nsdiffabledatasourcesnapshot/reconfigureitems(_:)">https://developer.apple.com/documentation/uikit/nsdiffabledatasourcesnapshot/reconfigureitems(_:)</a></p>
 
     <br />
     <br />
@@ -537,7 +491,7 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=우린 - 소켓은 열려 있는데 메시지가 안 온다 (웹소켓 재연결과 재동기화)&amp;url=http://localhost:4000/project/2026/11/23/Woorin-Chat-WebSocket-Resync/"
+    <a href="http://twitter.com/share?text=우린 - 채팅 웹소켓 서버 (방 관리, 동시 전송, 끊긴 세션, 놓친 메시지)&amp;url=http://localhost:4000/project/2026/11/23/Woorin-Chat-WebSocket-Resync/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
@@ -586,7 +540,7 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 
 <li class="h4">
   <a href="/project/2026/11/23/Woorin-Silent-Failures/" data-flip="title">
-    <span>우린 - 에러 없이 실패하는 버그들 (진짜 원인을 찾기까지)</span>
+    <span>우린 - 에러 없이 실패하는 서버 버그들 (진짜 원인을 찾기까지)</span>
   </a>
   <small><time datetime="2026-11-23T00:00:00+09:00">
     23 Nov 2026
@@ -602,7 +556,7 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 
 <li class="h4">
   <a href="/project/2026/11/23/Woorin-FCM-Push/" data-flip="title">
-    <span>우린 - 알림이 두 번 오고, 안 오고, 안 사라지고 (FCM 푸시)</span>
+    <span>우린 - 푸시 알림 서버 (중복 알림, 느려진 전송, 보고 있는데 오는 알림)</span>
   </a>
   <small><time datetime="2026-11-23T00:00:00+09:00">
     23 Nov 2026
@@ -1542,8 +1496,6 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
       <p>일을 벌여놔야 주워 담을 수 있습니다.</p>
 
       
-        <p class="sidebar-visits">누적 방문 <span data-gc-total>-</span></p>
-      
       
       
         <div class="sidebar-social">
@@ -1620,42 +1572,28 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 
 <script>
   (function () {
-    var base = 'https://taewoocode.goatcounter.com';
-
-    // Pages are swapped in by push-state, so count and fill counters manually on every page.
+    /* GoatCounter only records visits for the dashboard. The numbers on the page come from busuanzi below.
+       Pages are swapped in by push-state, so count manually on every page.
+       Use block comments only: compress_html joins this script into one line, so a // comment would swallow the rest. */
     window.goatcounter = { no_onload: true };
-
-    function fill(el, path) {
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', base + '/counter/' + encodeURIComponent(path) + '.json');
-      xhr.onload = function () {
-        var count = '0';
-        try { if (xhr.status === 200) count = JSON.parse(xhr.responseText).count; } catch (e) {}
-        el.textContent = count;
-      };
-      xhr.send();
-    }
 
     function onPage() {
       if (window.goatcounter.count) window.goatcounter.count({ path: location.pathname });
-      var views = document.querySelectorAll('[data-gc-views]');
-      for (var i = 0; i < views.length; i++) fill(views[i], location.pathname);
     }
 
     var script = document.createElement('script');
     script.async = true;
     script.src = '//gc.zgo.at/count.js';
-    script.setAttribute('data-goatcounter', base + '/count');
+    script.setAttribute('data-goatcounter', 'https://taewoocode.goatcounter.com/count');
     script.onload = onPage;
     document.head.appendChild(script);
-
-    var total = document.querySelector('[data-gc-total]');
-    if (total) fill(total, 'TOTAL');
 
     var pushState = document.getElementById('_yPushState');
     if (pushState) pushState.addEventListener('y-push-state-after', onPage);
   })();
 </script>
+
+
 
 
 

@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="우린 - 알림이 두 번 오고, 안 오고, 안 사라지고 (FCM 푸시)" />
+<meta property="og:title" content="우린 - 푸시 알림 서버 (중복 알림, 느려진 전송, 보고 있는데 오는 알림)" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,7 +52,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>우린 - 알림이 두 번 오고, 안 오고, 안 사라지고 (FCM 푸시) &middot; 일벌리는 개발자</title>
+<title>우린 - 푸시 알림 서버 (중복 알림, 느려진 전송, 보고 있는데 오는 알림) &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
@@ -187,7 +187,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
   <header>
     <h1 class="post-title">
       
-      우린 - 알림이 두 번 오고, 안 오고, 안 사라지고 (FCM 푸시)
+      우린 - 푸시 알림 서버 (중복 알림, 느려진 전송, 보고 있는데 오는 알림)
       
     </h1>
 
@@ -217,8 +217,6 @@ in <a href="/category/project/" data-flip="title">Project</a>
 
 on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 
-      
-      <span class="post-views">· 조회수 <span data-gc-views>-</span></span>
       
     </p>
 
@@ -276,32 +274,49 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 
 <ul>
   <li>왼쪽은 로그인 화면, 오른쪽은 더보기의 알림 설정이다. 알림 받기, 우린로그 촬영 알림, 진동을 따로 켜고 끌 수 있다.</li>
-  <li>우린은 채팅, 추억, 일정, 우린로그 리마인드(매시 30분 촬영 알림)를 푸시로 보낸다.</li>
-  <li>푸시는 기능을 만드는 것보다 <strong>“잘 오게” 만드는 게</strong> 더 오래 걸렸다.
+  <li>우린은 채팅, 추억, 일정, 우린로그 리마인드를 FCM(Firebase Cloud Messaging)으로 보낸다.</li>
+  <li>보내는 것 자체는 Firebase Admin SDK 몇 줄이면 된다. 서버에서 오래 걸린 건 그 주변이었다.
     <ul>
       <li>같은 알림이 <strong>두 번씩</strong> 왔다.</li>
-      <li>아이폰에서 FCM 토큰 등록이 <strong>조용히 실패</strong>하고 있었다.</li>
-      <li>채팅을 읽어도 잠금화면의 채팅 알림이 <strong>안 사라졌다.</strong></li>
-      <li>안드로이드는 무음 모드에서 알림이 <strong>조용히 쌓이기만</strong> 했다.</li>
+      <li>푸시 때문에 <strong>메시지 전송 응답이 느려졌다.</strong></li>
+      <li>채팅방을 <strong>보고 있는데도</strong> 알림이 왔다.</li>
+      <li>앱 아이콘의 <strong>안 읽은 개수</strong>를 서버가 계산해서 실어 보내야 했다.</li>
     </ul>
   </li>
-  <li>가장 오래 헤맨 건 첫 번째였다. 원인은 <strong>“토큰은 사용자가 아니라 기기의 것”</strong> 이라는 걸 놓친 데 있었다.</li>
 </ul>
 
 <h2 id="구조">구조</h2>
 
 <ul>
-  <li>앱은 실행 때 Firebase에서 받은 FCM 토큰을 서버에 올린다. (<code class="language-plaintext highlighter-rouge">PUT /api/users/{userId}/fcm-token</code>)</li>
+  <li>앱은 실행할 때 Firebase에서 받은 FCM 토큰을 서버에 올린다. (<code class="language-plaintext highlighter-rouge">PUT /api/users/{userId}/fcm-token</code>)</li>
   <li>서버는 회원 테이블의 <code class="language-plaintext highlighter-rouge">FCM_TOKEN</code> 컬럼에 저장하고, 푸시를 보낼 때 받는 사람의 토큰으로 보낸다.</li>
-  <li>회원 한 명에 토큰 하나. 단순하다.</li>
+  <li>보내는 곳은 <code class="language-plaintext highlighter-rouge">PushNotificationService</code> 한 곳이다.</li>
 </ul>
 
-<h2 id="1-알림이-두-번씩-온다">1. 알림이 두 번씩 온다</h2>
+<p><img src="/assets/img/projects/woorin/fcm/img_5.png" alt="img.png" /></p>
+
+<ul>
+  <li><strong><code class="language-plaintext highlighter-rouge">notification</code></strong>(제목, 본문)은 기기가 알림 배너로 보여준다.</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">data</code></strong>에는 알림 종류(<code class="language-plaintext highlighter-rouge">type</code>: <code class="language-plaintext highlighter-rouge">CHAT</code>, <code class="language-plaintext highlighter-rouge">MEMORY</code>, <code class="language-plaintext highlighter-rouge">CALENDAR</code> …)와 글 번호 같은 값을 싣는다.
+    <ul>
+      <li>배너에는 안 보이는 값이라, 앱이 “알림을 누르면 어느 화면으로 갈지”, “채팅을 읽으면 어떤 알림을 지울지” 판단하는 데 쓴다.</li>
+      <li>알림함 테이블(<code class="language-plaintext highlighter-rouge">TB_MASTER_NOTIFICATION</code>)에 쓰는 종류 값과 같은 문자열을 쓴다. 서버 안에서 알림 종류가 한 가지 이름으로 통한다.</li>
+    </ul>
+  </li>
+  <li><strong><code class="language-plaintext highlighter-rouge">aps</code></strong>(iOS 전용)에는 아이콘 배지 숫자와 소리를 싣는다.
+    <ul>
+      <li>iOS는 <code class="language-plaintext highlighter-rouge">aps.sound</code>가 있어야 잠금화면에서 소리·진동을 울린다. 그래서 회원별 “알림 올 때 진동” 설정이 꺼져 있으면 <code class="language-plaintext highlighter-rouge">aps.sound</code>를 <strong>아예 빼는</strong> 게 그 설정의 실제 동작이다.</li>
+    </ul>
+  </li>
+  <li>전송이 실패해도(토큰 만료, 앱 삭제 등) 예외를 밖으로 던지지 않는다. 푸시는 부가 기능이라, 푸시 실패 때문에 메시지 저장 같은 핵심 기능이 실패하면 안 된다.</li>
+</ul>
+
+<h2 id="1-같은-알림이-두-번씩-왔다">1. 같은 알림이 두 번씩 왔다</h2>
 
 <ul>
   <li>우린로그 리마인드 같은 푸시가 <strong>두 번씩</strong> 울렸다.
     <ul>
-      <li>리마인드는 10/5에 넣은 기능이다. 오늘 아직 우린로그를 안 올린 커플에게 <strong>06~23시 매시간</strong> 보낸다. 하루 최대 18번이라, 두 번씩 오면 바로 티가 났다.</li>
+      <li>리마인드는 매시 30분(06~23시)에, 그 시간에 아직 우린로그를 안 올린 사람에게 보낸다. 하루에도 여러 번 오는 알림이라 두 번씩 오면 바로 티가 났다.</li>
     </ul>
   </li>
   <li>원인은 <strong>같은 폰에서 계정을 바꿔 로그인</strong>한 것이었다.</li>
@@ -318,7 +333,7 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
   <li>FCM 토큰은 <strong>앱 설치(기기)마다</strong> 발급된다. 계정을 바꿔도 같은 폰이면 같은 토큰이다.</li>
   <li>서버는 토큰을 “회원의 속성”으로 다루고 있어서, 한 토큰이 여러 회원에게 붙는 걸 막지 않았다.
     <ul>
-      <li>로그아웃한 계정 앞으로 온 알림이 계속 이 폰으로 오는 문제도 같은 원인이다.</li>
+      <li>로그아웃한 계정 앞으로 온 알림이 계속 그 폰으로 오는 문제도 같은 원인이다.</li>
     </ul>
   </li>
 </ul>
@@ -334,44 +349,49 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 <p><img src="/assets/img/projects/woorin/fcm/img_2.png" alt="img.png" /></p>
 
 <ul>
-  <li>로그아웃할 때도 지운다. (<code class="language-plaintext highlighter-rouge">DELETE /api/users/{userId}/fcm-token</code>)
+  <li>로그아웃 API(<code class="language-plaintext highlighter-rouge">DELETE /api/users/{userId}/fcm-token</code>)도 만들었다. 앱은 로그아웃하기 직전, 인증 토큰이 아직 살아 있을 때 이걸 부른다.
     <ul>
-      <li>순서가 중요하다. 이 API도 인증이 필요하니, <strong>인증 토큰이 살아 있을 때</strong> 먼저 지우고 나서 로그아웃 상태로 바꾼다.</li>
-      <li>오프라인이라 실패해도 로그아웃은 막지 않는다. 다음에 누가 그 폰으로 로그인하면 위의 등록 로직이 정리해 준다.</li>
+      <li>오프라인이라 이 호출이 실패해도 괜찮다. 다음에 누가 그 폰으로 로그인하면 위의 등록 로직이 다른 계정의 토큰을 정리해 준다.</li>
     </ul>
   </li>
+  <li>토큰을 별도 테이블(기기 테이블)로 빼는 방법도 있다. 한 계정이 여러 기기를 쓰려면 그게 맞다. 우린은 “한 사람 = 폰 하나”라서 컬럼 하나에 “한 토큰은 한 계정에만”이라는 규칙을 더하는 쪽으로 충분했다.</li>
+</ul>
+
+<h2 id="2-푸시-때문에-메시지-전송이-느려졌다">2. 푸시 때문에 메시지 전송이 느려졌다</h2>
+
+<ul>
+  <li>채팅을 보내면 서버는 메시지를 저장하고, 상대에게 푸시를 보낸다.</li>
+  <li>처음엔 이걸 <strong>요청 스레드에서 차례로</strong> 했다.
+    <ul>
+      <li>상대 정보 조회, 보낸 사람 닉네임 조회, 안 읽은 개수 계산(배지), FCM 전송(외부 네트워크 호출), 알림함 저장</li>
+      <li>이게 다 끝나야 응답이 나가서, 보내는 사람의 “전송 완료”가 그만큼 늦게 떴다.</li>
+    </ul>
+  </li>
+  <li>푸시를 <code class="language-plaintext highlighter-rouge">@Async</code>로 별도 스레드에서 보내도록 바꿨다.</li>
 </ul>
 
 <p><img src="/assets/img/projects/woorin/fcm/img_3.png" alt="img.png" /></p>
 
-<h2 id="2-토큰-등록이-401을-받고-있었다">2. 토큰 등록이 401을 받고 있었다</h2>
-
 <ul>
-  <li>API에 인증 토큰을 도입한 직후 생긴 문제다.</li>
-  <li>다른 API는 다 되는데, FCM 토큰 등록만 <strong><code class="language-plaintext highlighter-rouge">URLSession</code>으로 직접</strong> 짜여 있었다.
+  <li>여기서 주의할 점이 있다. 메시지 서비스 안에 <code class="language-plaintext highlighter-rouge">@Async</code> 메서드를 만들어 같은 클래스에서 부르면 <strong>비동기로 돌지 않는다.</strong>
     <ul>
-      <li>공통 클라이언트(<code class="language-plaintext highlighter-rouge">APIClient</code>)를 거치지 않으니 <code class="language-plaintext highlighter-rouge">Authorization</code> 헤더가 안 실렸고, 서버는 401을 돌려줬다.</li>
-      <li>실패는 <code class="language-plaintext highlighter-rouge">print</code>로만 찍혀서 화면에는 아무 표시가 없었다.</li>
+      <li>스프링은 프록시로 <code class="language-plaintext highlighter-rouge">@Async</code>를 건다. 프록시를 거쳐서 들어온 호출만 비동기가 된다.</li>
+      <li>같은 클래스 안에서 자기 메서드를 부르면(<code class="language-plaintext highlighter-rouge">this.notifyPartner()</code>) 프록시를 거치지 않아서, 어노테이션이 있어도 그냥 동기로 실행된다.</li>
     </ul>
   </li>
-  <li>인증 커밋(9/14 00:19)과 이 수정(00:24)이 <strong>5분</strong> 차이다.</li>
-  <li>그런데 같은 날 01:16에 <strong>사진 업로드도 같은 이유로 401</strong>이 났다. 커밋 메시지에 “FCM 토큰 업로드 때와 같은 패턴의 버그”라고 적었다. 한 번 고치고도 같은 패턴을 다른 곳에서 또 만났다.</li>
-  <li><code class="language-plaintext highlighter-rouge">APIClient.send</code>를 쓰도록 바꿨다. 이런 “한 곳만 다르게 짠 요청”은 공통 규칙이 바뀔 때 꼭 빠진다.</li>
+  <li>그래서 푸시 보내는 쪽을 <strong>별도 빈</strong>(<code class="language-plaintext highlighter-rouge">ChatPartnerNotifier</code>)으로 분리했다. 메시지 서비스는 이 빈을 주입받아 부른다.</li>
+  <li><a href="/project/2026/11/23/Woorin-Chat-Load-Test/">부하 테스트 글</a>에서 “응답 시간에는 안 보여도 DB는 같이 쓴다”고 한 게 이 <code class="language-plaintext highlighter-rouge">@Async</code>다. 스레드는 나눴지만 DB 커넥션 풀은 같이 쓴다.</li>
 </ul>
 
-<h2 id="3-읽었는데-알림이-안-사라진다">3. 읽었는데 알림이 안 사라진다</h2>
+<h2 id="3-채팅방을-보고-있는데-알림이-왔다">3. 채팅방을 보고 있는데 알림이 왔다</h2>
 
 <ul>
-  <li>채팅 푸시를 보고 앱을 열어 대화를 다 읽어도, 알림센터와 잠금화면에 채팅 알림이 그대로 남았다.</li>
-  <li>iOS는 앱 안에서 읽었다고 <strong>이미 도착한 알림을 알아서 치워주지 않는다.</strong>
+  <li>상대가 지금 채팅방을 보고 있으면, 메시지는 웹소켓으로 바로 도착하고 곧바로 읽음 처리된다.</li>
+  <li>그런데도 푸시와 알림함 알림이 매번 같이 나갔다. 눈앞에서 방금 본 메시지를 또 알려주는 셈이다.</li>
+  <li>서버는 상대가 “지금 보고 있는지”를 직접 알 수 없다. 대신 <strong>“곧 읽음 처리되는지”는 알 수 있다.</strong>
     <ul>
-      <li>배지 숫자를 0으로 바꿔도 알림 자체는 남는다.</li>
-    </ul>
-  </li>
-  <li>앱이 직접 지워야 한다. 그런데 어떤 알림이 채팅 알림인지 알아야 한다.
-    <ul>
-      <li>서버가 푸시를 보낼 때 data payload에 <code class="language-plaintext highlighter-rouge">type</code>(<code class="language-plaintext highlighter-rouge">CHAT</code>, <code class="language-plaintext highlighter-rouge">MEMORY</code>, …)을 실어 보내도록 하고,</li>
-      <li>앱은 채팅을 읽음 처리한 직후 <code class="language-plaintext highlighter-rouge">type == "CHAT"</code>인 알림만 골라 지운다.</li>
+      <li>보고 있는 앱은 메시지를 받자마자 읽음 처리 API를 부른다. 사람이 반응하는 것보다 훨씬 빠르다.</li>
+      <li>그래서 푸시를 보내기 전에 <strong>1.5초</strong> 기다렸다가, 그 메시지가 그새 읽음 처리됐는지 다시 확인한다.</li>
     </ul>
   </li>
 </ul>
@@ -379,159 +399,55 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 <p><img src="/assets/img/projects/woorin/fcm/img_4.png" alt="img.png" /></p>
 
 <ul>
-  <li>이 <code class="language-plaintext highlighter-rouge">type</code>은 알림을 눌렀을 때 해당 화면으로 보내는 데에도 같이 쓴다.</li>
+  <li>이미 읽었으면 푸시도, 알림함 등록도 건너뛴다.</li>
+  <li>이 기다림은 2번에서 분리한 <strong>비동기 스레드</strong>에서 한다. 메시지 전송 응답에는 영향이 없다.</li>
+  <li>읽음 처리 자체는 <a href="/project/2026/11/24/Woorin-Chat-Read-Receipt/">읽음 처리 글</a>에 따로 정리했다.</li>
 </ul>
 
-<h2 id="4-안드로이드는-조용히-쌓이기만-했다">4. 안드로이드는 조용히 쌓이기만 했다</h2>
+<h2 id="4-아이콘-배지-숫자는-서버가-계산한다">4. 아이콘 배지 숫자는 서버가 계산한다</h2>
 
 <ul>
-  <li>iOS 앱을 안드로이드로 옮긴 뒤, 무음(진동) 모드인 폰에서 알림이 <strong>소리도 진동도 없이</strong> 조용히 쌓였다.</li>
-  <li>안드로이드 8부터 알림은 <strong>채널</strong> 단위로 소리, 진동, 중요도를 정한다.
+  <li>iOS 앱 아이콘의 빨간 숫자는 푸시에 실린 <code class="language-plaintext highlighter-rouge">aps.badge</code> 값으로 바뀐다. 앱이 꺼져 있어도 바뀌어야 하니, <strong>서버가 계산해서 실어 보내야</strong> 한다.</li>
+</ul>
+
+<p><img src="/assets/img/projects/woorin/fcm/img_6.png" alt="img.png" /></p>
+
+<ul>
+  <li>숫자는 “안 읽은 채팅 + 안 읽은 추억 댓글”이다.</li>
+  <li>푸시를 보낼 때마다 이 계산이 돈다. 안 읽은 채팅 수를 세는 쿼리가 대화가 쌓이면 느려졌던 이야기, 그리고 인덱스로 고친 이야기는 <a href="/project/2026/11/23/Woorin-Chat-Load-Test/">부하 테스트 글</a>에 있다.</li>
+  <li>앱이 스스로 배지를 동기화할 수 있게, 같은 계산을 돌려주는 API(<code class="language-plaintext highlighter-rouge">GET /api/users/{id}/badge-count</code>)도 뒀다.</li>
+</ul>
+
+<h2 id="5-리마인드는-스케줄러로">5. 리마인드는 스케줄러로</h2>
+
+<p><img src="/assets/img/projects/woorin/fcm/img_7.png" alt="img.png" /></p>
+
+<ul>
+  <li>매시 30분, 06~23시에 돈다. 자정부터 새벽 6시까지는 보내지 않는다.</li>
+  <li>cron에 <code class="language-plaintext highlighter-rouge">zone = "Asia/Seoul"</code>을 <strong>명시</strong>했다.
     <ul>
-      <li>처음 만든 채널(<code class="language-plaintext highlighter-rouge">woorin_default</code>)은 진동이 꺼진 상태였다.</li>
+      <li>운영 서버의 OS 시간대가 바뀌어도 “한국 시각 6시~23시”가 유지되게 하려는 것이다. 서버 시간대 때문에 시각이 9시간씩 밀렸던 적이 있어서(<a href="/project/2026/11/23/Woorin-Silent-Failures/">에러 없이 실패하는 버그들</a>), 시각이 의미 있는 코드는 시간대를 코드에 적어 둔다.</li>
     </ul>
   </li>
-  <li>그런데 채널 설정을 고쳐도 <strong>반영이 안 됐다.</strong>
-    <ul>
-      <li>채널은 한 번 만들어지면 그 뒤로는 <strong>사용자만</strong> 설정을 바꿀 수 있다. 앱이 같은 id로 다시 만들어도 무시된다.</li>
-    </ul>
-  </li>
-  <li>그래서 <strong>새 id로 채널을 만들고</strong>, 예전 채널은 지웠다.</li>
-</ul>
-
-<p><img src="/assets/img/projects/woorin/fcm/img_5.png" alt="img.png" /></p>
-
-<ul>
-  <li>처음엔 <code class="language-plaintext highlighter-rouge">lockscreenVisibility = VISIBILITY_PUBLIC</code>도 같이 넣었다. 잠금화면에 내용까지 보이게 하려고.
-    <ul>
-      <li>그런데 채널의 잠금화면 표시는 <strong>시스템만 바꿀 수 있는 값</strong>이라, 앱이 넣어도 무시된다. 효과 없는 줄이라 나중에 지웠다.</li>
-      <li>잠금화면에 내용을 보일지는 사용자의 기기 설정이 정한다. 앱이 할 수 있는 건 중요도(<code class="language-plaintext highlighter-rouge">IMPORTANCE_HIGH</code>)와 진동까지다.</li>
-    </ul>
-  </li>
-  <li>서버 푸시에는 안드로이드 채널 지정이 없어서, 매니페스트의 기본 채널 id(<code class="language-plaintext highlighter-rouge">default_notification_channel_id</code>)도 같이 바꿔야 했다.</li>
-</ul>
-
-<h2 id="5-푸시가-메시지-전송을-늦췄다">5. 푸시가 메시지 전송을 늦췄다</h2>
-
-<ul>
-  <li>채팅을 보내면 서버는 메시지를 저장하고, 상대에게 푸시를 보낸다.</li>
-  <li>처음엔 이걸 <strong>요청 스레드에서 차례로</strong> 했다. FCM 전송과 안 읽은 수 조회가 끝나야 응답이 나가서, 보내기가 그만큼 느렸다.</li>
-  <li>푸시를 <code class="language-plaintext highlighter-rouge">@Async</code>로 별도 스레드에서 보내도록 바꿨다. (9/17)
-    <ul>
-      <li>그런데 같은 클래스 안에서 <code class="language-plaintext highlighter-rouge">@Async</code> 메서드를 부르면 <strong>적용이 안 된다.</strong> 스프링은 프록시로 비동기를 거는데, 클래스 안에서 자기 메서드를 부르면 프록시를 거치지 않는다.</li>
-      <li>그래서 푸시 보내는 쪽을 별도 빈(<code class="language-plaintext highlighter-rouge">ChatPartnerNotifier</code>)으로 분리했다.</li>
-    </ul>
-  </li>
-  <li><a href="/project/2026/11/23/Woorin-Chat-Load-Test/">부하 테스트 글</a>에서 “응답 시간에는 안 보여도 DB는 같이 쓴다”고 한 그 <code class="language-plaintext highlighter-rouge">@Async</code>가 이것이다.</li>
-</ul>
-
-<h2 id="6-보고-있는-채팅에도-알림이-왔다">6. 보고 있는 채팅에도 알림이 왔다</h2>
-
-<ul>
-  <li>상대가 지금 채팅방을 보고 있으면 메시지는 곧바로 읽음 처리된다. 그런데도 푸시와 알림함 알림이 매번 같이 나갔다.</li>
-  <li>저장 직후 바로 알림을 보내지 않고 <strong>1.5초 기다린 뒤</strong>, 그 메시지가 그새 읽음 처리됐는지 다시 확인한다. 읽었으면 푸시와 알림함 등록을 둘 다 건너뛴다. (9/19)</li>
-  <li>앱 쪽도 맞췄다. 앱이 켜져 있을 때 온 채팅 푸시는 배너와 소리 대신 배지만 갱신한다. (9/13)</li>
-</ul>
-
-<h2 id="커밋으로-본-흐름">커밋으로 본 흐름</h2>
-
-<table>
-  <thead>
-    <tr>
-      <th>날짜</th>
-      <th>어디</th>
-      <th>커밋</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>9/13 01:18</td>
-      <td>iOS</td>
-      <td>채팅 푸시(FCM) 등록</td>
-    </tr>
-    <tr>
-      <td>9/13 04:37</td>
-      <td>iOS</td>
-      <td>앱 사용 중엔 배너 대신 배지만</td>
-    </tr>
-    <tr>
-      <td>9/14 00:24</td>
-      <td>iOS</td>
-      <td>인증 도입 5분 뒤, 토큰 등록 401 수정</td>
-    </tr>
-    <tr>
-      <td>9/17 23:25</td>
-      <td>서버</td>
-      <td>채팅 푸시를 <code class="language-plaintext highlighter-rouge">@Async</code>로</td>
-    </tr>
-    <tr>
-      <td>9/19 23:53</td>
-      <td>서버</td>
-      <td>회원별 소리/진동 설정, 모든 푸시에 <code class="language-plaintext highlighter-rouge">aps.sound</code></td>
-    </tr>
-    <tr>
-      <td>9/19 23:57</td>
-      <td>서버</td>
-      <td>보고 있는 채팅은 1.5초 뒤 확인해서 푸시 생략</td>
-    </tr>
-    <tr>
-      <td>9/25 21:07</td>
-      <td>iOS</td>
-      <td>알림 탭하면 <code class="language-plaintext highlighter-rouge">type</code>으로 해당 화면 이동</td>
-    </tr>
-    <tr>
-      <td>9/25 21:08</td>
-      <td>서버</td>
-      <td>푸시 data에 <code class="language-plaintext highlighter-rouge">type</code> 싣기 (9곳 발송 지점)</td>
-    </tr>
-    <tr>
-      <td>10/5 20:36</td>
-      <td>서버</td>
-      <td>우린로그 매시간 리마인드 (06~23시)</td>
-    </tr>
-    <tr>
-      <td>10/7 00:42</td>
-      <td>iOS</td>
-      <td>채팅 읽으면 도착한 채팅 알림 지우기</td>
-    </tr>
-    <tr>
-      <td>10/14 00:29</td>
-      <td>Android</td>
-      <td>FCM 연결 (iOS와 같은 Firebase 프로젝트)</td>
-    </tr>
-    <tr>
-      <td>10/15 00:28</td>
-      <td>Android</td>
-      <td>진동 꺼진 채널 → 새 채널로 교체</td>
-    </tr>
-    <tr>
-      <td>10/18 21:34</td>
-      <td>서버+iOS</td>
-      <td>한 기기 = 한 계정, 로그아웃 시 토큰 삭제</td>
-    </tr>
-  </tbody>
-</table>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">type</code>은 처음엔 <strong>알림을 눌렀을 때 화면 이동</strong>용으로 넣었다(9/25). 2주 뒤 <strong>알림 지우기</strong>(10/7)에 그대로 다시 썼다. 처음부터 종류를 실어 보낸 덕분이다.</li>
+  <li>리마인드도 부가 기능이라, 실패해도 예외를 밖으로 던지지 않고 로그만 남긴다. 발송 인원은 운영 로그(INFO)에 남겨서 돌았는지 확인할 수 있게 했다.</li>
 </ul>
 
 <h2 id="정리">정리</h2>
 
 <ul>
   <li><strong>FCM 토큰은 사용자가 아니라 기기(앱 설치)의 것이다.</strong> 한 토큰은 한 계정에만 붙어 있어야 하고, 로그아웃하면 떼어내야 한다.</li>
-  <li>푸시 실패는 앱 화면에 아무것도 안 남는다. 등록 실패를 <code class="language-plaintext highlighter-rouge">print</code>로만 남기면 아무도 모른다.</li>
-  <li>알림은 “보내기”만이 아니라 <strong>“치우기”까지</strong> 앱이 챙겨야 한다. 그러려면 알림에 종류(type)를 실어 보내야 한다.</li>
-  <li>안드로이드 알림 채널은 <strong>처음 만들 때 제대로</strong> 만들어야 한다. 바꾸려면 새 채널을 만드는 수밖에 없다.</li>
+  <li>외부 네트워크 호출이 낀 부가 작업은 요청 스레드에서 빼낸다. <code class="language-plaintext highlighter-rouge">@Async</code>는 <strong>다른 빈에서 불러야</strong> 동작한다.</li>
+  <li>서버가 “보고 있는지”를 모를 때는, 그 결과(“곧 읽음 처리되는지”)를 보고 판단할 수 있다.</li>
+  <li>푸시에는 보여줄 내용(<code class="language-plaintext highlighter-rouge">notification</code>)과 앱이 판단할 값(<code class="language-plaintext highlighter-rouge">data</code>)을 나눠 싣는다. 종류를 실어 두면 화면 이동, 알림 정리 등 쓸 데가 계속 생긴다.</li>
 </ul>
 
 <h2 id="reference">Reference</h2>
 
 <p><a href="https://firebase.google.com/docs/cloud-messaging/manage-tokens">https://firebase.google.com/docs/cloud-messaging/manage-tokens</a></p>
 
-<p><a href="https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/removedeliverednotifications(withidentifiers:)">https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/removedeliverednotifications(withidentifiers:)</a></p>
+<p><a href="https://firebase.google.com/docs/cloud-messaging/concept-options#notifications_and_data_messages">https://firebase.google.com/docs/cloud-messaging/concept-options#notifications_and_data_messages</a></p>
 
-<p><a href="https://developer.android.com/develop/ui/views/notifications/channels">https://developer.android.com/develop/ui/views/notifications/channels</a></p>
+<p><a href="https://docs.spring.io/spring-framework/reference/integration/scheduling.html#scheduling-annotation-support-async">https://docs.spring.io/spring-framework/reference/integration/scheduling.html#scheduling-annotation-support-async</a></p>
 
     <br />
     <br />
@@ -545,7 +461,7 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=우린 - 알림이 두 번 오고, 안 오고, 안 사라지고 (FCM 푸시)&amp;url=http://localhost:4000/project/2026/11/23/Woorin-FCM-Push/"
+    <a href="http://twitter.com/share?text=우린 - 푸시 알림 서버 (중복 알림, 느려진 전송, 보고 있는데 오는 알림)&amp;url=http://localhost:4000/project/2026/11/23/Woorin-FCM-Push/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
@@ -594,7 +510,7 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 
 <li class="h4">
   <a href="/project/2026/11/23/Woorin-Silent-Failures/" data-flip="title">
-    <span>우린 - 에러 없이 실패하는 버그들 (진짜 원인을 찾기까지)</span>
+    <span>우린 - 에러 없이 실패하는 서버 버그들 (진짜 원인을 찾기까지)</span>
   </a>
   <small><time datetime="2026-11-23T00:00:00+09:00">
     23 Nov 2026
@@ -613,7 +529,7 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 
 <li class="h4">
   <a href="/project/2026/11/23/Woorin-Chat-WebSocket-Resync/" data-flip="title">
-    <span>우린 - 소켓은 열려 있는데 메시지가 안 온다 (웹소켓 재연결과 재동기화)</span>
+    <span>우린 - 채팅 웹소켓 서버 (방 관리, 동시 전송, 끊긴 세션, 놓친 메시지)</span>
   </a>
   <small><time datetime="2026-11-23T00:00:00+09:00">
     23 Nov 2026
@@ -1550,8 +1466,6 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
       <p>일을 벌여놔야 주워 담을 수 있습니다.</p>
 
       
-        <p class="sidebar-visits">누적 방문 <span data-gc-total>-</span></p>
-      
       
       
         <div class="sidebar-social">
@@ -1628,42 +1542,28 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 
 <script>
   (function () {
-    var base = 'https://taewoocode.goatcounter.com';
-
-    // Pages are swapped in by push-state, so count and fill counters manually on every page.
+    /* GoatCounter only records visits for the dashboard. The numbers on the page come from busuanzi below.
+       Pages are swapped in by push-state, so count manually on every page.
+       Use block comments only: compress_html joins this script into one line, so a // comment would swallow the rest. */
     window.goatcounter = { no_onload: true };
-
-    function fill(el, path) {
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', base + '/counter/' + encodeURIComponent(path) + '.json');
-      xhr.onload = function () {
-        var count = '0';
-        try { if (xhr.status === 200) count = JSON.parse(xhr.responseText).count; } catch (e) {}
-        el.textContent = count;
-      };
-      xhr.send();
-    }
 
     function onPage() {
       if (window.goatcounter.count) window.goatcounter.count({ path: location.pathname });
-      var views = document.querySelectorAll('[data-gc-views]');
-      for (var i = 0; i < views.length; i++) fill(views[i], location.pathname);
     }
 
     var script = document.createElement('script');
     script.async = true;
     script.src = '//gc.zgo.at/count.js';
-    script.setAttribute('data-goatcounter', base + '/count');
+    script.setAttribute('data-goatcounter', 'https://taewoocode.goatcounter.com/count');
     script.onload = onPage;
     document.head.appendChild(script);
-
-    var total = document.querySelector('[data-gc-total]');
-    if (total) fill(total, 'TOTAL');
 
     var pushState = document.getElementById('_yPushState');
     if (pushState) pushState.addEventListener('y-push-state-after', onPage);
   })();
 </script>
+
+
 
 
 

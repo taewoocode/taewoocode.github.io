@@ -218,8 +218,6 @@ in <a href="/category/project/" data-flip="title">Project</a>
 on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 
       
-      <span class="post-views">· 조회수 <span data-gc-views>-</span></span>
-      
     </p>
 
     
@@ -641,7 +639,7 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 
 <li class="h4">
   <a href="/project/2026/11/23/Woorin-Silent-Failures/" data-flip="title">
-    <span>우린 - 에러 없이 실패하는 버그들 (진짜 원인을 찾기까지)</span>
+    <span>우린 - 에러 없이 실패하는 서버 버그들 (진짜 원인을 찾기까지)</span>
   </a>
   <small><time datetime="2026-11-23T00:00:00+09:00">
     23 Nov 2026
@@ -657,7 +655,7 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 
 <li class="h4">
   <a href="/project/2026/11/23/Woorin-FCM-Push/" data-flip="title">
-    <span>우린 - 알림이 두 번 오고, 안 오고, 안 사라지고 (FCM 푸시)</span>
+    <span>우린 - 푸시 알림 서버 (중복 알림, 느려진 전송, 보고 있는데 오는 알림)</span>
   </a>
   <small><time datetime="2026-11-23T00:00:00+09:00">
     23 Nov 2026
@@ -1597,8 +1595,6 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
       <p>일을 벌여놔야 주워 담을 수 있습니다.</p>
 
       
-        <p class="sidebar-visits">누적 방문 <span data-gc-total>-</span></p>
-      
       
       
         <div class="sidebar-social">
@@ -1675,42 +1671,28 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 
 <script>
   (function () {
-    var base = 'https://taewoocode.goatcounter.com';
-
-    // Pages are swapped in by push-state, so count and fill counters manually on every page.
+    /* GoatCounter only records visits for the dashboard. The numbers on the page come from busuanzi below.
+       Pages are swapped in by push-state, so count manually on every page.
+       Use block comments only: compress_html joins this script into one line, so a // comment would swallow the rest. */
     window.goatcounter = { no_onload: true };
-
-    function fill(el, path) {
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', base + '/counter/' + encodeURIComponent(path) + '.json');
-      xhr.onload = function () {
-        var count = '0';
-        try { if (xhr.status === 200) count = JSON.parse(xhr.responseText).count; } catch (e) {}
-        el.textContent = count;
-      };
-      xhr.send();
-    }
 
     function onPage() {
       if (window.goatcounter.count) window.goatcounter.count({ path: location.pathname });
-      var views = document.querySelectorAll('[data-gc-views]');
-      for (var i = 0; i < views.length; i++) fill(views[i], location.pathname);
     }
 
     var script = document.createElement('script');
     script.async = true;
     script.src = '//gc.zgo.at/count.js';
-    script.setAttribute('data-goatcounter', base + '/count');
+    script.setAttribute('data-goatcounter', 'https://taewoocode.goatcounter.com/count');
     script.onload = onPage;
     document.head.appendChild(script);
-
-    var total = document.querySelector('[data-gc-total]');
-    if (total) fill(total, 'TOTAL');
 
     var pushState = document.getElementById('_yPushState');
     if (pushState) pushState.addEventListener('y-push-state-after', onPage);
   })();
 </script>
+
+
 
 
 

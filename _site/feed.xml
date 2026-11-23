@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 23 Nov 2026 22:56:07 +0900</pubDate>
-    <lastBuildDate>Mon, 23 Nov 2026 22:56:07 +0900</lastBuildDate>
+    <pubDate>Tue, 24 Nov 2026 00:26:42 +0900</pubDate>
+    <lastBuildDate>Tue, 24 Nov 2026 00:26:42 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
@@ -36,13 +36,8 @@
 
 &lt;ul&gt;
   &lt;li&gt;우린은 여자친구와 둘이 쓰려고 만든 앱이라, 보안은 “로그인만 되면 됐다” 정도로 생각했다.&lt;/li&gt;
-  &lt;li&gt;처음엔 인증 자체가 없었다. &lt;strong&gt;9월 14일&lt;/strong&gt;에야 API 인증(토큰)을 넣었는데, 그 커밋 메시지에 이렇게 적혀 있다.
-    &lt;ul&gt;
-      &lt;li&gt;“지금까지는 userId/coupleId만 알면 아무나 남의 데이터를 조회/수정/삭제할 수 있었음”&lt;/li&gt;
-      &lt;li&gt;“아직 안 한 것: 채팅 웹소켓(/ws/chat)은 이번 인증 대상에서 빠짐”&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;그 뒤로도 세 군데가 뚫려 있었다.
+  &lt;li&gt;처음엔 인증 자체가 없었다. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;userId&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;coupleId&lt;/code&gt;만 알면 누구나 남의 데이터를 조회/수정/삭제할 수 있었다.&lt;/li&gt;
+  &lt;li&gt;API 인증(토큰)을 넣은 뒤에도 세 군데가 뚫려 있었다.
     &lt;ul&gt;
       &lt;li&gt;&lt;strong&gt;채팅 웹소켓에 인증이 없었다.&lt;/strong&gt; 숫자 하나만 바꾸면 남의 커플 채팅을 실시간으로 볼 수 있었다.&lt;/li&gt;
       &lt;li&gt;에러가 나면 &lt;strong&gt;DB 오류 메시지가 그대로&lt;/strong&gt; 앱에 내려갔다.&lt;/li&gt;
@@ -62,14 +57,14 @@
       &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;coupleId=2&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;coupleId=3&lt;/code&gt;… 으로 바꿔 붙으면 그 커플의 새 메시지, 읽음, 입력 중 이벤트가 실시간으로 들어왔다.&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;사실 몰랐던 게 아니다. 9/14 인증 커밋에 “웹소켓은 빠짐”이라고 적어 두고, 막은 건 &lt;strong&gt;13일 뒤인 9/27&lt;/strong&gt;이다. 그 사이 소켓은 열려 있었다.&lt;/li&gt;
+  &lt;li&gt;사실 몰랐던 게 아니다. API 인증을 넣을 때 “웹소켓은 다음에”로 미뤄 뒀고, 그 사이 소켓은 열려 있었다.&lt;/li&gt;
   &lt;li&gt;웹소켓은 HTTP로 시작해서(핸드셰이크) 프로토콜을 바꾸는 구조라, &lt;strong&gt;서블릿 필터 경로 설정에서 빠지기 쉽다.&lt;/strong&gt; REST를 막았다고 소켓까지 막힌 게 아니었다.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h3 id=&quot;필터는-너무-좁기도-너무-넓기도-했다&quot;&gt;필터는 너무 좁기도, 너무 넓기도 했다&lt;/h3&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;같은 필터가 반대 방향으로도 문제를 냈다. 9/20에 &lt;strong&gt;카카오 로그인이 “로그인이 필요해요”로 거부&lt;/strong&gt;됐다.
+  &lt;li&gt;같은 필터가 반대 방향으로도 문제를 냈다. &lt;strong&gt;카카오 로그인이 “로그인이 필요해요”로 거부&lt;/strong&gt;됐다.
     &lt;ul&gt;
       &lt;li&gt;카카오 로그인은 로그인 &lt;strong&gt;전에&lt;/strong&gt; 부르는 API라 토큰 없이 통과해야 한다. 회원가입/로그인처럼 예외 목록(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PUBLIC_PATHS&lt;/code&gt;)에 넣어야 했는데 빠져 있었다.&lt;/li&gt;
     &lt;/ul&gt;
@@ -112,15 +107,27 @@
 &lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/ws-auth/img_2.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;앱은 소켓을 열 때 REST와 같은 토큰을 헤더에 싣는다. (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;URLSessionWebSocketTask&lt;/code&gt;는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;URLRequest&lt;/code&gt;로 헤더를 넣을 수 있다)&lt;/li&gt;
+  &lt;li&gt;앱은 소켓을 열 때 REST와 같은 토큰을 헤더에 실어 보낸다.&lt;/li&gt;
   &lt;li&gt;대가도 있었다. &lt;strong&gt;토큰을 안 보내는 이전 앱 빌드는 실시간 연결이 거부된다.&lt;/strong&gt;
     &lt;ul&gt;
       &lt;li&gt;메시지 보내기와 목록 조회는 REST라 동작은 하지만, 새 메시지가 바로 안 뜬다.&lt;/li&gt;
-      &lt;li&gt;그래서 서버(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;c858460&lt;/code&gt;)와 iOS(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;f2fc344&lt;/code&gt;)를 &lt;strong&gt;같은 분(9/27 21:27)에&lt;/strong&gt; 커밋하고 같이 배포했다.&lt;/li&gt;
-      &lt;li&gt;9/14 인증 커밋에도 같은 주의가 적혀 있다. “서버만 먼저 올리면 구버전 앱은 토큰을 안 보내서 전부 401 처리됨”.&lt;/li&gt;
+      &lt;li&gt;그래서 서버와 앱을 같이 배포했다. API 인증을 처음 넣을 때도 같았다. 서버만 먼저 올리면 토큰을 안 보내는 구버전 앱의 요청은 전부 401이 된다.&lt;/li&gt;
       &lt;li&gt;사용자가 많다면 한동안 토큰 없는 연결도 받아주는 유예 기간을 두는 게 맞다.&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;토큰만으로는-부족하다-본인-데이터인가&quot;&gt;토큰만으로는 부족하다: “본인 데이터인가”&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;토큰은 “누구인지”만 알려준다. 로그인한 사람이 &lt;strong&gt;남의&lt;/strong&gt; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;coupleId&lt;/code&gt;를 넣어 부르면 토큰은 멀쩡히 통과한다.&lt;/li&gt;
+  &lt;li&gt;그래서 필터가 검증한 회원 정보를 요청 동안 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CurrentUser&lt;/code&gt;에 담아 두고, 컨트롤러마다 &lt;strong&gt;“이 coupleId가 내 커플인가, 이 userId가 나인가”&lt;/strong&gt;를 다시 확인한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/read/img_1.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;웹소켓 핸드셰이크에서 하는 확인과 같은 내용이다. 경로마다 “누구인지”와 “그 데이터에 손댈 수 있는지”를 둘 다 본다.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;2-에러-메시지에-테이블-이름이-실려-나갔다&quot;&gt;2. 에러 메시지에 테이블 이름이 실려 나갔다&lt;/h2&gt;
@@ -194,64 +201,6 @@
   &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&quot;커밋으로-본-흐름&quot;&gt;커밋으로 본 흐름&lt;/h2&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;날짜&lt;/th&gt;
-      &lt;th&gt;어디&lt;/th&gt;
-      &lt;th&gt;커밋&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;9/14 00:19&lt;/td&gt;
-      &lt;td&gt;서버&lt;/td&gt;
-      &lt;td&gt;API 인증(토큰) 도입. 웹소켓은 대상에서 빠짐&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;9/14 00:24&lt;/td&gt;
-      &lt;td&gt;iOS&lt;/td&gt;
-      &lt;td&gt;FCM 토큰 등록이 인증 헤더 없이 나가서 401 → 수정&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;9/14 01:16&lt;/td&gt;
-      &lt;td&gt;iOS&lt;/td&gt;
-      &lt;td&gt;사진 업로드도 같은 이유로 401 → 수정&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;9/14 01:55&lt;/td&gt;
-      &lt;td&gt;서버&lt;/td&gt;
-      &lt;td&gt;상대 프로필 조회가 “본인만” 제한에 걸려 403 → 전용 API&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;9/20 18:59&lt;/td&gt;
-      &lt;td&gt;서버&lt;/td&gt;
-      &lt;td&gt;카카오 로그인이 인증 필터에 막힘 → 예외 경로 추가&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;9/27 21:08&lt;/td&gt;
-      &lt;td&gt;서버&lt;/td&gt;
-      &lt;td&gt;에러 응답의 내부 메시지 노출 수정 (컨트롤러 86곳)&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;9/27 21:27&lt;/td&gt;
-      &lt;td&gt;서버+iOS&lt;/td&gt;
-      &lt;td&gt;채팅 웹소켓 핸드셰이크 인증&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;10/6 02:28&lt;/td&gt;
-      &lt;td&gt;서버&lt;/td&gt;
-      &lt;td&gt;운영 로그에서 SQL/개인정보 제거 (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;log4j2-prod.xml&lt;/code&gt;)&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;인증을 넣은 날 하루에만 401/403 버그를 세 개 고쳤다. 인증은 기능 하나가 아니라 &lt;strong&gt;모든 요청의 규칙을 바꾸는 일&lt;/strong&gt;이었다.&lt;/li&gt;
-&lt;/ul&gt;
-
 &lt;h2 id=&quot;정리&quot;&gt;정리&lt;/h2&gt;
 
 &lt;ul&gt;
@@ -286,26 +235,23 @@
       </item>
     
       <item>
-        <title>우린 - 에러 없이 실패하는 버그들 (진짜 원인을 찾기까지)</title>
+        <title>우린 - 에러 없이 실패하는 서버 버그들 (진짜 원인을 찾기까지)</title>
         <description>&lt;h2 id=&quot;개요&quot;&gt;개요&lt;/h2&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;우린을 만들면서 커밋 메시지에 &lt;strong&gt;“진짜 원인”&lt;/strong&gt; 이라고 적은 버그가 여럿 있다.
+  &lt;li&gt;우린 서버를 운영하면서 가장 오래 헤맨 버그들은 공통점이 있었다. &lt;strong&gt;에러가 안 났다.&lt;/strong&gt;
     &lt;ul&gt;
-      &lt;li&gt;첫 번째로 고친 게 원인이 아니었고, 한 번 더 파고 나서야 찾았다는 뜻이다.&lt;/li&gt;
+      &lt;li&gt;예외도, 빨간 로그도, 서버 다운도 없이 “그냥 안 되는” 상태였다.&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;돌아보니 셋 다 공통점이 있었다. &lt;strong&gt;에러가 안 났다.&lt;/strong&gt;
-    &lt;ul&gt;
-      &lt;li&gt;예외도, 빨간 로그도, 크래시도 없이 “그냥 안 되는” 상태였다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;이번 글은 그 세 가지를 어떻게 찾았는지 정리한다.
-    &lt;ul&gt;
-      &lt;li&gt;문화행사 동기화가 매번 &lt;strong&gt;0건&lt;/strong&gt;&lt;/li&gt;
-      &lt;li&gt;채팅에서 상대 프로필이 &lt;strong&gt;안 바뀜&lt;/strong&gt;&lt;/li&gt;
-      &lt;li&gt;채팅 프로필 사진이 &lt;strong&gt;첫 줄만&lt;/strong&gt; 안 뜸&lt;/li&gt;
-    &lt;/ul&gt;
+  &lt;li&gt;이번 글은 그런 버그 다섯 가지를 어떻게 찾았는지 정리한다.
+    &lt;ol&gt;
+      &lt;li&gt;외부 API 응답은 잘 오는데 저장이 &lt;strong&gt;0건&lt;/strong&gt;&lt;/li&gt;
+      &lt;li&gt;배포할 때마다 &lt;strong&gt;푸시가 조용히 꺼졌다&lt;/strong&gt;&lt;/li&gt;
+      &lt;li&gt;모든 시각이 &lt;strong&gt;9시간씩 밀렸다&lt;/strong&gt;&lt;/li&gt;
+      &lt;li&gt;저장은 됐는데 앱에는 &lt;strong&gt;“실패”&lt;/strong&gt;로 떴다&lt;/li&gt;
+      &lt;li&gt;상대 프로필이 &lt;strong&gt;안 바뀐다&lt;/strong&gt; → 사실은 403&lt;/li&gt;
+    &lt;/ol&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
 
@@ -316,10 +262,10 @@
 &lt;ul&gt;
   &lt;li&gt;우린에는 서울시 문화행사를 데이트 후보로 보여주는 기능이 있다.
     &lt;ul&gt;
-      &lt;li&gt;서울 열린데이터광장 API에서 매일 행사를 받아와 DB에 저장한다.&lt;/li&gt;
+      &lt;li&gt;서울 열린데이터광장 API에서 행사를 받아와 DB에 저장한다. (서버 첫 기동 때 한 번, 이후 매일 새벽 3시)&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;연동을 붙이고(9/14 22:23) 동기화를 돌려 보니, 에러 로그도 없이 끝나는데 &lt;strong&gt;저장은 늘 0건&lt;/strong&gt;이었다.&lt;/li&gt;
+  &lt;li&gt;동기화를 돌려 보니, 에러 로그도 없이 끝나는데 &lt;strong&gt;저장은 늘 0건&lt;/strong&gt;이었다.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h3 id=&quot;찾기&quot;&gt;찾기&lt;/h3&gt;
@@ -359,205 +305,222 @@
       &lt;li&gt;그래서 Jackson이 기다리는 키는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;title&lt;/code&gt;이고, JSON의 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TITLE&lt;/code&gt;은 “모르는 필드”가 된다.&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;여기에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ignoreUnknown = true&lt;/code&gt;가 붙어 있었다.
+  &lt;li&gt;여기에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@JsonIgnoreProperties(ignoreUnknown = true)&lt;/code&gt;가 붙어 있었다.
     &lt;ul&gt;
       &lt;li&gt;모르는 필드는 &lt;strong&gt;조용히 버린다.&lt;/strong&gt; 예외가 없으니 모든 필드가 null인 객체가 정상적으로 만들어졌다.&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;외부 API 응답이 바뀌어도 안 깨지게 하려고 넣은 설정이, 이번엔 매핑 실패를 숨겼다.&lt;/li&gt;
+  &lt;li&gt;외부 API 응답에 필드가 추가돼도 안 깨지게 하려고 넣은 설정이, 이번엔 매핑 실패를 숨겼다.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h3 id=&quot;해결&quot;&gt;해결&lt;/h3&gt;
 
-&lt;ul&gt;
-  &lt;li&gt;필드마다 JSON 이름을 명시했다.&lt;/li&gt;
-  &lt;li&gt;디버그 로그를 넣은 커밋(22:35)과 고친 커밋(22:37)이 &lt;strong&gt;2분&lt;/strong&gt; 차이다. 로그 한 줄이 원인을 바로 가리켰다.
-    &lt;ul&gt;
-      &lt;li&gt;반대로 말하면, 로그를 넣기 전까지는 “API 키가 틀렸나”만 의심하며 원인을 볼 방법이 없었다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
 &lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/silent/img_2.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
 
-&lt;h2 id=&quot;2-상대-프로필이-안-바뀐다--사실은-403&quot;&gt;2. 상대 프로필이 안 바뀐다 → 사실은 403&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;필드마다 JSON 이름을 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@JsonProperty&lt;/code&gt;로 명시했다.&lt;/li&gt;
+  &lt;li&gt;로그 한 줄로 “응답은 왔다 / 값이 비었다”를 나누고 나서야 원인이 바로 보였다. 그 전까지는 “API 키가 틀렸나”만 의심했다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;2-배포할-때마다-푸시가-조용히-꺼졌다&quot;&gt;2. 배포할 때마다 푸시가 조용히 꺼졌다&lt;/h2&gt;
 
 &lt;h3 id=&quot;증상-1&quot;&gt;증상&lt;/h3&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;상대가 프로필 사진과 닉네임을 바꿔도, 내 채팅 화면엔 예전 것이 그대로였다.&lt;/li&gt;
+  &lt;li&gt;어느 순간부터 푸시가 하나도 안 왔다. 채팅, 추억, 일정 전부.&lt;/li&gt;
+  &lt;li&gt;서버 로그에는 푸시 관련 에러가 &lt;strong&gt;한 줄도&lt;/strong&gt; 없었다.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&quot;배경-90분-전에-넣은-인증&quot;&gt;배경: 90분 전에 넣은 인증&lt;/h3&gt;
+&lt;h3 id=&quot;원인-배포가-firebase-키를-지웠다&quot;&gt;원인: 배포가 Firebase 키를 지웠다&lt;/h3&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;이 버그는 9월 14일 새벽에 몰려서 생기고 고쳐졌다. 커밋 시각을 순서대로 놓으면 이렇다.&lt;/li&gt;
+  &lt;li&gt;배포는 GitLab CI가 소스를 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;rsync&lt;/code&gt;로 서버에 올리고, 서버에서 빌드해서 재시작한다.&lt;/li&gt;
 &lt;/ul&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;시각&lt;/th&gt;
-      &lt;th&gt;커밋&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;00:19&lt;/td&gt;
-      &lt;td&gt;API 인증(토큰) 도입. 유저 API에 &lt;strong&gt;“본인 정보만 조회”&lt;/strong&gt; 제한 추가&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;01:38&lt;/td&gt;
-      &lt;td&gt;프로필 사진/닉네임 수정 기능 + 채팅에서 상대 식별&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;01:43&lt;/td&gt;
-      &lt;td&gt;가설 1: 상대 정보를 한 번만 불러와서 → 들어올 때마다 다시 불러오기&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;01:50&lt;/td&gt;
-      &lt;td&gt;가설 2: GET 응답이 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;URLSession&lt;/code&gt; 디스크 캐시에 남아서 → 캐시 정책 명시&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;01:55&lt;/td&gt;
-      &lt;td&gt;&lt;strong&gt;진짜 원인: 403.&lt;/strong&gt; 상대 프로필 전용 API 추가 (서버·앱 같은 분에 커밋)&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;17분 동안 세 번 고쳤다. 원인은 90분 전에 내가 넣은 인증 제한이었다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;첫-번째-가설-한-번만-불러와서&quot;&gt;첫 번째 가설: 한 번만 불러와서&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;코드를 보니 상대 정보를 &lt;strong&gt;채팅 첫 진입 때 한 번만&lt;/strong&gt; 불러오고 있었다.
-    &lt;ul&gt;
-      &lt;li&gt;소켓 중복 연결을 막으려고 “같은 커플이면 다시 설정 안 함” 가드를 넣었는데, 상대 정보 로딩도 그 안에 들어가 있었다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;채팅 탭에 들어올 때마다 상대 정보를 새로 받게 고쳤다.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;그래도 안 바뀌었다.&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;두-번째-가설-예전-응답이-캐시에-남아서&quot;&gt;두 번째 가설: 예전 응답이 캐시에 남아서&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;URLSession&lt;/code&gt;은 캐시 정책을 따로 정하지 않으면 GET 응답을 &lt;strong&gt;디스크에 캐시&lt;/strong&gt;한다.
-    &lt;ul&gt;
-      &lt;li&gt;앱을 다시 빌드해도 이 캐시는 안 지워져서, 상대가 프로필을 바꿔도 예전 응답이 나올 수 있다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;모든 요청이 항상 네트워크로 새로 받아오게 캐시 정책을 명시했다.&lt;/li&gt;
-  &lt;li&gt;이것도 실제로 있던 문제다. 하지만 &lt;strong&gt;여전히 안 바뀌었다.&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;진짜-원인&quot;&gt;진짜 원인&lt;/h3&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/silent/img_3.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;이 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;catch&lt;/code&gt;가 에러를 삼키고 있었다. 찍어 보니 매번 &lt;strong&gt;403&lt;/strong&gt;이었다.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;GET /api/users/{userId}&lt;/code&gt;는 &lt;strong&gt;본인만&lt;/strong&gt; 조회할 수 있게 막아 둔 API다.
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;rsync --delete&lt;/code&gt;는 “소스에 없는 파일은 서버에서도 지운다”는 옵션이다.&lt;/li&gt;
+  &lt;li&gt;Firebase 서비스 계정 키(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;secrets/firebase-service-account.json&lt;/code&gt;)는 git에 올리면 안 되는 파일이라 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.gitignore&lt;/code&gt;에 있고, 서버에만 직접 넣어 뒀다.
     &lt;ul&gt;
-      &lt;li&gt;이메일, 인증 토큰 같은 민감한 정보가 들어 있어서 당연한 제한이다.&lt;/li&gt;
-      &lt;li&gt;상대 id로 부르니 매번 거부됐고, 화면엔 처음 회원가입 때 받은 값이 남아 있었다.&lt;/li&gt;
+      &lt;li&gt;CI가 올리는 소스(git 저장소)에는 이 파일이 없다.&lt;/li&gt;
+      &lt;li&gt;그래서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;rsync --delete&lt;/code&gt;는 배포할 때마다 이 파일을 “있으면 안 되는 파일”로 보고 &lt;strong&gt;지웠다.&lt;/strong&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;두 가설 모두 틀린 건 아니었지만, 그걸 고쳐도 &lt;strong&gt;불러오는 요청 자체가 실패&lt;/strong&gt;하고 있었다.&lt;/li&gt;
-  &lt;li&gt;이 제한은 00:19 인증 커밋에서 넣었다. 그 커밋 메시지에 이렇게 적혀 있다. “지금까지는 userId/coupleId만 알면 아무나 남의 데이터를 조회/수정/삭제할 수 있었음”. 막은 건 맞았는데, 그 API를 상대 조회에 쓰던 곳이 있었다.&lt;/li&gt;
+  &lt;li&gt;지금 설정에는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--exclude=&apos;secrets&apos;&lt;/code&gt;가 들어가 있다. 업로드 파일(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;uploads&lt;/code&gt;)처럼 서버에만 있는 폴더는 전부 제외 목록에 넣어야 한다.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&quot;해결-1&quot;&gt;해결&lt;/h3&gt;
+&lt;h3 id=&quot;왜-에러가-안-났나&quot;&gt;왜 에러가 안 났나&lt;/h3&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;상대 프로필 전용 API를 만들었다. 닉네임과 사진만 내려준다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/silent/img_4.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;권한을 풀어서 해결하지 않았다. 필요한 것만 담은 &lt;strong&gt;다른 창구&lt;/strong&gt;를 만들었다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;3-프로필-사진이-첫-줄만-안-뜬다&quot;&gt;3. 프로필 사진이 첫 줄만 안 뜬다&lt;/h2&gt;
-
-&lt;h3 id=&quot;증상-2&quot;&gt;증상&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;채팅방을 열면 상대 프로필 사진이 &lt;strong&gt;어떤 줄은 뜨고 어떤 줄은 빈 원&lt;/strong&gt;이었다. 특히 첫 줄이 자주 비었다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/silent/app_1.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;같은 채팅방을 3분 간격으로 연 화면이다.
-    &lt;ul&gt;
-      &lt;li&gt;왼쪽은 위 두 줄이, 오른쪽은 첫 줄만 빈 원이다. 열 때마다 비는 줄이 달라졌다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;프로필 사진을 제대로 설정해도 재현됐다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;첫-번째-가설-캐시가-작아서&quot;&gt;첫 번째 가설: 캐시가 작아서&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;프로필 사진은 메시지 줄마다 따로 그린다. 같은 URL이 수십 번 나온다.&lt;/li&gt;
-  &lt;li&gt;SwiftUI &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AsyncImage&lt;/code&gt;는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;URLCache.shared&lt;/code&gt;를 쓰는데, 기본 용량이 &lt;strong&gt;메모리 512KB / 디스크 10MB&lt;/strong&gt;다.
-    &lt;ul&gt;
-      &lt;li&gt;사진 몇 장이면 밀려나서, 같은 사진을 줄마다 다시 요청하고, 요청이 몰리면 일부가 실패한다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;캐시를 50MB / 200MB로 키웠다.&lt;/li&gt;
-  &lt;li&gt;서버도 같이 고쳤다. 업로드 파일(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/uploads/**&lt;/code&gt;)에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Cache-Control&lt;/code&gt;이 &lt;strong&gt;아예 없어서&lt;/strong&gt;, 같은 사진을 그릴 때마다 서버에 다시 요청하고 있었다.
-    &lt;ul&gt;
-      &lt;li&gt;파일명이 UUID라 같은 URL의 내용은 절대 안 바뀐다. 그래서 7일 캐시를 걸어도 안전하다.&lt;/li&gt;
-      &lt;li&gt;서버 커밋 메시지에도 “프사 일부가 안 보이던 문제 원인 &lt;strong&gt;중 하나&lt;/strong&gt;“라고 적었다. 하나뿐이 아니라는 걸 그때도 알고 있었다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;빈 원이 줄었지만 &lt;strong&gt;첫 줄은 여전히 가끔 비었다.&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;진짜-원인-1&quot;&gt;진짜 원인&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;채팅방을 막 열면 여러 줄의 프로필 요청이 &lt;strong&gt;한꺼번에&lt;/strong&gt; 나간다. 캐시가 아직 비어 있는 첫 순간이다.&lt;/li&gt;
-  &lt;li&gt;이때 하나가 실패하면, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AsyncImage&lt;/code&gt;는 &lt;strong&gt;다시 시도하지 않는다.&lt;/strong&gt;
-    &lt;ul&gt;
-      &lt;li&gt;실패 상태(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.failure&lt;/code&gt;)로 끝나고, 화면을 다시 그릴 때까지(앱 재실행 등) 빈 채로 남는다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;실패하면 1초 뒤에 최대 3번 다시 시도하는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RetryingAsyncImage&lt;/code&gt;로 감쌌다.&lt;/li&gt;
+  &lt;li&gt;키가 없을 때 서버가 &lt;strong&gt;죽지 않도록&lt;/strong&gt; 일부러 만들어 둔 구조 때문이다.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/silent/img_5.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;9/20 23:28에 캐시(앱·서버)를 고치고, 12분 뒤인 23:40에 재시도를 넣었다.&lt;/li&gt;
-  &lt;li&gt;10/7에는 채팅 사진이 많아지면서 사진을 화면 크기로 줄여 풀고 메모리에 캐시하는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CachedAsyncImage&lt;/code&gt;로 한 번 더 바꿨다. 스크롤할 때 깜빡임과 버벅임도 같이 줄었다.&lt;/li&gt;
+  &lt;li&gt;키 파일을 못 읽으면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;FirebaseApp&lt;/code&gt; 빈을 만들지 않고(null) 서버는 정상 기동한다. 로컬에서 키 없이 개발할 때 편하라고 이렇게 했다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/silent/img_6.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;보내는 쪽은 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;FirebaseApp&lt;/code&gt;을 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ObjectProvider&lt;/code&gt;로 받아서, 없으면 &lt;strong&gt;아무것도 안 하고 돌아간다.&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;“푸시는 부가 기능이니, 없어도 핵심 기능은 돌아가야 한다”는 의도대로 동작한 것이다. 문제는 그 상태가 &lt;strong&gt;운영에서도 조용했다&lt;/strong&gt;는 것이다.
+    &lt;ul&gt;
+      &lt;li&gt;개발 환경에서 “키가 없으니 푸시는 끈다”는 정상이지만, 운영에서 “키가 없다”는 사고다. 같은 코드 경로가 두 상황을 구분하지 않았다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;3-모든-시각이-9시간씩-밀렸다&quot;&gt;3. 모든 시각이 9시간씩 밀렸다&lt;/h2&gt;
+
+&lt;h3 id=&quot;증상-2&quot;&gt;증상&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;운영 서버에 배포했더니 채팅 보낸 시각, 일정 시각이 &lt;strong&gt;전부 9시간씩&lt;/strong&gt; 어긋나 보였다.&lt;/li&gt;
+  &lt;li&gt;로컬에서는 멀쩡했다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;원인-servertimezone&quot;&gt;원인: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;serverTimezone&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/silent/img_7.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;MySQL JDBC URL의 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;serverTimezone&lt;/code&gt;은 “&lt;strong&gt;DB에 저장된 값이 어느 시간대 기준인지&lt;/strong&gt;“를 드라이버에 알려주는 값이다.
+    &lt;ul&gt;
+      &lt;li&gt;화면에 보여줄 시간대(한국)가 아니라, &lt;strong&gt;DB 서버가 실제로 쓰는 시간대&lt;/strong&gt;와 맞춰야 한다.&lt;/li&gt;
+      &lt;li&gt;둘이 다르면 드라이버가 저장할 때와 읽을 때 그 차이만큼 시각을 옮겨서, 정확히 9시간이 밀린다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;처음엔 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;serverTimezone=Asia/Seoul&lt;/code&gt;이었다.
+    &lt;ul&gt;
+      &lt;li&gt;로컬 개발 환경(맥)은 시간대가 한국이라, MySQL도 한국 시간으로 돌았다. 설정과 실제가 &lt;strong&gt;우연히&lt;/strong&gt; 맞았다.&lt;/li&gt;
+      &lt;li&gt;운영 서버(GCP VM)는 기본 시간대가 &lt;strong&gt;UTC&lt;/strong&gt;였다. 설정은 한국인데 DB는 UTC라 9시간이 밀렸다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;설정을 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;serverTimezone=UTC&lt;/code&gt;로 바꿔 맞췄다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;한-번-더-서버-시간대를-한국으로-옮길-때&quot;&gt;한 번 더: 서버 시간대를 한국으로 옮길 때&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/silent/app_2.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;나중에 운영 VM의 시간대를 아예 한국 시간으로 옮겼다. 로그와 스케줄 시각을 한국 시간으로 보는 게 편해서다.&lt;/li&gt;
+  &lt;li&gt;이때는 세 가지를 &lt;strong&gt;같이&lt;/strong&gt; 바꿔야 한다.
+    &lt;ul&gt;
+      &lt;li&gt;VM 시간대 (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;timedatectl set-timezone Asia/Seoul&lt;/code&gt;)&lt;/li&gt;
+      &lt;li&gt;MySQL 재시작 (MySQL은 기동할 때 OS 시간대를 읽는다)&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;serverTimezone=Asia/Seoul&lt;/code&gt;로 바꾼 서버 배포&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;하나라도 순서가 어긋나면 그 사이에는 또 9시간이 밀린다. 위 채팅은 그 전환 작업을 하던 날 테스트하며 주고받은 메시지다.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DATETIME&lt;/code&gt; 컬럼에는 시간대 정보가 없다. 저장된 건 “2026-10-05 13:14:00” 같은 &lt;strong&gt;벽시계 값&lt;/strong&gt;뿐이고, 그게 어느 시간대 기준인지는 이 설정이 정한다. 그래서 설정만 바뀌어도 이미 저장된 값의 의미가 바뀐다.&lt;/li&gt;
+  &lt;li&gt;이 일 이후로 시각이 의미 있는 코드(예: 리마인드 스케줄러의 cron)에는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;zone = &quot;Asia/Seoul&quot;&lt;/code&gt;처럼 시간대를 코드에 적어 둔다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;4-저장은-됐는데-앱에는-실패로-떴다&quot;&gt;4. 저장은 됐는데 앱에는 “실패”로 떴다&lt;/h2&gt;
+
+&lt;h3 id=&quot;증상-3&quot;&gt;증상&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;우린로그(짧은 영상)를 올리면 서버에는 잘 저장되는데, 앱에는 &lt;strong&gt;“실패했어요”&lt;/strong&gt;가 떴다.&lt;/li&gt;
+  &lt;li&gt;서버 로그에는 에러가 없다. 응답도 200이다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;원인-응답에-db-기본값이-빠져-있었다&quot;&gt;원인: 응답에 DB 기본값이 빠져 있었다&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;등록 API는 이렇게 생겼었다.
+    &lt;ol&gt;
+      &lt;li&gt;요청 VO를 그대로 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;INSERT&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;MyBatis &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;useGeneratedKeys&lt;/code&gt;로 새 ID를 요청 VO에 채운다&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;그 요청 VO를 그대로 응답&lt;/strong&gt;&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;useGeneratedKeys&lt;/code&gt;가 채워주는 건 &lt;strong&gt;ID 하나뿐&lt;/strong&gt;이다.
+    &lt;ul&gt;
+      &lt;li&gt;등록 시각(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;FST_RG_DTM&lt;/code&gt;)처럼 DB &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DEFAULT&lt;/code&gt;로 찍히는 값은 요청 VO에 없다. 응답 JSON에는 이 값이 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;null&lt;/code&gt;로 나간다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;앱은 등록 시각을 필수 값으로 읽게 되어 있어서, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;null&lt;/code&gt;을 만나면 응답 해석 자체가 실패했다. 그래서 저장은 됐는데 “실패”로 보였다.&lt;/li&gt;
+  &lt;li&gt;같은 모양의 문제가 맛집 수정 API에도 있었다. 요청 VO를 그대로 돌려줘서 작성자와 등록 시각이 빠졌다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;해결-저장한-행을-다시-읽어서-돌려준다&quot;&gt;해결: 저장한 행을 다시 읽어서 돌려준다&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/silent/img_9.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;채팅 메시지 저장은 처음부터 이렇게 하고 있었다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/silent/img_8.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;요청 VO는 “앱이 보낸 값”이고, 응답은 “&lt;strong&gt;DB에 실제로 저장된 값&lt;/strong&gt;“이어야 한다. 둘은 다르다.
+    &lt;ul&gt;
+      &lt;li&gt;DB 기본값, 트리거, 다른 컬럼과의 조인 결과는 다시 읽어야만 알 수 있다.&lt;/li&gt;
+      &lt;li&gt;조회가 한 번 늘지만, PK 조회라 비용은 거의 없다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;5-상대-프로필이-안-바뀐다--사실은-403&quot;&gt;5. 상대 프로필이 안 바뀐다 → 사실은 403&lt;/h2&gt;
+
+&lt;h3 id=&quot;증상-4&quot;&gt;증상&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;상대가 프로필 사진과 닉네임을 바꿔도, 내 채팅 화면엔 예전 것이 그대로였다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;원인&quot;&gt;원인&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;앱은 상대 정보를 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;GET /api/users/{userId}&lt;/code&gt;로, &lt;strong&gt;상대의 userId&lt;/strong&gt;를 넣어서 불러오고 있었다.&lt;/li&gt;
+  &lt;li&gt;이 API는 API 인증을 넣으면서 &lt;strong&gt;본인만&lt;/strong&gt; 조회할 수 있게 막아 둔 API다.
+    &lt;ul&gt;
+      &lt;li&gt;이메일, 인증 토큰 같은 민감한 정보가 들어 있어서 당연한 제한이다.&lt;/li&gt;
+      &lt;li&gt;그래서 상대 id로 부르면 매번 &lt;strong&gt;403&lt;/strong&gt;이었다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;앱은 “상대 정보는 부가 정보라 실패해도 채팅은 써야 한다”며 에러를 조용히 넘기고 있었다. 화면에는 예전에 받아 둔 값이 남아 있었다.&lt;/li&gt;
+  &lt;li&gt;서버 쪽에서 보면, 권한을 막는 변경을 하면서 &lt;strong&gt;그 API를 부르던 곳&lt;/strong&gt;을 다 확인하지 않은 게 원인이다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;해결-권한을-풀지-않고-창구를-하나-더-만든다&quot;&gt;해결: 권한을 풀지 않고 창구를 하나 더 만든다&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/silent/img_4.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;상대 프로필 전용 API를 만들었다. &lt;strong&gt;닉네임과 사진만&lt;/strong&gt; 내려준다.
+    &lt;ul&gt;
+      &lt;li&gt;“내 커플인가”만 확인하고, 커플에서 상대 id를 서버가 찾는다. 앱이 상대 id를 넘길 필요도 없다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;기존 API의 “본인만” 제한을 풀면 문제는 바로 사라진다. 하지만 그러면 상대의 이메일과 토큰까지 내려간다. 필요한 것만 담은 &lt;strong&gt;다른 창구&lt;/strong&gt;를 만드는 게 맞다.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;정리&quot;&gt;정리&lt;/h2&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;셋 다 &lt;strong&gt;실패가 조용했다.&lt;/strong&gt;
+  &lt;li&gt;다섯 가지 모두 &lt;strong&gt;실패가 조용했다.&lt;/strong&gt;
     &lt;ul&gt;
       &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ignoreUnknown = true&lt;/code&gt;가 매핑 실패를 삼켰다.&lt;/li&gt;
-      &lt;li&gt;빈 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;catch&lt;/code&gt;가 403을 삼켰다.&lt;/li&gt;
-      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AsyncImage&lt;/code&gt;가 실패를 빈 원으로 바꾸고 끝냈다.&lt;/li&gt;
+      &lt;li&gt;“키가 없으면 푸시는 끈다”가 운영 사고를 삼켰다.&lt;/li&gt;
+      &lt;li&gt;로컬 시간대가 설정 오류를 우연히 가렸다.&lt;/li&gt;
+      &lt;li&gt;200 응답 안에 빠진 값이 숨어 있었다.&lt;/li&gt;
+      &lt;li&gt;403이 “부가 정보”라는 이유로 삼켜졌다.&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;그래서 첫 번째 가설은 그럴듯했지만 틀렸거나, 절반만 맞았다.
+  &lt;li&gt;그래서 지키게 된 것
     &lt;ul&gt;
-      &lt;li&gt;2번과 3번은 첫 수정이 &lt;strong&gt;실제로 있던 다른 문제&lt;/strong&gt;를 고쳤다. 그래서 “고쳤다”고 착각하기 쉬웠다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;그 뒤로 지키는 것
-    &lt;ul&gt;
-      &lt;li&gt;“부가 기능이라 실패해도 괜찮다”는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;catch&lt;/code&gt;라도 &lt;strong&gt;로그는 남긴다.&lt;/strong&gt; 화면을 안 깨뜨리는 것과 실패를 숨기는 건 다르다.&lt;/li&gt;
       &lt;li&gt;외부 응답을 받는 클래스는 이름이 같아 보여도 &lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@JsonProperty&lt;/code&gt;로 명시한다.&lt;/strong&gt;&lt;/li&gt;
-      &lt;li&gt;증상을 고친 뒤엔 &lt;strong&gt;원래 재현 조건으로 다시&lt;/strong&gt; 확인한다. 줄었다고 사라진 건 아니다.&lt;/li&gt;
+      &lt;li&gt;서버에만 있는 파일(키, 업로드)은 배포 도구의 삭제 대상에서 &lt;strong&gt;명시적으로 뺀다.&lt;/strong&gt;&lt;/li&gt;
+      &lt;li&gt;시간대는 우연에 맡기지 않는다. DB, JDBC 설정, 코드(cron)에 &lt;strong&gt;같은 시간대를 명시한다.&lt;/strong&gt;&lt;/li&gt;
+      &lt;li&gt;응답은 요청 VO가 아니라 &lt;strong&gt;저장된 행&lt;/strong&gt;으로 만든다.&lt;/li&gt;
+      &lt;li&gt;권한을 좁힐 때는 그 API를 부르는 곳을 먼저 찾는다.&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
@@ -566,9 +529,11 @@
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/FasterXML/jackson-databind/wiki/Mapper-Features&quot;&gt;https://github.com/FasterXML/jackson-databind/wiki/Mapper-Features&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://developer.apple.com/documentation/swiftui/asyncimage&quot;&gt;https://developer.apple.com/documentation/swiftui/asyncimage&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://download.samba.org/pub/rsync/rsync.1#opt--delete&quot;&gt;https://download.samba.org/pub/rsync/rsync.1#opt--delete&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://developer.apple.com/documentation/foundation/urlcache&quot;&gt;https://developer.apple.com/documentation/foundation/urlcache&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://dev.mysql.com/doc/connector-j/en/connector-j-time-instants.html&quot;&gt;https://dev.mysql.com/doc/connector-j/en/connector-j-time-instants.html&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://mybatis.org/mybatis-3/sqlmap-xml.html#insert-update-and-delete&quot;&gt;https://mybatis.org/mybatis-3/sqlmap-xml.html#insert-update-and-delete&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Mon, 23 Nov 2026 00:00:00 +0900</pubDate>
         <link>http://localhost:4000/project/2026/11/23/Woorin-Silent-Failures/</link>
@@ -582,39 +547,56 @@
       </item>
     
       <item>
-        <title>우린 - 알림이 두 번 오고, 안 오고, 안 사라지고 (FCM 푸시)</title>
+        <title>우린 - 푸시 알림 서버 (중복 알림, 느려진 전송, 보고 있는데 오는 알림)</title>
         <description>&lt;h2 id=&quot;개요&quot;&gt;개요&lt;/h2&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/fcm/app_1.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;왼쪽은 로그인 화면, 오른쪽은 더보기의 알림 설정이다. 알림 받기, 우린로그 촬영 알림, 진동을 따로 켜고 끌 수 있다.&lt;/li&gt;
-  &lt;li&gt;우린은 채팅, 추억, 일정, 우린로그 리마인드(매시 30분 촬영 알림)를 푸시로 보낸다.&lt;/li&gt;
-  &lt;li&gt;푸시는 기능을 만드는 것보다 &lt;strong&gt;“잘 오게” 만드는 게&lt;/strong&gt; 더 오래 걸렸다.
+  &lt;li&gt;우린은 채팅, 추억, 일정, 우린로그 리마인드를 FCM(Firebase Cloud Messaging)으로 보낸다.&lt;/li&gt;
+  &lt;li&gt;보내는 것 자체는 Firebase Admin SDK 몇 줄이면 된다. 서버에서 오래 걸린 건 그 주변이었다.
     &lt;ul&gt;
       &lt;li&gt;같은 알림이 &lt;strong&gt;두 번씩&lt;/strong&gt; 왔다.&lt;/li&gt;
-      &lt;li&gt;아이폰에서 FCM 토큰 등록이 &lt;strong&gt;조용히 실패&lt;/strong&gt;하고 있었다.&lt;/li&gt;
-      &lt;li&gt;채팅을 읽어도 잠금화면의 채팅 알림이 &lt;strong&gt;안 사라졌다.&lt;/strong&gt;&lt;/li&gt;
-      &lt;li&gt;안드로이드는 무음 모드에서 알림이 &lt;strong&gt;조용히 쌓이기만&lt;/strong&gt; 했다.&lt;/li&gt;
+      &lt;li&gt;푸시 때문에 &lt;strong&gt;메시지 전송 응답이 느려졌다.&lt;/strong&gt;&lt;/li&gt;
+      &lt;li&gt;채팅방을 &lt;strong&gt;보고 있는데도&lt;/strong&gt; 알림이 왔다.&lt;/li&gt;
+      &lt;li&gt;앱 아이콘의 &lt;strong&gt;안 읽은 개수&lt;/strong&gt;를 서버가 계산해서 실어 보내야 했다.&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;가장 오래 헤맨 건 첫 번째였다. 원인은 &lt;strong&gt;“토큰은 사용자가 아니라 기기의 것”&lt;/strong&gt; 이라는 걸 놓친 데 있었다.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;구조&quot;&gt;구조&lt;/h2&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;앱은 실행 때 Firebase에서 받은 FCM 토큰을 서버에 올린다. (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PUT /api/users/{userId}/fcm-token&lt;/code&gt;)&lt;/li&gt;
+  &lt;li&gt;앱은 실행할 때 Firebase에서 받은 FCM 토큰을 서버에 올린다. (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PUT /api/users/{userId}/fcm-token&lt;/code&gt;)&lt;/li&gt;
   &lt;li&gt;서버는 회원 테이블의 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;FCM_TOKEN&lt;/code&gt; 컬럼에 저장하고, 푸시를 보낼 때 받는 사람의 토큰으로 보낸다.&lt;/li&gt;
-  &lt;li&gt;회원 한 명에 토큰 하나. 단순하다.&lt;/li&gt;
+  &lt;li&gt;보내는 곳은 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PushNotificationService&lt;/code&gt; 한 곳이다.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&quot;1-알림이-두-번씩-온다&quot;&gt;1. 알림이 두 번씩 온다&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/fcm/img_5.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;notification&lt;/code&gt;&lt;/strong&gt;(제목, 본문)은 기기가 알림 배너로 보여준다.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;data&lt;/code&gt;&lt;/strong&gt;에는 알림 종류(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;type&lt;/code&gt;: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CHAT&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MEMORY&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CALENDAR&lt;/code&gt; …)와 글 번호 같은 값을 싣는다.
+    &lt;ul&gt;
+      &lt;li&gt;배너에는 안 보이는 값이라, 앱이 “알림을 누르면 어느 화면으로 갈지”, “채팅을 읽으면 어떤 알림을 지울지” 판단하는 데 쓴다.&lt;/li&gt;
+      &lt;li&gt;알림함 테이블(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TB_MASTER_NOTIFICATION&lt;/code&gt;)에 쓰는 종류 값과 같은 문자열을 쓴다. 서버 안에서 알림 종류가 한 가지 이름으로 통한다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;aps&lt;/code&gt;&lt;/strong&gt;(iOS 전용)에는 아이콘 배지 숫자와 소리를 싣는다.
+    &lt;ul&gt;
+      &lt;li&gt;iOS는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;aps.sound&lt;/code&gt;가 있어야 잠금화면에서 소리·진동을 울린다. 그래서 회원별 “알림 올 때 진동” 설정이 꺼져 있으면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;aps.sound&lt;/code&gt;를 &lt;strong&gt;아예 빼는&lt;/strong&gt; 게 그 설정의 실제 동작이다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;전송이 실패해도(토큰 만료, 앱 삭제 등) 예외를 밖으로 던지지 않는다. 푸시는 부가 기능이라, 푸시 실패 때문에 메시지 저장 같은 핵심 기능이 실패하면 안 된다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;1-같은-알림이-두-번씩-왔다&quot;&gt;1. 같은 알림이 두 번씩 왔다&lt;/h2&gt;
 
 &lt;ul&gt;
   &lt;li&gt;우린로그 리마인드 같은 푸시가 &lt;strong&gt;두 번씩&lt;/strong&gt; 울렸다.
     &lt;ul&gt;
-      &lt;li&gt;리마인드는 10/5에 넣은 기능이다. 오늘 아직 우린로그를 안 올린 커플에게 &lt;strong&gt;06~23시 매시간&lt;/strong&gt; 보낸다. 하루 최대 18번이라, 두 번씩 오면 바로 티가 났다.&lt;/li&gt;
+      &lt;li&gt;리마인드는 매시 30분(06~23시)에, 그 시간에 아직 우린로그를 안 올린 사람에게 보낸다. 하루에도 여러 번 오는 알림이라 두 번씩 오면 바로 티가 났다.&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
   &lt;li&gt;원인은 &lt;strong&gt;같은 폰에서 계정을 바꿔 로그인&lt;/strong&gt;한 것이었다.&lt;/li&gt;
@@ -631,7 +613,7 @@
   &lt;li&gt;FCM 토큰은 &lt;strong&gt;앱 설치(기기)마다&lt;/strong&gt; 발급된다. 계정을 바꿔도 같은 폰이면 같은 토큰이다.&lt;/li&gt;
   &lt;li&gt;서버는 토큰을 “회원의 속성”으로 다루고 있어서, 한 토큰이 여러 회원에게 붙는 걸 막지 않았다.
     &lt;ul&gt;
-      &lt;li&gt;로그아웃한 계정 앞으로 온 알림이 계속 이 폰으로 오는 문제도 같은 원인이다.&lt;/li&gt;
+      &lt;li&gt;로그아웃한 계정 앞으로 온 알림이 계속 그 폰으로 오는 문제도 같은 원인이다.&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
@@ -647,44 +629,49 @@
 &lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/fcm/img_2.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;로그아웃할 때도 지운다. (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DELETE /api/users/{userId}/fcm-token&lt;/code&gt;)
+  &lt;li&gt;로그아웃 API(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DELETE /api/users/{userId}/fcm-token&lt;/code&gt;)도 만들었다. 앱은 로그아웃하기 직전, 인증 토큰이 아직 살아 있을 때 이걸 부른다.
     &lt;ul&gt;
-      &lt;li&gt;순서가 중요하다. 이 API도 인증이 필요하니, &lt;strong&gt;인증 토큰이 살아 있을 때&lt;/strong&gt; 먼저 지우고 나서 로그아웃 상태로 바꾼다.&lt;/li&gt;
-      &lt;li&gt;오프라인이라 실패해도 로그아웃은 막지 않는다. 다음에 누가 그 폰으로 로그인하면 위의 등록 로직이 정리해 준다.&lt;/li&gt;
+      &lt;li&gt;오프라인이라 이 호출이 실패해도 괜찮다. 다음에 누가 그 폰으로 로그인하면 위의 등록 로직이 다른 계정의 토큰을 정리해 준다.&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
+  &lt;li&gt;토큰을 별도 테이블(기기 테이블)로 빼는 방법도 있다. 한 계정이 여러 기기를 쓰려면 그게 맞다. 우린은 “한 사람 = 폰 하나”라서 컬럼 하나에 “한 토큰은 한 계정에만”이라는 규칙을 더하는 쪽으로 충분했다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;2-푸시-때문에-메시지-전송이-느려졌다&quot;&gt;2. 푸시 때문에 메시지 전송이 느려졌다&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;채팅을 보내면 서버는 메시지를 저장하고, 상대에게 푸시를 보낸다.&lt;/li&gt;
+  &lt;li&gt;처음엔 이걸 &lt;strong&gt;요청 스레드에서 차례로&lt;/strong&gt; 했다.
+    &lt;ul&gt;
+      &lt;li&gt;상대 정보 조회, 보낸 사람 닉네임 조회, 안 읽은 개수 계산(배지), FCM 전송(외부 네트워크 호출), 알림함 저장&lt;/li&gt;
+      &lt;li&gt;이게 다 끝나야 응답이 나가서, 보내는 사람의 “전송 완료”가 그만큼 늦게 떴다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;푸시를 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@Async&lt;/code&gt;로 별도 스레드에서 보내도록 바꿨다.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/fcm/img_3.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
 
-&lt;h2 id=&quot;2-토큰-등록이-401을-받고-있었다&quot;&gt;2. 토큰 등록이 401을 받고 있었다&lt;/h2&gt;
-
 &lt;ul&gt;
-  &lt;li&gt;API에 인증 토큰을 도입한 직후 생긴 문제다.&lt;/li&gt;
-  &lt;li&gt;다른 API는 다 되는데, FCM 토큰 등록만 &lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;URLSession&lt;/code&gt;으로 직접&lt;/strong&gt; 짜여 있었다.
+  &lt;li&gt;여기서 주의할 점이 있다. 메시지 서비스 안에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@Async&lt;/code&gt; 메서드를 만들어 같은 클래스에서 부르면 &lt;strong&gt;비동기로 돌지 않는다.&lt;/strong&gt;
     &lt;ul&gt;
-      &lt;li&gt;공통 클라이언트(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;APIClient&lt;/code&gt;)를 거치지 않으니 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Authorization&lt;/code&gt; 헤더가 안 실렸고, 서버는 401을 돌려줬다.&lt;/li&gt;
-      &lt;li&gt;실패는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;print&lt;/code&gt;로만 찍혀서 화면에는 아무 표시가 없었다.&lt;/li&gt;
+      &lt;li&gt;스프링은 프록시로 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@Async&lt;/code&gt;를 건다. 프록시를 거쳐서 들어온 호출만 비동기가 된다.&lt;/li&gt;
+      &lt;li&gt;같은 클래스 안에서 자기 메서드를 부르면(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;this.notifyPartner()&lt;/code&gt;) 프록시를 거치지 않아서, 어노테이션이 있어도 그냥 동기로 실행된다.&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;인증 커밋(9/14 00:19)과 이 수정(00:24)이 &lt;strong&gt;5분&lt;/strong&gt; 차이다.&lt;/li&gt;
-  &lt;li&gt;그런데 같은 날 01:16에 &lt;strong&gt;사진 업로드도 같은 이유로 401&lt;/strong&gt;이 났다. 커밋 메시지에 “FCM 토큰 업로드 때와 같은 패턴의 버그”라고 적었다. 한 번 고치고도 같은 패턴을 다른 곳에서 또 만났다.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;APIClient.send&lt;/code&gt;를 쓰도록 바꿨다. 이런 “한 곳만 다르게 짠 요청”은 공통 규칙이 바뀔 때 꼭 빠진다.&lt;/li&gt;
+  &lt;li&gt;그래서 푸시 보내는 쪽을 &lt;strong&gt;별도 빈&lt;/strong&gt;(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ChatPartnerNotifier&lt;/code&gt;)으로 분리했다. 메시지 서비스는 이 빈을 주입받아 부른다.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;/project/2026/11/23/Woorin-Chat-Load-Test/&quot;&gt;부하 테스트 글&lt;/a&gt;에서 “응답 시간에는 안 보여도 DB는 같이 쓴다”고 한 게 이 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@Async&lt;/code&gt;다. 스레드는 나눴지만 DB 커넥션 풀은 같이 쓴다.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&quot;3-읽었는데-알림이-안-사라진다&quot;&gt;3. 읽었는데 알림이 안 사라진다&lt;/h2&gt;
+&lt;h2 id=&quot;3-채팅방을-보고-있는데-알림이-왔다&quot;&gt;3. 채팅방을 보고 있는데 알림이 왔다&lt;/h2&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;채팅 푸시를 보고 앱을 열어 대화를 다 읽어도, 알림센터와 잠금화면에 채팅 알림이 그대로 남았다.&lt;/li&gt;
-  &lt;li&gt;iOS는 앱 안에서 읽었다고 &lt;strong&gt;이미 도착한 알림을 알아서 치워주지 않는다.&lt;/strong&gt;
+  &lt;li&gt;상대가 지금 채팅방을 보고 있으면, 메시지는 웹소켓으로 바로 도착하고 곧바로 읽음 처리된다.&lt;/li&gt;
+  &lt;li&gt;그런데도 푸시와 알림함 알림이 매번 같이 나갔다. 눈앞에서 방금 본 메시지를 또 알려주는 셈이다.&lt;/li&gt;
+  &lt;li&gt;서버는 상대가 “지금 보고 있는지”를 직접 알 수 없다. 대신 &lt;strong&gt;“곧 읽음 처리되는지”는 알 수 있다.&lt;/strong&gt;
     &lt;ul&gt;
-      &lt;li&gt;배지 숫자를 0으로 바꿔도 알림 자체는 남는다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;앱이 직접 지워야 한다. 그런데 어떤 알림이 채팅 알림인지 알아야 한다.
-    &lt;ul&gt;
-      &lt;li&gt;서버가 푸시를 보낼 때 data payload에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;type&lt;/code&gt;(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CHAT&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MEMORY&lt;/code&gt;, …)을 실어 보내도록 하고,&lt;/li&gt;
-      &lt;li&gt;앱은 채팅을 읽음 처리한 직후 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;type == &quot;CHAT&quot;&lt;/code&gt;인 알림만 골라 지운다.&lt;/li&gt;
+      &lt;li&gt;보고 있는 앱은 메시지를 받자마자 읽음 처리 API를 부른다. 사람이 반응하는 것보다 훨씬 빠르다.&lt;/li&gt;
+      &lt;li&gt;그래서 푸시를 보내기 전에 &lt;strong&gt;1.5초&lt;/strong&gt; 기다렸다가, 그 메시지가 그새 읽음 처리됐는지 다시 확인한다.&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
@@ -692,159 +679,55 @@
 &lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/fcm/img_4.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;이 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;type&lt;/code&gt;은 알림을 눌렀을 때 해당 화면으로 보내는 데에도 같이 쓴다.&lt;/li&gt;
+  &lt;li&gt;이미 읽었으면 푸시도, 알림함 등록도 건너뛴다.&lt;/li&gt;
+  &lt;li&gt;이 기다림은 2번에서 분리한 &lt;strong&gt;비동기 스레드&lt;/strong&gt;에서 한다. 메시지 전송 응답에는 영향이 없다.&lt;/li&gt;
+  &lt;li&gt;읽음 처리 자체는 &lt;a href=&quot;/project/2026/11/24/Woorin-Chat-Read-Receipt/&quot;&gt;읽음 처리 글&lt;/a&gt;에 따로 정리했다.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&quot;4-안드로이드는-조용히-쌓이기만-했다&quot;&gt;4. 안드로이드는 조용히 쌓이기만 했다&lt;/h2&gt;
+&lt;h2 id=&quot;4-아이콘-배지-숫자는-서버가-계산한다&quot;&gt;4. 아이콘 배지 숫자는 서버가 계산한다&lt;/h2&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;iOS 앱을 안드로이드로 옮긴 뒤, 무음(진동) 모드인 폰에서 알림이 &lt;strong&gt;소리도 진동도 없이&lt;/strong&gt; 조용히 쌓였다.&lt;/li&gt;
-  &lt;li&gt;안드로이드 8부터 알림은 &lt;strong&gt;채널&lt;/strong&gt; 단위로 소리, 진동, 중요도를 정한다.
+  &lt;li&gt;iOS 앱 아이콘의 빨간 숫자는 푸시에 실린 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;aps.badge&lt;/code&gt; 값으로 바뀐다. 앱이 꺼져 있어도 바뀌어야 하니, &lt;strong&gt;서버가 계산해서 실어 보내야&lt;/strong&gt; 한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/fcm/img_6.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;숫자는 “안 읽은 채팅 + 안 읽은 추억 댓글”이다.&lt;/li&gt;
+  &lt;li&gt;푸시를 보낼 때마다 이 계산이 돈다. 안 읽은 채팅 수를 세는 쿼리가 대화가 쌓이면 느려졌던 이야기, 그리고 인덱스로 고친 이야기는 &lt;a href=&quot;/project/2026/11/23/Woorin-Chat-Load-Test/&quot;&gt;부하 테스트 글&lt;/a&gt;에 있다.&lt;/li&gt;
+  &lt;li&gt;앱이 스스로 배지를 동기화할 수 있게, 같은 계산을 돌려주는 API(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;GET /api/users/{id}/badge-count&lt;/code&gt;)도 뒀다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;5-리마인드는-스케줄러로&quot;&gt;5. 리마인드는 스케줄러로&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/fcm/img_7.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;매시 30분, 06~23시에 돈다. 자정부터 새벽 6시까지는 보내지 않는다.&lt;/li&gt;
+  &lt;li&gt;cron에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;zone = &quot;Asia/Seoul&quot;&lt;/code&gt;을 &lt;strong&gt;명시&lt;/strong&gt;했다.
     &lt;ul&gt;
-      &lt;li&gt;처음 만든 채널(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;woorin_default&lt;/code&gt;)은 진동이 꺼진 상태였다.&lt;/li&gt;
+      &lt;li&gt;운영 서버의 OS 시간대가 바뀌어도 “한국 시각 6시~23시”가 유지되게 하려는 것이다. 서버 시간대 때문에 시각이 9시간씩 밀렸던 적이 있어서(&lt;a href=&quot;/project/2026/11/23/Woorin-Silent-Failures/&quot;&gt;에러 없이 실패하는 버그들&lt;/a&gt;), 시각이 의미 있는 코드는 시간대를 코드에 적어 둔다.&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;그런데 채널 설정을 고쳐도 &lt;strong&gt;반영이 안 됐다.&lt;/strong&gt;
-    &lt;ul&gt;
-      &lt;li&gt;채널은 한 번 만들어지면 그 뒤로는 &lt;strong&gt;사용자만&lt;/strong&gt; 설정을 바꿀 수 있다. 앱이 같은 id로 다시 만들어도 무시된다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;그래서 &lt;strong&gt;새 id로 채널을 만들고&lt;/strong&gt;, 예전 채널은 지웠다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/fcm/img_5.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;처음엔 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lockscreenVisibility = VISIBILITY_PUBLIC&lt;/code&gt;도 같이 넣었다. 잠금화면에 내용까지 보이게 하려고.
-    &lt;ul&gt;
-      &lt;li&gt;그런데 채널의 잠금화면 표시는 &lt;strong&gt;시스템만 바꿀 수 있는 값&lt;/strong&gt;이라, 앱이 넣어도 무시된다. 효과 없는 줄이라 나중에 지웠다.&lt;/li&gt;
-      &lt;li&gt;잠금화면에 내용을 보일지는 사용자의 기기 설정이 정한다. 앱이 할 수 있는 건 중요도(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;IMPORTANCE_HIGH&lt;/code&gt;)와 진동까지다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;서버 푸시에는 안드로이드 채널 지정이 없어서, 매니페스트의 기본 채널 id(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;default_notification_channel_id&lt;/code&gt;)도 같이 바꿔야 했다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;5-푸시가-메시지-전송을-늦췄다&quot;&gt;5. 푸시가 메시지 전송을 늦췄다&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;채팅을 보내면 서버는 메시지를 저장하고, 상대에게 푸시를 보낸다.&lt;/li&gt;
-  &lt;li&gt;처음엔 이걸 &lt;strong&gt;요청 스레드에서 차례로&lt;/strong&gt; 했다. FCM 전송과 안 읽은 수 조회가 끝나야 응답이 나가서, 보내기가 그만큼 느렸다.&lt;/li&gt;
-  &lt;li&gt;푸시를 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@Async&lt;/code&gt;로 별도 스레드에서 보내도록 바꿨다. (9/17)
-    &lt;ul&gt;
-      &lt;li&gt;그런데 같은 클래스 안에서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@Async&lt;/code&gt; 메서드를 부르면 &lt;strong&gt;적용이 안 된다.&lt;/strong&gt; 스프링은 프록시로 비동기를 거는데, 클래스 안에서 자기 메서드를 부르면 프록시를 거치지 않는다.&lt;/li&gt;
-      &lt;li&gt;그래서 푸시 보내는 쪽을 별도 빈(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ChatPartnerNotifier&lt;/code&gt;)으로 분리했다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;/project/2026/11/23/Woorin-Chat-Load-Test/&quot;&gt;부하 테스트 글&lt;/a&gt;에서 “응답 시간에는 안 보여도 DB는 같이 쓴다”고 한 그 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@Async&lt;/code&gt;가 이것이다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;6-보고-있는-채팅에도-알림이-왔다&quot;&gt;6. 보고 있는 채팅에도 알림이 왔다&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;상대가 지금 채팅방을 보고 있으면 메시지는 곧바로 읽음 처리된다. 그런데도 푸시와 알림함 알림이 매번 같이 나갔다.&lt;/li&gt;
-  &lt;li&gt;저장 직후 바로 알림을 보내지 않고 &lt;strong&gt;1.5초 기다린 뒤&lt;/strong&gt;, 그 메시지가 그새 읽음 처리됐는지 다시 확인한다. 읽었으면 푸시와 알림함 등록을 둘 다 건너뛴다. (9/19)&lt;/li&gt;
-  &lt;li&gt;앱 쪽도 맞췄다. 앱이 켜져 있을 때 온 채팅 푸시는 배너와 소리 대신 배지만 갱신한다. (9/13)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;커밋으로-본-흐름&quot;&gt;커밋으로 본 흐름&lt;/h2&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;날짜&lt;/th&gt;
-      &lt;th&gt;어디&lt;/th&gt;
-      &lt;th&gt;커밋&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;9/13 01:18&lt;/td&gt;
-      &lt;td&gt;iOS&lt;/td&gt;
-      &lt;td&gt;채팅 푸시(FCM) 등록&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;9/13 04:37&lt;/td&gt;
-      &lt;td&gt;iOS&lt;/td&gt;
-      &lt;td&gt;앱 사용 중엔 배너 대신 배지만&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;9/14 00:24&lt;/td&gt;
-      &lt;td&gt;iOS&lt;/td&gt;
-      &lt;td&gt;인증 도입 5분 뒤, 토큰 등록 401 수정&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;9/17 23:25&lt;/td&gt;
-      &lt;td&gt;서버&lt;/td&gt;
-      &lt;td&gt;채팅 푸시를 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@Async&lt;/code&gt;로&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;9/19 23:53&lt;/td&gt;
-      &lt;td&gt;서버&lt;/td&gt;
-      &lt;td&gt;회원별 소리/진동 설정, 모든 푸시에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;aps.sound&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;9/19 23:57&lt;/td&gt;
-      &lt;td&gt;서버&lt;/td&gt;
-      &lt;td&gt;보고 있는 채팅은 1.5초 뒤 확인해서 푸시 생략&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;9/25 21:07&lt;/td&gt;
-      &lt;td&gt;iOS&lt;/td&gt;
-      &lt;td&gt;알림 탭하면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;type&lt;/code&gt;으로 해당 화면 이동&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;9/25 21:08&lt;/td&gt;
-      &lt;td&gt;서버&lt;/td&gt;
-      &lt;td&gt;푸시 data에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;type&lt;/code&gt; 싣기 (9곳 발송 지점)&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;10/5 20:36&lt;/td&gt;
-      &lt;td&gt;서버&lt;/td&gt;
-      &lt;td&gt;우린로그 매시간 리마인드 (06~23시)&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;10/7 00:42&lt;/td&gt;
-      &lt;td&gt;iOS&lt;/td&gt;
-      &lt;td&gt;채팅 읽으면 도착한 채팅 알림 지우기&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;10/14 00:29&lt;/td&gt;
-      &lt;td&gt;Android&lt;/td&gt;
-      &lt;td&gt;FCM 연결 (iOS와 같은 Firebase 프로젝트)&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;10/15 00:28&lt;/td&gt;
-      &lt;td&gt;Android&lt;/td&gt;
-      &lt;td&gt;진동 꺼진 채널 → 새 채널로 교체&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;10/18 21:34&lt;/td&gt;
-      &lt;td&gt;서버+iOS&lt;/td&gt;
-      &lt;td&gt;한 기기 = 한 계정, 로그아웃 시 토큰 삭제&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;type&lt;/code&gt;은 처음엔 &lt;strong&gt;알림을 눌렀을 때 화면 이동&lt;/strong&gt;용으로 넣었다(9/25). 2주 뒤 &lt;strong&gt;알림 지우기&lt;/strong&gt;(10/7)에 그대로 다시 썼다. 처음부터 종류를 실어 보낸 덕분이다.&lt;/li&gt;
+  &lt;li&gt;리마인드도 부가 기능이라, 실패해도 예외를 밖으로 던지지 않고 로그만 남긴다. 발송 인원은 운영 로그(INFO)에 남겨서 돌았는지 확인할 수 있게 했다.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;정리&quot;&gt;정리&lt;/h2&gt;
 
 &lt;ul&gt;
   &lt;li&gt;&lt;strong&gt;FCM 토큰은 사용자가 아니라 기기(앱 설치)의 것이다.&lt;/strong&gt; 한 토큰은 한 계정에만 붙어 있어야 하고, 로그아웃하면 떼어내야 한다.&lt;/li&gt;
-  &lt;li&gt;푸시 실패는 앱 화면에 아무것도 안 남는다. 등록 실패를 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;print&lt;/code&gt;로만 남기면 아무도 모른다.&lt;/li&gt;
-  &lt;li&gt;알림은 “보내기”만이 아니라 &lt;strong&gt;“치우기”까지&lt;/strong&gt; 앱이 챙겨야 한다. 그러려면 알림에 종류(type)를 실어 보내야 한다.&lt;/li&gt;
-  &lt;li&gt;안드로이드 알림 채널은 &lt;strong&gt;처음 만들 때 제대로&lt;/strong&gt; 만들어야 한다. 바꾸려면 새 채널을 만드는 수밖에 없다.&lt;/li&gt;
+  &lt;li&gt;외부 네트워크 호출이 낀 부가 작업은 요청 스레드에서 빼낸다. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@Async&lt;/code&gt;는 &lt;strong&gt;다른 빈에서 불러야&lt;/strong&gt; 동작한다.&lt;/li&gt;
+  &lt;li&gt;서버가 “보고 있는지”를 모를 때는, 그 결과(“곧 읽음 처리되는지”)를 보고 판단할 수 있다.&lt;/li&gt;
+  &lt;li&gt;푸시에는 보여줄 내용(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;notification&lt;/code&gt;)과 앱이 판단할 값(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;data&lt;/code&gt;)을 나눠 싣는다. 종류를 실어 두면 화면 이동, 알림 정리 등 쓸 데가 계속 생긴다.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://firebase.google.com/docs/cloud-messaging/manage-tokens&quot;&gt;https://firebase.google.com/docs/cloud-messaging/manage-tokens&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/removedeliverednotifications(withidentifiers:)&quot;&gt;https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/removedeliverednotifications(withidentifiers:)&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://firebase.google.com/docs/cloud-messaging/concept-options#notifications_and_data_messages&quot;&gt;https://firebase.google.com/docs/cloud-messaging/concept-options#notifications_and_data_messages&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://developer.android.com/develop/ui/views/notifications/channels&quot;&gt;https://developer.android.com/develop/ui/views/notifications/channels&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-framework/reference/integration/scheduling.html#scheduling-annotation-support-async&quot;&gt;https://docs.spring.io/spring-framework/reference/integration/scheduling.html#scheduling-annotation-support-async&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Mon, 23 Nov 2026 00:00:00 +0900</pubDate>
         <link>http://localhost:4000/project/2026/11/23/Woorin-FCM-Push/</link>
@@ -858,261 +741,217 @@
       </item>
     
       <item>
-        <title>우린 - 소켓은 열려 있는데 메시지가 안 온다 (웹소켓 재연결과 재동기화)</title>
+        <title>우린 - 채팅 웹소켓 서버 (방 관리, 동시 전송, 끊긴 세션, 놓친 메시지)</title>
         <description>&lt;h2 id=&quot;개요&quot;&gt;개요&lt;/h2&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;우린 채팅을 쓰다 보면 이런 일이 있었다.
+  &lt;li&gt;우린 채팅의 실시간 전송은 Spring의 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TextWebSocketHandler&lt;/code&gt; 하나로 돌아간다.&lt;/li&gt;
+  &lt;li&gt;처음엔 단순했다. 커플별로 연결된 세션을 모아 두고, 메시지가 저장되면 그 세션들에 뿌린다.&lt;/li&gt;
+  &lt;li&gt;그런데 쓰다 보니, 그리고 &lt;a href=&quot;/project/2026/11/23/Woorin-Chat-Load-Test/&quot;&gt;부하 테스트&lt;/a&gt;를 하다 보니 서버 쪽에서 네 가지 문제가 나왔다.
     &lt;ul&gt;
-      &lt;li&gt;상대가 보낸 메시지의 &lt;strong&gt;푸시 알림은 왔는데&lt;/strong&gt;, 채팅 화면을 열어 보면 그 메시지가 없다.&lt;/li&gt;
-      &lt;li&gt;채팅방을 나갔다 들어오거나 앱을 껐다 켜야 보인다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;처음엔 서버가 메시지를 늦게 보내는 줄 알았다. 그런데 푸시는 제때 왔으니 서버는 정상이다.&lt;/li&gt;
-  &lt;li&gt;문제는 &lt;strong&gt;웹소켓이 끊긴 걸 앱이 모르고 있던 것&lt;/strong&gt;, 그리고 다시 붙어도 &lt;strong&gt;끊긴 동안의 메시지를 채우지 않은 것&lt;/strong&gt;이었다.&lt;/li&gt;
-  &lt;li&gt;고치다 보니 같은 뿌리의 문제가 둘 더 나왔다.
-    &lt;ul&gt;
-      &lt;li&gt;상대가 입력을 멈췄는데 “입력 중(…)”이 계속 떠 있다.&lt;/li&gt;
-      &lt;li&gt;상대가 읽었는데 “1”이 안 사라진다.&lt;/li&gt;
+      &lt;li&gt;세션 &lt;strong&gt;하나&lt;/strong&gt;에서 전송이 실패하면 같은 방의 &lt;strong&gt;상대도&lt;/strong&gt; 못 받았다.&lt;/li&gt;
+      &lt;li&gt;둘이 거의 동시에 보내면 전송 자체가 &lt;strong&gt;예외로 깨졌다.&lt;/strong&gt;&lt;/li&gt;
+      &lt;li&gt;조용히 끊긴 연결은 서버도 &lt;strong&gt;끊긴 줄 모른다.&lt;/strong&gt;&lt;/li&gt;
+      &lt;li&gt;끊겨 있던 동안의 메시지는 웹소켓으로는 &lt;strong&gt;다시 오지 않는다.&lt;/strong&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&quot;구조&quot;&gt;구조&lt;/h2&gt;
+&lt;h2 id=&quot;구조-보내기는-rest-받기는-웹소켓&quot;&gt;구조: 보내기는 REST, 받기는 웹소켓&lt;/h2&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;보내기는 REST, 받기는 웹소켓이다.
+  &lt;li&gt;앱이 메시지를 보낼 때는 웹소켓이 아니라 &lt;strong&gt;REST&lt;/strong&gt;(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;POST /api/chat/messages&lt;/code&gt;)를 쓴다.&lt;/li&gt;
+  &lt;li&gt;웹소켓은 서버 → 앱 방향으로 &lt;strong&gt;결과를 알려주는 용도&lt;/strong&gt;다.
     &lt;ul&gt;
-      &lt;li&gt;앱은 커플 방(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/ws/chat?coupleId=N&lt;/code&gt;)에 소켓을 붙여 두고 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MESSAGE&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;READ&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TYPING&lt;/code&gt; 이벤트를 받는다.&lt;/li&gt;
-      &lt;li&gt;푸시(FCM)는 소켓과 &lt;strong&gt;별개의 경로&lt;/strong&gt;다. 그래서 소켓이 죽어 있어도 푸시는 온다.&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MESSAGE&lt;/code&gt;(새 메시지), &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;READ&lt;/code&gt;(읽음), &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;REACTION&lt;/code&gt;(반응), &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;WOORIN_LOG&lt;/code&gt;(우린로그 올림/삭제)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;앱이 웹소켓으로 보내는 건 “입력 중(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TYPING&lt;/code&gt;)” 하나뿐이다. REST로 보내기엔 너무 잦고 가볍기 때문이다.&lt;/li&gt;
+  &lt;li&gt;왜 보내기를 REST로 했나?
+    &lt;ul&gt;
+      &lt;li&gt;인증, 입력 검증, 에러 응답, &lt;a href=&quot;/project/2026/11/23/Woorin-Chat-Idempotency/&quot;&gt;재전송 중복 방지&lt;/a&gt;를 이미 있는 REST 구조 그대로 쓸 수 있다.&lt;/li&gt;
+      &lt;li&gt;웹소켓으로 받으면 이걸 다 소켓 메시지 위에서 다시 만들어야 한다.&lt;/li&gt;
+      &lt;li&gt;저장이 성공했는지를 앱이 &lt;strong&gt;응답 코드로&lt;/strong&gt; 바로 안다.&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&quot;0-처음엔-재연결-자체가-없었다&quot;&gt;0. 처음엔 재연결 자체가 없었다&lt;/h2&gt;
+&lt;h3 id=&quot;커플--방&quot;&gt;커플 = 방&lt;/h3&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;채팅을 만든 다음 날(9/13) 먼저 부딪힌 건 &lt;strong&gt;서버 쪽에서 끊기는&lt;/strong&gt; 경우였다.
-    &lt;ul&gt;
-      &lt;li&gt;개발 중이라 서버가 devtools로 자동 재시작되거나, 당시 쓰던 ngrok 터널이 잠깐 끊기면 소켓이 죽었다.&lt;/li&gt;
-      &lt;li&gt;재연결 로직이 없어서, 앱을 &lt;strong&gt;완전히 껐다 켜야&lt;/strong&gt; 실시간 수신이 돌아왔다.&lt;/li&gt;
-      &lt;li&gt;화면에 다시 들어와도 소용없었다. 같은 커플이면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;connect()&lt;/code&gt;를 다시 부르지 않게 막아 뒀기 때문이다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;그래서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;receive()&lt;/code&gt;가 실패하면 3초 뒤 소켓 스스로 다시 붙게 했다.&lt;/li&gt;
-  &lt;li&gt;이건 서버가 연결을 &lt;strong&gt;닫아 줄 때&lt;/strong&gt;만 동작한다. 아래 원인 1은 닫아 주지도 않고 사라지는 경우다.&lt;/li&gt;
+  &lt;li&gt;커플은 항상 두 명뿐이라, 채팅방 테이블을 따로 두지 않고 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;COUPLE_ID&lt;/code&gt;를 그대로 방으로 쓴다.&lt;/li&gt;
+  &lt;li&gt;서버는 메모리에 “커플 → 그 커플에 연결된 세션들”을 들고 있다.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&quot;원인-1-끊겼는데-끊긴-줄-모른다&quot;&gt;원인 1. 끊겼는데 끊긴 줄 모른다&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/ws/img_3.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;셀룰러망이나 공유기(NAT)는 한동안 아무것도 안 오가는 연결을 &lt;strong&gt;양쪽에 알리지 않고&lt;/strong&gt; 정리해 버리는 경우가 많다.
-    &lt;ul&gt;
-      &lt;li&gt;연결을 끊을 때 보내는 신호(FIN)가 없으니, 앱의 소켓은 여전히 “열림” 상태다.&lt;/li&gt;
-      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;receive()&lt;/code&gt;는 에러 없이 다음 메시지를 기다리기만 한다. 다음 메시지는 오지 않는다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;이른바 반쯤 열린(half-open) 연결이다. 무언가를 &lt;strong&gt;보내 봐야&lt;/strong&gt; 끊긴 걸 알 수 있다.&lt;/li&gt;
-  &lt;li&gt;그래서 25초마다 ping을 보낸다. 실패하면 3초 뒤에 다시 붙는다. (9/14)
-    &lt;ul&gt;
-      &lt;li&gt;첫 재연결 로직을 넣은 지 하루 만이다. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;receive()&lt;/code&gt; 실패만 기다려서는 이 경우를 못 잡았다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
+  &lt;li&gt;한 커플에 세션이 둘보다 많을 수 있다. 한 사람이 폰과 다른 기기로 동시에 붙거나, 재연결하면서 잠깐 옛 세션과 새 세션이 겹칠 때다.&lt;/li&gt;
+  &lt;li&gt;세션은 핸드셰이크에서 검증된 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;coupleId&lt;/code&gt;로만 방에 들어간다. (&lt;a href=&quot;/project/2026/11/23/Woorin-WebSocket-Auth/&quot;&gt;웹소켓 인증&lt;/a&gt;)&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/resync/img_1.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+&lt;h2 id=&quot;1-세션-하나가-실패하면-상대도-못-받았다&quot;&gt;1. 세션 하나가 실패하면 상대도 못 받았다&lt;/h2&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;ping 실패와 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;receive()&lt;/code&gt; 실패가 거의 동시에 나면 재연결이 두 번 걸린다. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;isReconnecting&lt;/code&gt; 플래그로 한 번만 예약되게 막았다.&lt;/li&gt;
+  &lt;li&gt;처음 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;broadcast&lt;/code&gt;는 이랬다.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&quot;원인-2-다시-붙어도-놓친-메시지는-안-온다&quot;&gt;원인 2. 다시 붙어도 놓친 메시지는 안 온다&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/ws/img_1.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;ping을 넣고 나서도 “나갔다 들어와야 보이는” 일이 남았다.&lt;/li&gt;
-  &lt;li&gt;소켓은 &lt;strong&gt;지금 이 순간&lt;/strong&gt; 일어나는 일만 전해 준다. 끊겨 있던 동안 서버가 뿌린 메시지는 다시 붙어도 돌아오지 않는다.&lt;/li&gt;
-  &lt;li&gt;게다가 iOS는 앱이 백그라운드로 가면 소켓을 오래 살려 두지 않는다. 앱으로 돌아오는 순간이 가장 많이 놓치는 순간이다.&lt;/li&gt;
-  &lt;li&gt;그래서 원칙을 하나 세웠다. &lt;strong&gt;소켓은 “새 소식이 있다”를 빨리 알려주는 용도, 진짜 목록은 REST.&lt;/strong&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;try&lt;/code&gt;가 &lt;strong&gt;반복문 바깥&lt;/strong&gt;에 있다.
     &lt;ul&gt;
-      &lt;li&gt;다시 붙을 때마다 REST로 최근 메시지를 다시 받아 채운다.&lt;/li&gt;
-      &lt;li&gt;다시 붙는 시점은 세 가지다.&lt;/li&gt;
+      &lt;li&gt;방에 세션이 둘(나, 상대) 있을 때, 내 세션이 먼저 돌았는데 내 연결이 막 끊긴 상태라 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sendMessage&lt;/code&gt;가 예외를 던지면&lt;/li&gt;
+      &lt;li&gt;반복문이 거기서 끝나고 &lt;strong&gt;상대 세션에는 보내지도 않는다.&lt;/strong&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/resync/img_3.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/resync/img_2.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;최초 연결 때는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;onReconnect&lt;/code&gt;를 부르지 않는다. 처음 화면을 열 때 이미 히스토리를 받아오니까 중복이다.&lt;/li&gt;
-  &lt;li&gt;REST로 받은 목록과 소켓으로 받은 메시지가 겹칠 수 있는데, 이건 &lt;a href=&quot;/project/2026/11/23/Woorin-Chat-Idempotency/&quot;&gt;clientMessageId 글&lt;/a&gt;에서 만든 짝짓기로 걸러진다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;원인-3-끄기-신호를-놓치면-영원히-켜져-있다&quot;&gt;원인 3. “끄기” 신호를 놓치면 영원히 켜져 있다&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;“입력 중(…)”은 이렇게 동작했다.
+  &lt;li&gt;메시지 저장은 성공했고, 에러 로그도 남는다. 그런데 상대 화면에는 메시지가 안 뜬다.
     &lt;ul&gt;
-      &lt;li&gt;입력을 시작하면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TYPING isTyping=true&lt;/code&gt;, 3초간 입력이 없으면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;isTyping=false&lt;/code&gt;를 보낸다.&lt;/li&gt;
-      &lt;li&gt;받는 쪽은 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;false&lt;/code&gt;가 올 때까지 …을 보여준다.&lt;/li&gt;
+      &lt;li&gt;로그만 보면 “보낸 사람 쪽 연결이 끊겼다”로 읽혀서, 상대가 못 받았다는 게 바로 드러나지 않는다.&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;문제는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;false&lt;/code&gt;가 &lt;strong&gt;안 오는&lt;/strong&gt; 경우다.
-    &lt;ul&gt;
-      &lt;li&gt;상대가 입력하다가 앱을 나가거나, 네트워크가 끊기거나, 내 소켓이 재연결하는 사이에 신호가 지나가면&lt;/li&gt;
-      &lt;li&gt;…이 다음에 상대가 입력할 때까지 계속 떠 있다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;켜기/끄기 신호 쌍에 의존하는 대신, &lt;strong&gt;유효기간이 있는 상태&lt;/strong&gt;로 바꿨다.&lt;/li&gt;
+  &lt;li&gt;세션마다 따로 처리하도록 바꿨다.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/resync/img_4.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/ws/img_2.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;보내는 쪽은 계속 입력 중이면 &lt;strong&gt;3초마다 “켜기”를 다시 보낸다.&lt;/strong&gt; 만료(6초)보다 짧아서 길게 써도 중간에 꺼지지 않는다.&lt;/li&gt;
-  &lt;li&gt;그 밖에 바로 끄는 경우
+  &lt;li&gt;JSON 변환은 세션과 상관없으니 반복문 &lt;strong&gt;밖&lt;/strong&gt;에서 한 번만 하고, 실패하면 그때는 아무에게도 안 보낸다.&lt;/li&gt;
+  &lt;li&gt;전송은 세션마다 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;try&lt;/code&gt;를 따로 걸어서, 한 세션의 실패가 다른 세션에 번지지 않게 했다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;2-둘이-동시에-보내면-전송이-깨졌다&quot;&gt;2. 둘이 동시에 보내면 전송이 깨졌다&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;부하 테스트에서 이런 예외가 나왔다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;java.lang.IllegalStateException: The remote endpoint was in state [TEXT_PARTIAL_WRITING]
+which is an invalid state for called method
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;원인은 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;WebSocketSession.sendMessage&lt;/code&gt;가 &lt;strong&gt;스레드 안전하지 않은 것&lt;/strong&gt;이다.
     &lt;ul&gt;
-      &lt;li&gt;상대 메시지가 도착했을 때, 내 소켓이 재연결될 때 → 받는 쪽에서 끈다.&lt;/li&gt;
-      &lt;li&gt;채팅 화면을 벗어나거나 앱이 백그라운드로 갈 때 → 보내는 쪽이 소켓이 끊기기 전에 “끄기”를 보낸다.&lt;/li&gt;
+      &lt;li&gt;메시지 전송은 REST 요청이라, 요청마다 다른 톰캣 스레드에서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;broadcast&lt;/code&gt;가 돈다.&lt;/li&gt;
+      &lt;li&gt;커플 두 사람이 거의 동시에 보내면, 두 스레드가 &lt;strong&gt;같은 세션에 동시에&lt;/strong&gt; 쓰려고 한다. 한쪽이 쓰는 중에 다른 쪽이 끼어들면 위 예외가 난다.&lt;/li&gt;
+      &lt;li&gt;새 메시지와 읽음 이벤트가 겹쳐도 똑같다. 둘이 쓸 땐 동시에 보낼 일이 드물어서 몰랐다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Spring이 제공하는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ConcurrentWebSocketSessionDecorator&lt;/code&gt;로 세션을 감쌌다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/ws/img_3.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;데코레이터는 같은 세션으로 가는 전송을 &lt;strong&gt;줄 세워서&lt;/strong&gt; 한 번에 하나씩 보낸다. 다른 스레드가 쓰는 중이면 버퍼에 넣고 돌아간다.&lt;/li&gt;
+  &lt;li&gt;두 가지 한도를 줬다.
+    &lt;ul&gt;
+      &lt;li&gt;&lt;strong&gt;5초&lt;/strong&gt; 넘게 한 세션의 전송이 밀리거나, &lt;strong&gt;512KB&lt;/strong&gt; 넘게 쌓이면 그 세션만 끊는다.&lt;/li&gt;
+      &lt;li&gt;느린(또는 반쯤 죽은) 클라이언트 하나 때문에 요청 스레드가 붙잡혀 있지 않게 하려는 것이다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;방 안의 세션 저장 방식도 같이 바꿨다.
+    &lt;ul&gt;
+      &lt;li&gt;예전엔 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Set&amp;lt;WebSocketSession&amp;gt;&lt;/code&gt;에 세션을 그대로 넣었다.&lt;/li&gt;
+      &lt;li&gt;이제 방에 넣는 건 &lt;strong&gt;데코레이터로 감싼 세션&lt;/strong&gt;인데, 연결이 끊길 때 Spring이 넘겨주는 건 &lt;strong&gt;원래 세션&lt;/strong&gt;이다. 둘은 서로 다른 객체라 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Set&lt;/code&gt;에서 지울 수가 없다.&lt;/li&gt;
+      &lt;li&gt;그래서 세션 ID를 키로 하는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Map&lt;/code&gt;으로 바꿨다. 감싼 세션이든 원래 세션이든 ID는 같다.&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&quot;원인-4-이벤트는-왔는데-화면이-안-바뀐다&quot;&gt;원인 4. 이벤트는 왔는데 화면이 안 바뀐다&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/ws/img_4.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/resync/app_1.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+&lt;h2 id=&quot;3-끊긴-세션은-서버도-모른다&quot;&gt;3. 끊긴 세션은 서버도 모른다&lt;/h2&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;내가 보낸 메시지 옆의 “1”은 상대가 아직 안 읽었다는 표시다. 상대가 읽으면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;READ&lt;/code&gt; 이벤트가 와서 사라져야 한다.&lt;/li&gt;
-  &lt;li&gt;읽음 “1”이 안 사라지는 문제도 소켓을 의심했는데, 이번엔 소켓이 아니었다.
+  &lt;li&gt;모바일 셀룰러망이나 공유기(NAT)는 한동안 아무것도 안 오가는 연결을 &lt;strong&gt;양쪽에 알리지 않고&lt;/strong&gt; 정리해 버리는 경우가 많다.
     &lt;ul&gt;
-      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;READ&lt;/code&gt; 이벤트는 잘 왔고, 메시지의 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;isRead&lt;/code&gt;도 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;true&lt;/code&gt;로 바뀌어 있었다.&lt;/li&gt;
+      &lt;li&gt;연결을 끊을 때 보내는 신호가 없으니, 서버 입장에서 그 세션은 여전히 “열림”이다.&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;afterConnectionClosed&lt;/code&gt;가 불리지 않으니 방에서도 안 빠진다. 서버는 계속 그 세션에 메시지를 보낸다.&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;원인은 직전에 넣은 &lt;strong&gt;목록 최적화&lt;/strong&gt;였다.
+  &lt;li&gt;이 상태에서 서버가 할 수 있는 건 &lt;strong&gt;잘못 보내도 피해가 번지지 않게&lt;/strong&gt; 하는 것이다.
     &lt;ul&gt;
-      &lt;li&gt;그 전날 밤(9/25 23:00~9/26 05:30) 채팅 화면의 &lt;strong&gt;키보드 문제&lt;/strong&gt;와 씨름했다. 키보드를 열면 보던 메시지가 가려지거나 밀려나는 문제다.&lt;/li&gt;
-      &lt;li&gt;그 6시간 반 동안 커밋이 10개 넘게 쌓였다. 수정 → Revert → 재시도 → “마지막으로 확실히 동작하던 상태로 롤백” → 다시 시도.&lt;/li&gt;
-      &lt;li&gt;결국 05:30에 메시지 목록을 SwiftUI &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ScrollView&lt;/code&gt;에서 UIKit &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;UICollectionView&lt;/code&gt;로 &lt;strong&gt;통째로 바꿨다.&lt;/strong&gt; 스크롤 위치를 SwiftUI로는 정확히 잴 수 없었기 때문이다. (+337줄 / -135줄)&lt;/li&gt;
-      &lt;li&gt;이 전환에 같이 들어간 게 아래 최적화다. 읽음 “1” 회귀는 그로부터 &lt;strong&gt;8시간 뒤&lt;/strong&gt;(13:22)에 고쳤다.&lt;/li&gt;
-      &lt;li&gt;채팅 목록은 diffable data source로 그린다. 스크롤 성능을 위해 “행 구성(rows)이 그대로면 apply를 건너뛰기”를 넣었다.&lt;/li&gt;
-      &lt;li&gt;그런데 행은 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(메시지 id, 헤더 표시 여부)&lt;/code&gt;만 담고 있어서, &lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;isRead&lt;/code&gt;만 바뀌면 rows는 그대로&lt;/strong&gt;다. 그래서 갱신 자체를 건너뛰었다.&lt;/li&gt;
-      &lt;li&gt;같은 스냅샷으로 apply를 다시 불러도 소용없다. diffable은 식별자가 같은 항목은 다시 그리지 않는다.&lt;/li&gt;
+      &lt;li&gt;1번처럼 세션마다 따로 보내니, 죽은 세션이 있어도 살아 있는 상대는 받는다.&lt;/li&gt;
+      &lt;li&gt;2번의 한도 덕분에, 죽은 세션으로 가는 전송이 계속 밀리면 그 세션은 끊기고 방에서 빠진다.&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;이전 상태와 비교해 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;isRead&lt;/code&gt;가 바뀐 메시지만 골라 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;reconfigureItems&lt;/code&gt;로 그 셀만 다시 그리게 했다.&lt;/li&gt;
+  &lt;li&gt;죽은 연결을 &lt;strong&gt;알아채는&lt;/strong&gt; 건 앱 쪽이 맡는다. 앱은 25초마다 ping을 보내고, 실패하면 새로 연결한다.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/resync/img_5.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/resync/img_6.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;반대-방향-버그-안-봤는데-읽음-처리&quot;&gt;반대 방향 버그: 안 봤는데 읽음 처리&lt;/h2&gt;
+&lt;h2 id=&quot;4-놓친-메시지는-rest가-책임진다&quot;&gt;4. 놓친 메시지는 REST가 책임진다&lt;/h2&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;읽음은 “안 사라지는” 문제 전에 “너무 빨리 생기는” 문제도 있었다. (9/13)&lt;/li&gt;
-  &lt;li&gt;탭 화면(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TabView&lt;/code&gt;)은 채팅 탭을 안 보고 있어도 채팅 화면과 소켓을 살려 둔다.
+  &lt;li&gt;웹소켓은 &lt;strong&gt;지금 이 순간&lt;/strong&gt; 일어난 일만 전해 준다.
     &lt;ul&gt;
-      &lt;li&gt;그런데 메시지가 소켓으로 도착하기만 하면 무조건 읽음 처리를 보내고 있었다. 홈 탭에 있어도 상대 화면에선 “1”이 바로 사라졌다.&lt;/li&gt;
+      &lt;li&gt;앱이 백그라운드에 있거나 연결이 끊겨 있던 동안 서버가 뿌린 메시지는, 다시 연결해도 돌아오지 않는다.&lt;/li&gt;
+      &lt;li&gt;서버는 세션별로 “어디까지 받았는지”를 기억하지 않는다. 기억하게 만들 수도 있지만, 그러면 메시지 큐를 하나 만드는 셈이다.&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;앱이 포그라운드이고 채팅 탭이 실제로 보일 때만 읽음 처리하도록 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;isViewingChat&lt;/code&gt;으로 구분했다.
+  &lt;li&gt;그래서 원칙을 세웠다. &lt;strong&gt;웹소켓은 “새 소식이 있다”를 빨리 알려주는 용도, 진짜 목록은 REST.&lt;/strong&gt;
     &lt;ul&gt;
-      &lt;li&gt;위 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;resync()&lt;/code&gt;도 이 값으로 “다시 나타났을 때”를 판단한다.&lt;/li&gt;
+      &lt;li&gt;앱은 다시 연결할 때마다, 그리고 앱으로 돌아올 때마다 REST로 최근 메시지를 다시 받는다.&lt;/li&gt;
+      &lt;li&gt;서버는 “최근 N건”과 “이 메시지보다 오래된 N건”을 주는 페이징 API만 잘 만들어 두면 된다.&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&quot;커밋으로-본-흐름&quot;&gt;커밋으로 본 흐름&lt;/h2&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;날짜&lt;/th&gt;
-      &lt;th&gt;어디&lt;/th&gt;
-      &lt;th&gt;커밋&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;9/13 03:44&lt;/td&gt;
-      &lt;td&gt;iOS&lt;/td&gt;
-      &lt;td&gt;소켓 끊기면 3초 뒤 자동 재연결&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;9/13 18:11&lt;/td&gt;
-      &lt;td&gt;iOS&lt;/td&gt;
-      &lt;td&gt;다른 탭에 있을 때 잘못 읽음 처리되던 버그 수정 (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;isViewingChat&lt;/code&gt;)&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;9/14 21:26&lt;/td&gt;
-      &lt;td&gt;iOS&lt;/td&gt;
-      &lt;td&gt;25초 ping으로 조용히 끊긴 연결 감지&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;9/17 23:24&lt;/td&gt;
-      &lt;td&gt;iOS&lt;/td&gt;
-      &lt;td&gt;포그라운드 복귀/탭 재진입/재연결 때 REST로 재동기화&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;9/19 23:39&lt;/td&gt;
-      &lt;td&gt;서버+iOS&lt;/td&gt;
-      &lt;td&gt;입력 중(TYPING) 이벤트 중계, 입력 중 표시&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;9/26 05:30&lt;/td&gt;
-      &lt;td&gt;iOS&lt;/td&gt;
-      &lt;td&gt;키보드 문제 끝에 메시지 목록을 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;UICollectionView&lt;/code&gt;로 전환&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;9/26 13:22&lt;/td&gt;
-      &lt;td&gt;iOS&lt;/td&gt;
-      &lt;td&gt;읽음 “1” 안 사라지던 회귀 수정 (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;reconfigureItems&lt;/code&gt;)&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;10/1 02:20&lt;/td&gt;
-      &lt;td&gt;iOS&lt;/td&gt;
-      &lt;td&gt;입력 중 표시에 6초 만료, 3초마다 재전송&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;10/1 02:38&lt;/td&gt;
-      &lt;td&gt;iOS&lt;/td&gt;
-      &lt;td&gt;입력 중 표시가 뜨면 맨 아래로 스크롤&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;10/12 23:31&lt;/td&gt;
-      &lt;td&gt;Android&lt;/td&gt;
-      &lt;td&gt;채팅 화면/실시간 통신 포팅&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;10/18 22:10&lt;/td&gt;
-      &lt;td&gt;서버&lt;/td&gt;
-      &lt;td&gt;우린로그 올림/삭제도 커플 웹소켓으로 알림&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/ws/img_5.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;채팅 소켓은 이제 채팅 전용이 아니다. 10/18부터 우린로그 이벤트도 같은 커플 채널로 받는다. &lt;strong&gt;“커플 둘만의 실시간 채널”&lt;/strong&gt; 이 된 셈이다.&lt;/li&gt;
+  &lt;li&gt;커서는 시간이 아니라 &lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MESSAGE_ID&lt;/code&gt;&lt;/strong&gt;로 잡았다. (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;WHERE MESSAGE_ID &amp;lt; ? ORDER BY MESSAGE_ID DESC LIMIT ?&lt;/code&gt;)
+    &lt;ul&gt;
+      &lt;li&gt;AUTO_INCREMENT라 계속 커지고 겹치지 않는다. 같은 초에 온 메시지 두 개도 순서가 정확하다.&lt;/li&gt;
+      &lt;li&gt;인덱스도 그 순서에 맞춰 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(COUPLE_ID, MESSAGE_ID)&lt;/code&gt;로 걸었다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/ws/img_6.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;limit&lt;/code&gt;을 안 보내는 예전 버전 앱에는 예전처럼 전체 목록을 준다. 페이징을 모르는 앱이 첫 페이지만 받고 나머지를 잃지 않게 하기 위해서다.&lt;/li&gt;
+  &lt;li&gt;이 페이징 쿼리가 대화가 쌓이면 느려졌던 이야기는 &lt;a href=&quot;/project/2026/11/23/Woorin-Chat-Load-Test/&quot;&gt;부하 테스트 글&lt;/a&gt;에 정리했다.&lt;/li&gt;
+  &lt;li&gt;REST로 받은 목록과 웹소켓으로 받은 메시지가 겹칠 수 있는데, 앱이 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;message_id&lt;/code&gt;와 &lt;a href=&quot;/project/2026/11/23/Woorin-Chat-Idempotency/&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;clientMessageId&lt;/code&gt;&lt;/a&gt;로 거른다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;5-입력-중은-저장하지-않는다&quot;&gt;5. “입력 중”은 저장하지 않는다&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;앱이 웹소켓으로 보내는 유일한 메시지가 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TYPING&lt;/code&gt;이다. 서버는 이걸 &lt;strong&gt;저장하지 않고 같은 방에 그대로 중계&lt;/strong&gt;만 한다.
+    &lt;ul&gt;
+      &lt;li&gt;저장할 이유가 없는 순간적인 상태라서다. DB를 거치지 않으니 가볍다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;중계하기 전에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;userId&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;coupleId&lt;/code&gt;는 핸드셰이크에서 검증된 값으로 덮어쓴다. 남인 척 “입력 중”을 띄우지 못하게 하기 위해서다. (&lt;a href=&quot;/project/2026/11/23/Woorin-WebSocket-Auth/&quot;&gt;웹소켓 인증&lt;/a&gt;)&lt;/li&gt;
+  &lt;li&gt;“입력 중 끄기” 신호가 유실되는 경우(상대가 입력하다 앱을 닫는 등)는 앱이 받은 지 6초가 지나면 저절로 끄는 식으로 처리한다. 서버는 끄기 신호를 보장하지 않는다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;서버를-여러-대로-늘린다면&quot;&gt;서버를 여러 대로 늘린다면&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;방 목록(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;rooms&lt;/code&gt;)이 &lt;strong&gt;서버 메모리&lt;/strong&gt;에 있다.&lt;/li&gt;
+  &lt;li&gt;커플 두 사람이 서로 다른 서버에 붙으면, A 서버의 방에는 B 서버에 붙은 상대가 없다. 실시간 메시지가 상대에게 안 간다.&lt;/li&gt;
+  &lt;li&gt;메시지를 저장한 서버가 Redis Pub/Sub 같은 곳에 “커플 N에 메시지”를 발행하고, 모든 서버가 구독해서 자기한테 붙은 세션에만 보내는 구조가 필요하다. 이 부분은 &lt;a href=&quot;/project/2026/11/23/Woorin-Chat-Load-Test/&quot;&gt;부하 테스트 글&lt;/a&gt;의 “서버를 늘리려면 바꿔야 하는 것”에 정리했다.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;정리&quot;&gt;정리&lt;/h2&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;모바일에서 소켓은 &lt;strong&gt;조용히 끊긴다.&lt;/strong&gt; 끊긴 걸 알려면 보내 봐야 한다. (ping)&lt;/li&gt;
-  &lt;li&gt;소켓은 놓친 걸 다시 주지 않는다. 다시 붙을 때마다 &lt;strong&gt;REST로 다시 맞춘다.&lt;/strong&gt; 소켓은 빠른 알림, 진실은 REST.&lt;/li&gt;
-  &lt;li&gt;켜기/끄기 쌍으로 된 상태는 끄기를 놓치면 영원히 남는다. &lt;strong&gt;유효기간을 두고 주기적으로 갱신&lt;/strong&gt;하면 신호를 놓쳐도 스스로 회복한다.&lt;/li&gt;
-  &lt;li&gt;“실시간이 안 된다”의 원인이 항상 실시간 쪽에 있는 건 아니다. 읽음 표시는 화면 갱신 최적화가 원인이었다.&lt;/li&gt;
+  &lt;li&gt;방송(broadcast)은 &lt;strong&gt;세션마다 따로&lt;/strong&gt; 보내야 한다. 하나의 실패가 같은 방 전체를 막으면 안 된다.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;WebSocketSession.sendMessage&lt;/code&gt;는 스레드 안전하지 않다. 여러 요청 스레드가 같은 세션에 쓸 수 있다면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ConcurrentWebSocketSessionDecorator&lt;/code&gt;로 감싼다. 한도를 줘서 느린 세션은 끊는다.&lt;/li&gt;
+  &lt;li&gt;서버는 조용히 끊긴 연결을 바로 알 수 없다. 대신 죽은 세션이 있어도 피해가 번지지 않게 만든다.&lt;/li&gt;
+  &lt;li&gt;웹소켓은 놓친 걸 다시 주지 않는다. &lt;strong&gt;웹소켓은 빠른 알림, 진실은 REST.&lt;/strong&gt; 서버는 재동기화에 쓸 페이징 API를 잘 만들어 두면 된다.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://developer.apple.com/documentation/foundation/urlsessionwebsockettask&quot;&gt;https://developer.apple.com/documentation/foundation/urlsessionwebsockettask&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-framework/reference/web/websocket/server.html&quot;&gt;https://docs.spring.io/spring-framework/reference/web/websocket/server.html&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/socket/handler/ConcurrentWebSocketSessionDecorator.html&quot;&gt;https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/socket/handler/ConcurrentWebSocketSessionDecorator.html&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://datatracker.ietf.org/doc/html/rfc6455#section-5.5.2&quot;&gt;https://datatracker.ietf.org/doc/html/rfc6455#section-5.5.2&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://developer.apple.com/documentation/uikit/nsdiffabledatasourcesnapshot/reconfigureitems(_:)&quot;&gt;https://developer.apple.com/documentation/uikit/nsdiffabledatasourcesnapshot/reconfigureitems(_:)&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Mon, 23 Nov 2026 00:00:00 +0900</pubDate>
         <link>http://localhost:4000/project/2026/11/23/Woorin-Chat-WebSocket-Resync/</link>
@@ -1449,26 +1288,26 @@
       </item>
     
       <item>
-        <title>우린 - 보내자마자 뜨는 말풍선과 두 번 저장되는 메시지 (clientMessageId)</title>
+        <title>우린 - 재전송해도 메시지가 한 번만 저장되게 (clientMessageId와 UNIQUE)</title>
         <description>&lt;h2 id=&quot;개요&quot;&gt;개요&lt;/h2&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;우린 채팅은 처음에 &lt;strong&gt;서버 응답이 와야&lt;/strong&gt; 말풍선을 띄웠다.
+  &lt;li&gt;우린 채팅은 처음에 &lt;strong&gt;서버 응답이 와야&lt;/strong&gt; 앱이 말풍선을 띄웠다.
     &lt;ul&gt;
       &lt;li&gt;와이파이에선 티가 안 나는데, 지하철이나 엘리베이터에서 보내면 말풍선이 한참 뒤에 뜬다.&lt;/li&gt;
-      &lt;li&gt;카카오톡처럼 &lt;strong&gt;누르자마자 말풍선을 띄우고&lt;/strong&gt;, 뒤에서 보내도록(낙관적 전송) 바꾸기로 했다.&lt;/li&gt;
+      &lt;li&gt;그래서 앱이 &lt;strong&gt;누르자마자 말풍선을 띄우고&lt;/strong&gt;, 뒤에서 보내도록(낙관적 전송) 바꾸기로 했다.&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;그런데 바꾸려고 보니 질문이 두 개 생겼다.
+  &lt;li&gt;앱이 응답을 기다리지 않으면, 응답을 못 받았을 때 &lt;strong&gt;다시 보내기&lt;/strong&gt;가 필요하다. 이때 서버가 답해야 할 질문이 생긴다.
     &lt;ul&gt;
-      &lt;li&gt;응답을 못 받았을 때 &lt;strong&gt;다시 보내도 되나?&lt;/strong&gt; 사실은 서버에 저장됐는데 응답만 못 받은 거라면 같은 메시지가 두 번 저장된다.&lt;/li&gt;
-      &lt;li&gt;내 메시지가 &lt;strong&gt;REST 응답과 웹소켓으로 두 번&lt;/strong&gt; 돌아오는데, 먼저 띄운 말풍선과 어떻게 짝지을까?&lt;/li&gt;
+      &lt;li&gt;같은 메시지가 두 번 오면 &lt;strong&gt;두 번 저장해도 되나?&lt;/strong&gt;&lt;/li&gt;
+      &lt;li&gt;두 번 왔다는 건 &lt;strong&gt;어떻게 알아보나?&lt;/strong&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
   &lt;li&gt;결과
     &lt;ul&gt;
-      &lt;li&gt;앱이 보내기 전에 만든 UUID(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;clientMessageId&lt;/code&gt;) 하나와 &lt;strong&gt;UNIQUE 인덱스 하나&lt;/strong&gt;로 둘 다 해결했다.&lt;/li&gt;
-      &lt;li&gt;같은 값으로 몇 번을 다시 보내도 메시지는 한 번만 저장되고, 서버는 처음 저장된 메시지를 돌려준다.&lt;/li&gt;
+      &lt;li&gt;앱이 보내기 전에 만든 UUID(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;clientMessageId&lt;/code&gt;) 하나와 &lt;strong&gt;UNIQUE 인덱스 하나&lt;/strong&gt;로 해결했다.&lt;/li&gt;
+      &lt;li&gt;같은 값으로 몇 번을 다시 보내도 메시지는 한 번만 저장되고, 서버는 처음 저장된 메시지를 돌려준다. 상대에게 실시간 전송과 푸시도 한 번만 나간다.&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
@@ -1476,38 +1315,24 @@
 &lt;h2 id=&quot;응답을-못-받았다고-실패한-건-아니다&quot;&gt;응답을 못 받았다고 실패한 건 아니다&lt;/h2&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;앱 입장에서 “전송 실패”는 하나지만, 실제로는 두 경우가 섞여 있다.
+  &lt;li&gt;앱 입장에서 “전송 실패”는 하나지만, 서버 입장에서는 두 경우가 섞여 있다.
     &lt;ul&gt;
       &lt;li&gt;요청이 &lt;strong&gt;서버에 닿지 못했다&lt;/strong&gt; → 다시 보내야 한다.&lt;/li&gt;
-      &lt;li&gt;서버는 &lt;strong&gt;저장까지 끝냈는데 응답이 돌아오다 끊겼다&lt;/strong&gt; → 다시 보내면 안 된다.&lt;/li&gt;
+      &lt;li&gt;서버는 &lt;strong&gt;저장까지 끝냈는데 응답이 돌아가다 끊겼다&lt;/strong&gt; → 다시 보내면 안 된다.&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
   &lt;li&gt;앱은 이 둘을 구분할 수 없다. 둘 다 타임아웃이나 네트워크 에러로 보인다.&lt;/li&gt;
-  &lt;li&gt;그래서 “다시 보내기” 버튼을 만들려면, &lt;strong&gt;같은 요청을 여러 번 보내도 결과가 한 번 보낸 것과 같아야&lt;/strong&gt; 한다. (멱등성)
+  &lt;li&gt;그래서 “다시 보내기”를 허용하려면 &lt;strong&gt;같은 요청을 여러 번 받아도 결과가 한 번 받은 것과 같아야&lt;/strong&gt; 한다. (멱등성)
     &lt;ul&gt;
       &lt;li&gt;앱이 판단할 수 없으니, 판단은 서버가 해야 한다.&lt;/li&gt;
       &lt;li&gt;서버가 판단하려면 “이건 아까 그 요청이다”를 알아볼 &lt;strong&gt;식별자&lt;/strong&gt;가 요청에 실려 있어야 한다.&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;내-메시지가-두-번-돌아온다&quot;&gt;내 메시지가 두 번 돌아온다&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;우린 채팅은 보내기는 REST, 받기는 웹소켓이다.
+  &lt;li&gt;서버가 주는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;message_id&lt;/code&gt;는 쓸 수 없다. 저장이 끝나야 생기는 값이라, 응답을 못 받은 앱은 그 값을 모른다.
     &lt;ul&gt;
-      &lt;li&gt;서버는 메시지를 저장하면 커플 방에 웹소켓으로 뿌린다. &lt;strong&gt;보낸 사람 본인에게도&lt;/strong&gt; 간다.&lt;/li&gt;
-      &lt;li&gt;그래서 내 메시지는 REST 응답과 소켓 echo로 두 번 돌아오고, 순서도 그때그때 다르다.&lt;/li&gt;
+      &lt;li&gt;결국 &lt;strong&gt;앱이 보내기 전에 만들고, 재전송 때도 똑같이 보내는&lt;/strong&gt; 값이 필요하다.&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;응답을 기다리던 시절엔 서버가 준 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;message_id&lt;/code&gt;로 중복을 걸렀다.&lt;/li&gt;
-  &lt;li&gt;낙관적 전송에선 말풍선을 띄울 때 &lt;strong&gt;아직 서버 id가 없다.&lt;/strong&gt;
-    &lt;ul&gt;
-      &lt;li&gt;임시로 음수 id를 붙여 두지만, 돌아온 메시지의 id와 비교할 수가 없다.&lt;/li&gt;
-      &lt;li&gt;내용으로 비교하면 “ㅋㅋ”를 연달아 두 번 보낼 때 틀린다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;결국 여기서도 필요한 건 같다. &lt;strong&gt;앱이 보내기 전에 만들고, 서버가 그대로 돌려주는 식별자.&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;해결-앱이-만든-uuid를-unique로&quot;&gt;해결: 앱이 만든 UUID를 UNIQUE로&lt;/h2&gt;
@@ -1515,170 +1340,92 @@
 &lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/idempotency/img_1.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;앱은 말풍선을 띄울 때 UUID를 만들어 요청에 싣는다. 다시 보낼 때도 &lt;strong&gt;같은 값&lt;/strong&gt;을 쓴다.&lt;/li&gt;
-  &lt;li&gt;예전 메시지와 사진 메시지는 이 값이 NULL이다.
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CLIENT_MESSAGE_ID&lt;/code&gt;는 앱이 만든 UUID다. 길이가 고정(36자)이라 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;VARCHAR(36)&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;UNIQUE는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(COUPLE_ID, CLIENT_MESSAGE_ID)&lt;/code&gt;로 걸었다.
     &lt;ul&gt;
-      &lt;li&gt;사진은 업로드가 먼저 끝나야 보낼 수 있어서 낙관적 전송 대상에서 뺐다. 텍스트와 이모티콘(로컬 에셋 이름만 보냄)만 낙관적으로 보낸다.&lt;/li&gt;
-      &lt;li&gt;MySQL UNIQUE는 NULL끼리는 중복으로 보지 않아서, 기존 데이터를 건드리지 않고 인덱스를 걸 수 있었다.&lt;/li&gt;
+      &lt;li&gt;UUID는 사실상 겹치지 않지만, 범위를 커플로 좁혀 두면 “다른 커플의 메시지와 충돌”이라는 경우 자체를 생각할 필요가 없다.&lt;/li&gt;
+      &lt;li&gt;앞 컬럼이 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;COUPLE_ID&lt;/code&gt;라, 중복일 때 기존 메시지를 찾는 조회도 이 인덱스를 그대로 탄다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;컬럼은 &lt;strong&gt;NULL 허용&lt;/strong&gt;이다.
+    &lt;ul&gt;
+      &lt;li&gt;예전 메시지, 사진 메시지(업로드가 먼저 끝나야 보낼 수 있어 낙관적 전송 대상이 아니다), &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;clientMessageId&lt;/code&gt;를 안 보내는 예전 버전 앱은 NULL로 저장된다.&lt;/li&gt;
+      &lt;li&gt;MySQL UNIQUE는 NULL끼리는 중복으로 보지 않는다. 그래서 기존 데이터를 손대지 않고 인덱스를 걸 수 있었다.&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
+
+&lt;h3 id=&quot;중복이면-저장된-메시지를-돌려준다&quot;&gt;중복이면 저장된 메시지를 돌려준다&lt;/h3&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/idempotency/img_2.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
+  &lt;li&gt;INSERT를 먼저 시도하고, UNIQUE에 걸리면(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DuplicateKeyException&lt;/code&gt;) 이미 저장된 메시지를 찾아서 돌려준다.&lt;/li&gt;
   &lt;li&gt;왜 “먼저 SELECT로 있는지 보고, 없으면 INSERT”로 안 했나?
     &lt;ul&gt;
       &lt;li&gt;재전송은 첫 요청이 아직 처리 중일 때도 온다. 두 요청이 동시에 SELECT하면 &lt;strong&gt;둘 다 “없음”을 보고 둘 다 INSERT&lt;/strong&gt;한다.&lt;/li&gt;
-      &lt;li&gt;UNIQUE 인덱스에 맡기면 DB가 둘 중 하나만 통과시킨다. 판단을 애플리케이션이 아니라 DB의 제약 조건에 둔 것이다.&lt;/li&gt;
+      &lt;li&gt;UNIQUE 제약에 맡기면 DB가 둘 중 하나만 통과시킨다. 판단을 애플리케이션 코드가 아니라 &lt;strong&gt;DB 제약&lt;/strong&gt;에 둔 것이다.&lt;/li&gt;
+      &lt;li&gt;보통은 중복이 아니니, 대부분의 요청은 INSERT 한 번으로 끝난다. 조회가 추가되는 건 재전송일 때뿐이다.&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;중복으로 걸린 요청은 &lt;strong&gt;브로드캐스트와 푸시를 다시 하지 않는다.&lt;/strong&gt;
-    &lt;ul&gt;
-      &lt;li&gt;첫 요청 때 이미 상대에게 갔다. 여기서 또 보내면 상대는 알림을 두 번 받는다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;clientMessageId&lt;/code&gt;가 없는데 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DuplicateKeyException&lt;/code&gt;이 났다면 이 경우가 아니다. 그때는 예외를 그대로 던진다.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&quot;앱-돌아온-메시지를-말풍선과-짝짓기&quot;&gt;앱: 돌아온 메시지를 말풍선과 짝짓기&lt;/h2&gt;
+&lt;h2 id=&quot;저장-다음에-하는-일들&quot;&gt;저장 다음에 하는 일들&lt;/h2&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;말풍선은 세 상태를 가진다. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sending&lt;/code&gt;(시계 아이콘, 흐리게) → &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sent&lt;/code&gt;, 또는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;failed&lt;/code&gt;(빨간 느낌표, 다시 보내기/삭제).&lt;/li&gt;
+  &lt;li&gt;메시지 저장 하나에 서버가 하는 일은 저장만이 아니다. 전체 흐름은 이렇다.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/idempotency/img_3.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
 
-&lt;ul&gt;
-  &lt;li&gt;놓치기 쉬운 순서 문제가 하나 있었다.
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;저장&lt;/strong&gt; (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;INSERT&lt;/code&gt;, 중복이면 기존 메시지 반환하고 끝)&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;저장한 행을 다시 읽는다&lt;/strong&gt;
     &lt;ul&gt;
-      &lt;li&gt;소켓 echo가 먼저 와서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sent&lt;/code&gt;가 됐는데, &lt;strong&gt;REST 응답은 뒤늦게 타임아웃&lt;/strong&gt;으로 실패할 수 있다.&lt;/li&gt;
-      &lt;li&gt;그대로 두면 이미 상대에게 간 메시지에 빨간 느낌표가 뜬다.&lt;/li&gt;
-      &lt;li&gt;그래서 실패 처리 전에 “아직 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sending&lt;/code&gt;인가”를 한 번 더 확인한다.&lt;/li&gt;
+      &lt;li&gt;요청 VO에는 앱이 보낸 값만 있다. 읽음 여부(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;READ_YN&lt;/code&gt;), 보낸 시각(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;FST_RG_DTM&lt;/code&gt;)처럼 &lt;strong&gt;DB 기본값&lt;/strong&gt;으로 채워지는 컬럼은 비어 있다.&lt;/li&gt;
+      &lt;li&gt;다시 읽지 않으면 응답과 실시간 전송에 이 값들이 빠진다. (&lt;a href=&quot;/project/2026/11/23/Woorin-Silent-Failures/&quot;&gt;이 문제로 실제로 겪은 일&lt;/a&gt;)&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/idempotency/img_4.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;채팅 목록을 서버에서 다시 받아올 때도 조심해야 했다.
+  &lt;li&gt;&lt;strong&gt;커플 방에 웹소켓으로 전송&lt;/strong&gt; (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MESSAGE&lt;/code&gt; 이벤트, 보낸 사람 본인 포함)&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;상대에게 푸시&lt;/strong&gt; (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@Async&lt;/code&gt;로 별도 스레드)&lt;/li&gt;
+  &lt;li&gt;응답
     &lt;ul&gt;
-      &lt;li&gt;서버 목록으로 통째로 덮어쓰면, 아직 확인 못 받은(보내는 중/실패) 말풍선이 사라진다.&lt;/li&gt;
-      &lt;li&gt;서버 목록에 같은 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;clientMessageId&lt;/code&gt;가 있으면 서버 것을 쓰고, 없으면 뒤에 그대로 붙여 둔다.&lt;/li&gt;
+      &lt;li&gt;중복 요청은 1번에서 끝난다. 3, 4번을 다시 하면 상대는 같은 메시지를 실시간으로 두 번 받고, 푸시도 두 번 받는다. 첫 요청 때 이미 나갔으니 &lt;strong&gt;저장된 메시지만 돌려준다.&lt;/strong&gt;&lt;/li&gt;
+      &lt;li&gt;응답과 실시간 전송 둘 다 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;clientMessageId&lt;/code&gt;를 그대로 담는다.
+        &lt;ul&gt;
+          &lt;li&gt;앱은 내 메시지를 REST 응답과 웹소켓으로 두 번 받는데, 어느 쪽이 먼저 오든 이 값으로 먼저 띄워 둔 말풍선과 짝짓는다.&lt;/li&gt;
+          &lt;li&gt;서버가 할 일은 이 값을 &lt;strong&gt;저장하고 그대로 돌려주는 것&lt;/strong&gt;까지다. 짝짓기는 앱이 한다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-&lt;/ul&gt;
+&lt;/ol&gt;
 
-&lt;h2 id=&quot;배포-순서가-상관없었던-이유&quot;&gt;배포 순서가 상관없었던 이유&lt;/h2&gt;
+&lt;h2 id=&quot;예전-앱과-새-서버가-섞여도-깨지지-않게&quot;&gt;예전 앱과 새 서버가 섞여도 깨지지 않게&lt;/h2&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;이 변경은 서버(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;16a11c4&lt;/code&gt;)와 iOS(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;f96ca5c&lt;/code&gt;)를 &lt;strong&gt;같은 분(10/7 00:58)에&lt;/strong&gt; 커밋했다. 하지만 &lt;a href=&quot;/project/2026/11/23/Woorin-WebSocket-Auth/&quot;&gt;웹소켓 인증&lt;/a&gt; 때와 달리 배포 순서를 신경 쓸 필요가 없었다.
+  &lt;li&gt;이 변경은 서버와 앱이 같이 바뀌어야 의미가 있다. 그런데 배포 순서를 신경 쓸 필요가 없었다.
     &lt;ul&gt;
-      &lt;li&gt;서버가 먼저 올라가면: 예전 앱은 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;clientMessageId&lt;/code&gt;를 안 보낸다 → NULL로 저장 → 예전처럼 동작한다.&lt;/li&gt;
+      &lt;li&gt;서버가 먼저 올라가면: 예전 앱은 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;clientMessageId&lt;/code&gt;를 안 보낸다 → NULL로 저장 → 예전과 똑같이 동작한다.&lt;/li&gt;
       &lt;li&gt;앱이 먼저 올라가면: 예전 서버는 모르는 필드를 무시한다 → 저장은 되고, 짝짓기만 안 된다.&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;새 컬럼을 NULL 허용으로 두고 UNIQUE가 NULL을 중복으로 안 보는 성질 덕분이다. &lt;strong&gt;옛 클라이언트와 새 서버가 섞여도 깨지지 않게&lt;/strong&gt; 만든 것이다.&lt;/li&gt;
-  &lt;li&gt;10/12에 안드로이드로 채팅을 옮길 때도 같은 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;clientMessageId&lt;/code&gt; 방식을 그대로 썼다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;말풍선이-깜빡였다&quot;&gt;말풍선이 깜빡였다&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;처음 붙였을 때 보내는 순간 말풍선이 &lt;strong&gt;한 번 깜빡였다.&lt;/strong&gt;&lt;/li&gt;
-  &lt;li&gt;채팅 목록은 UICollectionView의 diffable data source로 그리는데, 행을 &lt;strong&gt;id&lt;/strong&gt;로 구분하고 있었다.
-    &lt;ul&gt;
-      &lt;li&gt;임시 id(-1) → 서버 id(1234)로 바뀌면, diffable은 “-1 행 삭제 + 1234 행 추가”로 본다. 삭제/추가 애니메이션이 깜빡임이었다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;행의 키를 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;clientMessageId&lt;/code&gt;로 바꿨다. (옛날 메시지는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&quot;id-&amp;lt;서버 id&amp;gt;&quot;&lt;/code&gt;)
-    &lt;ul&gt;
-      &lt;li&gt;키가 그대로라 “같은 행의 내용만 바뀜”으로 처리되고, 그 셀만 다시 그린다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/idempotency/img_5.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;누르자마자-보이게&quot;&gt;누르자마자 보이게&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;데이터는 바로 들어가는데, 눈에는 &lt;strong&gt;한 박자 늦게&lt;/strong&gt; 보였다.
-    &lt;ul&gt;
-      &lt;li&gt;목록에 새 행이 붙을 때 페이드인(약 0.3초)이 있고, 그다음 맨 아래로 스크롤하는 애니메이션(약 0.3초)이 또 있다.&lt;/li&gt;
-      &lt;li&gt;둘이 겹치면 말풍선이 화면 아래 바깥에 붙었다가 스크롤이 끝나야 보인다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;내가 방금 보낸 메시지는 애니메이션 없이 바로 붙이도록 했다. 상대 메시지는 그대로 페이드인한다. (낙관적 전송을 넣고 37분 뒤에 고쳤다)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;커밋으로-본-흐름&quot;&gt;커밋으로 본 흐름&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;이 작업은 10/7 새벽 한 시간 남짓에 몰려 있다. 채팅을 “빠르게 느껴지게” 만드는 커밋들이다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;시각&lt;/th&gt;
-      &lt;th&gt;어디&lt;/th&gt;
-      &lt;th&gt;커밋&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;00:42&lt;/td&gt;
-      &lt;td&gt;iOS&lt;/td&gt;
-      &lt;td&gt;채팅을 읽으면 알림센터/잠금화면의 채팅 푸시도 지우기&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;00:50&lt;/td&gt;
-      &lt;td&gt;iOS&lt;/td&gt;
-      &lt;td&gt;입력창을 별도 뷰로 분리 (타이핑할 때마다 목록 전체 재계산 방지)&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;00:58&lt;/td&gt;
-      &lt;td&gt;서버&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;clientMessageId&lt;/code&gt; 컬럼 + UNIQUE, 재전송 시 기존 메시지 반환 (DDL 59)&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;00:58&lt;/td&gt;
-      &lt;td&gt;iOS&lt;/td&gt;
-      &lt;td&gt;텍스트/이모티콘 낙관적 전송, 실패하면 다시 보내기/삭제&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;01:20&lt;/td&gt;
-      &lt;td&gt;iOS&lt;/td&gt;
-      &lt;td&gt;채팅 사진/프사를 화면 크기로 줄여 메모리 캐시&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;01:35&lt;/td&gt;
-      &lt;td&gt;iOS&lt;/td&gt;
-      &lt;td&gt;내가 보낸 메시지는 페이드인/스크롤 애니메이션 없이 즉시 보이게&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;01:49&lt;/td&gt;
-      &lt;td&gt;iOS&lt;/td&gt;
-      &lt;td&gt;채팅 목록 구조 개선 (읽음 변경 시 높이 재측정 생략, 안 바뀌면 업데이트 생략)&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;그리고 한 달 반 뒤(11/23) 부하 테스트에서, k6가 메시지마다 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;clientMessageId&lt;/code&gt;를 실어 보내 같은 경로를 검증했다.&lt;/li&gt;
+  &lt;li&gt;새 컬럼을 &lt;strong&gt;NULL 허용&lt;/strong&gt;으로 두고, UNIQUE가 NULL을 중복으로 안 보는 성질을 이용한 덕분이다.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;/project/2026/11/23/Woorin-WebSocket-Auth/&quot;&gt;웹소켓 인증&lt;/a&gt;처럼 “예전 앱은 거부”가 되는 변경과 비교하면, 처음부터 &lt;strong&gt;옛 클라이언트를 그대로 받아주는&lt;/strong&gt; 쪽으로 설계하는 게 훨씬 편하다.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;정리&quot;&gt;정리&lt;/h2&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;네트워크 요청의 실패는 “안 갔다”와 “갔는데 답을 못 받았다”가 구분되지 않는다. 다시 보내기를 만들려면 &lt;strong&gt;멱등성&lt;/strong&gt;이 먼저다.&lt;/li&gt;
+  &lt;li&gt;네트워크 요청의 실패는 “안 갔다”와 “갔는데 답을 못 받았다”가 구분되지 않는다. 재전송을 허용하려면 &lt;strong&gt;서버가 멱등&lt;/strong&gt;해야 한다.&lt;/li&gt;
   &lt;li&gt;멱등성의 핵심은 &lt;strong&gt;클라이언트가 만든 식별자 + DB의 UNIQUE 제약&lt;/strong&gt;이었다.
     &lt;ul&gt;
       &lt;li&gt;“있는지 보고 넣기”는 동시 요청에 깨진다. 판단은 DB 제약에 맡긴다.&lt;/li&gt;
+      &lt;li&gt;중복 요청은 저장뿐 아니라 &lt;strong&gt;부수 효과(실시간 전송, 푸시)도 다시 일으키면 안 된다.&lt;/strong&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;같은 식별자가 낙관적 UI의 짝짓기 키, 목록의 행 키까지 한 번에 해결해 줬다.&lt;/li&gt;
+  &lt;li&gt;새 컬럼은 NULL 허용으로 두면, 예전 클라이언트와 섞여도 깨지지 않는다.&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;/project/2026/11/23/Woorin-Chat-Load-Test/&quot;&gt;부하 테스트 글&lt;/a&gt;의 k6 시나리오에서 메시지마다 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;clientMessageId: uuidv4()&lt;/code&gt;를 실어 보낸 이유가 이것이다.&lt;/li&gt;
 &lt;/ul&gt;
 
@@ -1688,7 +1435,7 @@
 
 &lt;p&gt;&lt;a href=&quot;https://dev.mysql.com/doc/refman/8.0/en/create-index.html#create-index-unique&quot;&gt;https://dev.mysql.com/doc/refman/8.0/en/create-index.html#create-index-unique&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://developer.apple.com/documentation/uikit/nsdiffabledatasourcesnapshot/reconfigureitems(_:)&quot;&gt;https://developer.apple.com/documentation/uikit/nsdiffabledatasourcesnapshot/reconfigureitems(_:)&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-framework/reference/data-access/dao.html#dao-exceptions&quot;&gt;https://docs.spring.io/spring-framework/reference/data-access/dao.html#dao-exceptions&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Mon, 23 Nov 2026 00:00:00 +0900</pubDate>
         <link>http://localhost:4000/project/2026/11/23/Woorin-Chat-Idempotency/</link>

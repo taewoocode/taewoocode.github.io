@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="우린 - 보내자마자 뜨는 말풍선과 두 번 저장되는 메시지 (clientMessageId)" />
+<meta property="og:title" content="우린 - 재전송해도 메시지가 한 번만 저장되게 (clientMessageId와 UNIQUE)" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,7 +52,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>우린 - 보내자마자 뜨는 말풍선과 두 번 저장되는 메시지 (clientMessageId) &middot; 일벌리는 개발자</title>
+<title>우린 - 재전송해도 메시지가 한 번만 저장되게 (clientMessageId와 UNIQUE) &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
@@ -187,7 +187,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
   <header>
     <h1 class="post-title">
       
-      우린 - 보내자마자 뜨는 말풍선과 두 번 저장되는 메시지 (clientMessageId)
+      우린 - 재전송해도 메시지가 한 번만 저장되게 (clientMessageId와 UNIQUE)
       
     </h1>
 
@@ -217,8 +217,6 @@ in <a href="/category/project/" data-flip="title">Project</a>
 
 on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 
-      
-      <span class="post-views">· 조회수 <span data-gc-views>-</span></span>
       
     </p>
 
@@ -273,22 +271,22 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
     <h2 id="개요">개요</h2>
 
 <ul>
-  <li>우린 채팅은 처음에 <strong>서버 응답이 와야</strong> 말풍선을 띄웠다.
+  <li>우린 채팅은 처음에 <strong>서버 응답이 와야</strong> 앱이 말풍선을 띄웠다.
     <ul>
       <li>와이파이에선 티가 안 나는데, 지하철이나 엘리베이터에서 보내면 말풍선이 한참 뒤에 뜬다.</li>
-      <li>카카오톡처럼 <strong>누르자마자 말풍선을 띄우고</strong>, 뒤에서 보내도록(낙관적 전송) 바꾸기로 했다.</li>
+      <li>그래서 앱이 <strong>누르자마자 말풍선을 띄우고</strong>, 뒤에서 보내도록(낙관적 전송) 바꾸기로 했다.</li>
     </ul>
   </li>
-  <li>그런데 바꾸려고 보니 질문이 두 개 생겼다.
+  <li>앱이 응답을 기다리지 않으면, 응답을 못 받았을 때 <strong>다시 보내기</strong>가 필요하다. 이때 서버가 답해야 할 질문이 생긴다.
     <ul>
-      <li>응답을 못 받았을 때 <strong>다시 보내도 되나?</strong> 사실은 서버에 저장됐는데 응답만 못 받은 거라면 같은 메시지가 두 번 저장된다.</li>
-      <li>내 메시지가 <strong>REST 응답과 웹소켓으로 두 번</strong> 돌아오는데, 먼저 띄운 말풍선과 어떻게 짝지을까?</li>
+      <li>같은 메시지가 두 번 오면 <strong>두 번 저장해도 되나?</strong></li>
+      <li>두 번 왔다는 건 <strong>어떻게 알아보나?</strong></li>
     </ul>
   </li>
   <li>결과
     <ul>
-      <li>앱이 보내기 전에 만든 UUID(<code class="language-plaintext highlighter-rouge">clientMessageId</code>) 하나와 <strong>UNIQUE 인덱스 하나</strong>로 둘 다 해결했다.</li>
-      <li>같은 값으로 몇 번을 다시 보내도 메시지는 한 번만 저장되고, 서버는 처음 저장된 메시지를 돌려준다.</li>
+      <li>앱이 보내기 전에 만든 UUID(<code class="language-plaintext highlighter-rouge">clientMessageId</code>) 하나와 <strong>UNIQUE 인덱스 하나</strong>로 해결했다.</li>
+      <li>같은 값으로 몇 번을 다시 보내도 메시지는 한 번만 저장되고, 서버는 처음 저장된 메시지를 돌려준다. 상대에게 실시간 전송과 푸시도 한 번만 나간다.</li>
     </ul>
   </li>
 </ul>
@@ -296,38 +294,24 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 <h2 id="응답을-못-받았다고-실패한-건-아니다">응답을 못 받았다고 실패한 건 아니다</h2>
 
 <ul>
-  <li>앱 입장에서 “전송 실패”는 하나지만, 실제로는 두 경우가 섞여 있다.
+  <li>앱 입장에서 “전송 실패”는 하나지만, 서버 입장에서는 두 경우가 섞여 있다.
     <ul>
       <li>요청이 <strong>서버에 닿지 못했다</strong> → 다시 보내야 한다.</li>
-      <li>서버는 <strong>저장까지 끝냈는데 응답이 돌아오다 끊겼다</strong> → 다시 보내면 안 된다.</li>
+      <li>서버는 <strong>저장까지 끝냈는데 응답이 돌아가다 끊겼다</strong> → 다시 보내면 안 된다.</li>
     </ul>
   </li>
   <li>앱은 이 둘을 구분할 수 없다. 둘 다 타임아웃이나 네트워크 에러로 보인다.</li>
-  <li>그래서 “다시 보내기” 버튼을 만들려면, <strong>같은 요청을 여러 번 보내도 결과가 한 번 보낸 것과 같아야</strong> 한다. (멱등성)
+  <li>그래서 “다시 보내기”를 허용하려면 <strong>같은 요청을 여러 번 받아도 결과가 한 번 받은 것과 같아야</strong> 한다. (멱등성)
     <ul>
       <li>앱이 판단할 수 없으니, 판단은 서버가 해야 한다.</li>
       <li>서버가 판단하려면 “이건 아까 그 요청이다”를 알아볼 <strong>식별자</strong>가 요청에 실려 있어야 한다.</li>
     </ul>
   </li>
-</ul>
-
-<h2 id="내-메시지가-두-번-돌아온다">내 메시지가 두 번 돌아온다</h2>
-
-<ul>
-  <li>우린 채팅은 보내기는 REST, 받기는 웹소켓이다.
+  <li>서버가 주는 <code class="language-plaintext highlighter-rouge">message_id</code>는 쓸 수 없다. 저장이 끝나야 생기는 값이라, 응답을 못 받은 앱은 그 값을 모른다.
     <ul>
-      <li>서버는 메시지를 저장하면 커플 방에 웹소켓으로 뿌린다. <strong>보낸 사람 본인에게도</strong> 간다.</li>
-      <li>그래서 내 메시지는 REST 응답과 소켓 echo로 두 번 돌아오고, 순서도 그때그때 다르다.</li>
+      <li>결국 <strong>앱이 보내기 전에 만들고, 재전송 때도 똑같이 보내는</strong> 값이 필요하다.</li>
     </ul>
   </li>
-  <li>응답을 기다리던 시절엔 서버가 준 <code class="language-plaintext highlighter-rouge">message_id</code>로 중복을 걸렀다.</li>
-  <li>낙관적 전송에선 말풍선을 띄울 때 <strong>아직 서버 id가 없다.</strong>
-    <ul>
-      <li>임시로 음수 id를 붙여 두지만, 돌아온 메시지의 id와 비교할 수가 없다.</li>
-      <li>내용으로 비교하면 “ㅋㅋ”를 연달아 두 번 보낼 때 틀린다.</li>
-    </ul>
-  </li>
-  <li>결국 여기서도 필요한 건 같다. <strong>앱이 보내기 전에 만들고, 서버가 그대로 돌려주는 식별자.</strong></li>
 </ul>
 
 <h2 id="해결-앱이-만든-uuid를-unique로">해결: 앱이 만든 UUID를 UNIQUE로</h2>
@@ -335,170 +319,92 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 <p><img src="/assets/img/projects/woorin/idempotency/img_1.png" alt="img.png" /></p>
 
 <ul>
-  <li>앱은 말풍선을 띄울 때 UUID를 만들어 요청에 싣는다. 다시 보낼 때도 <strong>같은 값</strong>을 쓴다.</li>
-  <li>예전 메시지와 사진 메시지는 이 값이 NULL이다.
+  <li><code class="language-plaintext highlighter-rouge">CLIENT_MESSAGE_ID</code>는 앱이 만든 UUID다. 길이가 고정(36자)이라 <code class="language-plaintext highlighter-rouge">VARCHAR(36)</code>.</li>
+  <li>UNIQUE는 <code class="language-plaintext highlighter-rouge">(COUPLE_ID, CLIENT_MESSAGE_ID)</code>로 걸었다.
     <ul>
-      <li>사진은 업로드가 먼저 끝나야 보낼 수 있어서 낙관적 전송 대상에서 뺐다. 텍스트와 이모티콘(로컬 에셋 이름만 보냄)만 낙관적으로 보낸다.</li>
-      <li>MySQL UNIQUE는 NULL끼리는 중복으로 보지 않아서, 기존 데이터를 건드리지 않고 인덱스를 걸 수 있었다.</li>
+      <li>UUID는 사실상 겹치지 않지만, 범위를 커플로 좁혀 두면 “다른 커플의 메시지와 충돌”이라는 경우 자체를 생각할 필요가 없다.</li>
+      <li>앞 컬럼이 <code class="language-plaintext highlighter-rouge">COUPLE_ID</code>라, 중복일 때 기존 메시지를 찾는 조회도 이 인덱스를 그대로 탄다.</li>
+    </ul>
+  </li>
+  <li>컬럼은 <strong>NULL 허용</strong>이다.
+    <ul>
+      <li>예전 메시지, 사진 메시지(업로드가 먼저 끝나야 보낼 수 있어 낙관적 전송 대상이 아니다), <code class="language-plaintext highlighter-rouge">clientMessageId</code>를 안 보내는 예전 버전 앱은 NULL로 저장된다.</li>
+      <li>MySQL UNIQUE는 NULL끼리는 중복으로 보지 않는다. 그래서 기존 데이터를 손대지 않고 인덱스를 걸 수 있었다.</li>
     </ul>
   </li>
 </ul>
+
+<h3 id="중복이면-저장된-메시지를-돌려준다">중복이면 저장된 메시지를 돌려준다</h3>
 
 <p><img src="/assets/img/projects/woorin/idempotency/img_2.png" alt="img.png" /></p>
 
 <ul>
+  <li>INSERT를 먼저 시도하고, UNIQUE에 걸리면(<code class="language-plaintext highlighter-rouge">DuplicateKeyException</code>) 이미 저장된 메시지를 찾아서 돌려준다.</li>
   <li>왜 “먼저 SELECT로 있는지 보고, 없으면 INSERT”로 안 했나?
     <ul>
       <li>재전송은 첫 요청이 아직 처리 중일 때도 온다. 두 요청이 동시에 SELECT하면 <strong>둘 다 “없음”을 보고 둘 다 INSERT</strong>한다.</li>
-      <li>UNIQUE 인덱스에 맡기면 DB가 둘 중 하나만 통과시킨다. 판단을 애플리케이션이 아니라 DB의 제약 조건에 둔 것이다.</li>
+      <li>UNIQUE 제약에 맡기면 DB가 둘 중 하나만 통과시킨다. 판단을 애플리케이션 코드가 아니라 <strong>DB 제약</strong>에 둔 것이다.</li>
+      <li>보통은 중복이 아니니, 대부분의 요청은 INSERT 한 번으로 끝난다. 조회가 추가되는 건 재전송일 때뿐이다.</li>
     </ul>
   </li>
-  <li>중복으로 걸린 요청은 <strong>브로드캐스트와 푸시를 다시 하지 않는다.</strong>
-    <ul>
-      <li>첫 요청 때 이미 상대에게 갔다. 여기서 또 보내면 상대는 알림을 두 번 받는다.</li>
-    </ul>
-  </li>
+  <li><code class="language-plaintext highlighter-rouge">clientMessageId</code>가 없는데 <code class="language-plaintext highlighter-rouge">DuplicateKeyException</code>이 났다면 이 경우가 아니다. 그때는 예외를 그대로 던진다.</li>
 </ul>
 
-<h2 id="앱-돌아온-메시지를-말풍선과-짝짓기">앱: 돌아온 메시지를 말풍선과 짝짓기</h2>
+<h2 id="저장-다음에-하는-일들">저장 다음에 하는 일들</h2>
 
 <ul>
-  <li>말풍선은 세 상태를 가진다. <code class="language-plaintext highlighter-rouge">sending</code>(시계 아이콘, 흐리게) → <code class="language-plaintext highlighter-rouge">sent</code>, 또는 <code class="language-plaintext highlighter-rouge">failed</code>(빨간 느낌표, 다시 보내기/삭제).</li>
+  <li>메시지 저장 하나에 서버가 하는 일은 저장만이 아니다. 전체 흐름은 이렇다.</li>
 </ul>
 
 <p><img src="/assets/img/projects/woorin/idempotency/img_3.png" alt="img.png" /></p>
 
-<ul>
-  <li>놓치기 쉬운 순서 문제가 하나 있었다.
+<ol>
+  <li><strong>저장</strong> (<code class="language-plaintext highlighter-rouge">INSERT</code>, 중복이면 기존 메시지 반환하고 끝)</li>
+  <li><strong>저장한 행을 다시 읽는다</strong>
     <ul>
-      <li>소켓 echo가 먼저 와서 <code class="language-plaintext highlighter-rouge">sent</code>가 됐는데, <strong>REST 응답은 뒤늦게 타임아웃</strong>으로 실패할 수 있다.</li>
-      <li>그대로 두면 이미 상대에게 간 메시지에 빨간 느낌표가 뜬다.</li>
-      <li>그래서 실패 처리 전에 “아직 <code class="language-plaintext highlighter-rouge">sending</code>인가”를 한 번 더 확인한다.</li>
+      <li>요청 VO에는 앱이 보낸 값만 있다. 읽음 여부(<code class="language-plaintext highlighter-rouge">READ_YN</code>), 보낸 시각(<code class="language-plaintext highlighter-rouge">FST_RG_DTM</code>)처럼 <strong>DB 기본값</strong>으로 채워지는 컬럼은 비어 있다.</li>
+      <li>다시 읽지 않으면 응답과 실시간 전송에 이 값들이 빠진다. (<a href="/project/2026/11/23/Woorin-Silent-Failures/">이 문제로 실제로 겪은 일</a>)</li>
     </ul>
   </li>
-</ul>
-
-<p><img src="/assets/img/projects/woorin/idempotency/img_4.png" alt="img.png" /></p>
-
-<ul>
-  <li>채팅 목록을 서버에서 다시 받아올 때도 조심해야 했다.
+  <li><strong>커플 방에 웹소켓으로 전송</strong> (<code class="language-plaintext highlighter-rouge">MESSAGE</code> 이벤트, 보낸 사람 본인 포함)</li>
+  <li><strong>상대에게 푸시</strong> (<code class="language-plaintext highlighter-rouge">@Async</code>로 별도 스레드)</li>
+  <li>응답
     <ul>
-      <li>서버 목록으로 통째로 덮어쓰면, 아직 확인 못 받은(보내는 중/실패) 말풍선이 사라진다.</li>
-      <li>서버 목록에 같은 <code class="language-plaintext highlighter-rouge">clientMessageId</code>가 있으면 서버 것을 쓰고, 없으면 뒤에 그대로 붙여 둔다.</li>
+      <li>중복 요청은 1번에서 끝난다. 3, 4번을 다시 하면 상대는 같은 메시지를 실시간으로 두 번 받고, 푸시도 두 번 받는다. 첫 요청 때 이미 나갔으니 <strong>저장된 메시지만 돌려준다.</strong></li>
+      <li>응답과 실시간 전송 둘 다 <code class="language-plaintext highlighter-rouge">clientMessageId</code>를 그대로 담는다.
+        <ul>
+          <li>앱은 내 메시지를 REST 응답과 웹소켓으로 두 번 받는데, 어느 쪽이 먼저 오든 이 값으로 먼저 띄워 둔 말풍선과 짝짓는다.</li>
+          <li>서버가 할 일은 이 값을 <strong>저장하고 그대로 돌려주는 것</strong>까지다. 짝짓기는 앱이 한다.</li>
+        </ul>
+      </li>
     </ul>
   </li>
-</ul>
+</ol>
 
-<h2 id="배포-순서가-상관없었던-이유">배포 순서가 상관없었던 이유</h2>
+<h2 id="예전-앱과-새-서버가-섞여도-깨지지-않게">예전 앱과 새 서버가 섞여도 깨지지 않게</h2>
 
 <ul>
-  <li>이 변경은 서버(<code class="language-plaintext highlighter-rouge">16a11c4</code>)와 iOS(<code class="language-plaintext highlighter-rouge">f96ca5c</code>)를 <strong>같은 분(10/7 00:58)에</strong> 커밋했다. 하지만 <a href="/project/2026/11/23/Woorin-WebSocket-Auth/">웹소켓 인증</a> 때와 달리 배포 순서를 신경 쓸 필요가 없었다.
+  <li>이 변경은 서버와 앱이 같이 바뀌어야 의미가 있다. 그런데 배포 순서를 신경 쓸 필요가 없었다.
     <ul>
-      <li>서버가 먼저 올라가면: 예전 앱은 <code class="language-plaintext highlighter-rouge">clientMessageId</code>를 안 보낸다 → NULL로 저장 → 예전처럼 동작한다.</li>
+      <li>서버가 먼저 올라가면: 예전 앱은 <code class="language-plaintext highlighter-rouge">clientMessageId</code>를 안 보낸다 → NULL로 저장 → 예전과 똑같이 동작한다.</li>
       <li>앱이 먼저 올라가면: 예전 서버는 모르는 필드를 무시한다 → 저장은 되고, 짝짓기만 안 된다.</li>
     </ul>
   </li>
-  <li>새 컬럼을 NULL 허용으로 두고 UNIQUE가 NULL을 중복으로 안 보는 성질 덕분이다. <strong>옛 클라이언트와 새 서버가 섞여도 깨지지 않게</strong> 만든 것이다.</li>
-  <li>10/12에 안드로이드로 채팅을 옮길 때도 같은 <code class="language-plaintext highlighter-rouge">clientMessageId</code> 방식을 그대로 썼다.</li>
-</ul>
-
-<h2 id="말풍선이-깜빡였다">말풍선이 깜빡였다</h2>
-
-<ul>
-  <li>처음 붙였을 때 보내는 순간 말풍선이 <strong>한 번 깜빡였다.</strong></li>
-  <li>채팅 목록은 UICollectionView의 diffable data source로 그리는데, 행을 <strong>id</strong>로 구분하고 있었다.
-    <ul>
-      <li>임시 id(-1) → 서버 id(1234)로 바뀌면, diffable은 “-1 행 삭제 + 1234 행 추가”로 본다. 삭제/추가 애니메이션이 깜빡임이었다.</li>
-    </ul>
-  </li>
-  <li>행의 키를 <code class="language-plaintext highlighter-rouge">clientMessageId</code>로 바꿨다. (옛날 메시지는 <code class="language-plaintext highlighter-rouge">"id-&lt;서버 id&gt;"</code>)
-    <ul>
-      <li>키가 그대로라 “같은 행의 내용만 바뀜”으로 처리되고, 그 셀만 다시 그린다.</li>
-    </ul>
-  </li>
-</ul>
-
-<p><img src="/assets/img/projects/woorin/idempotency/img_5.png" alt="img.png" /></p>
-
-<h2 id="누르자마자-보이게">누르자마자 보이게</h2>
-
-<ul>
-  <li>데이터는 바로 들어가는데, 눈에는 <strong>한 박자 늦게</strong> 보였다.
-    <ul>
-      <li>목록에 새 행이 붙을 때 페이드인(약 0.3초)이 있고, 그다음 맨 아래로 스크롤하는 애니메이션(약 0.3초)이 또 있다.</li>
-      <li>둘이 겹치면 말풍선이 화면 아래 바깥에 붙었다가 스크롤이 끝나야 보인다.</li>
-    </ul>
-  </li>
-  <li>내가 방금 보낸 메시지는 애니메이션 없이 바로 붙이도록 했다. 상대 메시지는 그대로 페이드인한다. (낙관적 전송을 넣고 37분 뒤에 고쳤다)</li>
-</ul>
-
-<h2 id="커밋으로-본-흐름">커밋으로 본 흐름</h2>
-
-<ul>
-  <li>이 작업은 10/7 새벽 한 시간 남짓에 몰려 있다. 채팅을 “빠르게 느껴지게” 만드는 커밋들이다.</li>
-</ul>
-
-<table>
-  <thead>
-    <tr>
-      <th>시각</th>
-      <th>어디</th>
-      <th>커밋</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>00:42</td>
-      <td>iOS</td>
-      <td>채팅을 읽으면 알림센터/잠금화면의 채팅 푸시도 지우기</td>
-    </tr>
-    <tr>
-      <td>00:50</td>
-      <td>iOS</td>
-      <td>입력창을 별도 뷰로 분리 (타이핑할 때마다 목록 전체 재계산 방지)</td>
-    </tr>
-    <tr>
-      <td>00:58</td>
-      <td>서버</td>
-      <td><code class="language-plaintext highlighter-rouge">clientMessageId</code> 컬럼 + UNIQUE, 재전송 시 기존 메시지 반환 (DDL 59)</td>
-    </tr>
-    <tr>
-      <td>00:58</td>
-      <td>iOS</td>
-      <td>텍스트/이모티콘 낙관적 전송, 실패하면 다시 보내기/삭제</td>
-    </tr>
-    <tr>
-      <td>01:20</td>
-      <td>iOS</td>
-      <td>채팅 사진/프사를 화면 크기로 줄여 메모리 캐시</td>
-    </tr>
-    <tr>
-      <td>01:35</td>
-      <td>iOS</td>
-      <td>내가 보낸 메시지는 페이드인/스크롤 애니메이션 없이 즉시 보이게</td>
-    </tr>
-    <tr>
-      <td>01:49</td>
-      <td>iOS</td>
-      <td>채팅 목록 구조 개선 (읽음 변경 시 높이 재측정 생략, 안 바뀌면 업데이트 생략)</td>
-    </tr>
-  </tbody>
-</table>
-
-<ul>
-  <li>그리고 한 달 반 뒤(11/23) 부하 테스트에서, k6가 메시지마다 <code class="language-plaintext highlighter-rouge">clientMessageId</code>를 실어 보내 같은 경로를 검증했다.</li>
+  <li>새 컬럼을 <strong>NULL 허용</strong>으로 두고, UNIQUE가 NULL을 중복으로 안 보는 성질을 이용한 덕분이다.</li>
+  <li><a href="/project/2026/11/23/Woorin-WebSocket-Auth/">웹소켓 인증</a>처럼 “예전 앱은 거부”가 되는 변경과 비교하면, 처음부터 <strong>옛 클라이언트를 그대로 받아주는</strong> 쪽으로 설계하는 게 훨씬 편하다.</li>
 </ul>
 
 <h2 id="정리">정리</h2>
 
 <ul>
-  <li>네트워크 요청의 실패는 “안 갔다”와 “갔는데 답을 못 받았다”가 구분되지 않는다. 다시 보내기를 만들려면 <strong>멱등성</strong>이 먼저다.</li>
+  <li>네트워크 요청의 실패는 “안 갔다”와 “갔는데 답을 못 받았다”가 구분되지 않는다. 재전송을 허용하려면 <strong>서버가 멱등</strong>해야 한다.</li>
   <li>멱등성의 핵심은 <strong>클라이언트가 만든 식별자 + DB의 UNIQUE 제약</strong>이었다.
     <ul>
       <li>“있는지 보고 넣기”는 동시 요청에 깨진다. 판단은 DB 제약에 맡긴다.</li>
+      <li>중복 요청은 저장뿐 아니라 <strong>부수 효과(실시간 전송, 푸시)도 다시 일으키면 안 된다.</strong></li>
     </ul>
   </li>
-  <li>같은 식별자가 낙관적 UI의 짝짓기 키, 목록의 행 키까지 한 번에 해결해 줬다.</li>
+  <li>새 컬럼은 NULL 허용으로 두면, 예전 클라이언트와 섞여도 깨지지 않는다.</li>
   <li><a href="/project/2026/11/23/Woorin-Chat-Load-Test/">부하 테스트 글</a>의 k6 시나리오에서 메시지마다 <code class="language-plaintext highlighter-rouge">clientMessageId: uuidv4()</code>를 실어 보낸 이유가 이것이다.</li>
 </ul>
 
@@ -508,7 +414,7 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 
 <p><a href="https://dev.mysql.com/doc/refman/8.0/en/create-index.html#create-index-unique">https://dev.mysql.com/doc/refman/8.0/en/create-index.html#create-index-unique</a></p>
 
-<p><a href="https://developer.apple.com/documentation/uikit/nsdiffabledatasourcesnapshot/reconfigureitems(_:)">https://developer.apple.com/documentation/uikit/nsdiffabledatasourcesnapshot/reconfigureitems(_:)</a></p>
+<p><a href="https://docs.spring.io/spring-framework/reference/data-access/dao.html#dao-exceptions">https://docs.spring.io/spring-framework/reference/data-access/dao.html#dao-exceptions</a></p>
 
     <br />
     <br />
@@ -522,7 +428,7 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=우린 - 보내자마자 뜨는 말풍선과 두 번 저장되는 메시지 (clientMessageId)&amp;url=http://localhost:4000/project/2026/11/23/Woorin-Chat-Idempotency/"
+    <a href="http://twitter.com/share?text=우린 - 재전송해도 메시지가 한 번만 저장되게 (clientMessageId와 UNIQUE)&amp;url=http://localhost:4000/project/2026/11/23/Woorin-Chat-Idempotency/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>
@@ -571,7 +477,7 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 
 <li class="h4">
   <a href="/project/2026/11/23/Woorin-Silent-Failures/" data-flip="title">
-    <span>우린 - 에러 없이 실패하는 버그들 (진짜 원인을 찾기까지)</span>
+    <span>우린 - 에러 없이 실패하는 서버 버그들 (진짜 원인을 찾기까지)</span>
   </a>
   <small><time datetime="2026-11-23T00:00:00+09:00">
     23 Nov 2026
@@ -587,7 +493,7 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 
 <li class="h4">
   <a href="/project/2026/11/23/Woorin-FCM-Push/" data-flip="title">
-    <span>우린 - 알림이 두 번 오고, 안 오고, 안 사라지고 (FCM 푸시)</span>
+    <span>우린 - 푸시 알림 서버 (중복 알림, 느려진 전송, 보고 있는데 오는 알림)</span>
   </a>
   <small><time datetime="2026-11-23T00:00:00+09:00">
     23 Nov 2026
@@ -1527,8 +1433,6 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
       <p>일을 벌여놔야 주워 담을 수 있습니다.</p>
 
       
-        <p class="sidebar-visits">누적 방문 <span data-gc-total>-</span></p>
-      
       
       
         <div class="sidebar-social">
@@ -1605,42 +1509,28 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 
 <script>
   (function () {
-    var base = 'https://taewoocode.goatcounter.com';
-
-    // Pages are swapped in by push-state, so count and fill counters manually on every page.
+    /* GoatCounter only records visits for the dashboard. The numbers on the page come from busuanzi below.
+       Pages are swapped in by push-state, so count manually on every page.
+       Use block comments only: compress_html joins this script into one line, so a // comment would swallow the rest. */
     window.goatcounter = { no_onload: true };
-
-    function fill(el, path) {
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', base + '/counter/' + encodeURIComponent(path) + '.json');
-      xhr.onload = function () {
-        var count = '0';
-        try { if (xhr.status === 200) count = JSON.parse(xhr.responseText).count; } catch (e) {}
-        el.textContent = count;
-      };
-      xhr.send();
-    }
 
     function onPage() {
       if (window.goatcounter.count) window.goatcounter.count({ path: location.pathname });
-      var views = document.querySelectorAll('[data-gc-views]');
-      for (var i = 0; i < views.length; i++) fill(views[i], location.pathname);
     }
 
     var script = document.createElement('script');
     script.async = true;
     script.src = '//gc.zgo.at/count.js';
-    script.setAttribute('data-goatcounter', base + '/count');
+    script.setAttribute('data-goatcounter', 'https://taewoocode.goatcounter.com/count');
     script.onload = onPage;
     document.head.appendChild(script);
-
-    var total = document.querySelector('[data-gc-total]');
-    if (total) fill(total, 'TOTAL');
 
     var pushState = document.getElementById('_yPushState');
     if (pushState) pushState.addEventListener('y-push-state-after', onPage);
   })();
 </script>
+
+
 
 
 
