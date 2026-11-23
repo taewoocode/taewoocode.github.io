@@ -6,15 +6,16 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 23 Nov 2026 19:58:46 +0900</pubDate>
-    <lastBuildDate>Mon, 23 Nov 2026 19:58:46 +0900</lastBuildDate>
+    <pubDate>Mon, 23 Nov 2026 22:47:34 +0900</pubDate>
+    <lastBuildDate>Mon, 23 Nov 2026 22:47:34 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
         <title>블로그 이사</title>
         <description>&lt;h2 id=&quot;블로그-이사&quot;&gt;블로그 이사&lt;/h2&gt;
 
-&lt;p&gt;naver에서 다시 해당 블로그로 이사왔습니다~&lt;/p&gt;
+&lt;p&gt;naver에서 다시 해당 블로그로 이사왔다.
+백준도 나오고 다시 포스팅 열심히 해야지~~&lt;/p&gt;
 
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
 </description>
@@ -26,6 +27,1247 @@
         
         
         <category>life</category>
+        
+      </item>
+    
+      <item>
+        <title>우린 - 둘이 쓰는 앱이라 괜찮다고 생각했던 보안 (웹소켓 인증, 에러 메시지, 운영 로그)</title>
+        <description>&lt;h2 id=&quot;개요&quot;&gt;개요&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;우린은 여자친구와 둘이 쓰려고 만든 앱이라, 보안은 “로그인만 되면 됐다” 정도로 생각했다.&lt;/li&gt;
+  &lt;li&gt;그런데 한 번 점검해 보니 세 군데가 뚫려 있었다.
+    &lt;ul&gt;
+      &lt;li&gt;&lt;strong&gt;채팅 웹소켓에 인증이 없었다.&lt;/strong&gt; 숫자 하나만 바꾸면 남의 커플 채팅을 실시간으로 볼 수 있었다.&lt;/li&gt;
+      &lt;li&gt;에러가 나면 &lt;strong&gt;DB 오류 메시지가 그대로&lt;/strong&gt; 앱에 내려갔다.&lt;/li&gt;
+      &lt;li&gt;운영 서버 로그에 &lt;strong&gt;인증 토큰과 채팅 내용이 평문으로&lt;/strong&gt; 쌓이고 있었다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;셋 다 “둘이 쓸 때”는 문제가 드러날 일이 없었다는 공통점이 있다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;1-coupleid만-바꾸면-남의-채팅이-보였다&quot;&gt;1. coupleId만 바꾸면 남의 채팅이 보였다&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;REST API는 인증 필터(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AuthTokenFilter&lt;/code&gt;)가 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Authorization: Bearer 토큰&lt;/code&gt;을 확인한다.&lt;/li&gt;
+  &lt;li&gt;그런데 이 필터는 &lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/api/**&lt;/code&gt;만&lt;/strong&gt; 본다. 채팅 웹소켓 주소는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/ws/chat?coupleId=1&lt;/code&gt;이다.
+    &lt;ul&gt;
+      &lt;li&gt;토큰 없이 붙어도 연결됐고,&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;coupleId=2&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;coupleId=3&lt;/code&gt;… 으로 바꿔 붙으면 그 커플의 새 메시지, 읽음, 입력 중 이벤트가 실시간으로 들어왔다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;웹소켓은 HTTP로 시작해서(핸드셰이크) 프로토콜을 바꾸는 구조라, &lt;strong&gt;서블릿 필터 경로 설정에서 빠지기 쉽다.&lt;/strong&gt; REST를 막았다고 소켓까지 막힌 게 아니었다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;핸드셰이크에서-막기&quot;&gt;핸드셰이크에서 막기&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Spring의 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;HandshakeInterceptor&lt;/code&gt;로 연결이 성립되기 전에 확인한다.
+    &lt;ul&gt;
+      &lt;li&gt;토큰으로 회원을 찾고, 요청한 coupleId가 &lt;strong&gt;그 회원의 커플일 때만&lt;/strong&gt; 연결을 허용한다.&lt;/li&gt;
+      &lt;li&gt;토큰이 없거나 틀리면 401, 남의 커플이면 403.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/ws-auth/img_1.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;registry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addHandler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;chatWebSocketHandler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;/ws/chat&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addInterceptors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;chatHandshakeAuthInterceptor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setAllowedOrigins&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;*&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;연결-후에도-클라이언트-값을-믿지-않기&quot;&gt;연결 후에도 클라이언트 값을 믿지 않기&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;연결만 막으면 끝일까? 소켓으로 &lt;strong&gt;앱이 직접 보내는&lt;/strong&gt; 메시지가 하나 있다. “입력 중” 이벤트다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;TYPING&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;coupleId&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;userId&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;isTyping&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;여기 담긴 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;userId&lt;/code&gt;를 그대로 중계하면, 상대인 척 “입력 중”을 띄울 수 있다.&lt;/li&gt;
+  &lt;li&gt;핸들러는 클라이언트가 보낸 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;userId&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;coupleId&lt;/code&gt;를 &lt;strong&gt;핸드셰이크에서 검증된 값으로 덮어쓴다.&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/ws-auth/img_2.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;앱은 소켓을 열 때 REST와 같은 토큰을 헤더에 싣는다. (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;URLSessionWebSocketTask&lt;/code&gt;는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;URLRequest&lt;/code&gt;로 헤더를 넣을 수 있다)&lt;/li&gt;
+  &lt;li&gt;대가도 있었다. &lt;strong&gt;토큰을 안 보내는 이전 앱 빌드는 실시간 연결이 거부된다.&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;메시지 보내기와 목록 조회는 REST라 동작은 하지만, 새 메시지가 바로 안 뜬다.&lt;/li&gt;
+      &lt;li&gt;사용자가 많다면 한동안 토큰 없는 연결도 받아주는 유예 기간을 두는 게 맞다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;2-에러-메시지에-테이블-이름이-실려-나갔다&quot;&gt;2. 에러 메시지에 테이블 이름이 실려 나갔다&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;컨트롤러 대부분이 이런 모양이었다. 세어 보니 &lt;strong&gt;86곳&lt;/strong&gt;이었다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ResponseEntity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;HttpStatus&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;BAD_REQUEST&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;of&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;message&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getMessage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()));&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;서비스에서 일부러 던진 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&quot;이미 가입된 이메일입니다.&quot;&lt;/code&gt; 같은 메시지를 앱에 보여주려고 만든 구조다.&lt;/li&gt;
+  &lt;li&gt;그런데 DB 오류나 NPE가 나도 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;e.getMessage()&lt;/code&gt;가 그대로 나간다.
+    &lt;ul&gt;
+      &lt;li&gt;SQL 오류면 테이블명, 컬럼명, 쿼리 일부가 응답에 담긴다. 공격하는 쪽에겐 DB 구조 안내서다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;메시지를 그대로 보여줄 예외와 숨길 예외를 나누는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ApiErrors.safeMessage(e)&lt;/code&gt;를 만들었다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/ws-auth/img_3.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;클래스를 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;instanceof&lt;/code&gt;가 아니라 &lt;strong&gt;정확히 같은지&lt;/strong&gt;로 비교한 이유
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NumberFormatException&lt;/code&gt;은 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;IllegalArgumentException&lt;/code&gt;의 하위 클래스다. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;instanceof&lt;/code&gt;로 보면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;For input string: &quot;abc&quot;&lt;/code&gt; 같은 라이브러리 메시지가 섞여 나간다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;스택의 맨 위가 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;com.woorin&lt;/code&gt;인지 보는 이유
+    &lt;ul&gt;
+      &lt;li&gt;JDK나 라이브러리 안에서 던진 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;IllegalStateException&lt;/code&gt;은 내부 메시지다. 우리 코드에서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;new&lt;/code&gt; 한 것만 사용자용으로 본다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;컨트롤러가 아예 못 잡은 예외는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@RestControllerAdvice&lt;/code&gt;에서 500 + 같은 일반 문구로 바꾼다.
+    &lt;ul&gt;
+      &lt;li&gt;잘못된 JSON, 없는 경로 같은 스프링 표준 예외는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ResponseEntityExceptionHandler&lt;/code&gt;를 상속해서 원래대로 400/404/405로 둔다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;원인은 사라지지 않는다. 응답 대신 &lt;strong&gt;서버 로그로&lt;/strong&gt; 간다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;3-서버-로그에-토큰과-채팅이-평문으로-남았다&quot;&gt;3. 서버 로그에 토큰과 채팅이 평문으로 남았다&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;개발할 때 쓰던 log4jdbc 설정을 운영에서도 그대로 쓰고 있었다.
+    &lt;ul&gt;
+      &lt;li&gt;실행된 SQL을 &lt;strong&gt;바인딩 값까지 채워서&lt;/strong&gt;, 조회 결과는 &lt;strong&gt;표로&lt;/strong&gt; 찍는다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;운영에서 그대로 두면 서버 로그(journalctl)에 이런 것들이 남는다.
+    &lt;ul&gt;
+      &lt;li&gt;로그인 조회 → 인증 토큰이 그대로&lt;/li&gt;
+      &lt;li&gt;FCM 토큰 등록 → FCM 토큰이 그대로&lt;/li&gt;
+      &lt;li&gt;채팅 목록 조회 → 대화 내용이 결과 표로&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;로그는 DB보다 덜 지켜진다. 서버에 들어올 수 있는 사람이면 누구나 볼 수 있고, 오래 남는다.&lt;/li&gt;
+  &lt;li&gt;운영 전용 설정(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;log4j2-prod.xml&lt;/code&gt;)을 따로 만들고 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;application-prod.yml&lt;/code&gt;에서 지정했다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/ws-auth/img_4.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;꺼버리면 운영에서 확인하던 로그도 사라진다.
+    &lt;ul&gt;
+      &lt;li&gt;우린로그 리마인드 발송 건수, 인기 랭킹 저장 건수처럼 &lt;strong&gt;개인정보 없이&lt;/strong&gt; 운영에 필요한 로그는 DEBUG → INFO로 올렸다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;정리&quot;&gt;정리&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;REST를 막았다고 소켓까지 막힌 게 아니다.&lt;/strong&gt; 필터가 어느 경로를 보는지 확인해야 한다.&lt;/li&gt;
+  &lt;li&gt;인증은 연결 시점에 한 번 하고, 그 뒤로는 &lt;strong&gt;클라이언트가 보낸 신원 값을 믿지 않고 서버가 검증한 값을 쓴다.&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;에러 메시지와 로그는 둘 다 “개발할 때 편하라고” 만든 것이 운영에서 정보를 흘리는 통로가 됐다.
+    &lt;ul&gt;
+      &lt;li&gt;응답에는 사용자가 알아야 할 것만, 원인은 서버 로그에만.&lt;/li&gt;
+      &lt;li&gt;그 로그에도 개인정보는 남기지 않는다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;둘이 쓸 때는 공격하는 사람이 없으니 드러나지 않는다. &lt;strong&gt;사용자가 늘기 전에&lt;/strong&gt; 찾아서 다행이었다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-framework/reference/web/websocket/server.html#websocket-server-handshake&quot;&gt;https://docs.spring.io/spring-framework/reference/web/websocket/server.html#websocket-server-handshake&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://owasp.org/www-community/Improper_Error_Handling&quot;&gt;https://owasp.org/www-community/Improper_Error_Handling&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html&quot;&gt;https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Mon, 23 Nov 2026 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/project/2026/11/23/Woorin-WebSocket-Auth/</link>
+        <guid isPermaLink="true">http://localhost:4000/project/2026/11/23/Woorin-WebSocket-Auth/</guid>
+        
+        <category>project</category>
+        
+        
+        <category>project</category>
+        
+      </item>
+    
+      <item>
+        <title>우린 - 에러 없이 실패하는 버그들 (진짜 원인을 찾기까지)</title>
+        <description>&lt;h2 id=&quot;개요&quot;&gt;개요&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;우린을 만들면서 커밋 메시지에 &lt;strong&gt;“진짜 원인”&lt;/strong&gt; 이라고 적은 버그가 여럿 있다.
+    &lt;ul&gt;
+      &lt;li&gt;첫 번째로 고친 게 원인이 아니었고, 한 번 더 파고 나서야 찾았다는 뜻이다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;돌아보니 셋 다 공통점이 있었다. &lt;strong&gt;에러가 안 났다.&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;예외도, 빨간 로그도, 크래시도 없이 “그냥 안 되는” 상태였다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;이번 글은 그 세 가지를 어떻게 찾았는지 정리한다.
+    &lt;ul&gt;
+      &lt;li&gt;문화행사 동기화가 매번 &lt;strong&gt;0건&lt;/strong&gt;&lt;/li&gt;
+      &lt;li&gt;채팅에서 상대 프로필이 &lt;strong&gt;안 바뀜&lt;/strong&gt;&lt;/li&gt;
+      &lt;li&gt;채팅 프로필 사진이 &lt;strong&gt;첫 줄만&lt;/strong&gt; 안 뜸&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;1-api는-응답이-잘-오는데-저장은-0건&quot;&gt;1. API는 응답이 잘 오는데 저장은 0건&lt;/h2&gt;
+
+&lt;h3 id=&quot;증상&quot;&gt;증상&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;우린에는 서울시 문화행사를 데이트 후보로 보여주는 기능이 있다.
+    &lt;ul&gt;
+      &lt;li&gt;서울 열린데이터광장 API에서 매일 행사를 받아와 DB에 저장한다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;스케줄러는 매번 정상 종료했다. 에러 로그도 없었다. 그런데 &lt;strong&gt;저장은 늘 0건&lt;/strong&gt;이었다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;찾기&quot;&gt;찾기&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;일단 API 응답부터 의심했다. 키가 틀렸거나, 응답이 비었거나.&lt;/li&gt;
+  &lt;li&gt;로그를 하나 넣었다. 응답의 전체 건수와 받은 행 수를 찍는다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;문화행사 API 응답: total={}, rowCount={}&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;total&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rows&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;null&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rows&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;결과는 &lt;strong&gt;total도 rowCount도 정상&lt;/strong&gt;이었다. 행은 잘 왔다.&lt;/li&gt;
+  &lt;li&gt;그러면 행 안의 값이 문제다. 확인해 보니 &lt;strong&gt;필드가 전부 null&lt;/strong&gt;로 채워져 있었다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;원인-jackson이-title을-title로-읽는다&quot;&gt;원인: Jackson이 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TITLE&lt;/code&gt;을 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;title&lt;/code&gt;로 읽는다&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;API 응답은 필드 이름이 전부 대문자다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;TITLE&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;...&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;CODENAME&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;...&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;GUNAME&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;...&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;STRTDATE&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;...&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;받는 클래스도 원본 이름 그대로 만들었다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/silent/img_1.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Jackson은 필드가 private이면 &lt;strong&gt;getter/setter 이름에서&lt;/strong&gt; 프로퍼티 이름을 만든다.
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;setTITLE&lt;/code&gt; → 앞의 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;set&lt;/code&gt;을 떼고 → &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TITLE&lt;/code&gt; → 기본 규칙은 &lt;strong&gt;앞쪽 대문자들을 소문자로&lt;/strong&gt; 바꾼다 → &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;title&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;그래서 Jackson이 기다리는 키는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;title&lt;/code&gt;이고, JSON의 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TITLE&lt;/code&gt;은 “모르는 필드”가 된다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;여기에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ignoreUnknown = true&lt;/code&gt;가 붙어 있었다.
+    &lt;ul&gt;
+      &lt;li&gt;모르는 필드는 &lt;strong&gt;조용히 버린다.&lt;/strong&gt; 예외가 없으니 모든 필드가 null인 객체가 정상적으로 만들어졌다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;외부 API 응답이 바뀌어도 안 깨지게 하려고 넣은 설정이, 이번엔 매핑 실패를 숨겼다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;해결&quot;&gt;해결&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;필드마다 JSON 이름을 명시했다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/silent/img_2.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;2-상대-프로필이-안-바뀐다--사실은-403&quot;&gt;2. 상대 프로필이 안 바뀐다 → 사실은 403&lt;/h2&gt;
+
+&lt;h3 id=&quot;증상-1&quot;&gt;증상&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;상대가 프로필 사진과 닉네임을 바꿔도, 내 채팅 화면엔 예전 것이 그대로였다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;첫-번째-가설-한-번만-불러와서&quot;&gt;첫 번째 가설: 한 번만 불러와서&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;코드를 보니 상대 정보를 &lt;strong&gt;채팅 첫 진입 때 한 번만&lt;/strong&gt; 불러오고 있었다.
+    &lt;ul&gt;
+      &lt;li&gt;소켓 중복 연결을 막으려고 “같은 커플이면 다시 설정 안 함” 가드를 넣었는데, 상대 정보 로딩도 그 안에 들어가 있었다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;채팅 탭에 들어올 때마다 상대 정보를 새로 받게 고쳤다.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;그래도 안 바뀌었다.&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;진짜-원인&quot;&gt;진짜 원인&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/silent/img_3.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;이 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;catch&lt;/code&gt;가 에러를 삼키고 있었다. 찍어 보니 매번 &lt;strong&gt;403&lt;/strong&gt;이었다.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;GET /api/users/{userId}&lt;/code&gt;는 &lt;strong&gt;본인만&lt;/strong&gt; 조회할 수 있게 막아 둔 API다.
+    &lt;ul&gt;
+      &lt;li&gt;이메일, 인증 토큰 같은 민감한 정보가 들어 있어서 당연한 제한이다.&lt;/li&gt;
+      &lt;li&gt;상대 id로 부르니 매번 거부됐고, 화면엔 처음 회원가입 때 받은 값이 남아 있었다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;즉 첫 번째 가설도 틀린 건 아니었지만, 그걸 고쳐도 &lt;strong&gt;불러오는 요청 자체가 실패&lt;/strong&gt;하고 있었다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;해결-1&quot;&gt;해결&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;상대 프로필 전용 API를 만들었다. 닉네임과 사진만 내려준다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/silent/img_4.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;권한을 풀어서 해결하지 않았다. 필요한 것만 담은 &lt;strong&gt;다른 창구&lt;/strong&gt;를 만들었다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;3-프로필-사진이-첫-줄만-안-뜬다&quot;&gt;3. 프로필 사진이 첫 줄만 안 뜬다&lt;/h2&gt;
+
+&lt;h3 id=&quot;증상-2&quot;&gt;증상&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;채팅방을 열면 상대 프로필 사진이 &lt;strong&gt;어떤 줄은 뜨고 어떤 줄은 빈 원&lt;/strong&gt;이었다. 특히 첫 줄이 자주 비었다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/silent/app_1.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;같은 채팅방을 3분 간격으로 연 화면이다.
+    &lt;ul&gt;
+      &lt;li&gt;왼쪽은 위 두 줄이, 오른쪽은 첫 줄만 빈 원이다. 열 때마다 비는 줄이 달라졌다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;프로필 사진을 제대로 설정해도 재현됐다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;첫-번째-가설-캐시가-작아서&quot;&gt;첫 번째 가설: 캐시가 작아서&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;프로필 사진은 메시지 줄마다 따로 그린다. 같은 URL이 수십 번 나온다.&lt;/li&gt;
+  &lt;li&gt;SwiftUI &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AsyncImage&lt;/code&gt;는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;URLCache.shared&lt;/code&gt;를 쓰는데, 기본 용량이 &lt;strong&gt;메모리 512KB / 디스크 10MB&lt;/strong&gt;다.
+    &lt;ul&gt;
+      &lt;li&gt;사진 몇 장이면 밀려나서, 같은 사진을 줄마다 다시 요청하고, 요청이 몰리면 일부가 실패한다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;캐시를 50MB / 200MB로 키웠다. (서버 이미지 응답에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Cache-Control&lt;/code&gt; 헤더가 있어야 캐시가 효과를 낸다)&lt;/li&gt;
+  &lt;li&gt;빈 원이 줄었지만 &lt;strong&gt;첫 줄은 여전히 가끔 비었다.&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;진짜-원인-1&quot;&gt;진짜 원인&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;채팅방을 막 열면 여러 줄의 프로필 요청이 &lt;strong&gt;한꺼번에&lt;/strong&gt; 나간다. 캐시가 아직 비어 있는 첫 순간이다.&lt;/li&gt;
+  &lt;li&gt;이때 하나가 실패하면, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AsyncImage&lt;/code&gt;는 &lt;strong&gt;다시 시도하지 않는다.&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;실패 상태(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.failure&lt;/code&gt;)로 끝나고, 화면을 다시 그릴 때까지(앱 재실행 등) 빈 채로 남는다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;실패하면 1초 뒤에 최대 3번 다시 시도하는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RetryingAsyncImage&lt;/code&gt;로 감쌌다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/silent/img_5.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;나중엔 채팅 사진이 많아지면서 화면 크기로 줄여 메모리에 캐시하는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CachedAsyncImage&lt;/code&gt;로 한 번 더 바꿨다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;정리&quot;&gt;정리&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;셋 다 &lt;strong&gt;실패가 조용했다.&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ignoreUnknown = true&lt;/code&gt;가 매핑 실패를 삼켰다.&lt;/li&gt;
+      &lt;li&gt;빈 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;catch&lt;/code&gt;가 403을 삼켰다.&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AsyncImage&lt;/code&gt;가 실패를 빈 원으로 바꾸고 끝냈다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;그래서 첫 번째 가설은 그럴듯했지만 틀렸거나, 절반만 맞았다.
+    &lt;ul&gt;
+      &lt;li&gt;2번과 3번은 첫 수정이 &lt;strong&gt;실제로 있던 다른 문제&lt;/strong&gt;를 고쳤다. 그래서 “고쳤다”고 착각하기 쉬웠다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;그 뒤로 지키는 것
+    &lt;ul&gt;
+      &lt;li&gt;“부가 기능이라 실패해도 괜찮다”는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;catch&lt;/code&gt;라도 &lt;strong&gt;로그는 남긴다.&lt;/strong&gt; 화면을 안 깨뜨리는 것과 실패를 숨기는 건 다르다.&lt;/li&gt;
+      &lt;li&gt;외부 응답을 받는 클래스는 이름이 같아 보여도 &lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@JsonProperty&lt;/code&gt;로 명시한다.&lt;/strong&gt;&lt;/li&gt;
+      &lt;li&gt;증상을 고친 뒤엔 &lt;strong&gt;원래 재현 조건으로 다시&lt;/strong&gt; 확인한다. 줄었다고 사라진 건 아니다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/FasterXML/jackson-databind/wiki/Mapper-Features&quot;&gt;https://github.com/FasterXML/jackson-databind/wiki/Mapper-Features&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://developer.apple.com/documentation/swiftui/asyncimage&quot;&gt;https://developer.apple.com/documentation/swiftui/asyncimage&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://developer.apple.com/documentation/foundation/urlcache&quot;&gt;https://developer.apple.com/documentation/foundation/urlcache&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Mon, 23 Nov 2026 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/project/2026/11/23/Woorin-Silent-Failures/</link>
+        <guid isPermaLink="true">http://localhost:4000/project/2026/11/23/Woorin-Silent-Failures/</guid>
+        
+        <category>project</category>
+        
+        
+        <category>project</category>
+        
+      </item>
+    
+      <item>
+        <title>우린 - 알림이 두 번 오고, 안 오고, 안 사라지고 (FCM 푸시)</title>
+        <description>&lt;h2 id=&quot;개요&quot;&gt;개요&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/fcm/app_1.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;왼쪽은 로그인 화면, 오른쪽은 더보기의 알림 설정이다. 알림 받기, 우린로그 촬영 알림, 진동을 따로 켜고 끌 수 있다.&lt;/li&gt;
+  &lt;li&gt;우린은 채팅, 추억, 일정, 우린로그 리마인드(매시 30분 촬영 알림)를 푸시로 보낸다.&lt;/li&gt;
+  &lt;li&gt;푸시는 기능을 만드는 것보다 &lt;strong&gt;“잘 오게” 만드는 게&lt;/strong&gt; 더 오래 걸렸다.
+    &lt;ul&gt;
+      &lt;li&gt;같은 알림이 &lt;strong&gt;두 번씩&lt;/strong&gt; 왔다.&lt;/li&gt;
+      &lt;li&gt;아이폰에서 FCM 토큰 등록이 &lt;strong&gt;조용히 실패&lt;/strong&gt;하고 있었다.&lt;/li&gt;
+      &lt;li&gt;채팅을 읽어도 잠금화면의 채팅 알림이 &lt;strong&gt;안 사라졌다.&lt;/strong&gt;&lt;/li&gt;
+      &lt;li&gt;안드로이드는 무음 모드에서 알림이 &lt;strong&gt;조용히 쌓이기만&lt;/strong&gt; 했다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;가장 오래 헤맨 건 첫 번째였다. 원인은 &lt;strong&gt;“토큰은 사용자가 아니라 기기의 것”&lt;/strong&gt; 이라는 걸 놓친 데 있었다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;구조&quot;&gt;구조&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;앱은 실행 때 Firebase에서 받은 FCM 토큰을 서버에 올린다. (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PUT /api/users/{userId}/fcm-token&lt;/code&gt;)&lt;/li&gt;
+  &lt;li&gt;서버는 회원 테이블의 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;FCM_TOKEN&lt;/code&gt; 컬럼에 저장하고, 푸시를 보낼 때 받는 사람의 토큰으로 보낸다.&lt;/li&gt;
+  &lt;li&gt;회원 한 명에 토큰 하나. 단순하다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;1-알림이-두-번씩-온다&quot;&gt;1. 알림이 두 번씩 온다&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;우린로그 리마인드 같은 푸시가 &lt;strong&gt;두 번씩&lt;/strong&gt; 울렸다.&lt;/li&gt;
+  &lt;li&gt;원인은 &lt;strong&gt;같은 폰에서 계정을 바꿔 로그인&lt;/strong&gt;한 것이었다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;폰 A에서 계정 1로 로그인  → USER 1 의 FCM_TOKEN = tokenA
+로그아웃 (서버는 그대로)
+폰 A에서 계정 2로 로그인  → USER 2 의 FCM_TOKEN = tokenA
+
+리마인드 발송: USER 1 → tokenA, USER 2 → tokenA   →  폰 A에 두 번
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;FCM 토큰은 &lt;strong&gt;앱 설치(기기)마다&lt;/strong&gt; 발급된다. 계정을 바꿔도 같은 폰이면 같은 토큰이다.&lt;/li&gt;
+  &lt;li&gt;서버는 토큰을 “회원의 속성”으로 다루고 있어서, 한 토큰이 여러 회원에게 붙는 걸 막지 않았다.
+    &lt;ul&gt;
+      &lt;li&gt;로그아웃한 계정 앞으로 온 알림이 계속 이 폰으로 오는 문제도 같은 원인이다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;한-기기--한-계정&quot;&gt;한 기기 = 한 계정&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;토큰을 등록할 때, &lt;strong&gt;같은 토큰을 가진 다른 계정에서 먼저 떼어낸다.&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/fcm/img_1.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/fcm/img_2.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;로그아웃할 때도 지운다. (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DELETE /api/users/{userId}/fcm-token&lt;/code&gt;)
+    &lt;ul&gt;
+      &lt;li&gt;순서가 중요하다. 이 API도 인증이 필요하니, &lt;strong&gt;인증 토큰이 살아 있을 때&lt;/strong&gt; 먼저 지우고 나서 로그아웃 상태로 바꾼다.&lt;/li&gt;
+      &lt;li&gt;오프라인이라 실패해도 로그아웃은 막지 않는다. 다음에 누가 그 폰으로 로그인하면 위의 등록 로직이 정리해 준다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/fcm/img_3.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;2-토큰-등록이-401을-받고-있었다&quot;&gt;2. 토큰 등록이 401을 받고 있었다&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;API에 인증 토큰을 도입한 직후 생긴 문제다.&lt;/li&gt;
+  &lt;li&gt;다른 API는 다 되는데, FCM 토큰 등록만 &lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;URLSession&lt;/code&gt;으로 직접&lt;/strong&gt; 짜여 있었다.
+    &lt;ul&gt;
+      &lt;li&gt;공통 클라이언트(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;APIClient&lt;/code&gt;)를 거치지 않으니 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Authorization&lt;/code&gt; 헤더가 안 실렸고, 서버는 401을 돌려줬다.&lt;/li&gt;
+      &lt;li&gt;실패는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;print&lt;/code&gt;로만 찍혀서 화면에는 아무 표시가 없었다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;APIClient.send&lt;/code&gt;를 쓰도록 바꿨다. 이런 “한 곳만 다르게 짠 요청”은 공통 규칙이 바뀔 때 꼭 빠진다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;3-읽었는데-알림이-안-사라진다&quot;&gt;3. 읽었는데 알림이 안 사라진다&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;채팅 푸시를 보고 앱을 열어 대화를 다 읽어도, 알림센터와 잠금화면에 채팅 알림이 그대로 남았다.&lt;/li&gt;
+  &lt;li&gt;iOS는 앱 안에서 읽었다고 &lt;strong&gt;이미 도착한 알림을 알아서 치워주지 않는다.&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;배지 숫자를 0으로 바꿔도 알림 자체는 남는다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;앱이 직접 지워야 한다. 그런데 어떤 알림이 채팅 알림인지 알아야 한다.
+    &lt;ul&gt;
+      &lt;li&gt;서버가 푸시를 보낼 때 data payload에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;type&lt;/code&gt;(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CHAT&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MEMORY&lt;/code&gt;, …)을 실어 보내도록 하고,&lt;/li&gt;
+      &lt;li&gt;앱은 채팅을 읽음 처리한 직후 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;type == &quot;CHAT&quot;&lt;/code&gt;인 알림만 골라 지운다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/fcm/img_4.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;이 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;type&lt;/code&gt;은 알림을 눌렀을 때 해당 화면으로 보내는 데에도 같이 쓴다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;4-안드로이드는-조용히-쌓이기만-했다&quot;&gt;4. 안드로이드는 조용히 쌓이기만 했다&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;iOS 앱을 안드로이드로 옮긴 뒤, 무음(진동) 모드인 폰에서 알림이 &lt;strong&gt;소리도 진동도 없이&lt;/strong&gt; 조용히 쌓였다.&lt;/li&gt;
+  &lt;li&gt;안드로이드 8부터 알림은 &lt;strong&gt;채널&lt;/strong&gt; 단위로 소리, 진동, 중요도를 정한다.
+    &lt;ul&gt;
+      &lt;li&gt;처음 만든 채널(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;woorin_default&lt;/code&gt;)은 진동이 꺼진 상태였다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;그런데 채널 설정을 고쳐도 &lt;strong&gt;반영이 안 됐다.&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;채널은 한 번 만들어지면 그 뒤로는 &lt;strong&gt;사용자만&lt;/strong&gt; 설정을 바꿀 수 있다. 앱이 같은 id로 다시 만들어도 무시된다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;그래서 &lt;strong&gt;새 id로 채널을 만들고&lt;/strong&gt;, 예전 채널은 지웠다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/fcm/img_5.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;처음엔 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lockscreenVisibility = VISIBILITY_PUBLIC&lt;/code&gt;도 같이 넣었다. 잠금화면에 내용까지 보이게 하려고.
+    &lt;ul&gt;
+      &lt;li&gt;그런데 채널의 잠금화면 표시는 &lt;strong&gt;시스템만 바꿀 수 있는 값&lt;/strong&gt;이라, 앱이 넣어도 무시된다. 효과 없는 줄이라 나중에 지웠다.&lt;/li&gt;
+      &lt;li&gt;잠금화면에 내용을 보일지는 사용자의 기기 설정이 정한다. 앱이 할 수 있는 건 중요도(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;IMPORTANCE_HIGH&lt;/code&gt;)와 진동까지다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;서버 푸시에는 안드로이드 채널 지정이 없어서, 매니페스트의 기본 채널 id(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;default_notification_channel_id&lt;/code&gt;)도 같이 바꿔야 했다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;정리&quot;&gt;정리&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;FCM 토큰은 사용자가 아니라 기기(앱 설치)의 것이다.&lt;/strong&gt; 한 토큰은 한 계정에만 붙어 있어야 하고, 로그아웃하면 떼어내야 한다.&lt;/li&gt;
+  &lt;li&gt;푸시 실패는 앱 화면에 아무것도 안 남는다. 등록 실패를 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;print&lt;/code&gt;로만 남기면 아무도 모른다.&lt;/li&gt;
+  &lt;li&gt;알림은 “보내기”만이 아니라 &lt;strong&gt;“치우기”까지&lt;/strong&gt; 앱이 챙겨야 한다. 그러려면 알림에 종류(type)를 실어 보내야 한다.&lt;/li&gt;
+  &lt;li&gt;안드로이드 알림 채널은 &lt;strong&gt;처음 만들 때 제대로&lt;/strong&gt; 만들어야 한다. 바꾸려면 새 채널을 만드는 수밖에 없다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://firebase.google.com/docs/cloud-messaging/manage-tokens&quot;&gt;https://firebase.google.com/docs/cloud-messaging/manage-tokens&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/removedeliverednotifications(withidentifiers:)&quot;&gt;https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/removedeliverednotifications(withidentifiers:)&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://developer.android.com/develop/ui/views/notifications/channels&quot;&gt;https://developer.android.com/develop/ui/views/notifications/channels&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Mon, 23 Nov 2026 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/project/2026/11/23/Woorin-FCM-Push/</link>
+        <guid isPermaLink="true">http://localhost:4000/project/2026/11/23/Woorin-FCM-Push/</guid>
+        
+        <category>project</category>
+        
+        
+        <category>project</category>
+        
+      </item>
+    
+      <item>
+        <title>우린 - 소켓은 열려 있는데 메시지가 안 온다 (웹소켓 재연결과 재동기화)</title>
+        <description>&lt;h2 id=&quot;개요&quot;&gt;개요&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;우린 채팅을 쓰다 보면 이런 일이 있었다.
+    &lt;ul&gt;
+      &lt;li&gt;상대가 보낸 메시지의 &lt;strong&gt;푸시 알림은 왔는데&lt;/strong&gt;, 채팅 화면을 열어 보면 그 메시지가 없다.&lt;/li&gt;
+      &lt;li&gt;채팅방을 나갔다 들어오거나 앱을 껐다 켜야 보인다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;처음엔 서버가 메시지를 늦게 보내는 줄 알았다. 그런데 푸시는 제때 왔으니 서버는 정상이다.&lt;/li&gt;
+  &lt;li&gt;문제는 &lt;strong&gt;웹소켓이 끊긴 걸 앱이 모르고 있던 것&lt;/strong&gt;, 그리고 다시 붙어도 &lt;strong&gt;끊긴 동안의 메시지를 채우지 않은 것&lt;/strong&gt;이었다.&lt;/li&gt;
+  &lt;li&gt;고치다 보니 같은 뿌리의 문제가 둘 더 나왔다.
+    &lt;ul&gt;
+      &lt;li&gt;상대가 입력을 멈췄는데 “입력 중(…)”이 계속 떠 있다.&lt;/li&gt;
+      &lt;li&gt;상대가 읽었는데 “1”이 안 사라진다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;구조&quot;&gt;구조&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;보내기는 REST, 받기는 웹소켓이다.
+    &lt;ul&gt;
+      &lt;li&gt;앱은 커플 방(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/ws/chat?coupleId=N&lt;/code&gt;)에 소켓을 붙여 두고 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MESSAGE&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;READ&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TYPING&lt;/code&gt; 이벤트를 받는다.&lt;/li&gt;
+      &lt;li&gt;푸시(FCM)는 소켓과 &lt;strong&gt;별개의 경로&lt;/strong&gt;다. 그래서 소켓이 죽어 있어도 푸시는 온다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;원인-1-끊겼는데-끊긴-줄-모른다&quot;&gt;원인 1. 끊겼는데 끊긴 줄 모른다&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;셀룰러망이나 공유기(NAT)는 한동안 아무것도 안 오가는 연결을 &lt;strong&gt;양쪽에 알리지 않고&lt;/strong&gt; 정리해 버리는 경우가 많다.
+    &lt;ul&gt;
+      &lt;li&gt;연결을 끊을 때 보내는 신호(FIN)가 없으니, 앱의 소켓은 여전히 “열림” 상태다.&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;receive()&lt;/code&gt;는 에러 없이 다음 메시지를 기다리기만 한다. 다음 메시지는 오지 않는다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;이른바 반쯤 열린(half-open) 연결이다. 무언가를 &lt;strong&gt;보내 봐야&lt;/strong&gt; 끊긴 걸 알 수 있다.&lt;/li&gt;
+  &lt;li&gt;그래서 25초마다 ping을 보낸다. 실패하면 3초 뒤에 다시 붙는다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/resync/img_1.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;ping 실패와 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;receive()&lt;/code&gt; 실패가 거의 동시에 나면 재연결이 두 번 걸린다. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;isReconnecting&lt;/code&gt; 플래그로 한 번만 예약되게 막았다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;원인-2-다시-붙어도-놓친-메시지는-안-온다&quot;&gt;원인 2. 다시 붙어도 놓친 메시지는 안 온다&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;ping을 넣고 나서도 “나갔다 들어와야 보이는” 일이 남았다.&lt;/li&gt;
+  &lt;li&gt;소켓은 &lt;strong&gt;지금 이 순간&lt;/strong&gt; 일어나는 일만 전해 준다. 끊겨 있던 동안 서버가 뿌린 메시지는 다시 붙어도 돌아오지 않는다.&lt;/li&gt;
+  &lt;li&gt;게다가 iOS는 앱이 백그라운드로 가면 소켓을 오래 살려 두지 않는다. 앱으로 돌아오는 순간이 가장 많이 놓치는 순간이다.&lt;/li&gt;
+  &lt;li&gt;그래서 원칙을 하나 세웠다. &lt;strong&gt;소켓은 “새 소식이 있다”를 빨리 알려주는 용도, 진짜 목록은 REST.&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;다시 붙을 때마다 REST로 최근 메시지를 다시 받아 채운다.&lt;/li&gt;
+      &lt;li&gt;다시 붙는 시점은 세 가지다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/resync/img_3.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/resync/img_2.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;최초 연결 때는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;onReconnect&lt;/code&gt;를 부르지 않는다. 처음 화면을 열 때 이미 히스토리를 받아오니까 중복이다.&lt;/li&gt;
+  &lt;li&gt;REST로 받은 목록과 소켓으로 받은 메시지가 겹칠 수 있는데, 이건 &lt;a href=&quot;/project/2026/11/23/Woorin-Chat-Idempotency/&quot;&gt;clientMessageId 글&lt;/a&gt;에서 만든 짝짓기로 걸러진다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;원인-3-끄기-신호를-놓치면-영원히-켜져-있다&quot;&gt;원인 3. “끄기” 신호를 놓치면 영원히 켜져 있다&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;“입력 중(…)”은 이렇게 동작했다.
+    &lt;ul&gt;
+      &lt;li&gt;입력을 시작하면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TYPING isTyping=true&lt;/code&gt;, 3초간 입력이 없으면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;isTyping=false&lt;/code&gt;를 보낸다.&lt;/li&gt;
+      &lt;li&gt;받는 쪽은 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;false&lt;/code&gt;가 올 때까지 …을 보여준다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;문제는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;false&lt;/code&gt;가 &lt;strong&gt;안 오는&lt;/strong&gt; 경우다.
+    &lt;ul&gt;
+      &lt;li&gt;상대가 입력하다가 앱을 나가거나, 네트워크가 끊기거나, 내 소켓이 재연결하는 사이에 신호가 지나가면&lt;/li&gt;
+      &lt;li&gt;…이 다음에 상대가 입력할 때까지 계속 떠 있다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;켜기/끄기 신호 쌍에 의존하는 대신, &lt;strong&gt;유효기간이 있는 상태&lt;/strong&gt;로 바꿨다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/resync/img_4.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;보내는 쪽은 계속 입력 중이면 &lt;strong&gt;3초마다 “켜기”를 다시 보낸다.&lt;/strong&gt; 만료(6초)보다 짧아서 길게 써도 중간에 꺼지지 않는다.&lt;/li&gt;
+  &lt;li&gt;그 밖에 바로 끄는 경우
+    &lt;ul&gt;
+      &lt;li&gt;상대 메시지가 도착했을 때, 내 소켓이 재연결될 때 → 받는 쪽에서 끈다.&lt;/li&gt;
+      &lt;li&gt;채팅 화면을 벗어나거나 앱이 백그라운드로 갈 때 → 보내는 쪽이 소켓이 끊기기 전에 “끄기”를 보낸다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;원인-4-이벤트는-왔는데-화면이-안-바뀐다&quot;&gt;원인 4. 이벤트는 왔는데 화면이 안 바뀐다&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/resync/app_1.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;내가 보낸 메시지 옆의 “1”은 상대가 아직 안 읽었다는 표시다. 상대가 읽으면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;READ&lt;/code&gt; 이벤트가 와서 사라져야 한다.&lt;/li&gt;
+  &lt;li&gt;읽음 “1”이 안 사라지는 문제도 소켓을 의심했는데, 이번엔 소켓이 아니었다.
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;READ&lt;/code&gt; 이벤트는 잘 왔고, 메시지의 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;isRead&lt;/code&gt;도 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;true&lt;/code&gt;로 바뀌어 있었다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;원인은 직전에 넣은 &lt;strong&gt;목록 최적화&lt;/strong&gt;였다.
+    &lt;ul&gt;
+      &lt;li&gt;채팅 목록은 diffable data source로 그린다. 스크롤 성능을 위해 “행 구성(rows)이 그대로면 apply를 건너뛰기”를 넣었다.&lt;/li&gt;
+      &lt;li&gt;그런데 행은 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(메시지 id, 헤더 표시 여부)&lt;/code&gt;만 담고 있어서, &lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;isRead&lt;/code&gt;만 바뀌면 rows는 그대로&lt;/strong&gt;다. 그래서 갱신 자체를 건너뛰었다.&lt;/li&gt;
+      &lt;li&gt;같은 스냅샷으로 apply를 다시 불러도 소용없다. diffable은 식별자가 같은 항목은 다시 그리지 않는다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;이전 상태와 비교해 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;isRead&lt;/code&gt;가 바뀐 메시지만 골라 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;reconfigureItems&lt;/code&gt;로 그 셀만 다시 그리게 했다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/resync/img_5.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/resync/img_6.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;정리&quot;&gt;정리&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;모바일에서 소켓은 &lt;strong&gt;조용히 끊긴다.&lt;/strong&gt; 끊긴 걸 알려면 보내 봐야 한다. (ping)&lt;/li&gt;
+  &lt;li&gt;소켓은 놓친 걸 다시 주지 않는다. 다시 붙을 때마다 &lt;strong&gt;REST로 다시 맞춘다.&lt;/strong&gt; 소켓은 빠른 알림, 진실은 REST.&lt;/li&gt;
+  &lt;li&gt;켜기/끄기 쌍으로 된 상태는 끄기를 놓치면 영원히 남는다. &lt;strong&gt;유효기간을 두고 주기적으로 갱신&lt;/strong&gt;하면 신호를 놓쳐도 스스로 회복한다.&lt;/li&gt;
+  &lt;li&gt;“실시간이 안 된다”의 원인이 항상 실시간 쪽에 있는 건 아니다. 읽음 표시는 화면 갱신 최적화가 원인이었다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://developer.apple.com/documentation/foundation/urlsessionwebsockettask&quot;&gt;https://developer.apple.com/documentation/foundation/urlsessionwebsockettask&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://datatracker.ietf.org/doc/html/rfc6455#section-5.5.2&quot;&gt;https://datatracker.ietf.org/doc/html/rfc6455#section-5.5.2&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://developer.apple.com/documentation/uikit/nsdiffabledatasourcesnapshot/reconfigureitems(_:)&quot;&gt;https://developer.apple.com/documentation/uikit/nsdiffabledatasourcesnapshot/reconfigureitems(_:)&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Mon, 23 Nov 2026 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/project/2026/11/23/Woorin-Chat-WebSocket-Resync/</link>
+        <guid isPermaLink="true">http://localhost:4000/project/2026/11/23/Woorin-Chat-WebSocket-Resync/</guid>
+        
+        <category>project</category>
+        
+        
+        <category>project</category>
+        
+      </item>
+    
+      <item>
+        <title>우린 - 둘이 쓰던 채팅을 100명이 쓴다면 (k6 부하 테스트)</title>
+        <description>&lt;h2 id=&quot;개요&quot;&gt;개요&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/img_1.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;우린은 여자친구와 둘이 쓰려고 만든 커플 앱이다.
+    &lt;ul&gt;
+      &lt;li&gt;채팅도 직접 만들었는데, 둘이 쓸 때는 메시지가 늦게 간다고 느낀 적이 없다.&lt;/li&gt;
+      &lt;li&gt;그런데 이게 잘 만들어서인지, &lt;strong&gt;둘이라서 티가 안 났던 것&lt;/strong&gt;인지는 알 수 없다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;그래서 질문을 하나 세웠다.
+    &lt;ul&gt;
+      &lt;li&gt;&lt;strong&gt;100명이 동시에 채팅을 쓴다면&lt;/strong&gt; 지금 로직이 버틸까?&lt;/li&gt;
+      &lt;li&gt;문제가 있다면 어느 로직이고, 어떻게 고칠 수 있을까?&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;결과
+    &lt;ul&gt;
+      &lt;li&gt;동시 100명에서 &lt;strong&gt;19.9 TPS, p95 10.64초&lt;/strong&gt; → 쿼리 1개 수정 + 인덱스 1개 추가로 &lt;strong&gt;399.9 TPS, p95 0.53초&lt;/strong&gt; (약 20배)&lt;/li&gt;
+      &lt;li&gt;그 뒤엔 약 400 TPS에서 멈췄다. 쿼리가 아니라 &lt;strong&gt;서버 한 대(2 vCPU)의 한계&lt;/strong&gt;였다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;테스트-환경&quot;&gt;테스트 환경&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;서버
+    &lt;ul&gt;
+      &lt;li&gt;GCP Compute Engine &lt;strong&gt;e2-medium (2 vCPU, 메모리 4GB)&lt;/strong&gt;, Ubuntu 24.04, 서울 리전&lt;/li&gt;
+      &lt;li&gt;GCP를 고른 이유는 무료 체험 크레딧이다.&lt;/li&gt;
+      &lt;li&gt;서버 한 대에 Spring Boot(Java 17)와 MySQL 8.0을 같이 띄워 운영 중이다.&lt;/li&gt;
+      &lt;li&gt;커넥션 풀은 따로 설정하지 않아 DBCP2 기본값(최대 8개)이다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;데이터
+    &lt;ul&gt;
+      &lt;li&gt;운영 DB는 건드리지 않고, 같은 MySQL에 &lt;strong&gt;테스트 전용 DB&lt;/strong&gt;를 따로 만들었다.&lt;/li&gt;
+      &lt;li&gt;커플 100쌍(사용자 200명), 커플마다 대화 약 1만 건, &lt;strong&gt;총 100만 건&lt;/strong&gt;.&lt;/li&gt;
+      &lt;li&gt;둘이 쓸 때 대화는 수백 건이었다. 몇 달 쓴 커플처럼 대화를 쌓아야 문제가 보일 거라고 봤다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;부하 도구는 k6를 썼다.
+    &lt;ul&gt;
+      &lt;li&gt;시나리오를 JavaScript로 짤 수 있어서, 실제 채팅처럼 “열고, 보내고, 읽는” 흐름을 섞기 쉽다.&lt;/li&gt;
+      &lt;li&gt;부하는 로컬 Mac에서 원격으로 줬다. 서버와 부하 도구가 같은 기계에 있으면 CPU를 나눠 써서 숫자가 흔들린다. (처음에 로컬에서 다 같이 돌렸다가 숫자가 크게 흔들려서 바꿨다)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// chat.js — 가상 사용자 한 명 = 커플 중 한 사람&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;default&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;r&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Math&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;random&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;r&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;// 50% 채팅방 열기 (최근 30건)&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;BASE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/api/chat/messages?coupleId=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;couple&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;amp;limit=30`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;...);&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;r&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 40% 메시지 보내기 (재전송 대비 전송 ID 포함)&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;BASE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/api/chat/messages`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;JSON&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;stringify&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;coupleId&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;senderId&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;content&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;clientMessageId&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;uuidv4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}),&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;...);&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;              &lt;span class=&quot;c1&quot;&gt;// 10% 읽음 처리&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;BASE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/api/chat/read?coupleId=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;couple&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;amp;readerId=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;u&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;...);&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;측정 규칙
+    &lt;ul&gt;
+      &lt;li&gt;동시 사용자 N명이 쉬지 않고 30초 동안 반복한다.&lt;/li&gt;
+      &lt;li&gt;측정 전에 &lt;strong&gt;테스트 중 생긴 메시지를 지운다.&lt;/strong&gt; 안 지우면 측정할수록 데이터가 쌓여서 뒤 측정이 불리해진다.&lt;/li&gt;
+      &lt;li&gt;서버를 띄운 직후가 아니라 &lt;strong&gt;워밍업한 뒤&lt;/strong&gt; 잰다. (이유는 아래 “측정하며 틀렸던 것”)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;100명이면-10초가-걸렸다&quot;&gt;100명이면 10초가 걸렸다&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/img_2.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;동시 100명에서 &lt;strong&gt;19.9 TPS, p95 10.64초&lt;/strong&gt;. 에러는 없었지만 메시지 하나 보내는 데 평균 5초다.&lt;/li&gt;
+  &lt;li&gt;채팅방 열기, 보내기, 읽음 처리가 모두 비슷하게 느렸다.
+    &lt;ul&gt;
+      &lt;li&gt;하나가 느리면 그 요청이 커넥션과 CPU를 붙잡고 있어서, 나머지도 같이 줄을 선다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;그래서 DB에서 어떤 쿼리가 시간을 쓰고 있는지부터 봤다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/img_3.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;-- 쿼리별로 30초 동안 DB 시간을 얼마나 썼는지 (측정 전에 TRUNCATE로 비운다)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ROUND&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SUM_TIMER_WAIT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e12&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;total_sec&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;COUNT_STAR&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;calls&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+       &lt;span class=&quot;n&quot;&gt;ROUND&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AVG_TIMER_WAIT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;avg_ms&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DIGEST_TEXT&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;performance_schema&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;events_statements_summary_by_digest&lt;/span&gt;
+ &lt;span class=&quot;k&quot;&gt;ORDER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BY&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SUM_TIMER_WAIT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DESC&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;LIMIT&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;결과
+    &lt;ul&gt;
+      &lt;li&gt;&lt;strong&gt;채팅방 열기 (최근 30건)&lt;/strong&gt;: 평균 664ms, 30초 동안 223초. 압도적 1위다.&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;읽음 처리 UPDATE&lt;/strong&gt;: 평균 348ms&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;안 읽은 수 COUNT&lt;/strong&gt;: 평균 155ms&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;셋 다 &lt;strong&gt;커플의 대화 기록 전체를 훑는&lt;/strong&gt; 쿼리였다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;원인-최근-30건을-보여주려고-1만-건을-읽고-있었다&quot;&gt;원인: 최근 30건을 보여주려고 1만 건을 읽고 있었다&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/img_4.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;코드만 보면 문제없어 보인다. 앱이 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;limit=30&lt;/code&gt;을 보내면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ORDER BY ... LIMIT&lt;/code&gt;으로 최근 30건만 가져온다.
+    &lt;ul&gt;
+      &lt;li&gt;아래 실행계획은 같은 쿼리를 LIMIT 31로 떠서 31건으로 나온다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/img_5.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;실행계획(EXPLAIN ANALYZE)을 아래에서 위로 읽으면 실제 순서가 보인다.
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Index lookup on m ... rows=10004&lt;/code&gt; → 이 커플의 메시지를 &lt;strong&gt;전부&lt;/strong&gt; 읽는다.&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Single-row index lookup on p ... loops=10004&lt;/code&gt; → 답장 대상, 공유 장소, 추억 등 6개 테이블 조인을 &lt;strong&gt;1만 번씩&lt;/strong&gt; 한다.&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Select #2 (dependent) ... loops=10004&lt;/code&gt; → 메시지마다 사진 서브쿼리를 &lt;strong&gt;1만 번&lt;/strong&gt; 돈다.&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Sort: ... limit input to 31 row(s)&lt;/code&gt; → 그 다음에야 정렬해서 &lt;strong&gt;31건만&lt;/strong&gt; 남긴다. (앱 요청이면 30건)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;왜 이렇게 되나?
+    &lt;ul&gt;
+      &lt;li&gt;LEFT JOIN과 SELECT 절의 서브쿼리가 붙어 있으면, MySQL은 조인을 다 끝낸 결과에 정렬과 LIMIT을 건다.&lt;/li&gt;
+      &lt;li&gt;즉 “최근 30건만”이라는 조건이 &lt;strong&gt;맨 마지막에&lt;/strong&gt; 걸린다.&lt;/li&gt;
+      &lt;li&gt;그래서 대화가 쌓일수록 채팅방 열기가 그만큼 느려진다. 둘이 쓸 때처럼 대화가 수백 건이면 금방 끝나서, 몰랐던 이유가 이거다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;개선-1-최근-n건의-id만-먼저-뽑기&quot;&gt;개선 1. 최근 N건의 ID만 먼저 뽑기&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/img_6.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;순서를 바꿨다.
+    &lt;ul&gt;
+      &lt;li&gt;먼저 (커플, 메시지ID) 인덱스만으로 &lt;strong&gt;최근 N건의 ID&lt;/strong&gt;를 뽑는다. 이 단계는 인덱스만 보고 N개에서 멈춘다.&lt;/li&gt;
+      &lt;li&gt;그 N건에만 메시지 본문, 조인, 사진 서브쿼리를 붙인다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;조인할 대상이 1만 건에서 30건으로 줄어드니, 대화가 아무리 쌓여도 비용이 일정하다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/img_7.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;실행계획
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Limit: 31 row(s)&lt;/code&gt; → &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Materialize rows=31&lt;/code&gt; → 31건을 먼저 만들고 나서 조인한다.&lt;/li&gt;
+      &lt;li&gt;쿼리 하나만 실행하면 &lt;strong&gt;72.2ms → 1.28ms&lt;/strong&gt;.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;결과가 같은가?
+    &lt;ul&gt;
+      &lt;li&gt;쿼리를 바꾸면 순서나 빠지는 데이터가 생길 수 있다.&lt;/li&gt;
+      &lt;li&gt;바꾸기 전과 후 서버에서 같은 API(최근 30건, 이전 페이지)를 호출해 &lt;strong&gt;응답 JSON을 해시로 비교&lt;/strong&gt;했다. 둘 다 같았다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;개선-2-안-읽은-메시지만-바로-찾는-인덱스&quot;&gt;개선 2. 안 읽은 메시지만 바로 찾는 인덱스&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/img_8.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;읽음 처리와 안 읽은 수 세기는 같은 걸 찾는다.
+    &lt;ul&gt;
+      &lt;li&gt;“이 커플에서(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;couple_id =&lt;/code&gt;), &lt;strong&gt;안 읽은(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;read_yn = &apos;N&apos;&lt;/code&gt;)&lt;/strong&gt;, 상대가 보낸(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sender_id !=&lt;/code&gt;) 메시지”&lt;/li&gt;
+      &lt;li&gt;기존엔 (커플, 시간) 인덱스뿐이라, 커플의 메시지를 전부 꺼내 하나씩 읽음 여부를 확인했다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;안 읽은 수는 푸시를 보낼 때 배지 숫자로 쓴다.
+    &lt;ul&gt;
+      &lt;li&gt;푸시는 응답이 늦어지지 않도록 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@Async&lt;/code&gt;로 별도 스레드에서 보낸다.&lt;/li&gt;
+      &lt;li&gt;그런데 &lt;strong&gt;DB는 같이 쓴다.&lt;/strong&gt; 응답 시간에는 안 보여도, 이 쿼리가 DB를 붙잡고 있어서 결국 전체가 느려진다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INDEX&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IX_TB_MASTER_CHAT_MESSAGE_UNREAD&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;ON&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TB_MASTER_CHAT_MESSAGE&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;COUPLE_ID&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;READ_YN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SENDER_ID&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;컬럼 순서를 이렇게 둔 이유
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;=&lt;/code&gt;로 찾는 컬럼(COUPLE_ID, READ_YN)을 앞에, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;!=&lt;/code&gt;로 거르는 SENDER_ID를 뒤에 뒀다.&lt;/li&gt;
+      &lt;li&gt;그러면 “이 커플의 안 읽은 메시지”까지 인덱스로 바로 좁혀진다. 대부분 읽은 상태라 안 읽은 건 몇 건 안 된다.&lt;/li&gt;
+      &lt;li&gt;COUNT는 이 인덱스만 보고 끝난다. (실행계획에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Covering index range scan&lt;/code&gt;)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;결과: 읽음 처리 UPDATE 평균 &lt;strong&gt;348ms → 13ms&lt;/strong&gt;, 안 읽은 수 COUNT는 상위 쿼리 목록에서 사라졌다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;결과&quot;&gt;결과&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/img_9.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/img_10.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;동시 100명, 같은 서버, 같은 데이터
+    &lt;ul&gt;
+      &lt;li&gt;개선 전: &lt;strong&gt;19.9 TPS, p95 10.64초&lt;/strong&gt;&lt;/li&gt;
+      &lt;li&gt;개선 후: &lt;strong&gt;399.9 TPS, p95 0.53초&lt;/strong&gt; (약 20배)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;이제 DB 시간 1위는 메시지 INSERT(평균 14ms)다. 남은 건 &lt;strong&gt;정상적인 쓰기 비용&lt;/strong&gt;이다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;측정하며-틀렸던-것&quot;&gt;측정하며 틀렸던 것&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;데이터가 쌓이는 걸 몰랐다.
+    &lt;ul&gt;
+      &lt;li&gt;처음엔 측정을 연달아 돌렸다. 메시지 보내기가 40%라 측정마다 수만 건씩 쌓여서, 뒤에 잰 쪽이 항상 불리했다.&lt;/li&gt;
+      &lt;li&gt;→ 측정 전마다 테스트 중 생긴 메시지를 지우도록 바꿨다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;서버를 띄우자마자 쟀다.
+    &lt;ul&gt;
+      &lt;li&gt;개선 후 첫 측정이 178 TPS로 나왔는데, 워밍업 후 다시 재니 400 TPS였다.&lt;/li&gt;
+      &lt;li&gt;Java는 처음 실행될 때 코드를 최적화(JIT)하는 시간이 있어서, 띄운 직후 숫자는 낮게 나온다.&lt;/li&gt;
+      &lt;li&gt;→ 짧게 부하를 준 뒤 측정했다. 개선 전도 같은 방식으로 다시 쟀다. (개선 전은 DB가 병목이라 차이가 거의 없었다)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;커넥션 풀이 원인일 거라고 짐작했다.
+    &lt;ul&gt;
+      &lt;li&gt;처음 느렸을 때 가장 먼저 의심한 건 커넥션 풀(기본 8개)이었다.&lt;/li&gt;
+      &lt;li&gt;로컬에서 30개로 늘려 봤더니 &lt;strong&gt;오히려 느려졌다.&lt;/strong&gt; (100명, TPS 1,421 → 1,028)&lt;/li&gt;
+      &lt;li&gt;연결이 많아지면 DB 안에서 동시에 도는 쿼리가 늘어 서로 경합한다. 풀 크기는 늘릴수록 좋은 값이 아니라, DB가 감당할 수 있는 만큼으로 맞추는 값이다.&lt;/li&gt;
+      &lt;li&gt;진짜 원인은 쿼리별 누적 시간을 보고 나서야 찾았다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;더-센-부하-이번엔-서버-한-대의-한계&quot;&gt;더 센 부하: 이번엔 서버 한 대의 한계&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/img_11.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;동시 사용자를 올려 봤다.
+    &lt;ul&gt;
+      &lt;li&gt;50명 354 TPS / 100명 400 TPS / 200명 396 TPS. 에러는 0%.&lt;/li&gt;
+      &lt;li&gt;약 &lt;strong&gt;400 TPS에서 멈추고&lt;/strong&gt;, 응답시간만 늘었다. (200명 p95 1.21초)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;어디가 막혔나?
+    &lt;ul&gt;
+      &lt;li&gt;CPU 유휴가 약 5%. &lt;strong&gt;Java 121% + MySQL 72%&lt;/strong&gt;로 2코어(200%)를 둘이 나눠 쓰며 꽉 찼다.&lt;/li&gt;
+      &lt;li&gt;쿼리는 이미 가볍다. 이제는 특정 쿼리가 아니라 &lt;strong&gt;서버 한 대가 한계&lt;/strong&gt;다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;그럼 무엇을 해야 하나? 순서대로 보면
+    &lt;ul&gt;
+      &lt;li&gt;먼저 같은 서버에 있는 &lt;strong&gt;Java와 MySQL을 분리&lt;/strong&gt;한다. (Cloud SQL 같은 관리형 DB) 지금 CPU의 1/3 이상을 MySQL이 쓰고 있다.&lt;/li&gt;
+      &lt;li&gt;그래도 부족하면 &lt;strong&gt;서버를 여러 대로 늘린다.&lt;/strong&gt; 그런데 지금 코드는 그대로 늘릴 수 없다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;서버를-늘리려면-바꿔야-하는-것&quot;&gt;서버를 늘리려면 바꿔야 하는 것&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/img_12.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;웹소켓 방 목록이 &lt;strong&gt;서버 메모리&lt;/strong&gt;에 있다.
+    &lt;ul&gt;
+      &lt;li&gt;커플 두 사람이 서로 다른 서버에 붙으면, A 서버의 rooms에는 B 서버에 붙은 상대가 없다. → 실시간 메시지가 상대에게 안 간다.&lt;/li&gt;
+      &lt;li&gt;방법 1: 메시지를 저장한 서버가 &lt;strong&gt;Redis Pub/Sub&lt;/strong&gt;으로 “커플 N에 메시지”를 발행하고, 모든 서버가 구독해서 자기한테 붙은 사람에게만 보낸다.&lt;/li&gt;
+      &lt;li&gt;방법 2: 로드밸런서에서 &lt;strong&gt;같은 커플은 같은 서버로&lt;/strong&gt; 보낸다. 간단하지만 서버가 하나 죽으면 그 커플들이 다 끊긴다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/img_13.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;데이트 추천 중복 방지가 &lt;strong&gt;JVM 안의 synchronized&lt;/strong&gt;다.
+    &lt;ul&gt;
+      &lt;li&gt;같은 서버 안의 스레드끼리만 막아준다. 서버가 두 대면 두 요청이 각자 다른 서버에서 동시에 통과한다.&lt;/li&gt;
+      &lt;li&gt;만들 때 이미 “단일 인스턴스 전제”라고 주석으로 남겨뒀다. 늘리면 MySQL &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;GET_LOCK&lt;/code&gt; 같은 DB 락이나 Redis 락으로 바꿔야 한다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;그 밖에
+    &lt;ul&gt;
+      &lt;li&gt;사진을 서버 디스크에 저장한다. → 서버마다 디스크가 달라지니 공용 저장소(GCS 같은)가 필요하다.&lt;/li&gt;
+      &lt;li&gt;푸시 대기열이 메모리(@Async)에 있다. → 서버가 죽으면 보내지 못한 알림이 사라진다. 메시지 큐로 옮기는 걸 고려해야 한다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;정리&quot;&gt;정리&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;둘이 쓸 땐 안 보이던 문제는 &lt;strong&gt;데이터와 사용자가 늘어야&lt;/strong&gt; 드러난다.&lt;/li&gt;
+  &lt;li&gt;짐작보다 측정이 원인을 가리킨다.
+    &lt;ul&gt;
+      &lt;li&gt;커넥션 풀을 의심했지만, 쿼리별 누적 시간과 실행계획이 정확히 어디가 문제인지 보여줬다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;숫자는 측정 방법에 따라 쉽게 틀린다. 데이터 초기화, 워밍업, 부하 도구 분리를 지켜야 비교할 수 있다.&lt;/li&gt;
+  &lt;li&gt;병목은 사라지지 않고 &lt;strong&gt;다음 자리로 옮겨 간다.&lt;/strong&gt; DB → 서버 CPU → 서버 한 대.&lt;/li&gt;
+  &lt;li&gt;다음에 할 것
+    &lt;ul&gt;
+      &lt;li&gt;Java와 MySQL 분리, 웹소켓 메시지를 Redis Pub/Sub으로 서버 간에 공유하도록 바꾸고, 서버를 두 대로 늘려 다시 재본다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://grafana.com/docs/k6/latest/&quot;&gt;https://grafana.com/docs/k6/latest/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://dev.mysql.com/doc/refman/8.0/en/explain.html#explain-analyze&quot;&gt;https://dev.mysql.com/doc/refman/8.0/en/explain.html#explain-analyze&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://dev.mysql.com/doc/refman/8.0/en/performance-schema-statement-digests.html&quot;&gt;https://dev.mysql.com/doc/refman/8.0/en/performance-schema-statement-digests.html&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Mon, 23 Nov 2026 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/project/2026/11/23/Woorin-Chat-Load-Test/</link>
+        <guid isPermaLink="true">http://localhost:4000/project/2026/11/23/Woorin-Chat-Load-Test/</guid>
+        
+        <category>project</category>
+        
+        
+        <category>project</category>
+        
+      </item>
+    
+      <item>
+        <title>우린 - 보내자마자 뜨는 말풍선과 두 번 저장되는 메시지 (clientMessageId)</title>
+        <description>&lt;h2 id=&quot;개요&quot;&gt;개요&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;우린 채팅은 처음에 &lt;strong&gt;서버 응답이 와야&lt;/strong&gt; 말풍선을 띄웠다.
+    &lt;ul&gt;
+      &lt;li&gt;와이파이에선 티가 안 나는데, 지하철이나 엘리베이터에서 보내면 말풍선이 한참 뒤에 뜬다.&lt;/li&gt;
+      &lt;li&gt;카카오톡처럼 &lt;strong&gt;누르자마자 말풍선을 띄우고&lt;/strong&gt;, 뒤에서 보내도록(낙관적 전송) 바꾸기로 했다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;그런데 바꾸려고 보니 질문이 두 개 생겼다.
+    &lt;ul&gt;
+      &lt;li&gt;응답을 못 받았을 때 &lt;strong&gt;다시 보내도 되나?&lt;/strong&gt; 사실은 서버에 저장됐는데 응답만 못 받은 거라면 같은 메시지가 두 번 저장된다.&lt;/li&gt;
+      &lt;li&gt;내 메시지가 &lt;strong&gt;REST 응답과 웹소켓으로 두 번&lt;/strong&gt; 돌아오는데, 먼저 띄운 말풍선과 어떻게 짝지을까?&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;결과
+    &lt;ul&gt;
+      &lt;li&gt;앱이 보내기 전에 만든 UUID(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;clientMessageId&lt;/code&gt;) 하나와 &lt;strong&gt;UNIQUE 인덱스 하나&lt;/strong&gt;로 둘 다 해결했다.&lt;/li&gt;
+      &lt;li&gt;같은 값으로 몇 번을 다시 보내도 메시지는 한 번만 저장되고, 서버는 처음 저장된 메시지를 돌려준다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;응답을-못-받았다고-실패한-건-아니다&quot;&gt;응답을 못 받았다고 실패한 건 아니다&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;앱 입장에서 “전송 실패”는 하나지만, 실제로는 두 경우가 섞여 있다.
+    &lt;ul&gt;
+      &lt;li&gt;요청이 &lt;strong&gt;서버에 닿지 못했다&lt;/strong&gt; → 다시 보내야 한다.&lt;/li&gt;
+      &lt;li&gt;서버는 &lt;strong&gt;저장까지 끝냈는데 응답이 돌아오다 끊겼다&lt;/strong&gt; → 다시 보내면 안 된다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;앱은 이 둘을 구분할 수 없다. 둘 다 타임아웃이나 네트워크 에러로 보인다.&lt;/li&gt;
+  &lt;li&gt;그래서 “다시 보내기” 버튼을 만들려면, &lt;strong&gt;같은 요청을 여러 번 보내도 결과가 한 번 보낸 것과 같아야&lt;/strong&gt; 한다. (멱등성)
+    &lt;ul&gt;
+      &lt;li&gt;앱이 판단할 수 없으니, 판단은 서버가 해야 한다.&lt;/li&gt;
+      &lt;li&gt;서버가 판단하려면 “이건 아까 그 요청이다”를 알아볼 &lt;strong&gt;식별자&lt;/strong&gt;가 요청에 실려 있어야 한다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;내-메시지가-두-번-돌아온다&quot;&gt;내 메시지가 두 번 돌아온다&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;우린 채팅은 보내기는 REST, 받기는 웹소켓이다.
+    &lt;ul&gt;
+      &lt;li&gt;서버는 메시지를 저장하면 커플 방에 웹소켓으로 뿌린다. &lt;strong&gt;보낸 사람 본인에게도&lt;/strong&gt; 간다.&lt;/li&gt;
+      &lt;li&gt;그래서 내 메시지는 REST 응답과 소켓 echo로 두 번 돌아오고, 순서도 그때그때 다르다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;응답을 기다리던 시절엔 서버가 준 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;message_id&lt;/code&gt;로 중복을 걸렀다.&lt;/li&gt;
+  &lt;li&gt;낙관적 전송에선 말풍선을 띄울 때 &lt;strong&gt;아직 서버 id가 없다.&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;임시로 음수 id를 붙여 두지만, 돌아온 메시지의 id와 비교할 수가 없다.&lt;/li&gt;
+      &lt;li&gt;내용으로 비교하면 “ㅋㅋ”를 연달아 두 번 보낼 때 틀린다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;결국 여기서도 필요한 건 같다. &lt;strong&gt;앱이 보내기 전에 만들고, 서버가 그대로 돌려주는 식별자.&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;해결-앱이-만든-uuid를-unique로&quot;&gt;해결: 앱이 만든 UUID를 UNIQUE로&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/idempotency/img_1.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;앱은 말풍선을 띄울 때 UUID를 만들어 요청에 싣는다. 다시 보낼 때도 &lt;strong&gt;같은 값&lt;/strong&gt;을 쓴다.&lt;/li&gt;
+  &lt;li&gt;예전 메시지와 사진 메시지는 이 값이 NULL이다.
+    &lt;ul&gt;
+      &lt;li&gt;MySQL UNIQUE는 NULL끼리는 중복으로 보지 않아서, 기존 데이터를 건드리지 않고 인덱스를 걸 수 있었다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/idempotency/img_2.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;왜 “먼저 SELECT로 있는지 보고, 없으면 INSERT”로 안 했나?
+    &lt;ul&gt;
+      &lt;li&gt;재전송은 첫 요청이 아직 처리 중일 때도 온다. 두 요청이 동시에 SELECT하면 &lt;strong&gt;둘 다 “없음”을 보고 둘 다 INSERT&lt;/strong&gt;한다.&lt;/li&gt;
+      &lt;li&gt;UNIQUE 인덱스에 맡기면 DB가 둘 중 하나만 통과시킨다. 판단을 애플리케이션이 아니라 DB의 제약 조건에 둔 것이다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;중복으로 걸린 요청은 &lt;strong&gt;브로드캐스트와 푸시를 다시 하지 않는다.&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;첫 요청 때 이미 상대에게 갔다. 여기서 또 보내면 상대는 알림을 두 번 받는다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;앱-돌아온-메시지를-말풍선과-짝짓기&quot;&gt;앱: 돌아온 메시지를 말풍선과 짝짓기&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;말풍선은 세 상태를 가진다. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sending&lt;/code&gt;(시계 아이콘, 흐리게) → &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sent&lt;/code&gt;, 또는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;failed&lt;/code&gt;(빨간 느낌표, 다시 보내기/삭제).&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/idempotency/img_3.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;놓치기 쉬운 순서 문제가 하나 있었다.
+    &lt;ul&gt;
+      &lt;li&gt;소켓 echo가 먼저 와서 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sent&lt;/code&gt;가 됐는데, &lt;strong&gt;REST 응답은 뒤늦게 타임아웃&lt;/strong&gt;으로 실패할 수 있다.&lt;/li&gt;
+      &lt;li&gt;그대로 두면 이미 상대에게 간 메시지에 빨간 느낌표가 뜬다.&lt;/li&gt;
+      &lt;li&gt;그래서 실패 처리 전에 “아직 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sending&lt;/code&gt;인가”를 한 번 더 확인한다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/idempotency/img_4.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;채팅 목록을 서버에서 다시 받아올 때도 조심해야 했다.
+    &lt;ul&gt;
+      &lt;li&gt;서버 목록으로 통째로 덮어쓰면, 아직 확인 못 받은(보내는 중/실패) 말풍선이 사라진다.&lt;/li&gt;
+      &lt;li&gt;서버 목록에 같은 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;clientMessageId&lt;/code&gt;가 있으면 서버 것을 쓰고, 없으면 뒤에 그대로 붙여 둔다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;말풍선이-깜빡였다&quot;&gt;말풍선이 깜빡였다&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;처음 붙였을 때 보내는 순간 말풍선이 &lt;strong&gt;한 번 깜빡였다.&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;채팅 목록은 UICollectionView의 diffable data source로 그리는데, 행을 &lt;strong&gt;id&lt;/strong&gt;로 구분하고 있었다.
+    &lt;ul&gt;
+      &lt;li&gt;임시 id(-1) → 서버 id(1234)로 바뀌면, diffable은 “-1 행 삭제 + 1234 행 추가”로 본다. 삭제/추가 애니메이션이 깜빡임이었다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;행의 키를 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;clientMessageId&lt;/code&gt;로 바꿨다. (옛날 메시지는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&quot;id-&amp;lt;서버 id&amp;gt;&quot;&lt;/code&gt;)
+    &lt;ul&gt;
+      &lt;li&gt;키가 그대로라 “같은 행의 내용만 바뀜”으로 처리되고, 그 셀만 다시 그린다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/idempotency/img_5.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;정리&quot;&gt;정리&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;네트워크 요청의 실패는 “안 갔다”와 “갔는데 답을 못 받았다”가 구분되지 않는다. 다시 보내기를 만들려면 &lt;strong&gt;멱등성&lt;/strong&gt;이 먼저다.&lt;/li&gt;
+  &lt;li&gt;멱등성의 핵심은 &lt;strong&gt;클라이언트가 만든 식별자 + DB의 UNIQUE 제약&lt;/strong&gt;이었다.
+    &lt;ul&gt;
+      &lt;li&gt;“있는지 보고 넣기”는 동시 요청에 깨진다. 판단은 DB 제약에 맡긴다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;같은 식별자가 낙관적 UI의 짝짓기 키, 목록의 행 키까지 한 번에 해결해 줬다.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;/project/2026/11/23/Woorin-Chat-Load-Test/&quot;&gt;부하 테스트 글&lt;/a&gt;의 k6 시나리오에서 메시지마다 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;clientMessageId: uuidv4()&lt;/code&gt;를 실어 보낸 이유가 이것이다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Glossary/Idempotent&quot;&gt;https://developer.mozilla.org/en-US/docs/Glossary/Idempotent&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://dev.mysql.com/doc/refman/8.0/en/create-index.html#create-index-unique&quot;&gt;https://dev.mysql.com/doc/refman/8.0/en/create-index.html#create-index-unique&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://developer.apple.com/documentation/uikit/nsdiffabledatasourcesnapshot/reconfigureitems(_:)&quot;&gt;https://developer.apple.com/documentation/uikit/nsdiffabledatasourcesnapshot/reconfigureitems(_:)&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Mon, 23 Nov 2026 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/project/2026/11/23/Woorin-Chat-Idempotency/</link>
+        <guid isPermaLink="true">http://localhost:4000/project/2026/11/23/Woorin-Chat-Idempotency/</guid>
+        
+        <category>project</category>
+        
+        
+        <category>project</category>
         
       </item>
     
@@ -2564,508 +3806,6 @@ trace.begin(“OrderController.request”)로 로그 추적을 시작하고, ord
         <pubDate>Sat, 04 Jan 2025 00:00:00 +0900</pubDate>
         <link>http://localhost:4000/framework/2025/01/04/Spring-adv-01/</link>
         <guid isPermaLink="true">http://localhost:4000/framework/2025/01/04/Spring-adv-01/</guid>
-        
-        <category>spring</category>
-        
-        
-        <category>framework</category>
-        
-      </item>
-    
-      <item>
-        <title>Spring Basic 18 - Prometheus basic</title>
-        <description>&lt;h2 id=&quot;prometheus-basic-basic&quot;&gt;&lt;strong&gt;Prometheus basic&lt;/strong&gt; &lt;strong&gt;basic&lt;/strong&gt;&lt;/h2&gt;
-
-&lt;p&gt;검색창에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;http_server_requests_seconds_count&lt;/code&gt; 를 입력하고 실행해보자&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/48e9f44f-abfe-4502-9cb0-cdb5f56f6416&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;태그label-또는-tag의-개념&quot;&gt;&lt;strong&gt;태그(Label 또는 Tag)의 개념&lt;/strong&gt;&lt;/h3&gt;
-
-&lt;p&gt;태그는 메트릭 데이터에 추가 정보를 제공하는 key-value 쌍으로, 데이터를 세부적으로 분류하거나 특정 조건으로 조회할 때 사용된다.&lt;/p&gt;
-
-&lt;h3 id=&quot;prometheus와-micrometer의-용어-차이&quot;&gt;&lt;strong&gt;Prometheus와 Micrometer의 용어 차이&lt;/strong&gt;&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Prometheus: &lt;strong&gt;Label&lt;/strong&gt;&lt;/li&gt;
-  &lt;li&gt;Micrometer: &lt;strong&gt;Tag&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;둘은 기능적으로 동일하며, 메트릭 데이터를 필터링하거나 그룹화할 때 사용된다&lt;/p&gt;
-
-&lt;h3 id=&quot;레이블-기반-필터링&quot;&gt;&lt;strong&gt;레이블 기반 필터링&lt;/strong&gt;&lt;/h3&gt;
-
-&lt;p&gt;Prometheus에서는 레이블을 기반으로 특정 메트릭 데이터를 선택적으로 조회할 수 있다. 이를 &lt;strong&gt;필터링&lt;/strong&gt;이라고 하며, 다음과 같은 연산자를 지원한다.&lt;/p&gt;
-
-&lt;h3 id=&quot;레이블-연산자&quot;&gt;&lt;strong&gt;레이블 연산자&lt;/strong&gt;&lt;/h3&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;연산자&lt;/th&gt;
-      &lt;th&gt;설명&lt;/th&gt;
-      &lt;th&gt;예시&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;=&lt;/code&gt;&lt;/td&gt;
-      &lt;td&gt;제공된 문자열과 &lt;strong&gt;정확히 동일&lt;/strong&gt;한 레이블 선택&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;method=&quot;GET&quot;&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;!=&lt;/code&gt;&lt;/td&gt;
-      &lt;td&gt;제공된 문자열과 &lt;strong&gt;같지 않은&lt;/strong&gt; 레이블 선택&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;method!=&quot;POST&quot;&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;=~&lt;/code&gt;&lt;/td&gt;
-      &lt;td&gt;제공된 문자열과 &lt;strong&gt;정규식으로 일치&lt;/strong&gt;하는 레이블 선택&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;uri=~&quot;/api/v[0-9]+/.*&quot;&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;!~&lt;/code&gt;&lt;/td&gt;
-      &lt;td&gt;제공된 문자열과 &lt;strong&gt;정규식으로 일치하지 않는&lt;/strong&gt; 레이블 선택&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;uri!~&quot;/actuator.*&quot;&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;h2 id=&quot;필터-예제&quot;&gt;&lt;strong&gt;필터 예제&lt;/strong&gt;&lt;/h2&gt;
-
-&lt;h3 id=&quot;레이블의-정확한-일치-조건&quot;&gt;&lt;strong&gt;레이블의 정확한 일치 조건&lt;/strong&gt;&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;특정 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;uri&lt;/code&gt;와 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;method&lt;/code&gt;를 가진 메트릭 데이터만 조회&lt;/p&gt;
-
-    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  http_server_requests_seconds_count{uri=&quot;/log&quot;, method=&quot;GET&quot;}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;레이블의-부정-조건&quot;&gt;&lt;strong&gt;레이블의 부정 조건&lt;/strong&gt;&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;특정 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;uri&lt;/code&gt;를 제외한 데이터를 조회&lt;/p&gt;
-
-    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  http_server_requests_seconds_count{uri!=&quot;/actuator/prometheus&quot;}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;정규식을-사용한-조건&quot;&gt;&lt;strong&gt;정규식을 사용한 조건&lt;/strong&gt;&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;method&lt;/code&gt;가 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;GET&lt;/code&gt; 또는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;POST&lt;/code&gt;인 데이터를 조회&lt;/p&gt;
-
-    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  http_server_requests_seconds_count{method=~&quot;GET|POST&quot;}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/actuator&lt;/code&gt;로 시작하는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;uri&lt;/code&gt;를 제외한 데이터를 조회:&lt;/p&gt;
-
-    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  http_server_requests_seconds_count{uri!~&quot;/actuator.*&quot;}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-boot/api/rest/actuator/prometheus.html&quot;&gt;https://docs.spring.io/spring-boot/api/rest/actuator/prometheus.html&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Fri, 03 Jan 2025 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/framework/2025/01/03/Spring-basic-19/</link>
-        <guid isPermaLink="true">http://localhost:4000/framework/2025/01/03/Spring-basic-19/</guid>
-        
-        <category>spring</category>
-        
-        
-        <category>framework</category>
-        
-      </item>
-    
-      <item>
-        <title>Spring Basic 17 - Prometheus Config</title>
-        <description>&lt;h2 id=&quot;prometheus-config&quot;&gt;Prometheus config&lt;/h2&gt;
-
-&lt;p&gt;프로메테우스는 메트릭을 수집하고 보관하는 DB이다. 프로메테우스가 우리 애플리케이션의 메트릭을 수집하도록 연동 해보자.
-여기에는 2가지 작업이 필요하다.&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;애플리케이션 설정: 프로메테우스가 애플리케이션의 메트릭을 가져갈 수 있도록 애플리케이션에서 프로메테우스 포멧에 맞추어 메트릭 만들기&lt;/li&gt;
-  &lt;li&gt;프로메테우스 설정: 프로메테우스가 우리 애플리케이션의 메트릭을 주기적으로 수집하도록 설정&lt;/li&gt;
-  &lt;li&gt;프로메테우스가 애플리케이션의 메트릭을 가져가려면 프로메테우스가 사용하는 포멧에 맞추어 메트릭을 만들어야 한다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;프로메테우스는 &lt;a href=&quot;https://github.com/prometheus/prometheus/releases/download/v2.42.0/&quot;&gt;여기&lt;/a&gt;서 다운로드 받을 수 있다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/3fec6a57-ba46-4314-baf2-66246c294a78&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;각각의 메트릭들은 내부에서 마이크로미터 표준 방식으로 측정되고 있다. 따라서 어떤 구현체를 사용할지 지정만 해주면 된다.&lt;/p&gt;
-
-&lt;p&gt;build.gradle &lt;strong&gt;추가&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;language-jsx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;implementation&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;io.micrometer:micrometer-registry-prometheus&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;마이크로미터 프로메테우스 구현 라이브러리를 추가한다.
-이렇게 하면 스프링 부트와 액츄에이터가 자동으로 마이크로미터 프로메테우스 구현체를 등록해서 동작하도록 설정해준다. 
-액츄에이터에 프로메테우스 메트릭 수집 엔드포인트가 자동으로 추가된다.
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/actuator/prometheus&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;prometheus.yml&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/7deea1ae-a0b0-41d3-bb76-336eb8d2e3f3&quot; /&gt;
-&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/1dac37e7-422a-4f73-8e8b-a0f753e79722&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;프로메테우스 로컬서버를 실행해준다. 
-그리고 Status에서 Configuration을 확인해주면 yml에서 적용해준 설정값들이 들어가 있는 것을 확인할 수 있다.&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-boot/api/rest/actuator/prometheus.html&quot;&gt;https://docs.spring.io/spring-boot/api/rest/actuator/prometheus.html&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-boot/reference/features/profiles.html&quot;&gt;https://docs.spring.io/spring-boot/reference/features/profiles.html&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Thu, 02 Jan 2025 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/framework/2025/01/02/Spring-basic-18/</link>
-        <guid isPermaLink="true">http://localhost:4000/framework/2025/01/02/Spring-basic-18/</guid>
-        
-        <category>spring</category>
-        
-        
-        <category>framework</category>
-        
-      </item>
-    
-      <item>
-        <title>Spring Basic 17 - spring actuator</title>
-        <description>&lt;h2 id=&quot;프로덕션-준비&quot;&gt;프로덕션 준비&lt;/h2&gt;
-
-&lt;p&gt;운영 환경에서 서비스할 때 필요한 이런 기능들을 프로덕션 준비 기능이라 한다. 쉽게 이야기해서 프로덕션을 운영에 배포할 때 준비해야 하는 비 기능적 요소들을 뜻한다.
-지표(metric), 추적(trace), 감사(auditing) 애플리케이션이 현재 살아있는지, 로그 정보는 정상 설정 되었는지, 커넥션 풀은 얼마나 사용되고 있는지 등을 확인할 수 있어야 한다.
-스프링 부트가 제공하는 액추에이터는 이런 프로덕션 준비 기능을 매우 편리하게 사용할 수 있는 다양한 편의 기능들을 제공한다. 더 나아가서 마이크로미터, 프로메테우스, 그라파나 같은 최근 유행하는 모니터링 시스템과 매우 쉽게 연동할 수 있는 기능도 제공한다.
-참고로 액추에이터는 시스템을 움직이거나 제어하는 데 쓰이는 기계 장치라는 뜻이다.
-여러 설명보다 한번 만들어서 실행해보는 것이 더 빨리 이해가 될 것이다.&lt;/p&gt;
-
-&lt;h2 id=&quot;actuator&quot;&gt;actuator&lt;/h2&gt;
-
-&lt;p&gt;액츄에이터가 제공하는 프로덕션 준비 기능을 사용하려면 스프링 부트 액츄에이터 라이브러리를 추가해야 한다.&lt;/p&gt;
-
-&lt;p&gt;build.gradle&lt;/p&gt;
-&lt;div class=&quot;language-jsx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;implementation&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;org.springframework.boot:spring-boot-starter-actuator&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;actuator-설정파일-등록&quot;&gt;actuator 설정파일 등록&lt;/h2&gt;
-
-&lt;p&gt;application.yml&lt;/p&gt;
-
-&lt;div class=&quot;language-jsx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;management&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;endpoints&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;web&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;nx&quot;&gt;exposure&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;nx&quot;&gt;include&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;actuator에서 제공해주는 설정파일을 등록한다.&lt;/p&gt;
-
-&lt;div class=&quot;language-jsx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;_links&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;href&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;http://localhost:8080/actuator&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;templated&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-        &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;beans&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;href&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;http://localhost:8080/actuator/beans&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;templated&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-        &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;caches-cache&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;href&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;http://localhost:8080/actuator/caches/{cache}&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;templated&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-        &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;caches&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;href&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;http://localhost:8080/actuator/caches&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;templated&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-        &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;health-path&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;href&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;http://localhost:8080/actuator/health/{*path}&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;templated&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-        &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;health&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;href&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;http://localhost:8080/actuator/health&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;templated&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-        &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;href&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;http://localhost:8080/actuator/info&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;templated&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-        &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;conditions&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;href&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;http://localhost:8080/actuator/conditions&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;templated&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-        &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;configprops&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;href&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;http://localhost:8080/actuator/configprops&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;templated&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-        &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;configprops-prefix&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;href&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;http://localhost:8080/actuator/configprops/{prefix}&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;templated&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-        &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;href&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;http://localhost:8080/actuator/env&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;templated&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-        &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;env-toMatch&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;href&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;http://localhost:8080/actuator/env/{toMatch}&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;templated&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-        &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;loggers&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;href&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;http://localhost:8080/actuator/loggers&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;templated&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-        &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;loggers-name&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;href&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;http://localhost:8080/actuator/loggers/{name}&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;templated&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-        &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;heapdump&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;href&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;http://localhost:8080/actuator/heapdump&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;templated&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-        &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;threaddump&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;href&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;http://localhost:8080/actuator/threaddump&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;templated&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-        &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;metrics-requiredMetricName&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;href&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;http://localhost:8080/actuator/metrics/{requiredMetricName}&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;templated&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-        &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;metrics&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;href&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;http://localhost:8080/actuator/metrics&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;templated&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-        &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;scheduledtasks&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;href&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;http://localhost:8080/actuator/scheduledtasks&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;templated&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-        &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;mappings&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;href&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;http://localhost:8080/actuator/mappings&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;templated&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h2 id=&quot;다양한-엔드포인트&quot;&gt;다양한 엔드포인트&lt;/h2&gt;
-
-&lt;p&gt;각각의 엔드포인트를 통해서 개발자는 애플리케이션 내부의 수 많은 기능을 관리하고 모니터링 할 수 있다.
-스프링 부트가 기본으로 제공하는 다양한 엔드포인트에 대해서 알아보자. 다음은 자주 사용하는 기능 위주로 정리했다.&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;beans&lt;/code&gt; : 스프링 컨테이너에 등록된 스프링 빈을 보여준다.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;conditions&lt;/code&gt; : &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;condition&lt;/code&gt; 을 통해서 빈을 등록할 때 평가 조건과 일치하거나 일치하지 않는지 보여준다.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;configprops&lt;/code&gt; : &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@ConfigurationProperties&lt;/code&gt; 를 보여준다.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;env&lt;/code&gt; : &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Environment&lt;/code&gt; 정보를 보여준다.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;health&lt;/code&gt; : 애플리케이션 헬스 정보를 보여준다.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;httpexchanges&lt;/code&gt; : HTTP 호출 응답 정보를 보여준다. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;HttpExchangeRepository&lt;/code&gt; 를 구현한 빈을 별도로 등록해야 한다.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;info&lt;/code&gt; : 애플리케이션 정보를 보여준다.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;loggers&lt;/code&gt; : 애플리케이션 로거 설정을 보여주고 변경도 할 수 있다.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;metrics&lt;/code&gt; : 애플리케이션의 메트릭 정보를 보여준다.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;mappings&lt;/code&gt; : &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@RequestMapping&lt;/code&gt; 정보를 보여준다.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;threaddump&lt;/code&gt; : 쓰레드 덤프를 실행해서 보여준다.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;shutdown&lt;/code&gt; : 애플리케이션을 종료한다. 이 기능은 &lt;strong&gt;기본으로 비활성화&lt;/strong&gt; 되어 있다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;위와 같은 정보들을 제공받을 수 있다.
-Bean은 등록됬는지 안됬는지도 확인이 가능하다.&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-boot/docs/current/reference/html/&quot;&gt;https://docs.spring.io/spring-boot/docs/current/reference/html/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-boot/reference/features/profiles.html&quot;&gt;https://docs.spring.io/spring-boot/reference/features/profiles.html&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Mon, 30 Dec 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/framework/2024/12/30/Spring-basic-17/</link>
-        <guid isPermaLink="true">http://localhost:4000/framework/2024/12/30/Spring-basic-17/</guid>
-        
-        <category>spring</category>
-        
-        
-        <category>framework</category>
-        
-      </item>
-    
-      <item>
-        <title>Spring Basic 16 - Profile Bean</title>
-        <description>&lt;h2 id=&quot;profile&quot;&gt;Profile&lt;/h2&gt;
-
-&lt;p&gt;값이 다른 정도가 아니라 각 환경마다 서로 다른 빈을 등록해야 한다면 어떻게 해야할까?
-예를 들어서 결제 기능을 붙여야 하는데, 
-로컬 개발 환경에서는 실제 결제가 발생하면 문제가 되니 가짜 결제 기능이 있는 스프링 빈을 등록하고, 
-운영 환경에서는 실제 결제 기능을 제공하는 스프링 빈을 등록한다고 가정해보자.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/e8cfd4f3-8625-4ecd-9ca5-a1f266f9ad6c&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;우선 인터페이스를 하나 정의한다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/853284fc-20bf-459f-af3c-4190b7fbf366&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Reference그 다음 구현체를 통해서 인터페이스를 구현한다.
-스프링 프로필을 공부하기 위함이지 실제 결제기능 서비스를 개발하는 것은 아니기 때문에 log 정도만 남겨준다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/b6e6ea94-30f3-45f9-9c37-e0b6ff22aeda&quot; /&gt;
-&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/a30f4804-f68c-4a47-a44d-59557b004d16&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;개발 환경에서 사용할 구현체와, 운영 환경에서 사용할 구현체를 나눠준다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/390529b5-a142-439c-8c2f-fe7ef470151a&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Config를 통해서 수동으로 빈을 등록해준다.
-개발 환경에서는 default, 운영환경에서는 prod를 사용할 것이기 때문에 역할에 맞게 빈을 등록한다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/028f920d-e624-46be-b784-720d95deab22&quot; /&gt;
-&lt;img width=&quot;654&quot; alt=&quot;Image&quot; src=&quot;https://github.com/user-attachments/assets/b7dd60a2-d045-4b92-90bc-17c103bb125d&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;edit에 들어와서 prod로 적용해준다. 운영환경을 기준으로 애플리케이션을 실행해본다.
-prod 프로필을 적용했다. pr프로필이 사용되면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ProdPayClient&lt;/code&gt; 가 빈으로 등록되는 것을 확인할 수 있다.
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@Profile&lt;/code&gt; 은 특정 조건에 따라서 해당 빈을 등록할지 말지 선택한다. 어디서 많이 본 것 같지 않은가? 바로
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@Conditional&lt;/code&gt; 이다. 코드를 보면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@Conditional(ProfileCondition.class)&lt;/code&gt; 를 확인할 수 있다.
-스프링은 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@Conditional&lt;/code&gt; 기능을 활용해서 개발자가 더 편리하게 사용할 수 있는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@Profile&lt;/code&gt; 기능을 제공하는 것이다.&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-boot/reference/features/profiles.html&quot;&gt;https://docs.spring.io/spring-boot/reference/features/profiles.html&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Thu, 26 Dec 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/framework/2024/12/26/Spring-basic-16/</link>
-        <guid isPermaLink="true">http://localhost:4000/framework/2024/12/26/Spring-basic-16/</guid>
-        
-        <category>spring</category>
-        
-        
-        <category>framework</category>
-        
-      </item>
-    
-      <item>
-        <title>Spring Basic 15 - ConfigurationProperties</title>
-        <description>&lt;h2 id=&quot;spring-configurationproperties&quot;&gt;Spring ConfigurationProperties&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;스프링은 외부 설정의 묶음 정보를 객체로 변환하는 기능을 제공한다.&lt;/li&gt;
-  &lt;li&gt;타입 안전한 설정 속성이라 한다.&lt;/li&gt;
-  &lt;li&gt;객체를 사용하면 타입을 사용할 수 있다.&lt;/li&gt;
-  &lt;li&gt;따라서 타입 안전성이 보장된다.&lt;/li&gt;
-  &lt;li&gt;객체를 통해서 활용할 수 있는 부분들이 많아진다.&lt;/li&gt;
-  &lt;li&gt;위에서 말한 것들을 정리 해본다면 → 모든 외부 설정들을 자바코드로 관리하게 된다.&lt;/li&gt;
-  &lt;li&gt;설정 정보 그 자체도 타입임&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;코드로-알아보자&quot;&gt;코드로 알아보자&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;application.propeties&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/8f58f364-7b42-4ec4-9928-3b249e7684bd&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;외부 설정을 해줄 설정정보는 위와 같이 작성한다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/6793c3d4-3e4e-4a53-a140-6009f75b2e82&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;외부 설정을 주입 받을 객체를 생성한다. 
-그리고 각 필드를 외부 설정의 키 값에 맞추어 준비한다.
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@ConfigurationProperties&lt;/code&gt; 이 있으면 외부 설정을 주입 받는 객체라는 뜻이다. 
-여기에 외부 설정 KEY의 묶음 시작점인 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;my.datasource&lt;/code&gt; 를 적어준다. 기본 주입 방식은 자바빈 프로퍼티 방식이다. 
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Getter&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Setter&lt;/code&gt; 가 필요하다. (롬복의 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@Data&lt;/code&gt; 에 의해 자동 생성된다.)&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/b875b4e1-eeb9-424e-b6d3-4fb83c12c8d4&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@EnableConfigurationProperties(MyDataSourcePropertiesV1.class)&lt;/code&gt;스프링에게 사용할 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@ConfigurationProperties&lt;/code&gt; 를 지정해주어야 한다.&lt;/li&gt;
-  &lt;li&gt;이렇게 하면 해당 클래스는 스프링 빈으로 등록되고, 필요한 곳에서 주입 받아서 사용할 수 있다.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;private final MyDataSourcePropertiesV1 properties&lt;/code&gt; 설정 속성을 생성자를 통해 주입 받
-아서 사용한다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/18dc1571-0c62-4596-8c0a-6fbd7166b924&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;외부설정 값을 읽어오는 것을 확인할 수 있다.
-그리고 표기법 변환이 일어난 것을 확인할 수 있다. 
-max-connection은 (캐밥 케이스(표기법))을 따랐지만, 
-자바 코드는 카멜 케이스로 적은 것을 확인할 수 있다. 스프링은 캐밥 표기법을 카멜 케이스로 중간에 자동변환을 지원해준다.&lt;/p&gt;
-
-&lt;h2 id=&quot;코드의-문제점&quot;&gt;코드의 문제점&lt;/h2&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MyDataSourcePropertiesV1&lt;/code&gt; 은 스프링 빈으로 등록된다. 그런데 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Setter&lt;/code&gt; 를 가지고 있기 때문에 누군가 실수로
-값을 변경하는 문제가 발생할 수 있다. 여기에 있는 값들은 외부 설정값을 사용해서 초기에만 설정되고, 이후에는 변경
-하면 안된다. 이럴 때 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Setter&lt;/code&gt; 를 제거하고 대신에 생성자를 사용하면 중간에 데이터를 변경하는 실수를 근본적으로 방
-지할 수 있다.  이런 문제가 없을 것 같지만, 한번 발생하면 정말 잡기 어려운 버그가 만들어진다.
-대부분의 개발자가 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MyDataSourcePropertiesV1&lt;/code&gt; 의 값은 변경하면 안된다고 인지하고 있지만, 어떤 개발자가 자
-신의 문제를 해결하기 위해 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;setter&lt;/code&gt; 를 통해서 값을 변경하게 되면, 애플리케이션 전체에 심각한 버그를 유발할 수 있
-다.&lt;/p&gt;
-
-&lt;h2 id=&quot;data---getter&quot;&gt;Data -&amp;gt; Getter&lt;/h2&gt;
-
-&lt;p&gt;코드의 개선을 V2 버전을 만들어서 Lombok @Data에서 @Getter로 변경해주고 다시 실행시켰는데&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/4e31da83-70e4-40d1-be15-49515c292132&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;이러한 에러가 생겼다. 보니까 자바 빈 프로퍼티 주입 방식에서 Setter를 찾을 수 없어서 주입이 되지 않는다는 에러였다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/3298aa66-3874-4deb-ad50-abfcb1ef1887&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;따라서 생성자를 통해 주입을 해주니 잘 되는 것을 확인할 수 있었다.&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-boot/reference/features/profiles.html&quot;&gt;https://docs.spring.io/spring-boot/reference/features/profiles.html&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Fri, 20 Dec 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/framework/2024/12/20/Spring-basic-15/</link>
-        <guid isPermaLink="true">http://localhost:4000/framework/2024/12/20/Spring-basic-15/</guid>
-        
-        <category>spring</category>
-        
-        
-        <category>framework</category>
-        
-      </item>
-    
-      <item>
-        <title>Spring Basic 14 - 라이브러리 직접 만들어 보기</title>
-        <description>&lt;h2 id=&quot;순수-라이브러리&quot;&gt;순수 라이브러리&lt;/h2&gt;
-
-&lt;p&gt;스프링부트가 직접 제공해주는 @AutoConfiguration을 이해하기 위해서는 그 전에 먼저 라이브러리가 어떻게 사용되는지 이해하는 것이 필요하다.
-그리고 직접 라이브러리를 만들어 보면서 스프링 부트가 얼마나 위대한지 알 수 있었다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/61384a2f-0a19-4356-b5b8-1e7d093ec679&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;우선 라이브러리로 사용할 프로젝트에서 jar를 만들어 준다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/71978aa7-529a-48c2-9449-12cdba1928ff&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;그리고 실제 라이브러리를 사용하는 프로젝트에서 루트 디렉토리 아래에 libs 폴더를 생성해 준다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/3a7770af-51d5-4198-9ef8-aee960c25169&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;그리고 gradle에 가서 방금 추가한 jar의 경로를 gradle에 추가한다.&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/5837456f-ba1b-4ada-b460-b7e677b963f5&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;사실 여기가 제일 난감하다. 지금은 프로젝트가 소규모 프로젝트이고, 학습을 위한 프로젝트라서 간단하지 실제로 이게 대규모 프로젝트였다면 라이브러리를 등록하기
-위한 Bean을 다 설정해 줘야 하는데 어디서부터 건드려야 할지 굉장히 어려워진다고 한다.&lt;/p&gt;
-
-&lt;p&gt;그래서 우리는 Springboot가 제공해주는 AutoConfiguration이 있기에 라이브러리를 편리하게 사용할 수 있다.&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://stackoverflow.com/questions/61506907/how-can-a-library-module-of-a-spring-application-add-additional-configuration-to&quot;&gt;https://stackoverflow.com/questions/61506907/how-can-a-library-module-of-a-spring-application-add-additional-configuration-to&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Sun, 15 Dec 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/framework/2024/12/15/Spring-basic-14/</link>
-        <guid isPermaLink="true">http://localhost:4000/framework/2024/12/15/Spring-basic-14/</guid>
         
         <category>spring</category>
         

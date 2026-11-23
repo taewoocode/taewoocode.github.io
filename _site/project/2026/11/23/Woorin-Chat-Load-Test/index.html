@@ -1,0 +1,1767 @@
+<!DOCTYPE html>
+<html lang="en"><!--
+ __  __                __                                     __
+/\ \/\ \              /\ \             __                    /\ \
+\ \ \_\ \   __  __    \_\ \      __   /\_\      __       ___ \ \ \/'\
+ \ \  _  \ /\ \/\ \   /'_` \   /'__`\ \/\ \   /'__`\    /'___\\ \ , <
+  \ \ \ \ \\ \ \_\ \ /\ \L\ \ /\  __/  \ \ \ /\ \L\.\_ /\ \__/ \ \ \\`\
+   \ \_\ \_\\/`____ \\ \___,_\\ \____\ _\ \ \\ \__/.\_\\ \____\ \ \_\ \_\
+    \/_/\/_/ `/___/> \\/__,_ / \/____//\ \_\ \\/__/\/_/ \/____/  \/_/\/_/
+                /\___/                \ \____/
+                \/__/                  \/___/
+
+Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
+-->
+
+
+
+
+
+
+
+
+
+<head>
+  <!-- =============== -->
+<!-- META            -->
+<!-- =============== -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="format-detection" content="telephone=no" />
+<meta http-equiv="x-ua-compatible" content="ie=edge" />
+<meta
+        name="naver-site-verification"
+        content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
+/>
+<meta property="og:title" content="우린 - 둘이 쓰던 채팅을 100명이 쓴다면 (k6 부하 테스트)" />
+<meta property="og:type" content="article" />
+
+<!-- =============== -->
+<!-- Google AdSense  -->
+<!-- =============== -->
+<script
+        data-ad-client="ca-pub-8247516864622650"
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+></script>
+
+ 
+<meta property="og:image" content="http://localhost:4000/assets/img/logo.png" />
+
+
+<meta property="og:image:width" content="640" />
+<meta property="og:image:height" content="360" />
+ 
+<title>우린 - 둘이 쓰던 채팅을 100명이 쓴다면 (k6 부하 테스트) &middot; 일벌리는 개발자</title>
+ 
+<meta
+        name="description"
+        content="개요
+
+"
+/>
+<meta
+        property="og:description"
+        content="개요
+
+"
+/>
+
+
+
+<!-- =============== -->
+<!-- LINKS           -->
+<!-- =============== -->
+<link rel="canonical" href="http://localhost:4000/project/2026/11/23/Woorin-Chat-Load-Test/" />
+<meta property="og:url" content="http://localhost:4000/project/2026/11/23/Woorin-Chat-Load-Test/" />
+
+<link
+        rel="alternate"
+        type="application/atom+xml"
+        title="일벌리는 개발자 Feed"
+        href="http://localhost:4000/feed.xml"
+/>
+
+
+<link rel="prev" href="http://localhost:4000/project/2026/11/23/Woorin-Chat-Idempotency/" />
+ 
+<link rel="next" href="http://localhost:4000/project/2026/11/23/Woorin-Chat-WebSocket-Resync/" />
+
+
+<link
+        rel="apple-touch-icon"
+        href="http://localhost:4000/apple-touch-icon.png"
+/>
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?" />
+<!-- Place favicon.ico in the root directory -->
+
+<!-- =============== -->
+<!-- SCRIPTS         -->
+<!-- =============== -->
+<script>
+  !function(n,e){function t(n,e){n.onload=function(){this.onerror=this.onload=null,e(null,n)},n.onerror=function(){this.onerror=this.onload=null,e(new Error("Failed to load "+this.src),n)}}function o(n,e){n.onreadystatechange=function(){"complete"!=this.readyState&&"loaded"!=this.readyState||(this.onreadystatechange=null,e(null,n))}}n._loaded=!1,n.loadJSDeferred=function(a,d){function r(){n._loaded=!0;var r=e.createElement("script");r.src=a,d&&(("onload"in r?t:o)(r,d),r.onload||t(r,d));var l=e.getElementsByTagName("script")[0];l.parentNode.insertBefore(r,l)}n._loaded?r():n.addEventListener?n.addEventListener("load",r,!1):n.attachEvent?n.attachEvent("onload",r):n.onload=r}}(window,document);
+
+  !function(e){"use strict";var n=function(n,t,o){function i(e){if(a.body)return e();setTimeout(function(){i(e)})}function r(){l.addEventListener&&l.removeEventListener("load",r),l.media=o||"all"}var d,a=e.document,l=a.createElement("link");if(t)d=t;else{var f=(a.body||a.getElementsByTagName("head")[0]).childNodes;d=f[f.length-1]}var s=a.styleSheets;l.rel="stylesheet",l.href=n,l.media="only x",i(function(){d.parentNode.insertBefore(l,t?d:d.nextSibling)});var u=function(e){for(var n=l.href,t=s.length;t--;)if(s[t].href===n)return e();setTimeout(function(){u(e)})};return l.addEventListener&&l.addEventListener("load",r),l.onloadcssdefined=u,u(r),l};"undefined"!=typeof exports?exports.loadCSS=n:e.loadCSS=n}("undefined"!=typeof global?global:this);
+
+  !function(t){if(t.loadCSS){var e=loadCSS.relpreload={};if(e.support=function(){try{return t.document.createElement("link").relList.supports("preload")}catch(t){return!1}},e.poly=function(){for(var e=t.document.getElementsByTagName("link"),r=0;r<e.length;r++){var n=e[r];"preload"===n.rel&&"style"===n.getAttribute("as")&&(t.loadCSS(n.href,n,n.getAttribute("media")),n.rel=null)}},!e.support()){e.poly();var r=t.setInterval(e.poly,300);t.addEventListener&&t.addEventListener("load",function(){e.poly(),t.clearInterval(r)}),t.attachEvent&&t.attachEvent("onload",function(){t.clearInterval(r)})}}}(this);
+
+  window.disablePushState = false;
+  window.disableDrawer = false;
+</script>
+
+<!--[if lt IE 9]>
+<script src="https://unpkg.com/html5shiv/dist/html5shiv.min.js"></script>
+<![endif]-->
+
+<!-- =============== -->
+<!-- STYLES          -->
+<!-- =============== -->
+<!--[if gt IE 8]><!---->
+<style>
+  
+  article,aside,dialog,figcaption,figure,footer,header,hgroup,main,nav,section{display:block}mark{background:#FF0;color:#000}*{box-sizing:border-box}html,body{margin:0;padding:0}html{font-size:16px;line-height:1.75}body{color:#333;background-color:#fff;overflow-y:scroll}a{text-decoration:none}.lead{margin-left:-1rem;margin-right:-1rem}img,.img{display:block;max-width:100%;margin-bottom:1rem;border:none}img.lead,.img.lead{max-width:calc(100% + 2rem);width:calc(100% + 2rem)}h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6,.heading{font-weight:bold;text-rendering:optimizeLegibility}h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6{margin:1.6rem 0 1rem;line-height:1.6}h1,.h1{font-size:2rem;line-height:1.25}h2,.h2{font-size:1.5rem}h3,.h3{font-size:1.17em}p{margin-top:0;margin-bottom:1rem}p.lead{font-size:1.25rem;font-weight:300;padding:0 1rem}ul,ol,dl{margin-top:0;margin-bottom:1rem}ul,ol{padding-left:1.25rem}hr{position:relative;margin:1.5rem 0;border:0;border-top:1px solid #eee}.hr{padding-bottom:.5rem;border-bottom:1px solid #eee;margin-bottom:1.5rem}h4,h5,h6,.h4,.h5,.h6{margin-bottom:0.5rem;font-size:1rem}table{margin-bottom:1rem;width:100%;width:calc(100% + 2rem);margin-left:-1rem;border:1px solid #e5e5e5;border-collapse:collapse;border-spacing:0}td,th{padding:.25rem .5rem;border:1px solid #e5e5e5}td:first-child,th:first-child{padding-left:1rem}td:last-child,th:last-child{padding-right:1rem}thead+tbody,tbody+tbody,tfoot{border-top:3px double #e5e5e5}tbody tr:nth-child(odd) td,tbody tr:nth-child(odd) th{background-color:#f9f9f9}footer{margin-bottom:2rem}.page,.post{margin-bottom:3em}.page li+li,.post li+li{margin-top:.25rem}.page>header,.post>header{margin-bottom:2rem}.page-title,.post-title{margin-top:0}.post-date{display:block;margin-top:-0.5rem;margin-bottom:1rem;color:#9a9a9a}.related-posts{padding-left:0;list-style:none}.related-posts>li,.related-posts>li+li{margin-top:1rem}.related-posts>li>small,.related-posts>li+li>small{font-size:75%;color:#9a9a9a}.message{margin-bottom:1rem;padding:1rem;color:#787878;background-color:#f9f9f9;margin-left:-1rem;margin-right:-1rem}body,main{position:relative;overflow-x:hidden}@media screen{body::before{content:'';background:#e5e5e5;position:absolute;left:0;top:0;bottom:0}}@media screen and (min-width: 40em){html{font-size:17px}}@media screen and (min-width: 54em){html{font-size:16px}}@media screen and (min-width: 88em){html{font-size:17px}}@media screen and (min-width: 125em){html{font-size:18px}}.sr-only{display:none}.clearfix,.sidebar-social::after,.clearafter::after{content:"";display:table;clear:both}a,.a{position:relative;padding-bottom:.15rem;border-style:hidden}.img{overflow:hidden;background-color:#f9f9f9}.img>img{margin:0;width:100%;height:100%}.sixteen-nine{position:relative}.sixteen-nine::before{display:block;content:"";width:100%;padding-top:56.25%}.sixteen-nine>*{position:absolute;top:0;left:0;right:0;bottom:0}h1+hr,h2+hr,h3+hr,h4+hr,h5+hr,h6+hr{margin-top:0}.fade-in{animation-duration:500ms;animation-name:fade-in;animation-fill-mode:forwards}@keyframes fade-in{from{transform:translateY(-2rem);opacity:0}50%{transform:translateY(-2rem);opacity:0}to{transform:translateY(0);opacity:1}}.mb6{margin-bottom:10rem}.sidebar{color:rgba(255,255,255,0.75);text-align:left}.sidebar::before{content:"";position:absolute;z-index:2;top:0;left:0;bottom:0;right:0;background:linear-gradient(to bottom, rgba(32,32,32,0) 0%, rgba(32,32,32,0.5) 100%)}.sidebar a{color:#fff;border-bottom-color:rgba(255,255,255,0.2)}.right-side{width:100%;margin-left:auto;margin-right:auto}.right-side .ad-first{text-align:center}@media screen{.right-side{max-width:38rem;min-height:100vh}.right-side .ad-second{display:none}}@media screen and (min-width: 54em){.right-side{margin-left:20rem;margin-right:1rem;padding:4rem 1rem 12rem}.right-side .ad-second{text-align:center;display:block}}@media screen and (min-width: 72em){.right-side{margin-left:22rem;max-width:42rem}}@media screen and (min-width: 88em){.right-side{width:162px;margin-left:0rem;margin-right:0rem;padding:0rem;margin-top:10rem;display:block;float:left}}@media screen and (min-width: 96em){.right-side{width:300px;margin-right:0rem}}#_yDrawer{position:relative}@media screen{#_yDrawer{min-height:640px;min-height:100vh}}@media screen and (min-width: 54em){#_yDrawer{width:18rem;margin-left:0}}.sidebar-bg{position:absolute;height:100%;overflow:hidden;top:0;right:0;bottom:0;left:0;background:#202020 center / cover}.sidebar-box{display:flex;justify-content:center}.sidebar-sticky{position:relative;z-index:3}@media screen{.sidebar-sticky{-ms-overflow-style:none;overflow:-moz-scrollbars-none;height:100%;overflow:auto;position:absolute;padding:3rem 0rem;right:2.5rem;left:2.5rem}}.sidebar-sticky::-webkit-scrollbar{display:none}.sidebar-about>h1{color:#fff;font-size:2rem}.sidebar-nav>ul{list-style:none;padding-left:0;margin-bottom:.5rem}a.sidebar-nav-item{width:100%;font-weight:normal;display:block;line-height:1.75;padding:.25rem 0;border-bottom:1px solid rgba(255,255,255,0.2)}a.sidebar-nav-subitem{font-weight:normal;display:block;line-height:1.75;padding:.25rem 0;border-bottom:1px solid rgba(255,255,255,0.2)}@media screen{.y-drawer-scrim{z-index:2}.y-drawer-content{width:18rem;left:-18rem;z-index:3}}.sidebar-social{margin-bottom:.5rem}.sidebar-social>ul{list-style:none;padding-left:0;margin:0 -.25rem}.sidebar-social>ul>li{float:left}.sidebar-social>ul>li>a{display:inline-block;text-align:center;font-size:1.6rem;line-height:3rem;width:3.1249rem;height:4rem;padding:.5rem 0}.sidebar-social>ul li+li{margin-top:0}.fixed-top{position:fixed;top:0;left:0;width:100%;z-index:1}.navbar>.content{padding-top:0;padding-bottom:0;min-height:0;height:0}.menu{display:inline-block;padding:1.75rem 1.5rem;border-bottom:none;margin-left:-1.5rem;color:#9a9a9a !important}.menu::after{content:"\2630"}@media screen and (min-width: 54em){.menu{padding:1.25rem 1.5rem;position:absolute;left:-9999px}.menu:focus{position:static}}.animation-main{pointer-events:none}.loading{display:none}@media print{.menu{display:none}}.animation-main{opacity:0;will-change:opacity}.loading{position:absolute;top:0;right:0;padding:5.25rem 4.5rem;transform-origin:top right;transform:scale(0.33)}.content{position:relative;margin-left:auto;margin-right:auto;padding:5rem 1rem 12rem}@media screen{.content{min-height:100vh}}@media screen and (min-width: 54em){.content{padding:4rem 1rem 12rem;margin-left:19rem;margin-right:3rem}}@media screen and (min-width: 72em){.content{max-width:42rem;margin-left:21rem}}@media screen and (min-width: 88em){.content{float:left;width:100%;margin-left:22rem;margin-right:5rem}}@media screen and (min-width: 96em){.content{max-width:44rem}}@media screen and (min-width: 102em){.content{margin-left:25rem;margin-right:8rem}}.me{width:6.5rem;height:6.5rem;align-self:center;margin-right:20px;border-radius:100%;position:relative}@media screen and (min-width: 40em){.me{width:7rem;height:7rem}}@media screen and (min-width: 54em){.me{width:6.5rem;height:6.5rem}}@media screen and (min-width: 72em){.me{width:7rem;height:7rem}}main>footer{width:100%;position:absolute;bottom:0;left:0;right:0;padding:0 1rem;color:#9a9a9a;font-size:smaller;text-align:center}main>footer>p{margin-bottom:0}html{font-family:'Sans-serif'}h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6,.heading{font-family:'Sans-serif'}
+
+</style>
+
+
+<link
+        rel="preload"
+        href="http://localhost:4000/assets/css/hydejack.css?v=6.4.0"
+        as="style"
+        onload="this.rel='stylesheet'"
+/>
+
+<style id="_pageStyle">
+
+.content a{color:#4f86aa;border-color:rgba(79,134,170,0.2)}.content a:hover{border-color:#4f86aa}:focus{outline-color:#4f86aa}::selection{color:#fff;background:#4f86aa}::-moz-selection{color:#fff;background:#4f86aa}
+
+</style>
+
+
+<noscript>
+  <link rel="stylesheet" href="http://localhost:4000/assets/css/hydejack.css?v=6.4.0" />
+    
+  
+  <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Lato"
+  />
+  <style>
+    html { font-family: 'Lato', 'Sans-serif' }
+    h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, .heading { font-family: 'Lato', 'Sans-serif' }
+  </style>
+   
+  <link rel="stylesheet" href="http://localhost:4000/assets/icomoon/style.css" />
+</noscript>
+<!--<![endif]-->
+</head>
+
+<body>
+  <!-- =============== -->
+<!-- MENU            -->
+<!-- =============== -->
+<div class="navbar fixed-top">
+  <div class="content">
+    <span class="sr-only">Jump to:</span>
+    <a id="_menu" class="menu no-hover" href="#_title">
+      <span class="sr-only">Menu</span>
+    </a>
+  </div>
+</div>
+
+<!-- =============== -->
+<!-- CONTENT         -->
+<!-- =============== -->
+<div id="_yPushState">
+  <div class="fade-in">
+    <main
+            id="_main"
+            class="content"
+            role="main"
+            data-color="#4f86aa"
+            data-image="/assets/img/dp.jpeg"
+    >
+      
+
+<article id="post-project/2026/11/23/Woorin-Chat-Load-Test" class="post" role="article">
+  <header>
+    <h1 class="post-title">
+      
+      우린 - 둘이 쓰던 채팅을 100명이 쓴다면 (k6 부하 테스트)
+      
+    </h1>
+
+    <p class="post-date heading">
+      <time datetime="2026-11-23T00:00:00+09:00">23 Nov 2026</time>
+      
+
+
+
+
+
+
+
+
+
+in <a href="/category/project/" data-flip="title">Project</a>
+
+      
+
+
+
+
+
+
+
+
+
+on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
+
+      
+      <span class="post-views">· 조회수 <span data-gc-views>-</span></span>
+      
+    </p>
+
+    
+  <div class="hr" style="padding-bottom:0"></div>
+
+
+  </header>
+  
+
+
+  
+  <div class="markdown-body">
+
+    <!--  -->
+    <style>
+      .myAd1190 {
+        width: 48%;
+        height: 280px;
+      }
+
+      .myAd1290 {
+        width: 48%;
+        height: 280px;
+      }
+
+      @media(max-width: 800px) {
+        .myAd1190 {
+          display: none;
+        }
+
+        .myAd1290 {
+          width: 98%;
+        }
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 300px;
+      }
+
+      .row-center {
+        display: flex;
+        justify-content: center;
+        height: 258px;
+      }
+    </style>
+
+    <!--<br />-->
+    <h2 id="개요">개요</h2>
+
+<p><img src="/assets/img/projects/woorin/img_1.png" alt="img.png" /></p>
+
+<ul>
+  <li>우린은 여자친구와 둘이 쓰려고 만든 커플 앱이다.
+    <ul>
+      <li>채팅도 직접 만들었는데, 둘이 쓸 때는 메시지가 늦게 간다고 느낀 적이 없다.</li>
+      <li>그런데 이게 잘 만들어서인지, <strong>둘이라서 티가 안 났던 것</strong>인지는 알 수 없다.</li>
+    </ul>
+  </li>
+  <li>그래서 질문을 하나 세웠다.
+    <ul>
+      <li><strong>100명이 동시에 채팅을 쓴다면</strong> 지금 로직이 버틸까?</li>
+      <li>문제가 있다면 어느 로직이고, 어떻게 고칠 수 있을까?</li>
+    </ul>
+  </li>
+  <li>결과
+    <ul>
+      <li>동시 100명에서 <strong>19.9 TPS, p95 10.64초</strong> → 쿼리 1개 수정 + 인덱스 1개 추가로 <strong>399.9 TPS, p95 0.53초</strong> (약 20배)</li>
+      <li>그 뒤엔 약 400 TPS에서 멈췄다. 쿼리가 아니라 <strong>서버 한 대(2 vCPU)의 한계</strong>였다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="테스트-환경">테스트 환경</h2>
+
+<ul>
+  <li>서버
+    <ul>
+      <li>GCP Compute Engine <strong>e2-medium (2 vCPU, 메모리 4GB)</strong>, Ubuntu 24.04, 서울 리전</li>
+      <li>GCP를 고른 이유는 무료 체험 크레딧이다.</li>
+      <li>서버 한 대에 Spring Boot(Java 17)와 MySQL 8.0을 같이 띄워 운영 중이다.</li>
+      <li>커넥션 풀은 따로 설정하지 않아 DBCP2 기본값(최대 8개)이다.</li>
+    </ul>
+  </li>
+  <li>데이터
+    <ul>
+      <li>운영 DB는 건드리지 않고, 같은 MySQL에 <strong>테스트 전용 DB</strong>를 따로 만들었다.</li>
+      <li>커플 100쌍(사용자 200명), 커플마다 대화 약 1만 건, <strong>총 100만 건</strong>.</li>
+      <li>둘이 쓸 때 대화는 수백 건이었다. 몇 달 쓴 커플처럼 대화를 쌓아야 문제가 보일 거라고 봤다.</li>
+    </ul>
+  </li>
+  <li>부하 도구는 k6를 썼다.
+    <ul>
+      <li>시나리오를 JavaScript로 짤 수 있어서, 실제 채팅처럼 “열고, 보내고, 읽는” 흐름을 섞기 쉽다.</li>
+      <li>부하는 로컬 Mac에서 원격으로 줬다. 서버와 부하 도구가 같은 기계에 있으면 CPU를 나눠 써서 숫자가 흔들린다. (처음에 로컬에서 다 같이 돌렸다가 숫자가 크게 흔들려서 바꿨다)</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// chat.js — 가상 사용자 한 명 = 커플 중 한 사람</span>
+<span class="k">export</span> <span class="k">default</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">r</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">();</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">r</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">)</span> <span class="p">{</span>        <span class="c1">// 50% 채팅방 열기 (최근 30건)</span>
+    <span class="nx">http</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s2">`</span><span class="p">${</span><span class="nx">BASE</span><span class="p">}</span><span class="s2">/api/chat/messages?coupleId=</span><span class="p">${</span><span class="nx">couple</span><span class="p">}</span><span class="s2">&amp;limit=30`</span><span class="p">,</span> <span class="p">...);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">r</span> <span class="o">&lt;</span> <span class="mf">0.9</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 40% 메시지 보내기 (재전송 대비 전송 ID 포함)</span>
+    <span class="nx">http</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s2">`</span><span class="p">${</span><span class="nx">BASE</span><span class="p">}</span><span class="s2">/api/chat/messages`</span><span class="p">,</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span> <span class="nx">coupleId</span><span class="p">,</span> <span class="nx">senderId</span><span class="p">,</span> <span class="nx">content</span><span class="p">,</span> <span class="na">clientMessageId</span><span class="p">:</span> <span class="nx">uuidv4</span><span class="p">()</span> <span class="p">}),</span> <span class="p">...);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>              <span class="c1">// 10% 읽음 처리</span>
+    <span class="nx">http</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s2">`</span><span class="p">${</span><span class="nx">BASE</span><span class="p">}</span><span class="s2">/api/chat/read?coupleId=</span><span class="p">${</span><span class="nx">couple</span><span class="p">}</span><span class="s2">&amp;readerId=</span><span class="p">${</span><span class="nx">u</span><span class="p">}</span><span class="s2">`</span><span class="p">,</span> <span class="p">...);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>측정 규칙
+    <ul>
+      <li>동시 사용자 N명이 쉬지 않고 30초 동안 반복한다.</li>
+      <li>측정 전에 <strong>테스트 중 생긴 메시지를 지운다.</strong> 안 지우면 측정할수록 데이터가 쌓여서 뒤 측정이 불리해진다.</li>
+      <li>서버를 띄운 직후가 아니라 <strong>워밍업한 뒤</strong> 잰다. (이유는 아래 “측정하며 틀렸던 것”)</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="100명이면-10초가-걸렸다">100명이면 10초가 걸렸다</h2>
+
+<p><img src="/assets/img/projects/woorin/img_2.png" alt="img.png" /></p>
+
+<ul>
+  <li>동시 100명에서 <strong>19.9 TPS, p95 10.64초</strong>. 에러는 없었지만 메시지 하나 보내는 데 평균 5초다.</li>
+  <li>채팅방 열기, 보내기, 읽음 처리가 모두 비슷하게 느렸다.
+    <ul>
+      <li>하나가 느리면 그 요청이 커넥션과 CPU를 붙잡고 있어서, 나머지도 같이 줄을 선다.</li>
+    </ul>
+  </li>
+  <li>그래서 DB에서 어떤 쿼리가 시간을 쓰고 있는지부터 봤다.</li>
+</ul>
+
+<p><img src="/assets/img/projects/woorin/img_3.png" alt="img.png" /></p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- 쿼리별로 30초 동안 DB 시간을 얼마나 썼는지 (측정 전에 TRUNCATE로 비운다)</span>
+<span class="k">SELECT</span> <span class="n">ROUND</span><span class="p">(</span><span class="n">SUM_TIMER_WAIT</span><span class="o">/</span><span class="mi">1</span><span class="n">e12</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="k">AS</span> <span class="n">total_sec</span><span class="p">,</span> <span class="n">COUNT_STAR</span> <span class="k">AS</span> <span class="n">calls</span><span class="p">,</span>
+       <span class="n">ROUND</span><span class="p">(</span><span class="n">AVG_TIMER_WAIT</span><span class="o">/</span><span class="mi">1</span><span class="n">e9</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="k">AS</span> <span class="n">avg_ms</span><span class="p">,</span> <span class="n">DIGEST_TEXT</span>
+  <span class="k">FROM</span> <span class="n">performance_schema</span><span class="p">.</span><span class="n">events_statements_summary_by_digest</span>
+ <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">SUM_TIMER_WAIT</span> <span class="k">DESC</span> <span class="k">LIMIT</span> <span class="mi">5</span><span class="p">;</span>
+</code></pre></div></div>
+
+<ul>
+  <li>결과
+    <ul>
+      <li><strong>채팅방 열기 (최근 30건)</strong>: 평균 664ms, 30초 동안 223초. 압도적 1위다.</li>
+      <li><strong>읽음 처리 UPDATE</strong>: 평균 348ms</li>
+      <li><strong>안 읽은 수 COUNT</strong>: 평균 155ms</li>
+    </ul>
+  </li>
+  <li>셋 다 <strong>커플의 대화 기록 전체를 훑는</strong> 쿼리였다.</li>
+</ul>
+
+<h2 id="원인-최근-30건을-보여주려고-1만-건을-읽고-있었다">원인: 최근 30건을 보여주려고 1만 건을 읽고 있었다</h2>
+
+<p><img src="/assets/img/projects/woorin/img_4.png" alt="img.png" /></p>
+
+<ul>
+  <li>코드만 보면 문제없어 보인다. 앱이 <code class="language-plaintext highlighter-rouge">limit=30</code>을 보내면 <code class="language-plaintext highlighter-rouge">ORDER BY ... LIMIT</code>으로 최근 30건만 가져온다.
+    <ul>
+      <li>아래 실행계획은 같은 쿼리를 LIMIT 31로 떠서 31건으로 나온다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/assets/img/projects/woorin/img_5.png" alt="img.png" /></p>
+
+<ul>
+  <li>실행계획(EXPLAIN ANALYZE)을 아래에서 위로 읽으면 실제 순서가 보인다.
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">Index lookup on m ... rows=10004</code> → 이 커플의 메시지를 <strong>전부</strong> 읽는다.</li>
+      <li><code class="language-plaintext highlighter-rouge">Single-row index lookup on p ... loops=10004</code> → 답장 대상, 공유 장소, 추억 등 6개 테이블 조인을 <strong>1만 번씩</strong> 한다.</li>
+      <li><code class="language-plaintext highlighter-rouge">Select #2 (dependent) ... loops=10004</code> → 메시지마다 사진 서브쿼리를 <strong>1만 번</strong> 돈다.</li>
+      <li><code class="language-plaintext highlighter-rouge">Sort: ... limit input to 31 row(s)</code> → 그 다음에야 정렬해서 <strong>31건만</strong> 남긴다. (앱 요청이면 30건)</li>
+    </ul>
+  </li>
+  <li>왜 이렇게 되나?
+    <ul>
+      <li>LEFT JOIN과 SELECT 절의 서브쿼리가 붙어 있으면, MySQL은 조인을 다 끝낸 결과에 정렬과 LIMIT을 건다.</li>
+      <li>즉 “최근 30건만”이라는 조건이 <strong>맨 마지막에</strong> 걸린다.</li>
+      <li>그래서 대화가 쌓일수록 채팅방 열기가 그만큼 느려진다. 둘이 쓸 때처럼 대화가 수백 건이면 금방 끝나서, 몰랐던 이유가 이거다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="개선-1-최근-n건의-id만-먼저-뽑기">개선 1. 최근 N건의 ID만 먼저 뽑기</h2>
+
+<p><img src="/assets/img/projects/woorin/img_6.png" alt="img.png" /></p>
+
+<ul>
+  <li>순서를 바꿨다.
+    <ul>
+      <li>먼저 (커플, 메시지ID) 인덱스만으로 <strong>최근 N건의 ID</strong>를 뽑는다. 이 단계는 인덱스만 보고 N개에서 멈춘다.</li>
+      <li>그 N건에만 메시지 본문, 조인, 사진 서브쿼리를 붙인다.</li>
+    </ul>
+  </li>
+  <li>조인할 대상이 1만 건에서 30건으로 줄어드니, 대화가 아무리 쌓여도 비용이 일정하다.</li>
+</ul>
+
+<p><img src="/assets/img/projects/woorin/img_7.png" alt="img.png" /></p>
+
+<ul>
+  <li>실행계획
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">Limit: 31 row(s)</code> → <code class="language-plaintext highlighter-rouge">Materialize rows=31</code> → 31건을 먼저 만들고 나서 조인한다.</li>
+      <li>쿼리 하나만 실행하면 <strong>72.2ms → 1.28ms</strong>.</li>
+    </ul>
+  </li>
+  <li>결과가 같은가?
+    <ul>
+      <li>쿼리를 바꾸면 순서나 빠지는 데이터가 생길 수 있다.</li>
+      <li>바꾸기 전과 후 서버에서 같은 API(최근 30건, 이전 페이지)를 호출해 <strong>응답 JSON을 해시로 비교</strong>했다. 둘 다 같았다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="개선-2-안-읽은-메시지만-바로-찾는-인덱스">개선 2. 안 읽은 메시지만 바로 찾는 인덱스</h2>
+
+<p><img src="/assets/img/projects/woorin/img_8.png" alt="img.png" /></p>
+
+<ul>
+  <li>읽음 처리와 안 읽은 수 세기는 같은 걸 찾는다.
+    <ul>
+      <li>“이 커플에서(<code class="language-plaintext highlighter-rouge">couple_id =</code>), <strong>안 읽은(<code class="language-plaintext highlighter-rouge">read_yn = 'N'</code>)</strong>, 상대가 보낸(<code class="language-plaintext highlighter-rouge">sender_id !=</code>) 메시지”</li>
+      <li>기존엔 (커플, 시간) 인덱스뿐이라, 커플의 메시지를 전부 꺼내 하나씩 읽음 여부를 확인했다.</li>
+    </ul>
+  </li>
+  <li>안 읽은 수는 푸시를 보낼 때 배지 숫자로 쓴다.
+    <ul>
+      <li>푸시는 응답이 늦어지지 않도록 <code class="language-plaintext highlighter-rouge">@Async</code>로 별도 스레드에서 보낸다.</li>
+      <li>그런데 <strong>DB는 같이 쓴다.</strong> 응답 시간에는 안 보여도, 이 쿼리가 DB를 붙잡고 있어서 결국 전체가 느려진다.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">IX_TB_MASTER_CHAT_MESSAGE_UNREAD</span>
+    <span class="k">ON</span> <span class="n">TB_MASTER_CHAT_MESSAGE</span> <span class="p">(</span><span class="n">COUPLE_ID</span><span class="p">,</span> <span class="n">READ_YN</span><span class="p">,</span> <span class="n">SENDER_ID</span><span class="p">);</span>
+</code></pre></div></div>
+
+<ul>
+  <li>컬럼 순서를 이렇게 둔 이유
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">=</code>로 찾는 컬럼(COUPLE_ID, READ_YN)을 앞에, <code class="language-plaintext highlighter-rouge">!=</code>로 거르는 SENDER_ID를 뒤에 뒀다.</li>
+      <li>그러면 “이 커플의 안 읽은 메시지”까지 인덱스로 바로 좁혀진다. 대부분 읽은 상태라 안 읽은 건 몇 건 안 된다.</li>
+      <li>COUNT는 이 인덱스만 보고 끝난다. (실행계획에 <code class="language-plaintext highlighter-rouge">Covering index range scan</code>)</li>
+    </ul>
+  </li>
+  <li>결과: 읽음 처리 UPDATE 평균 <strong>348ms → 13ms</strong>, 안 읽은 수 COUNT는 상위 쿼리 목록에서 사라졌다.</li>
+</ul>
+
+<h2 id="결과">결과</h2>
+
+<p><img src="/assets/img/projects/woorin/img_9.png" alt="img.png" /></p>
+
+<p><img src="/assets/img/projects/woorin/img_10.png" alt="img.png" /></p>
+
+<ul>
+  <li>동시 100명, 같은 서버, 같은 데이터
+    <ul>
+      <li>개선 전: <strong>19.9 TPS, p95 10.64초</strong></li>
+      <li>개선 후: <strong>399.9 TPS, p95 0.53초</strong> (약 20배)</li>
+    </ul>
+  </li>
+  <li>이제 DB 시간 1위는 메시지 INSERT(평균 14ms)다. 남은 건 <strong>정상적인 쓰기 비용</strong>이다.</li>
+</ul>
+
+<h2 id="측정하며-틀렸던-것">측정하며 틀렸던 것</h2>
+
+<ul>
+  <li>데이터가 쌓이는 걸 몰랐다.
+    <ul>
+      <li>처음엔 측정을 연달아 돌렸다. 메시지 보내기가 40%라 측정마다 수만 건씩 쌓여서, 뒤에 잰 쪽이 항상 불리했다.</li>
+      <li>→ 측정 전마다 테스트 중 생긴 메시지를 지우도록 바꿨다.</li>
+    </ul>
+  </li>
+  <li>서버를 띄우자마자 쟀다.
+    <ul>
+      <li>개선 후 첫 측정이 178 TPS로 나왔는데, 워밍업 후 다시 재니 400 TPS였다.</li>
+      <li>Java는 처음 실행될 때 코드를 최적화(JIT)하는 시간이 있어서, 띄운 직후 숫자는 낮게 나온다.</li>
+      <li>→ 짧게 부하를 준 뒤 측정했다. 개선 전도 같은 방식으로 다시 쟀다. (개선 전은 DB가 병목이라 차이가 거의 없었다)</li>
+    </ul>
+  </li>
+  <li>커넥션 풀이 원인일 거라고 짐작했다.
+    <ul>
+      <li>처음 느렸을 때 가장 먼저 의심한 건 커넥션 풀(기본 8개)이었다.</li>
+      <li>로컬에서 30개로 늘려 봤더니 <strong>오히려 느려졌다.</strong> (100명, TPS 1,421 → 1,028)</li>
+      <li>연결이 많아지면 DB 안에서 동시에 도는 쿼리가 늘어 서로 경합한다. 풀 크기는 늘릴수록 좋은 값이 아니라, DB가 감당할 수 있는 만큼으로 맞추는 값이다.</li>
+      <li>진짜 원인은 쿼리별 누적 시간을 보고 나서야 찾았다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="더-센-부하-이번엔-서버-한-대의-한계">더 센 부하: 이번엔 서버 한 대의 한계</h2>
+
+<p><img src="/assets/img/projects/woorin/img_11.png" alt="img.png" /></p>
+
+<ul>
+  <li>동시 사용자를 올려 봤다.
+    <ul>
+      <li>50명 354 TPS / 100명 400 TPS / 200명 396 TPS. 에러는 0%.</li>
+      <li>약 <strong>400 TPS에서 멈추고</strong>, 응답시간만 늘었다. (200명 p95 1.21초)</li>
+    </ul>
+  </li>
+  <li>어디가 막혔나?
+    <ul>
+      <li>CPU 유휴가 약 5%. <strong>Java 121% + MySQL 72%</strong>로 2코어(200%)를 둘이 나눠 쓰며 꽉 찼다.</li>
+      <li>쿼리는 이미 가볍다. 이제는 특정 쿼리가 아니라 <strong>서버 한 대가 한계</strong>다.</li>
+    </ul>
+  </li>
+  <li>그럼 무엇을 해야 하나? 순서대로 보면
+    <ul>
+      <li>먼저 같은 서버에 있는 <strong>Java와 MySQL을 분리</strong>한다. (Cloud SQL 같은 관리형 DB) 지금 CPU의 1/3 이상을 MySQL이 쓰고 있다.</li>
+      <li>그래도 부족하면 <strong>서버를 여러 대로 늘린다.</strong> 그런데 지금 코드는 그대로 늘릴 수 없다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="서버를-늘리려면-바꿔야-하는-것">서버를 늘리려면 바꿔야 하는 것</h2>
+
+<p><img src="/assets/img/projects/woorin/img_12.png" alt="img.png" /></p>
+
+<ul>
+  <li>웹소켓 방 목록이 <strong>서버 메모리</strong>에 있다.
+    <ul>
+      <li>커플 두 사람이 서로 다른 서버에 붙으면, A 서버의 rooms에는 B 서버에 붙은 상대가 없다. → 실시간 메시지가 상대에게 안 간다.</li>
+      <li>방법 1: 메시지를 저장한 서버가 <strong>Redis Pub/Sub</strong>으로 “커플 N에 메시지”를 발행하고, 모든 서버가 구독해서 자기한테 붙은 사람에게만 보낸다.</li>
+      <li>방법 2: 로드밸런서에서 <strong>같은 커플은 같은 서버로</strong> 보낸다. 간단하지만 서버가 하나 죽으면 그 커플들이 다 끊긴다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/assets/img/projects/woorin/img_13.png" alt="img.png" /></p>
+
+<ul>
+  <li>데이트 추천 중복 방지가 <strong>JVM 안의 synchronized</strong>다.
+    <ul>
+      <li>같은 서버 안의 스레드끼리만 막아준다. 서버가 두 대면 두 요청이 각자 다른 서버에서 동시에 통과한다.</li>
+      <li>만들 때 이미 “단일 인스턴스 전제”라고 주석으로 남겨뒀다. 늘리면 MySQL <code class="language-plaintext highlighter-rouge">GET_LOCK</code> 같은 DB 락이나 Redis 락으로 바꿔야 한다.</li>
+    </ul>
+  </li>
+  <li>그 밖에
+    <ul>
+      <li>사진을 서버 디스크에 저장한다. → 서버마다 디스크가 달라지니 공용 저장소(GCS 같은)가 필요하다.</li>
+      <li>푸시 대기열이 메모리(@Async)에 있다. → 서버가 죽으면 보내지 못한 알림이 사라진다. 메시지 큐로 옮기는 걸 고려해야 한다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="정리">정리</h2>
+
+<ul>
+  <li>둘이 쓸 땐 안 보이던 문제는 <strong>데이터와 사용자가 늘어야</strong> 드러난다.</li>
+  <li>짐작보다 측정이 원인을 가리킨다.
+    <ul>
+      <li>커넥션 풀을 의심했지만, 쿼리별 누적 시간과 실행계획이 정확히 어디가 문제인지 보여줬다.</li>
+    </ul>
+  </li>
+  <li>숫자는 측정 방법에 따라 쉽게 틀린다. 데이터 초기화, 워밍업, 부하 도구 분리를 지켜야 비교할 수 있다.</li>
+  <li>병목은 사라지지 않고 <strong>다음 자리로 옮겨 간다.</strong> DB → 서버 CPU → 서버 한 대.</li>
+  <li>다음에 할 것
+    <ul>
+      <li>Java와 MySQL 분리, 웹소켓 메시지를 Redis Pub/Sub으로 서버 간에 공유하도록 바꾸고, 서버를 두 대로 늘려 다시 재본다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="reference">Reference</h2>
+
+<p><a href="https://grafana.com/docs/k6/latest/">https://grafana.com/docs/k6/latest/</a></p>
+
+<p><a href="https://dev.mysql.com/doc/refman/8.0/en/explain.html#explain-analyze">https://dev.mysql.com/doc/refman/8.0/en/explain.html#explain-analyze</a></p>
+
+<p><a href="https://dev.mysql.com/doc/refman/8.0/en/performance-schema-statement-digests.html">https://dev.mysql.com/doc/refman/8.0/en/performance-schema-statement-digests.html</a></p>
+
+    <br />
+    <br />
+  </div>
+  
+
+</article>
+
+<!--<hr class="dingbat" />-->
+<!--
+<div class="share">
+  <h2>Share this post</h2>
+  <div class="share-body">
+    <a href="http://twitter.com/share?text=우린 - 둘이 쓰던 채팅을 100명이 쓴다면 (k6 부하 테스트)&amp;url=http://localhost:4000/project/2026/11/23/Woorin-Chat-Load-Test/"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="icon-twitter">
+      </span>
+    </a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/project/2026/11/23/Woorin-Chat-Load-Test/"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="icon-facebook">
+      </span>
+    </a>
+  </div>
+</div>
+-->
+<br />
+
+
+
+
+<aside class="related" role="complementary">
+  <h2 class="hr">Related Posts</h2>
+
+  <ul class="related-posts">
+    
+      
+      
+      
+        
+        
+          
+
+
+<li class="h4">
+  <a href="/project/2026/11/23/Woorin-WebSocket-Auth/" data-flip="title">
+    <span>우린 - 둘이 쓰는 앱이라 괜찮다고 생각했던 보안 (웹소켓 인증, 에러 메시지, 운영 로그)</span>
+  </a>
+  <small><time datetime="2026-11-23T00:00:00+09:00">
+    23 Nov 2026
+  </time></small>
+</li>
+
+        
+      
+        
+        
+          
+
+
+<li class="h4">
+  <a href="/project/2026/11/23/Woorin-Silent-Failures/" data-flip="title">
+    <span>우린 - 에러 없이 실패하는 버그들 (진짜 원인을 찾기까지)</span>
+  </a>
+  <small><time datetime="2026-11-23T00:00:00+09:00">
+    23 Nov 2026
+  </time></small>
+</li>
+
+        
+      
+        
+        
+          
+
+
+<li class="h4">
+  <a href="/project/2026/11/23/Woorin-FCM-Push/" data-flip="title">
+    <span>우린 - 알림이 두 번 오고, 안 오고, 안 사라지고 (FCM 푸시)</span>
+  </a>
+  <small><time datetime="2026-11-23T00:00:00+09:00">
+    23 Nov 2026
+  </time></small>
+</li>
+
+        
+      
+        
+        
+      
+    
+  </ul>
+</aside>
+  <aside class="comments" role="complementary">
+  <h2>Comments</h2>
+  <hr/>
+
+  <script src="https://utteranc.es/client.js"
+          repo="taewoocode/taewoocode.github.io"
+          issue-term="title"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+</aside>
+
+
+       <footer>
+  <hr/>
+  
+    <p>© 2022. by taewoo</p>
+
+  
+  <p>
+    <code>Powered by <a href="https://taewoocode.github.io/">taewoo</a></code>
+  </p>
+</footer>
+
+    </main>
+    <div class="right-side">
+  <div class="add-first">
+    <script
+            async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+    ></script>
+    <!-- 우측 광고 -->
+    <ins
+            class="adsbygoogle"
+            style="display: block"
+            data-ad-client="ca-pub-8247516864622650"
+            data-ad-slot="9124111205"
+            data-ad-format="auto"
+            data-full-width-responsive="true"
+    ></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+  <br />
+  <br />
+  <div class="add-second">
+    <!-- 우측 광고2 -->
+    <ins
+            class="adsbygoogle"
+            style="display: block"
+            data-ad-client="ca-pub-8247516864622650"
+            data-ad-slot="5156946039"
+            data-ad-format="auto"
+            data-full-width-responsive="true"
+    ></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+</div>
+  </div>
+  <div id="_yDrawer">
+  <div id="_sidebar" class="sidebar">
+    <div class="sidebar-bg" style="background-color:#4f86aa;background-image:url(/assets/img/dp.jpeg)"></div>
+    <header class="sidebar-sticky" role="banner">
+      <br/>
+      <div class="sidebar-about">
+        <h1><a id="_title" href="/">일벌리는 개발자</a></h1>
+        
+
+      </div>
+
+      <br/>
+      <br/>
+      <nav class="sidebar-nav heading" role="navigation">
+        <span class="sr-only">Navigation:</span>
+<ul>
+  
+
+  
+
+  
+  
+  
+  
+  
+    <li>
+      <input type="checkbox" id="list-item-1"/>
+      <div  class="list-wrapper">
+      <a class="sidebar-nav-item" href="/category/life/">Life</a>
+       <label class="folder" for="list-item-1">▾</label>
+    </div>
+     <ul class="list-body">
+       
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/daily-books/">Books</a>
+             </li>
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/daily-daily/">Daily</a>
+             </li>
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+     </ul>
+    </li>
+
+  
+  
+    <li>
+      <input type="checkbox" id="list-item-2"/>
+      <div  class="list-wrapper">
+      <a class="sidebar-nav-item" href="/category/project/">Project</a>
+       <label class="folder" for="list-item-2">▾</label>
+    </div>
+     <ul class="list-body">
+       
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/project-spring/">Spring-Project</a>
+             </li>
+           
+         
+     </ul>
+    </li>
+
+  
+  
+    <li>
+      <input type="checkbox" id="list-item-3"/>
+      <div  class="list-wrapper">
+      <a class="sidebar-nav-item" href="/category/computer-science/">Computer Science</a>
+       <label class="folder" for="list-item-3">▾</label>
+    </div>
+     <ul class="list-body">
+       
+           
+         
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/cs-algorithm/">Algorithm</a>
+             </li>
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/cs-operatingsystem/">Operating System</a>
+             </li>
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/cs-network/">Network</a>
+             </li>
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/cs-db/">Database</a>
+             </li>
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/cs-hardware/">Hardware</a>
+             </li>
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+     </ul>
+    </li>
+
+  
+  
+    <li>
+      <input type="checkbox" id="list-item-4"/>
+      <div  class="list-wrapper">
+      <a class="sidebar-nav-item" href="/category/programming-language/">Programming Language</a>
+       <label class="folder" for="list-item-4">▾</label>
+    </div>
+     <ul class="list-body">
+       
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/programming-language-java/">Java</a>
+             </li>
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/programming-language-kotlin/">Kotlin</a>
+             </li>
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+     </ul>
+    </li>
+
+  
+  
+    <li>
+      <input type="checkbox" id="list-item-5"/>
+      <div  class="list-wrapper">
+      <a class="sidebar-nav-item" href="/category/framework/">Framework</a>
+       <label class="folder" for="list-item-5">▾</label>
+    </div>
+     <ul class="list-body">
+       
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/framework-spring/">Spring</a>
+             </li>
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/framework-spring-data-jpa/">Spring Data JPA</a>
+             </li>
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/framework-spring-security/">Spring Security</a>
+             </li>
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/framework-spring-mvc/">Spring MVC</a>
+             </li>
+           
+         
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/framework-junit/">JUnit</a>
+             </li>
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/framework-android/">Android</a>
+             </li>
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+     </ul>
+    </li>
+
+  
+  
+    <li>
+      <input type="checkbox" id="list-item-6"/>
+      <div  class="list-wrapper">
+      <a class="sidebar-nav-item" href="/category/language/">Language</a>
+       <label class="folder" for="list-item-6">▾</label>
+    </div>
+     <ul class="list-body">
+       
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/language-english/">English</a>
+             </li>
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+     </ul>
+    </li>
+
+  
+  
+    <li>
+      <input type="checkbox" id="list-item-7"/>
+      <div  class="list-wrapper">
+      <a class="sidebar-nav-item" href="/category/development/">Development</a>
+       <label class="folder" for="list-item-7">▾</label>
+    </div>
+     <ul class="list-body">
+       
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/development-ddd/">DDD</a>
+             </li>
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/development-tdd/">TDD</a>
+             </li>
+           
+         
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/development-clean-code/">Clean Code</a>
+             </li>
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+     </ul>
+    </li>
+
+  
+  
+    <li>
+      <input type="checkbox" id="list-item-8"/>
+      <div  class="list-wrapper">
+      <a class="sidebar-nav-item" href="/category/devops/">Devops</a>
+       <label class="folder" for="list-item-8">▾</label>
+    </div>
+     <ul class="list-body">
+       
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/devops-aws/">aws</a>
+             </li>
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/devops-ansible/">Ansible</a>
+             </li>
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/devops-docker/">Docker</a>
+             </li>
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/devops-es/">Elasticsearch</a>
+             </li>
+           
+         
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/devops-k8s/">Kubernetes</a>
+             </li>
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/devops-kafak/">Kafka</a>
+             </li>
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/devops-terraform/">Terraform</a>
+             </li>
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/devops-linux/">Linux</a>
+             </li>
+           
+         
+           
+         
+     </ul>
+    </li>
+
+  
+  
+    <li>
+      <input type="checkbox" id="list-item-9"/>
+      <div  class="list-wrapper">
+      <a class="sidebar-nav-item" href="/category/opensource/">Open Source</a>
+       <label class="folder" for="list-item-9">▾</label>
+    </div>
+     <ul class="list-body">
+       
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/opensource-opensource/">Open Source</a>
+             </li>
+           
+         
+           
+         
+           
+         
+     </ul>
+    </li>
+
+  
+  
+    <li>
+      <input type="checkbox" id="list-item-10"/>
+      <div  class="list-wrapper">
+      <a class="sidebar-nav-item" href="/about/">About</a>
+       
+    </div>
+     <ul class="list-body">
+       
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+     </ul>
+    </li>
+
+  
+</ul>
+
+      </nav>
+    <br/>
+    <br/>
+      <div class="sidebar-box">
+        
+      </div>
+      <p>일을 벌여놔야 주워 담을 수 있습니다.</p>
+
+      
+        <p class="sidebar-visits">누적 방문 <span data-gc-total>-</span></p>
+      
+      
+      
+        <div class="sidebar-social">
+          <span class="sr-only">Social:</span>
+<ul>
+  
+    
+
+
+
+
+
+
+
+
+
+<li>
+  <a href="https://github.com/taewoocode">
+    <span class="icon-github" title="GitHub"></span>
+    <span class="sr-only">GitHub</span>
+  </a>
+</li>
+
+  
+    
+
+
+
+
+
+
+
+
+
+<li>
+  <a href="https://www.linkedin.com/in/태우-박-15651828b">
+    <span class="icon-linkedin2" title="LinkedIn"></span>
+    <span class="sr-only">LinkedIn</span>
+  </a>
+</li>
+
+  
+    
+
+
+
+
+
+
+
+
+
+<li>
+  <a href="qkrxodn6035@gmail.com">
+    <span class="icon-mail" title="Email"></span>
+    <span class="sr-only">Email</span>
+  </a>
+</li>
+
+  
+</ul>
+
+        </div>
+      
+    </header>
+  </div>
+</div>
+
+</div>
+
+<!-- =============== -->
+<!-- SCRIPTS         -->
+<!-- =============== -->
+
+<script>
+  (function () {
+    var base = 'https://taewoocode.goatcounter.com';
+
+    // Pages are swapped in by push-state, so count and fill counters manually on every page.
+    window.goatcounter = { no_onload: true };
+
+    function fill(el, path) {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', base + '/counter/' + encodeURIComponent(path) + '.json');
+      xhr.onload = function () {
+        var count = '0';
+        try { if (xhr.status === 200) count = JSON.parse(xhr.responseText).count; } catch (e) {}
+        el.textContent = count;
+      };
+      xhr.send();
+    }
+
+    function onPage() {
+      if (window.goatcounter.count) window.goatcounter.count({ path: location.pathname });
+      var views = document.querySelectorAll('[data-gc-views]');
+      for (var i = 0; i < views.length; i++) fill(views[i], location.pathname);
+    }
+
+    var script = document.createElement('script');
+    script.async = true;
+    script.src = '//gc.zgo.at/count.js';
+    script.setAttribute('data-goatcounter', base + '/count');
+    script.onload = onPage;
+    document.head.appendChild(script);
+
+    var total = document.querySelector('[data-gc-total]');
+    if (total) fill(total, 'TOTAL');
+
+    var pushState = document.getElementById('_yPushState');
+    if (pushState) pushState.addEventListener('y-push-state-after', onPage);
+  })();
+</script>
+
+
+
+
+
+<!--[if gt IE 8]><!---->
+<script src="//ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+<script>
+  WebFont.load({
+    
+    google: {
+      families: 'Lato'.split('|')
+    },
+    
+
+    custom: {
+      families: ['icomoon'],
+      urls: ['/assets/icomoon/style.css']
+    }
+  });
+</script>
+<!--<![endif]-->
+
+
+  <!--[if gt IE 9]><!---->
+  
+  <script>loadJSDeferred('/assets/js/hydejack.js?v=6.4.0');</script>
+
+  
+  <!--<![endif]-->
+
+
+</body>
+
+</html>

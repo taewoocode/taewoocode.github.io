@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="en"><!--
+ __  __                __                                     __
+/\ \/\ \              /\ \             __                    /\ \
+\ \ \_\ \   __  __    \_\ \      __   /\_\      __       ___ \ \ \/'\
+ \ \  _  \ /\ \/\ \   /'_` \   /'__`\ \/\ \   /'__`\    /'___\\ \ , <
+  \ \ \ \ \\ \ \_\ \ /\ \L\ \ /\  __/  \ \ \ /\ \L\.\_ /\ \__/ \ \ \\`\
+   \ \_\ \_\\/`____ \\ \___,_\\ \____\ _\ \ \\ \__/.\_\\ \____\ \ \_\ \_\
+    \/_/\/_/ `/___/> \\/__,_ / \/____//\ \_\ \\/__/\/_/ \/____/  \/_/\/_/
+                /\___/                \ \____/
+                \/__/                  \/___/
+
+Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
+-->
+
+
+
+
+
+
+
+
+
+<head>
+  <!-- =============== -->
+<!-- META            -->
+<!-- =============== -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="format-detection" content="telephone=no" />
+<meta http-equiv="x-ua-compatible" content="ie=edge" />
+<meta
+        name="naver-site-verification"
+        content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
+/>
+<meta property="og:title" content="우린 - 소켓은 열려 있는데 메시지가 안 온다 (웹소켓 재연결과 재동기화)" />
+<meta property="og:type" content="article" />
+
+<!-- =============== -->
+<!-- Google AdSense  -->
+<!-- =============== -->
+<script
+        data-ad-client="ca-pub-8247516864622650"
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+></script>
+
+ 
+<meta property="og:image" content="http://localhost:4000/assets/img/logo.png" />
+
+
+<meta property="og:image:width" content="640" />
+<meta property="og:image:height" content="360" />
+ 
+<title>우린 - 소켓은 열려 있는데 메시지가 안 온다 (웹소켓 재연결과 재동기화) &middot; 일벌리는 개발자</title>
+ 
+<meta
+        name="description"
+        content="개요
+
+"
+/>
+<meta
+        property="og:description"
+        content="개요
+
+"
+/>
+
+
+
+<!-- =============== -->
+<!-- LINKS           -->
+<!-- =============== -->
+<link rel="canonical" href="http://localhost:4000/project/2026/11/23/Woorin-Chat-WebSocket-Resync/" />
+<meta property="og:url" content="http://localhost:4000/project/2026/11/23/Woorin-Chat-WebSocket-Resync/" />
+
+<link
+        rel="alternate"
+        type="application/atom+xml"
+        title="일벌리는 개발자 Feed"
+        href="http://localhost:4000/feed.xml"
+/>
+
+
+<link rel="prev" href="http://localhost:4000/project/2026/11/23/Woorin-Chat-Load-Test/" />
+ 
+<link rel="next" href="http://localhost:4000/project/2026/11/23/Woorin-FCM-Push/" />
+
+
+<link
+        rel="apple-touch-icon"
+        href="http://localhost:4000/apple-touch-icon.png"
+/>
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?" />
+<!-- Place favicon.ico in the root directory -->
+
+<!-- =============== -->
+<!-- SCRIPTS         -->
+<!-- =============== -->
+<script>
+  !function(n,e){function t(n,e){n.onload=function(){this.onerror=this.onload=null,e(null,n)},n.onerror=function(){this.onerror=this.onload=null,e(new Error("Failed to load "+this.src),n)}}function o(n,e){n.onreadystatechange=function(){"complete"!=this.readyState&&"loaded"!=this.readyState||(this.onreadystatechange=null,e(null,n))}}n._loaded=!1,n.loadJSDeferred=function(a,d){function r(){n._loaded=!0;var r=e.createElement("script");r.src=a,d&&(("onload"in r?t:o)(r,d),r.onload||t(r,d));var l=e.getElementsByTagName("script")[0];l.parentNode.insertBefore(r,l)}n._loaded?r():n.addEventListener?n.addEventListener("load",r,!1):n.attachEvent?n.attachEvent("onload",r):n.onload=r}}(window,document);
+
+  !function(e){"use strict";var n=function(n,t,o){function i(e){if(a.body)return e();setTimeout(function(){i(e)})}function r(){l.addEventListener&&l.removeEventListener("load",r),l.media=o||"all"}var d,a=e.document,l=a.createElement("link");if(t)d=t;else{var f=(a.body||a.getElementsByTagName("head")[0]).childNodes;d=f[f.length-1]}var s=a.styleSheets;l.rel="stylesheet",l.href=n,l.media="only x",i(function(){d.parentNode.insertBefore(l,t?d:d.nextSibling)});var u=function(e){for(var n=l.href,t=s.length;t--;)if(s[t].href===n)return e();setTimeout(function(){u(e)})};return l.addEventListener&&l.addEventListener("load",r),l.onloadcssdefined=u,u(r),l};"undefined"!=typeof exports?exports.loadCSS=n:e.loadCSS=n}("undefined"!=typeof global?global:this);
+
+  !function(t){if(t.loadCSS){var e=loadCSS.relpreload={};if(e.support=function(){try{return t.document.createElement("link").relList.supports("preload")}catch(t){return!1}},e.poly=function(){for(var e=t.document.getElementsByTagName("link"),r=0;r<e.length;r++){var n=e[r];"preload"===n.rel&&"style"===n.getAttribute("as")&&(t.loadCSS(n.href,n,n.getAttribute("media")),n.rel=null)}},!e.support()){e.poly();var r=t.setInterval(e.poly,300);t.addEventListener&&t.addEventListener("load",function(){e.poly(),t.clearInterval(r)}),t.attachEvent&&t.attachEvent("onload",function(){t.clearInterval(r)})}}}(this);
+
+  window.disablePushState = false;
+  window.disableDrawer = false;
+</script>
+
+<!--[if lt IE 9]>
+<script src="https://unpkg.com/html5shiv/dist/html5shiv.min.js"></script>
+<![endif]-->
+
+<!-- =============== -->
+<!-- STYLES          -->
+<!-- =============== -->
+<!--[if gt IE 8]><!---->
+<style>
+  
+  article,aside,dialog,figcaption,figure,footer,header,hgroup,main,nav,section{display:block}mark{background:#FF0;color:#000}*{box-sizing:border-box}html,body{margin:0;padding:0}html{font-size:16px;line-height:1.75}body{color:#333;background-color:#fff;overflow-y:scroll}a{text-decoration:none}.lead{margin-left:-1rem;margin-right:-1rem}img,.img{display:block;max-width:100%;margin-bottom:1rem;border:none}img.lead,.img.lead{max-width:calc(100% + 2rem);width:calc(100% + 2rem)}h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6,.heading{font-weight:bold;text-rendering:optimizeLegibility}h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6{margin:1.6rem 0 1rem;line-height:1.6}h1,.h1{font-size:2rem;line-height:1.25}h2,.h2{font-size:1.5rem}h3,.h3{font-size:1.17em}p{margin-top:0;margin-bottom:1rem}p.lead{font-size:1.25rem;font-weight:300;padding:0 1rem}ul,ol,dl{margin-top:0;margin-bottom:1rem}ul,ol{padding-left:1.25rem}hr{position:relative;margin:1.5rem 0;border:0;border-top:1px solid #eee}.hr{padding-bottom:.5rem;border-bottom:1px solid #eee;margin-bottom:1.5rem}h4,h5,h6,.h4,.h5,.h6{margin-bottom:0.5rem;font-size:1rem}table{margin-bottom:1rem;width:100%;width:calc(100% + 2rem);margin-left:-1rem;border:1px solid #e5e5e5;border-collapse:collapse;border-spacing:0}td,th{padding:.25rem .5rem;border:1px solid #e5e5e5}td:first-child,th:first-child{padding-left:1rem}td:last-child,th:last-child{padding-right:1rem}thead+tbody,tbody+tbody,tfoot{border-top:3px double #e5e5e5}tbody tr:nth-child(odd) td,tbody tr:nth-child(odd) th{background-color:#f9f9f9}footer{margin-bottom:2rem}.page,.post{margin-bottom:3em}.page li+li,.post li+li{margin-top:.25rem}.page>header,.post>header{margin-bottom:2rem}.page-title,.post-title{margin-top:0}.post-date{display:block;margin-top:-0.5rem;margin-bottom:1rem;color:#9a9a9a}.related-posts{padding-left:0;list-style:none}.related-posts>li,.related-posts>li+li{margin-top:1rem}.related-posts>li>small,.related-posts>li+li>small{font-size:75%;color:#9a9a9a}.message{margin-bottom:1rem;padding:1rem;color:#787878;background-color:#f9f9f9;margin-left:-1rem;margin-right:-1rem}body,main{position:relative;overflow-x:hidden}@media screen{body::before{content:'';background:#e5e5e5;position:absolute;left:0;top:0;bottom:0}}@media screen and (min-width: 40em){html{font-size:17px}}@media screen and (min-width: 54em){html{font-size:16px}}@media screen and (min-width: 88em){html{font-size:17px}}@media screen and (min-width: 125em){html{font-size:18px}}.sr-only{display:none}.clearfix,.sidebar-social::after,.clearafter::after{content:"";display:table;clear:both}a,.a{position:relative;padding-bottom:.15rem;border-style:hidden}.img{overflow:hidden;background-color:#f9f9f9}.img>img{margin:0;width:100%;height:100%}.sixteen-nine{position:relative}.sixteen-nine::before{display:block;content:"";width:100%;padding-top:56.25%}.sixteen-nine>*{position:absolute;top:0;left:0;right:0;bottom:0}h1+hr,h2+hr,h3+hr,h4+hr,h5+hr,h6+hr{margin-top:0}.fade-in{animation-duration:500ms;animation-name:fade-in;animation-fill-mode:forwards}@keyframes fade-in{from{transform:translateY(-2rem);opacity:0}50%{transform:translateY(-2rem);opacity:0}to{transform:translateY(0);opacity:1}}.mb6{margin-bottom:10rem}.sidebar{color:rgba(255,255,255,0.75);text-align:left}.sidebar::before{content:"";position:absolute;z-index:2;top:0;left:0;bottom:0;right:0;background:linear-gradient(to bottom, rgba(32,32,32,0) 0%, rgba(32,32,32,0.5) 100%)}.sidebar a{color:#fff;border-bottom-color:rgba(255,255,255,0.2)}.right-side{width:100%;margin-left:auto;margin-right:auto}.right-side .ad-first{text-align:center}@media screen{.right-side{max-width:38rem;min-height:100vh}.right-side .ad-second{display:none}}@media screen and (min-width: 54em){.right-side{margin-left:20rem;margin-right:1rem;padding:4rem 1rem 12rem}.right-side .ad-second{text-align:center;display:block}}@media screen and (min-width: 72em){.right-side{margin-left:22rem;max-width:42rem}}@media screen and (min-width: 88em){.right-side{width:162px;margin-left:0rem;margin-right:0rem;padding:0rem;margin-top:10rem;display:block;float:left}}@media screen and (min-width: 96em){.right-side{width:300px;margin-right:0rem}}#_yDrawer{position:relative}@media screen{#_yDrawer{min-height:640px;min-height:100vh}}@media screen and (min-width: 54em){#_yDrawer{width:18rem;margin-left:0}}.sidebar-bg{position:absolute;height:100%;overflow:hidden;top:0;right:0;bottom:0;left:0;background:#202020 center / cover}.sidebar-box{display:flex;justify-content:center}.sidebar-sticky{position:relative;z-index:3}@media screen{.sidebar-sticky{-ms-overflow-style:none;overflow:-moz-scrollbars-none;height:100%;overflow:auto;position:absolute;padding:3rem 0rem;right:2.5rem;left:2.5rem}}.sidebar-sticky::-webkit-scrollbar{display:none}.sidebar-about>h1{color:#fff;font-size:2rem}.sidebar-nav>ul{list-style:none;padding-left:0;margin-bottom:.5rem}a.sidebar-nav-item{width:100%;font-weight:normal;display:block;line-height:1.75;padding:.25rem 0;border-bottom:1px solid rgba(255,255,255,0.2)}a.sidebar-nav-subitem{font-weight:normal;display:block;line-height:1.75;padding:.25rem 0;border-bottom:1px solid rgba(255,255,255,0.2)}@media screen{.y-drawer-scrim{z-index:2}.y-drawer-content{width:18rem;left:-18rem;z-index:3}}.sidebar-social{margin-bottom:.5rem}.sidebar-social>ul{list-style:none;padding-left:0;margin:0 -.25rem}.sidebar-social>ul>li{float:left}.sidebar-social>ul>li>a{display:inline-block;text-align:center;font-size:1.6rem;line-height:3rem;width:3.1249rem;height:4rem;padding:.5rem 0}.sidebar-social>ul li+li{margin-top:0}.fixed-top{position:fixed;top:0;left:0;width:100%;z-index:1}.navbar>.content{padding-top:0;padding-bottom:0;min-height:0;height:0}.menu{display:inline-block;padding:1.75rem 1.5rem;border-bottom:none;margin-left:-1.5rem;color:#9a9a9a !important}.menu::after{content:"\2630"}@media screen and (min-width: 54em){.menu{padding:1.25rem 1.5rem;position:absolute;left:-9999px}.menu:focus{position:static}}.animation-main{pointer-events:none}.loading{display:none}@media print{.menu{display:none}}.animation-main{opacity:0;will-change:opacity}.loading{position:absolute;top:0;right:0;padding:5.25rem 4.5rem;transform-origin:top right;transform:scale(0.33)}.content{position:relative;margin-left:auto;margin-right:auto;padding:5rem 1rem 12rem}@media screen{.content{min-height:100vh}}@media screen and (min-width: 54em){.content{padding:4rem 1rem 12rem;margin-left:19rem;margin-right:3rem}}@media screen and (min-width: 72em){.content{max-width:42rem;margin-left:21rem}}@media screen and (min-width: 88em){.content{float:left;width:100%;margin-left:22rem;margin-right:5rem}}@media screen and (min-width: 96em){.content{max-width:44rem}}@media screen and (min-width: 102em){.content{margin-left:25rem;margin-right:8rem}}.me{width:6.5rem;height:6.5rem;align-self:center;margin-right:20px;border-radius:100%;position:relative}@media screen and (min-width: 40em){.me{width:7rem;height:7rem}}@media screen and (min-width: 54em){.me{width:6.5rem;height:6.5rem}}@media screen and (min-width: 72em){.me{width:7rem;height:7rem}}main>footer{width:100%;position:absolute;bottom:0;left:0;right:0;padding:0 1rem;color:#9a9a9a;font-size:smaller;text-align:center}main>footer>p{margin-bottom:0}html{font-family:'Sans-serif'}h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6,.heading{font-family:'Sans-serif'}
+
+</style>
+
+
+<link
+        rel="preload"
+        href="http://localhost:4000/assets/css/hydejack.css?v=6.4.0"
+        as="style"
+        onload="this.rel='stylesheet'"
+/>
+
+<style id="_pageStyle">
+
+.content a{color:#4f86aa;border-color:rgba(79,134,170,0.2)}.content a:hover{border-color:#4f86aa}:focus{outline-color:#4f86aa}::selection{color:#fff;background:#4f86aa}::-moz-selection{color:#fff;background:#4f86aa}
+
+</style>
+
+
+<noscript>
+  <link rel="stylesheet" href="http://localhost:4000/assets/css/hydejack.css?v=6.4.0" />
+    
+  
+  <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Lato"
+  />
+  <style>
+    html { font-family: 'Lato', 'Sans-serif' }
+    h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, .heading { font-family: 'Lato', 'Sans-serif' }
+  </style>
+   
+  <link rel="stylesheet" href="http://localhost:4000/assets/icomoon/style.css" />
+</noscript>
+<!--<![endif]-->
+</head>
+
+<body>
+  <!-- =============== -->
+<!-- MENU            -->
+<!-- =============== -->
+<div class="navbar fixed-top">
+  <div class="content">
+    <span class="sr-only">Jump to:</span>
+    <a id="_menu" class="menu no-hover" href="#_title">
+      <span class="sr-only">Menu</span>
+    </a>
+  </div>
+</div>
+
+<!-- =============== -->
+<!-- CONTENT         -->
+<!-- =============== -->
+<div id="_yPushState">
+  <div class="fade-in">
+    <main
+            id="_main"
+            class="content"
+            role="main"
+            data-color="#4f86aa"
+            data-image="/assets/img/dp.jpeg"
+    >
+      
+
+<article id="post-project/2026/11/23/Woorin-Chat-WebSocket-Resync" class="post" role="article">
+  <header>
+    <h1 class="post-title">
+      
+      우린 - 소켓은 열려 있는데 메시지가 안 온다 (웹소켓 재연결과 재동기화)
+      
+    </h1>
+
+    <p class="post-date heading">
+      <time datetime="2026-11-23T00:00:00+09:00">23 Nov 2026</time>
+      
+
+
+
+
+
+
+
+
+
+in <a href="/category/project/" data-flip="title">Project</a>
+
+      
+
+
+
+
+
+
+
+
+
+on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
+
+      
+      <span class="post-views">· 조회수 <span data-gc-views>-</span></span>
+      
+    </p>
+
+    
+  <div class="hr" style="padding-bottom:0"></div>
+
+
+  </header>
+  
+
+
+  
+  <div class="markdown-body">
+
+    <!--  -->
+    <style>
+      .myAd1190 {
+        width: 48%;
+        height: 280px;
+      }
+
+      .myAd1290 {
+        width: 48%;
+        height: 280px;
+      }
+
+      @media(max-width: 800px) {
+        .myAd1190 {
+          display: none;
+        }
+
+        .myAd1290 {
+          width: 98%;
+        }
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 300px;
+      }
+
+      .row-center {
+        display: flex;
+        justify-content: center;
+        height: 258px;
+      }
+    </style>
+
+    <!--<br />-->
+    <h2 id="개요">개요</h2>
+
+<ul>
+  <li>우린 채팅을 쓰다 보면 이런 일이 있었다.
+    <ul>
+      <li>상대가 보낸 메시지의 <strong>푸시 알림은 왔는데</strong>, 채팅 화면을 열어 보면 그 메시지가 없다.</li>
+      <li>채팅방을 나갔다 들어오거나 앱을 껐다 켜야 보인다.</li>
+    </ul>
+  </li>
+  <li>처음엔 서버가 메시지를 늦게 보내는 줄 알았다. 그런데 푸시는 제때 왔으니 서버는 정상이다.</li>
+  <li>문제는 <strong>웹소켓이 끊긴 걸 앱이 모르고 있던 것</strong>, 그리고 다시 붙어도 <strong>끊긴 동안의 메시지를 채우지 않은 것</strong>이었다.</li>
+  <li>고치다 보니 같은 뿌리의 문제가 둘 더 나왔다.
+    <ul>
+      <li>상대가 입력을 멈췄는데 “입력 중(…)”이 계속 떠 있다.</li>
+      <li>상대가 읽었는데 “1”이 안 사라진다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="구조">구조</h2>
+
+<ul>
+  <li>보내기는 REST, 받기는 웹소켓이다.
+    <ul>
+      <li>앱은 커플 방(<code class="language-plaintext highlighter-rouge">/ws/chat?coupleId=N</code>)에 소켓을 붙여 두고 <code class="language-plaintext highlighter-rouge">MESSAGE</code>, <code class="language-plaintext highlighter-rouge">READ</code>, <code class="language-plaintext highlighter-rouge">TYPING</code> 이벤트를 받는다.</li>
+      <li>푸시(FCM)는 소켓과 <strong>별개의 경로</strong>다. 그래서 소켓이 죽어 있어도 푸시는 온다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="원인-1-끊겼는데-끊긴-줄-모른다">원인 1. 끊겼는데 끊긴 줄 모른다</h2>
+
+<ul>
+  <li>셀룰러망이나 공유기(NAT)는 한동안 아무것도 안 오가는 연결을 <strong>양쪽에 알리지 않고</strong> 정리해 버리는 경우가 많다.
+    <ul>
+      <li>연결을 끊을 때 보내는 신호(FIN)가 없으니, 앱의 소켓은 여전히 “열림” 상태다.</li>
+      <li><code class="language-plaintext highlighter-rouge">receive()</code>는 에러 없이 다음 메시지를 기다리기만 한다. 다음 메시지는 오지 않는다.</li>
+    </ul>
+  </li>
+  <li>이른바 반쯤 열린(half-open) 연결이다. 무언가를 <strong>보내 봐야</strong> 끊긴 걸 알 수 있다.</li>
+  <li>그래서 25초마다 ping을 보낸다. 실패하면 3초 뒤에 다시 붙는다.</li>
+</ul>
+
+<p><img src="/assets/img/projects/woorin/resync/img_1.png" alt="img.png" /></p>
+
+<ul>
+  <li>ping 실패와 <code class="language-plaintext highlighter-rouge">receive()</code> 실패가 거의 동시에 나면 재연결이 두 번 걸린다. <code class="language-plaintext highlighter-rouge">isReconnecting</code> 플래그로 한 번만 예약되게 막았다.</li>
+</ul>
+
+<h2 id="원인-2-다시-붙어도-놓친-메시지는-안-온다">원인 2. 다시 붙어도 놓친 메시지는 안 온다</h2>
+
+<ul>
+  <li>ping을 넣고 나서도 “나갔다 들어와야 보이는” 일이 남았다.</li>
+  <li>소켓은 <strong>지금 이 순간</strong> 일어나는 일만 전해 준다. 끊겨 있던 동안 서버가 뿌린 메시지는 다시 붙어도 돌아오지 않는다.</li>
+  <li>게다가 iOS는 앱이 백그라운드로 가면 소켓을 오래 살려 두지 않는다. 앱으로 돌아오는 순간이 가장 많이 놓치는 순간이다.</li>
+  <li>그래서 원칙을 하나 세웠다. <strong>소켓은 “새 소식이 있다”를 빨리 알려주는 용도, 진짜 목록은 REST.</strong>
+    <ul>
+      <li>다시 붙을 때마다 REST로 최근 메시지를 다시 받아 채운다.</li>
+      <li>다시 붙는 시점은 세 가지다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/assets/img/projects/woorin/resync/img_3.png" alt="img.png" /></p>
+
+<p><img src="/assets/img/projects/woorin/resync/img_2.png" alt="img.png" /></p>
+
+<ul>
+  <li>최초 연결 때는 <code class="language-plaintext highlighter-rouge">onReconnect</code>를 부르지 않는다. 처음 화면을 열 때 이미 히스토리를 받아오니까 중복이다.</li>
+  <li>REST로 받은 목록과 소켓으로 받은 메시지가 겹칠 수 있는데, 이건 <a href="/project/2026/11/23/Woorin-Chat-Idempotency/">clientMessageId 글</a>에서 만든 짝짓기로 걸러진다.</li>
+</ul>
+
+<h2 id="원인-3-끄기-신호를-놓치면-영원히-켜져-있다">원인 3. “끄기” 신호를 놓치면 영원히 켜져 있다</h2>
+
+<ul>
+  <li>“입력 중(…)”은 이렇게 동작했다.
+    <ul>
+      <li>입력을 시작하면 <code class="language-plaintext highlighter-rouge">TYPING isTyping=true</code>, 3초간 입력이 없으면 <code class="language-plaintext highlighter-rouge">isTyping=false</code>를 보낸다.</li>
+      <li>받는 쪽은 <code class="language-plaintext highlighter-rouge">false</code>가 올 때까지 …을 보여준다.</li>
+    </ul>
+  </li>
+  <li>문제는 <code class="language-plaintext highlighter-rouge">false</code>가 <strong>안 오는</strong> 경우다.
+    <ul>
+      <li>상대가 입력하다가 앱을 나가거나, 네트워크가 끊기거나, 내 소켓이 재연결하는 사이에 신호가 지나가면</li>
+      <li>…이 다음에 상대가 입력할 때까지 계속 떠 있다.</li>
+    </ul>
+  </li>
+  <li>켜기/끄기 신호 쌍에 의존하는 대신, <strong>유효기간이 있는 상태</strong>로 바꿨다.</li>
+</ul>
+
+<p><img src="/assets/img/projects/woorin/resync/img_4.png" alt="img.png" /></p>
+
+<ul>
+  <li>보내는 쪽은 계속 입력 중이면 <strong>3초마다 “켜기”를 다시 보낸다.</strong> 만료(6초)보다 짧아서 길게 써도 중간에 꺼지지 않는다.</li>
+  <li>그 밖에 바로 끄는 경우
+    <ul>
+      <li>상대 메시지가 도착했을 때, 내 소켓이 재연결될 때 → 받는 쪽에서 끈다.</li>
+      <li>채팅 화면을 벗어나거나 앱이 백그라운드로 갈 때 → 보내는 쪽이 소켓이 끊기기 전에 “끄기”를 보낸다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="원인-4-이벤트는-왔는데-화면이-안-바뀐다">원인 4. 이벤트는 왔는데 화면이 안 바뀐다</h2>
+
+<p><img src="/assets/img/projects/woorin/resync/app_1.png" alt="img.png" /></p>
+
+<ul>
+  <li>내가 보낸 메시지 옆의 “1”은 상대가 아직 안 읽었다는 표시다. 상대가 읽으면 <code class="language-plaintext highlighter-rouge">READ</code> 이벤트가 와서 사라져야 한다.</li>
+  <li>읽음 “1”이 안 사라지는 문제도 소켓을 의심했는데, 이번엔 소켓이 아니었다.
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">READ</code> 이벤트는 잘 왔고, 메시지의 <code class="language-plaintext highlighter-rouge">isRead</code>도 <code class="language-plaintext highlighter-rouge">true</code>로 바뀌어 있었다.</li>
+    </ul>
+  </li>
+  <li>원인은 직전에 넣은 <strong>목록 최적화</strong>였다.
+    <ul>
+      <li>채팅 목록은 diffable data source로 그린다. 스크롤 성능을 위해 “행 구성(rows)이 그대로면 apply를 건너뛰기”를 넣었다.</li>
+      <li>그런데 행은 <code class="language-plaintext highlighter-rouge">(메시지 id, 헤더 표시 여부)</code>만 담고 있어서, <strong><code class="language-plaintext highlighter-rouge">isRead</code>만 바뀌면 rows는 그대로</strong>다. 그래서 갱신 자체를 건너뛰었다.</li>
+      <li>같은 스냅샷으로 apply를 다시 불러도 소용없다. diffable은 식별자가 같은 항목은 다시 그리지 않는다.</li>
+    </ul>
+  </li>
+  <li>이전 상태와 비교해 <code class="language-plaintext highlighter-rouge">isRead</code>가 바뀐 메시지만 골라 <code class="language-plaintext highlighter-rouge">reconfigureItems</code>로 그 셀만 다시 그리게 했다.</li>
+</ul>
+
+<p><img src="/assets/img/projects/woorin/resync/img_5.png" alt="img.png" /></p>
+
+<p><img src="/assets/img/projects/woorin/resync/img_6.png" alt="img.png" /></p>
+
+<h2 id="정리">정리</h2>
+
+<ul>
+  <li>모바일에서 소켓은 <strong>조용히 끊긴다.</strong> 끊긴 걸 알려면 보내 봐야 한다. (ping)</li>
+  <li>소켓은 놓친 걸 다시 주지 않는다. 다시 붙을 때마다 <strong>REST로 다시 맞춘다.</strong> 소켓은 빠른 알림, 진실은 REST.</li>
+  <li>켜기/끄기 쌍으로 된 상태는 끄기를 놓치면 영원히 남는다. <strong>유효기간을 두고 주기적으로 갱신</strong>하면 신호를 놓쳐도 스스로 회복한다.</li>
+  <li>“실시간이 안 된다”의 원인이 항상 실시간 쪽에 있는 건 아니다. 읽음 표시는 화면 갱신 최적화가 원인이었다.</li>
+</ul>
+
+<h2 id="reference">Reference</h2>
+
+<p><a href="https://developer.apple.com/documentation/foundation/urlsessionwebsockettask">https://developer.apple.com/documentation/foundation/urlsessionwebsockettask</a></p>
+
+<p><a href="https://datatracker.ietf.org/doc/html/rfc6455#section-5.5.2">https://datatracker.ietf.org/doc/html/rfc6455#section-5.5.2</a></p>
+
+<p><a href="https://developer.apple.com/documentation/uikit/nsdiffabledatasourcesnapshot/reconfigureitems(_:)">https://developer.apple.com/documentation/uikit/nsdiffabledatasourcesnapshot/reconfigureitems(_:)</a></p>
+
+    <br />
+    <br />
+  </div>
+  
+
+</article>
+
+<!--<hr class="dingbat" />-->
+<!--
+<div class="share">
+  <h2>Share this post</h2>
+  <div class="share-body">
+    <a href="http://twitter.com/share?text=우린 - 소켓은 열려 있는데 메시지가 안 온다 (웹소켓 재연결과 재동기화)&amp;url=http://localhost:4000/project/2026/11/23/Woorin-Chat-WebSocket-Resync/"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="icon-twitter">
+      </span>
+    </a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/project/2026/11/23/Woorin-Chat-WebSocket-Resync/"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="icon-facebook">
+      </span>
+    </a>
+  </div>
+</div>
+-->
+<br />
+
+
+
+
+<aside class="related" role="complementary">
+  <h2 class="hr">Related Posts</h2>
+
+  <ul class="related-posts">
+    
+      
+      
+      
+        
+        
+          
+
+
+<li class="h4">
+  <a href="/project/2026/11/23/Woorin-WebSocket-Auth/" data-flip="title">
+    <span>우린 - 둘이 쓰는 앱이라 괜찮다고 생각했던 보안 (웹소켓 인증, 에러 메시지, 운영 로그)</span>
+  </a>
+  <small><time datetime="2026-11-23T00:00:00+09:00">
+    23 Nov 2026
+  </time></small>
+</li>
+
+        
+      
+        
+        
+          
+
+
+<li class="h4">
+  <a href="/project/2026/11/23/Woorin-Silent-Failures/" data-flip="title">
+    <span>우린 - 에러 없이 실패하는 버그들 (진짜 원인을 찾기까지)</span>
+  </a>
+  <small><time datetime="2026-11-23T00:00:00+09:00">
+    23 Nov 2026
+  </time></small>
+</li>
+
+        
+      
+        
+        
+          
+
+
+<li class="h4">
+  <a href="/project/2026/11/23/Woorin-FCM-Push/" data-flip="title">
+    <span>우린 - 알림이 두 번 오고, 안 오고, 안 사라지고 (FCM 푸시)</span>
+  </a>
+  <small><time datetime="2026-11-23T00:00:00+09:00">
+    23 Nov 2026
+  </time></small>
+</li>
+
+        
+      
+        
+          
+          
+    
+  </ul>
+</aside>
+  <aside class="comments" role="complementary">
+  <h2>Comments</h2>
+  <hr/>
+
+  <script src="https://utteranc.es/client.js"
+          repo="taewoocode/taewoocode.github.io"
+          issue-term="title"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+</aside>
+
+
+       <footer>
+  <hr/>
+  
+    <p>© 2022. by taewoo</p>
+
+  
+  <p>
+    <code>Powered by <a href="https://taewoocode.github.io/">taewoo</a></code>
+  </p>
+</footer>
+
+    </main>
+    <div class="right-side">
+  <div class="add-first">
+    <script
+            async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+    ></script>
+    <!-- 우측 광고 -->
+    <ins
+            class="adsbygoogle"
+            style="display: block"
+            data-ad-client="ca-pub-8247516864622650"
+            data-ad-slot="9124111205"
+            data-ad-format="auto"
+            data-full-width-responsive="true"
+    ></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+  <br />
+  <br />
+  <div class="add-second">
+    <!-- 우측 광고2 -->
+    <ins
+            class="adsbygoogle"
+            style="display: block"
+            data-ad-client="ca-pub-8247516864622650"
+            data-ad-slot="5156946039"
+            data-ad-format="auto"
+            data-full-width-responsive="true"
+    ></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+</div>
+  </div>
+  <div id="_yDrawer">
+  <div id="_sidebar" class="sidebar">
+    <div class="sidebar-bg" style="background-color:#4f86aa;background-image:url(/assets/img/dp.jpeg)"></div>
+    <header class="sidebar-sticky" role="banner">
+      <br/>
+      <div class="sidebar-about">
+        <h1><a id="_title" href="/">일벌리는 개발자</a></h1>
+        
+
+      </div>
+
+      <br/>
+      <br/>
+      <nav class="sidebar-nav heading" role="navigation">
+        <span class="sr-only">Navigation:</span>
+<ul>
+  
+
+  
+
+  
+  
+  
+  
+  
+    <li>
+      <input type="checkbox" id="list-item-1"/>
+      <div  class="list-wrapper">
+      <a class="sidebar-nav-item" href="/category/life/">Life</a>
+       <label class="folder" for="list-item-1">▾</label>
+    </div>
+     <ul class="list-body">
+       
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/daily-books/">Books</a>
+             </li>
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/daily-daily/">Daily</a>
+             </li>
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+     </ul>
+    </li>
+
+  
+  
+    <li>
+      <input type="checkbox" id="list-item-2"/>
+      <div  class="list-wrapper">
+      <a class="sidebar-nav-item" href="/category/project/">Project</a>
+       <label class="folder" for="list-item-2">▾</label>
+    </div>
+     <ul class="list-body">
+       
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/project-spring/">Spring-Project</a>
+             </li>
+           
+         
+     </ul>
+    </li>
+
+  
+  
+    <li>
+      <input type="checkbox" id="list-item-3"/>
+      <div  class="list-wrapper">
+      <a class="sidebar-nav-item" href="/category/computer-science/">Computer Science</a>
+       <label class="folder" for="list-item-3">▾</label>
+    </div>
+     <ul class="list-body">
+       
+           
+         
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/cs-algorithm/">Algorithm</a>
+             </li>
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/cs-operatingsystem/">Operating System</a>
+             </li>
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/cs-network/">Network</a>
+             </li>
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/cs-db/">Database</a>
+             </li>
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/cs-hardware/">Hardware</a>
+             </li>
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+     </ul>
+    </li>
+
+  
+  
+    <li>
+      <input type="checkbox" id="list-item-4"/>
+      <div  class="list-wrapper">
+      <a class="sidebar-nav-item" href="/category/programming-language/">Programming Language</a>
+       <label class="folder" for="list-item-4">▾</label>
+    </div>
+     <ul class="list-body">
+       
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/programming-language-java/">Java</a>
+             </li>
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/programming-language-kotlin/">Kotlin</a>
+             </li>
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+     </ul>
+    </li>
+
+  
+  
+    <li>
+      <input type="checkbox" id="list-item-5"/>
+      <div  class="list-wrapper">
+      <a class="sidebar-nav-item" href="/category/framework/">Framework</a>
+       <label class="folder" for="list-item-5">▾</label>
+    </div>
+     <ul class="list-body">
+       
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/framework-spring/">Spring</a>
+             </li>
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/framework-spring-data-jpa/">Spring Data JPA</a>
+             </li>
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/framework-spring-security/">Spring Security</a>
+             </li>
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/framework-spring-mvc/">Spring MVC</a>
+             </li>
+           
+         
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/framework-junit/">JUnit</a>
+             </li>
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/framework-android/">Android</a>
+             </li>
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+     </ul>
+    </li>
+
+  
+  
+    <li>
+      <input type="checkbox" id="list-item-6"/>
+      <div  class="list-wrapper">
+      <a class="sidebar-nav-item" href="/category/language/">Language</a>
+       <label class="folder" for="list-item-6">▾</label>
+    </div>
+     <ul class="list-body">
+       
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/language-english/">English</a>
+             </li>
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+     </ul>
+    </li>
+
+  
+  
+    <li>
+      <input type="checkbox" id="list-item-7"/>
+      <div  class="list-wrapper">
+      <a class="sidebar-nav-item" href="/category/development/">Development</a>
+       <label class="folder" for="list-item-7">▾</label>
+    </div>
+     <ul class="list-body">
+       
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/development-ddd/">DDD</a>
+             </li>
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/development-tdd/">TDD</a>
+             </li>
+           
+         
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/development-clean-code/">Clean Code</a>
+             </li>
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+     </ul>
+    </li>
+
+  
+  
+    <li>
+      <input type="checkbox" id="list-item-8"/>
+      <div  class="list-wrapper">
+      <a class="sidebar-nav-item" href="/category/devops/">Devops</a>
+       <label class="folder" for="list-item-8">▾</label>
+    </div>
+     <ul class="list-body">
+       
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/devops-aws/">aws</a>
+             </li>
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/devops-ansible/">Ansible</a>
+             </li>
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/devops-docker/">Docker</a>
+             </li>
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/devops-es/">Elasticsearch</a>
+             </li>
+           
+         
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/devops-k8s/">Kubernetes</a>
+             </li>
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/devops-kafak/">Kafka</a>
+             </li>
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/devops-terraform/">Terraform</a>
+             </li>
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/devops-linux/">Linux</a>
+             </li>
+           
+         
+           
+         
+     </ul>
+    </li>
+
+  
+  
+    <li>
+      <input type="checkbox" id="list-item-9"/>
+      <div  class="list-wrapper">
+      <a class="sidebar-nav-item" href="/category/opensource/">Open Source</a>
+       <label class="folder" for="list-item-9">▾</label>
+    </div>
+     <ul class="list-body">
+       
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+             <li>
+               <a class="sidebar-nav-subitem" href="/tag/opensource-opensource/">Open Source</a>
+             </li>
+           
+         
+           
+         
+           
+         
+     </ul>
+    </li>
+
+  
+  
+    <li>
+      <input type="checkbox" id="list-item-10"/>
+      <div  class="list-wrapper">
+      <a class="sidebar-nav-item" href="/about/">About</a>
+       
+    </div>
+     <ul class="list-body">
+       
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+           
+         
+     </ul>
+    </li>
+
+  
+</ul>
+
+      </nav>
+    <br/>
+    <br/>
+      <div class="sidebar-box">
+        
+      </div>
+      <p>일을 벌여놔야 주워 담을 수 있습니다.</p>
+
+      
+        <p class="sidebar-visits">누적 방문 <span data-gc-total>-</span></p>
+      
+      
+      
+        <div class="sidebar-social">
+          <span class="sr-only">Social:</span>
+<ul>
+  
+    
+
+
+
+
+
+
+
+
+
+<li>
+  <a href="https://github.com/taewoocode">
+    <span class="icon-github" title="GitHub"></span>
+    <span class="sr-only">GitHub</span>
+  </a>
+</li>
+
+  
+    
+
+
+
+
+
+
+
+
+
+<li>
+  <a href="https://www.linkedin.com/in/태우-박-15651828b">
+    <span class="icon-linkedin2" title="LinkedIn"></span>
+    <span class="sr-only">LinkedIn</span>
+  </a>
+</li>
+
+  
+    
+
+
+
+
+
+
+
+
+
+<li>
+  <a href="qkrxodn6035@gmail.com">
+    <span class="icon-mail" title="Email"></span>
+    <span class="sr-only">Email</span>
+  </a>
+</li>
+
+  
+</ul>
+
+        </div>
+      
+    </header>
+  </div>
+</div>
+
+</div>
+
+<!-- =============== -->
+<!-- SCRIPTS         -->
+<!-- =============== -->
+
+<script>
+  (function () {
+    var base = 'https://taewoocode.goatcounter.com';
+
+    // Pages are swapped in by push-state, so count and fill counters manually on every page.
+    window.goatcounter = { no_onload: true };
+
+    function fill(el, path) {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', base + '/counter/' + encodeURIComponent(path) + '.json');
+      xhr.onload = function () {
+        var count = '0';
+        try { if (xhr.status === 200) count = JSON.parse(xhr.responseText).count; } catch (e) {}
+        el.textContent = count;
+      };
+      xhr.send();
+    }
+
+    function onPage() {
+      if (window.goatcounter.count) window.goatcounter.count({ path: location.pathname });
+      var views = document.querySelectorAll('[data-gc-views]');
+      for (var i = 0; i < views.length; i++) fill(views[i], location.pathname);
+    }
+
+    var script = document.createElement('script');
+    script.async = true;
+    script.src = '//gc.zgo.at/count.js';
+    script.setAttribute('data-goatcounter', base + '/count');
+    script.onload = onPage;
+    document.head.appendChild(script);
+
+    var total = document.querySelector('[data-gc-total]');
+    if (total) fill(total, 'TOTAL');
+
+    var pushState = document.getElementById('_yPushState');
+    if (pushState) pushState.addEventListener('y-push-state-after', onPage);
+  })();
+</script>
+
+
+
+
+
+<!--[if gt IE 8]><!---->
+<script src="//ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+<script>
+  WebFont.load({
+    
+    google: {
+      families: 'Lato'.split('|')
+    },
+    
+
+    custom: {
+      families: ['icomoon'],
+      urls: ['/assets/icomoon/style.css']
+    }
+  });
+</script>
+<!--<![endif]-->
+
+
+  <!--[if gt IE 9]><!---->
+  
+  <script>loadJSDeferred('/assets/js/hydejack.js?v=6.4.0');</script>
+
+  
+  <!--<![endif]-->
+
+
+</body>
+
+</html>
