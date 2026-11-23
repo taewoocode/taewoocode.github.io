@@ -1,41 +1,66 @@
 {% if site.goatcounter %}
 <script>
   (function () {
-    var base = 'https://{{ site.goatcounter }}.goatcounter.com';
-
-    /* Pages are swapped in by push-state, so count and fill counters manually on every page.
+    /* GoatCounter only records visits for the dashboard. The numbers on the page come from busuanzi below.
+       Pages are swapped in by push-state, so count manually on every page.
        Use block comments only: compress_html joins this script into one line, so a // comment would swallow the rest. */
     window.goatcounter = { no_onload: true };
 
-    function fill(el, path) {
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', base + '/counter/' + encodeURIComponent(path) + '.json');
-      xhr.onload = function () {
-        var count = '0';
-        try { if (xhr.status === 200) count = JSON.parse(xhr.responseText).count; } catch (e) {}
-        el.textContent = count;
-      };
-      xhr.send();
-    }
-
     function onPage() {
       if (window.goatcounter.count) window.goatcounter.count({ path: location.pathname });
-      var views = document.querySelectorAll('[data-gc-views]');
-      for (var i = 0; i < views.length; i++) fill(views[i], location.pathname);
     }
 
     var script = document.createElement('script');
     script.async = true;
     script.src = '//gc.zgo.at/count.js';
-    script.setAttribute('data-goatcounter', base + '/count');
+    script.setAttribute('data-goatcounter', 'https://{{ site.goatcounter }}.goatcounter.com/count');
     script.onload = onPage;
     document.head.appendChild(script);
 
-    var total = document.querySelector('[data-gc-total]');
-    if (total) fill(total, 'TOTAL');
-
     var pushState = document.getElementById('_yPushState');
     if (pushState) pushState.addEventListener('y-push-state-after', onPage);
+  })();
+</script>
+{% endif %}
+
+{% if site.busuanzi %}
+<script>
+  (function () {
+    /* busuanzi: realtime counters. Every call adds 1 to site_pv and to page_pv of the page named by the Referer,
+       then returns the new numbers through a JSONP callback.
+       The official script runs only once per full load; this blog swaps pages in by push-state,
+       so call the same endpoint again on every page change.
+       Use block comments only: compress_html joins this script into one line. */
+    var seq = 0;
+
+    function fill(selector, value) {
+      var els = document.querySelectorAll(selector);
+      for (var i = 0; i < els.length; i++) els[i].textContent = value;
+    }
+
+    function hit() {
+      seq += 1;
+      var name = 'BusuanziCallback_' + seq + '_' + new Date().getTime();
+      var tag = document.createElement('script');
+      function cleanup() {
+        try { delete window[name]; } catch (e) { window[name] = undefined; }
+        if (tag.parentNode) tag.parentNode.removeChild(tag);
+      }
+      window[name] = function (data) {
+        fill('[data-bsz-total]', data.site_pv);
+        fill('[data-bsz-views]', data.page_pv);
+        cleanup();
+      };
+      tag.onerror = cleanup;
+      tag.referrerPolicy = 'no-referrer-when-downgrade';
+      tag.src = 'https://busuanzi.ibruce.info/busuanzi?jsonpCallback=' + name;
+      document.head.appendChild(tag);
+    }
+
+    hit();
+
+    var pushState = document.getElementById('_yPushState');
+    if (pushState) pushState.addEventListener('y-push-state-after', hit);
   })();
 </script>
 {% endif %}

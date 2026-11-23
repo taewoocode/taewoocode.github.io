@@ -45,9 +45,13 @@ google_fonts:        Lato
 # If you do not use a Google Fonts, uncomment the line below
 # no_google_fonts:     true
 
-# Set your GoatCounter code (the `xxx` in xxx.goatcounter.com) to count visits
-# and show view counts. Universal Analytics (UA-) was shut down in July 2024.
+# Set your GoatCounter code (the `xxx` in xxx.goatcounter.com) to record visits for the dashboard.
+# Universal Analytics (UA-) was shut down in July 2024.
 goatcounter:         taewoocode
+
+# Show realtime view counts (sidebar total, per-post views) with busuanzi.
+# GoatCounter's public counter is cached for hours, so it is not used for display.
+busuanzi:            true
 
 # Setting a disqus shortname will enable the comment section on pages with `comments: true` in the front matter
 #disqus_shortname:    taewoo
