@@ -274,7 +274,13 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 
 <ul>
   <li>우린은 여자친구와 둘이 쓰려고 만든 앱이라, 보안은 “로그인만 되면 됐다” 정도로 생각했다.</li>
-  <li>그런데 한 번 점검해 보니 세 군데가 뚫려 있었다.
+  <li>처음엔 인증 자체가 없었다. <strong>9월 14일</strong>에야 API 인증(토큰)을 넣었는데, 그 커밋 메시지에 이렇게 적혀 있다.
+    <ul>
+      <li>“지금까지는 userId/coupleId만 알면 아무나 남의 데이터를 조회/수정/삭제할 수 있었음”</li>
+      <li>“아직 안 한 것: 채팅 웹소켓(/ws/chat)은 이번 인증 대상에서 빠짐”</li>
+    </ul>
+  </li>
+  <li>그 뒤로도 세 군데가 뚫려 있었다.
     <ul>
       <li><strong>채팅 웹소켓에 인증이 없었다.</strong> 숫자 하나만 바꾸면 남의 커플 채팅을 실시간으로 볼 수 있었다.</li>
       <li>에러가 나면 <strong>DB 오류 메시지가 그대로</strong> 앱에 내려갔다.</li>
@@ -294,7 +300,19 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
       <li><code class="language-plaintext highlighter-rouge">coupleId=2</code>, <code class="language-plaintext highlighter-rouge">coupleId=3</code>… 으로 바꿔 붙으면 그 커플의 새 메시지, 읽음, 입력 중 이벤트가 실시간으로 들어왔다.</li>
     </ul>
   </li>
+  <li>사실 몰랐던 게 아니다. 9/14 인증 커밋에 “웹소켓은 빠짐”이라고 적어 두고, 막은 건 <strong>13일 뒤인 9/27</strong>이다. 그 사이 소켓은 열려 있었다.</li>
   <li>웹소켓은 HTTP로 시작해서(핸드셰이크) 프로토콜을 바꾸는 구조라, <strong>서블릿 필터 경로 설정에서 빠지기 쉽다.</strong> REST를 막았다고 소켓까지 막힌 게 아니었다.</li>
+</ul>
+
+<h3 id="필터는-너무-좁기도-너무-넓기도-했다">필터는 너무 좁기도, 너무 넓기도 했다</h3>
+
+<ul>
+  <li>같은 필터가 반대 방향으로도 문제를 냈다. 9/20에 <strong>카카오 로그인이 “로그인이 필요해요”로 거부</strong>됐다.
+    <ul>
+      <li>카카오 로그인은 로그인 <strong>전에</strong> 부르는 API라 토큰 없이 통과해야 한다. 회원가입/로그인처럼 예외 목록(<code class="language-plaintext highlighter-rouge">PUBLIC_PATHS</code>)에 넣어야 했는데 빠져 있었다.</li>
+    </ul>
+  </li>
+  <li>웹소켓은 필터 범위 <strong>밖</strong>이라 뚫렸고, 카카오 로그인은 필터 범위 <strong>안</strong>이라 막혔다. 둘 다 “이 경로가 필터에 걸리나?”를 확인하지 않아서 생겼다.</li>
 </ul>
 
 <h3 id="핸드셰이크에서-막기">핸드셰이크에서 막기</h3>
@@ -336,6 +354,8 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
   <li>대가도 있었다. <strong>토큰을 안 보내는 이전 앱 빌드는 실시간 연결이 거부된다.</strong>
     <ul>
       <li>메시지 보내기와 목록 조회는 REST라 동작은 하지만, 새 메시지가 바로 안 뜬다.</li>
+      <li>그래서 서버(<code class="language-plaintext highlighter-rouge">c858460</code>)와 iOS(<code class="language-plaintext highlighter-rouge">f2fc344</code>)를 <strong>같은 분(9/27 21:27)에</strong> 커밋하고 같이 배포했다.</li>
+      <li>9/14 인증 커밋에도 같은 주의가 적혀 있다. “서버만 먼저 올리면 구버전 앱은 토큰을 안 보내서 전부 401 처리됨”.</li>
       <li>사용자가 많다면 한동안 토큰 없는 연결도 받아주는 유예 기간을 두는 게 맞다.</li>
     </ul>
   </li>
@@ -410,6 +430,64 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
       <li>우린로그 리마인드 발송 건수, 인기 랭킹 저장 건수처럼 <strong>개인정보 없이</strong> 운영에 필요한 로그는 DEBUG → INFO로 올렸다.</li>
     </ul>
   </li>
+</ul>
+
+<h2 id="커밋으로-본-흐름">커밋으로 본 흐름</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>날짜</th>
+      <th>어디</th>
+      <th>커밋</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>9/14 00:19</td>
+      <td>서버</td>
+      <td>API 인증(토큰) 도입. 웹소켓은 대상에서 빠짐</td>
+    </tr>
+    <tr>
+      <td>9/14 00:24</td>
+      <td>iOS</td>
+      <td>FCM 토큰 등록이 인증 헤더 없이 나가서 401 → 수정</td>
+    </tr>
+    <tr>
+      <td>9/14 01:16</td>
+      <td>iOS</td>
+      <td>사진 업로드도 같은 이유로 401 → 수정</td>
+    </tr>
+    <tr>
+      <td>9/14 01:55</td>
+      <td>서버</td>
+      <td>상대 프로필 조회가 “본인만” 제한에 걸려 403 → 전용 API</td>
+    </tr>
+    <tr>
+      <td>9/20 18:59</td>
+      <td>서버</td>
+      <td>카카오 로그인이 인증 필터에 막힘 → 예외 경로 추가</td>
+    </tr>
+    <tr>
+      <td>9/27 21:08</td>
+      <td>서버</td>
+      <td>에러 응답의 내부 메시지 노출 수정 (컨트롤러 86곳)</td>
+    </tr>
+    <tr>
+      <td>9/27 21:27</td>
+      <td>서버+iOS</td>
+      <td>채팅 웹소켓 핸드셰이크 인증</td>
+    </tr>
+    <tr>
+      <td>10/6 02:28</td>
+      <td>서버</td>
+      <td>운영 로그에서 SQL/개인정보 제거 (<code class="language-plaintext highlighter-rouge">log4j2-prod.xml</code>)</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>인증을 넣은 날 하루에만 401/403 버그를 세 개 고쳤다. 인증은 기능 하나가 아니라 <strong>모든 요청의 규칙을 바꾸는 일</strong>이었다.</li>
 </ul>
 
 <h2 id="정리">정리</h2>

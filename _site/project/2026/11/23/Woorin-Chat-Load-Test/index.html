@@ -33,7 +33,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
         name="naver-site-verification"
         content="22c5b4ef3bfda7fc6100671413989219de7a4ac8"
 />
-<meta property="og:title" content="우린 - 둘이 쓰던 채팅을 100명이 쓴다면 (k6 부하 테스트)" />
+<meta property="og:title" content="우린 - 2 vCPU 서버 한 대로 몇 명까지 동시에 채팅할 수 있을까 (k6 부하 테스트)" />
 <meta property="og:type" content="article" />
 
 <!-- =============== -->
@@ -52,7 +52,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
 <meta property="og:image:width" content="640" />
 <meta property="og:image:height" content="360" />
  
-<title>우린 - 둘이 쓰던 채팅을 100명이 쓴다면 (k6 부하 테스트) &middot; 일벌리는 개발자</title>
+<title>우린 - 2 vCPU 서버 한 대로 몇 명까지 동시에 채팅할 수 있을까 (k6 부하 테스트) &middot; 일벌리는 개발자</title>
  
 <meta
         name="description"
@@ -187,7 +187,7 @@ Powered by Hydejack v6.4.0 (https://qwtel.com/hydejack/)
   <header>
     <h1 class="post-title">
       
-      우린 - 둘이 쓰던 채팅을 100명이 쓴다면 (k6 부하 테스트)
+      우린 - 2 vCPU 서버 한 대로 몇 명까지 동시에 채팅할 수 있을까 (k6 부하 테스트)
       
     </h1>
 
@@ -272,7 +272,7 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
     <!--<br />-->
     <h2 id="개요">개요</h2>
 
-<p><img src="/assets/img/projects/woorin/img_1.png" alt="img.png" /></p>
+<p><img src="/assets/img/projects/woorin/img_16.png" alt="img.png" /></p>
 
 <ul>
   <li>우린은 여자친구와 둘이 쓰려고 만든 커플 앱이다.
@@ -281,16 +281,16 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
       <li>그런데 이게 잘 만들어서인지, <strong>둘이라서 티가 안 났던 것</strong>인지는 알 수 없다.</li>
     </ul>
   </li>
-  <li>그래서 질문을 하나 세웠다.
+  <li>그래서 질문을 세웠다.
     <ul>
-      <li><strong>100명이 동시에 채팅을 쓴다면</strong> 지금 로직이 버틸까?</li>
-      <li>문제가 있다면 어느 로직이고, 어떻게 고칠 수 있을까?</li>
+      <li>사람들이 실제로 채팅을 주고받는다면, <strong>이 서버는 몇 명까지 무너지지 않고 버틸까?</strong></li>
     </ul>
   </li>
-  <li>결과
+  <li>결론
     <ul>
-      <li>동시 100명에서 <strong>19.9 TPS, p95 10.64초</strong> → 쿼리 1개 수정 + 인덱스 1개 추가로 <strong>399.9 TPS, p95 0.53초</strong> (약 20배)</li>
-      <li>그 뒤엔 약 400 TPS에서 멈췄다. 쿼리가 아니라 <strong>서버 한 대(2 vCPU)의 한계</strong>였다.</li>
+      <li><strong>1,500명</strong>에서 CPU가 꽉 차고, <strong>2,000명</strong>부터 무너진다. (처리량이 절반 이하로 떨어지고 메시지가 13초 늦게 도착)</li>
+      <li>1,000명은 측정마다 도착 시간이 0.36~2.8초로 흔들렸다. 여유 있게 쓰려면 1,000명 아래로 잡는 게 안전하다.</li>
+      <li>부하 속에서 둘이 쓸 땐 안 보이던 <strong>동시성 버그 1개</strong>, 대화가 쌓이면 느려지는 <strong>쿼리 문제 1개</strong>를 찾아서 고쳤다.</li>
     </ul>
   </li>
 </ul>
@@ -303,89 +303,136 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
       <li>GCP Compute Engine <strong>e2-medium (2 vCPU, 메모리 4GB)</strong>, Ubuntu 24.04, 서울 리전</li>
       <li>GCP를 고른 이유는 무료 체험 크레딧이다.</li>
       <li>서버 한 대에 Spring Boot(Java 17)와 MySQL 8.0을 같이 띄워 운영 중이다.</li>
-      <li>커넥션 풀은 따로 설정하지 않아 DBCP2 기본값(최대 8개)이다.</li>
     </ul>
   </li>
   <li>데이터
     <ul>
       <li>운영 DB는 건드리지 않고, 같은 MySQL에 <strong>테스트 전용 DB</strong>를 따로 만들었다.</li>
-      <li>커플 100쌍(사용자 200명), 커플마다 대화 약 1만 건, <strong>총 100만 건</strong>.</li>
-      <li>둘이 쓸 때 대화는 수백 건이었다. 몇 달 쓴 커플처럼 대화를 쌓아야 문제가 보일 거라고 봤다.</li>
+      <li>커플 2,500쌍(사용자 5,000명). 서비스 초기처럼 커플마다 대화 50건만 넣었다.</li>
     </ul>
   </li>
-  <li>부하 도구는 k6를 썼다.
+  <li>부하는 로컬 Mac에서 k6로 원격으로 줬다. (서버까지 왕복 평균 28ms)</li>
+  <li>가상 사용자 한 명 = <strong>실제 사람 한 명처럼</strong> 움직이게 했다.
     <ul>
-      <li>시나리오를 JavaScript로 짤 수 있어서, 실제 채팅처럼 “열고, 보내고, 읽는” 흐름을 섞기 쉽다.</li>
-      <li>부하는 로컬 Mac에서 원격으로 줬다. 서버와 부하 도구가 같은 기계에 있으면 CPU를 나눠 써서 숫자가 흔들린다. (처음에 로컬에서 다 같이 돌렸다가 숫자가 크게 흔들려서 바꿨다)</li>
+      <li>채팅방에 들어와서(최근 30건 조회) <strong>웹소켓으로 접속해 있는다.</strong></li>
+      <li><strong>2~4초(평균 3초)마다</strong> 메시지를 하나 보낸다.</li>
+      <li>상대가 보낸 메시지는 웹소켓으로 받는다.</li>
+    </ul>
+  </li>
+  <li>무엇을 재나
+    <ul>
+      <li><strong>도착 시간</strong>: 보낸 순간부터 상대 웹소켓에 도착할 때까지. 메신저에서 사람이 느끼는 속도다.</li>
+      <li>보내는 쪽과 받는 쪽이 같은 k6 안에 있어서 시계가 같다. 메시지 내용에 보낸 시각을 넣고, 받는 쪽에서 빼서 잰다.</li>
+      <li>단계마다 60초 동안 접속을 유지하고, 측정 전마다 테스트 중 생긴 메시지를 지운다.</li>
     </ul>
   </li>
 </ul>
 
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// chat.js — 가상 사용자 한 명 = 커플 중 한 사람</span>
-<span class="k">export</span> <span class="k">default</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-  <span class="kd">const</span> <span class="nx">r</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">();</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">r</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">)</span> <span class="p">{</span>        <span class="c1">// 50% 채팅방 열기 (최근 30건)</span>
-    <span class="nx">http</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s2">`</span><span class="p">${</span><span class="nx">BASE</span><span class="p">}</span><span class="s2">/api/chat/messages?coupleId=</span><span class="p">${</span><span class="nx">couple</span><span class="p">}</span><span class="s2">&amp;limit=30`</span><span class="p">,</span> <span class="p">...);</span>
-  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">r</span> <span class="o">&lt;</span> <span class="mf">0.9</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 40% 메시지 보내기 (재전송 대비 전송 ID 포함)</span>
-    <span class="nx">http</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s2">`</span><span class="p">${</span><span class="nx">BASE</span><span class="p">}</span><span class="s2">/api/chat/messages`</span><span class="p">,</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span> <span class="nx">coupleId</span><span class="p">,</span> <span class="nx">senderId</span><span class="p">,</span> <span class="nx">content</span><span class="p">,</span> <span class="na">clientMessageId</span><span class="p">:</span> <span class="nx">uuidv4</span><span class="p">()</span> <span class="p">}),</span> <span class="p">...);</span>
-  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>              <span class="c1">// 10% 읽음 처리</span>
-    <span class="nx">http</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s2">`</span><span class="p">${</span><span class="nx">BASE</span><span class="p">}</span><span class="s2">/api/chat/read?coupleId=</span><span class="p">${</span><span class="nx">couple</span><span class="p">}</span><span class="s2">&amp;readerId=</span><span class="p">${</span><span class="nx">u</span><span class="p">}</span><span class="s2">`</span><span class="p">,</span> <span class="p">...);</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// chat_live.js 일부 — 웹소켓에 붙어 있으면서 평균 3초마다 보내고, 상대 메시지 도착 시간을 잰다</span>
+<span class="nx">ws</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="s2">`</span><span class="p">${</span><span class="nx">WSB</span><span class="p">}</span><span class="s2">/ws/chat?coupleId=</span><span class="p">${</span><span class="nx">couple</span><span class="p">}</span><span class="s2">`</span><span class="p">,</span> <span class="p">{</span> <span class="na">headers</span><span class="p">:</span> <span class="nx">auth</span> <span class="p">},</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">socket</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">open</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">loop</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="nx">http</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s2">`</span><span class="p">${</span><span class="nx">BASE</span><span class="p">}</span><span class="s2">/api/chat/messages`</span><span class="p">,</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span> <span class="p">...,</span> <span class="na">content</span><span class="p">:</span> <span class="s2">`t:</span><span class="p">${</span><span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()}</span><span class="s2">`</span> <span class="p">}),</span> <span class="p">...);</span>
+      <span class="nx">socket</span><span class="p">.</span><span class="nx">setTimeout</span><span class="p">(</span><span class="nx">loop</span><span class="p">,</span> <span class="mi">2000</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">2000</span><span class="p">);</span>
+    <span class="p">};</span>
+    <span class="nx">socket</span><span class="p">.</span><span class="nx">setTimeout</span><span class="p">(</span><span class="nx">loop</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">3000</span><span class="p">);</span>
+  <span class="p">});</span>
+  <span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">message</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">m</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nx">type</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">MESSAGE</span><span class="dl">'</span> <span class="o">&amp;&amp;</span> <span class="nx">m</span><span class="p">.</span><span class="nx">message</span><span class="p">.</span><span class="nx">senderId</span> <span class="o">!==</span> <span class="nx">u</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">delivery</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span> <span class="o">-</span> <span class="nb">Number</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nx">message</span><span class="p">.</span><span class="nx">content</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">2</span><span class="p">)));</span>   <span class="c1">// 도착 시간</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">});</span>
 </code></pre></div></div>
 
+<h2 id="몇-명까지-버티나">몇 명까지 버티나</h2>
+
 <ul>
-  <li>측정 규칙
+  <li>동시 접속을 250명부터 3,000명까지 올렸다.
     <ul>
-      <li>동시 사용자 N명이 쉬지 않고 30초 동안 반복한다.</li>
-      <li>측정 전에 <strong>테스트 중 생긴 메시지를 지운다.</strong> 안 지우면 측정할수록 데이터가 쌓여서 뒤 측정이 불리해진다.</li>
-      <li>서버를 띄운 직후가 아니라 <strong>워밍업한 뒤</strong> 잰다. (이유는 아래 “측정하며 틀렸던 것”)</li>
+      <li>250명: 초당 71건, 도착 0.17초</li>
+      <li>500명: 초당 141건, 도착 0.21초</li>
+      <li><strong>1,000명: 초당 263건, 도착 0.36초</strong> → 원활 (반복 측정에선 1.5~2.8초까지 흔들림, 아래 참고)</li>
+      <li><strong>1,500명: 초당 368건, 도착 0.99초, CPU 유휴 6%</strong> → 한계</li>
+      <li><strong>2,000명: 초당 164건, 도착 12.8초</strong> → 무너짐</li>
+      <li>3,000명: 초당 164건, 도착 20.3초</li>
+      <li>(도착 시간은 p95. 100명 중 95명은 이 시간 안에 받는다는 뜻)</li>
+    </ul>
+  </li>
+  <li>2,000명에서 무슨 일이 일어났나?
+    <ul>
+      <li>처리량이 1,500명일 때의 <strong>절반 이하로 떨어졌다.</strong> 사람은 늘었는데 일을 덜 한다. (368 → 164건/초)</li>
+      <li>CPU가 꽉 찬 상태에서 요청이 계속 쌓이면, 서버는 밀린 요청과 웹소켓 전송을 처리하느라 바빠서 새 메시지를 제때 못 받는다.</li>
+      <li>요청은 결국 다 성공했다(실패율 0%). 하지만 13초 뒤에 도착하는 메시지는 채팅으로 쓸 수 없다. <strong>에러가 안 나도 무너질 수 있다.</strong></li>
     </ul>
   </li>
 </ul>
 
-<h2 id="100명이면-10초가-걸렸다">100명이면 10초가 걸렸다</h2>
+<h2 id="부하-속에서-드러난-동시성-버그">부하 속에서 드러난 동시성 버그</h2>
+
+<ul>
+  <li>테스트가 끝나고 서버 로그를 보니 이런 에러가 13건 있었다.
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">IllegalStateException: The remote endpoint was in state [TEXT_PARTIAL_WRITING]</code></li>
+    </ul>
+  </li>
+  <li>원인
+    <ul>
+      <li>커플 두 사람이 거의 동시에 메시지를 보내면, 두 요청 스레드가 <strong>같은 웹소켓 세션</strong>에 동시에 메시지를 쓴다.</li>
+      <li>Spring의 <code class="language-plaintext highlighter-rouge">WebSocketSession.sendMessage</code>는 여러 스레드가 동시에 부르면 안 된다. 한 쪽이 쓰는 중에 다른 쪽이 쓰려다 터진다.</li>
+      <li>둘이 쓸 땐 두 사람이 같은 밀리초에 보낼 일이 거의 없어서 보이지 않았다.</li>
+    </ul>
+  </li>
+  <li>같이 찾은 문제
+    <ul>
+      <li>broadcast의 try-catch가 반복문 <strong>바깥</strong>에 있었다.</li>
+      <li>한 세션에서 전송이 실패하면(예: 보낸 사람 쪽 연결이 끊김) 반복이 멈춰서, <strong>같은 방의 상대도 메시지를 못 받는다.</strong></li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/assets/img/projects/woorin/img_14.png" alt="img.png" /></p>
+
+<p><img src="/assets/img/projects/woorin/img_15.png" alt="img.png" /></p>
+
+<ul>
+  <li>고친 것
+    <ul>
+      <li>세션을 <code class="language-plaintext highlighter-rouge">ConcurrentWebSocketSessionDecorator</code>로 감싼다. 세션마다 보내기를 줄 세워 준다.</li>
+      <li>한 세션에 보내기가 5초 또는 512KB 이상 밀리면 그 세션만 끊는다. 느린 클라이언트 하나가 서버 스레드를 붙잡지 않게.</li>
+      <li>실패 처리를 세션마다 따로 한다. 한 명이 실패해도 상대에게는 보낸다.</li>
+    </ul>
+  </li>
+  <li>결과
+    <ul>
+      <li>같은 테스트에서 <code class="language-plaintext highlighter-rouge">TEXT_PARTIAL_WRITING</code> <strong>13건 → 0건</strong>.</li>
+      <li>버티는 인원은 그대로였다. (1,500명 포화, 2,000명 붕괴) 버그는 정확성 문제였고, 한계는 CPU였다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="몇-달-쓰면-대화가-쌓이면-생기는-문제">몇 달 쓰면? 대화가 쌓이면 생기는 문제</h2>
+
+<ul>
+  <li>위 테스트는 서비스 초기처럼 대화가 적은 상태였다.</li>
+  <li>몇 달 쓴 커플이라면 대화가 1만 건씩 쌓인다. 그래서 커플 100쌍에 대화 1만 건씩(총 100만 건) 넣고, 100명이 쉬지 않고 채팅방 열기, 보내기, 읽음 처리를 반복하게 했다.</li>
+</ul>
 
 <p><img src="/assets/img/projects/woorin/img_2.png" alt="img.png" /></p>
 
 <ul>
-  <li>동시 100명에서 <strong>19.9 TPS, p95 10.64초</strong>. 에러는 없었지만 메시지 하나 보내는 데 평균 5초다.</li>
-  <li>채팅방 열기, 보내기, 읽음 처리가 모두 비슷하게 느렸다.
-    <ul>
-      <li>하나가 느리면 그 요청이 커넥션과 CPU를 붙잡고 있어서, 나머지도 같이 줄을 선다.</li>
-    </ul>
-  </li>
-  <li>그래서 DB에서 어떤 쿼리가 시간을 쓰고 있는지부터 봤다.</li>
+  <li><strong>19.9 TPS, p95 10.64초.</strong> 메시지 하나 보내는 데 평균 5초다.</li>
 </ul>
 
 <p><img src="/assets/img/projects/woorin/img_3.png" alt="img.png" /></p>
 
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- 쿼리별로 30초 동안 DB 시간을 얼마나 썼는지 (측정 전에 TRUNCATE로 비운다)</span>
-<span class="k">SELECT</span> <span class="n">ROUND</span><span class="p">(</span><span class="n">SUM_TIMER_WAIT</span><span class="o">/</span><span class="mi">1</span><span class="n">e12</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="k">AS</span> <span class="n">total_sec</span><span class="p">,</span> <span class="n">COUNT_STAR</span> <span class="k">AS</span> <span class="n">calls</span><span class="p">,</span>
-       <span class="n">ROUND</span><span class="p">(</span><span class="n">AVG_TIMER_WAIT</span><span class="o">/</span><span class="mi">1</span><span class="n">e9</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="k">AS</span> <span class="n">avg_ms</span><span class="p">,</span> <span class="n">DIGEST_TEXT</span>
-  <span class="k">FROM</span> <span class="n">performance_schema</span><span class="p">.</span><span class="n">events_statements_summary_by_digest</span>
- <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">SUM_TIMER_WAIT</span> <span class="k">DESC</span> <span class="k">LIMIT</span> <span class="mi">5</span><span class="p">;</span>
-</code></pre></div></div>
-
 <ul>
-  <li>결과
+  <li>MySQL에서 쿼리별로 30초 동안 쓴 시간을 집계했다. (performance_schema)
     <ul>
-      <li><strong>채팅방 열기 (최근 30건)</strong>: 평균 664ms, 30초 동안 223초. 압도적 1위다.</li>
+      <li><strong>채팅방 열기 (최근 30건)</strong>: 평균 664ms, 압도적 1위</li>
       <li><strong>읽음 처리 UPDATE</strong>: 평균 348ms</li>
-      <li><strong>안 읽은 수 COUNT</strong>: 평균 155ms</li>
-    </ul>
-  </li>
-  <li>셋 다 <strong>커플의 대화 기록 전체를 훑는</strong> 쿼리였다.</li>
-</ul>
-
-<h2 id="원인-최근-30건을-보여주려고-1만-건을-읽고-있었다">원인: 최근 30건을 보여주려고 1만 건을 읽고 있었다</h2>
-
-<p><img src="/assets/img/projects/woorin/img_4.png" alt="img.png" /></p>
-
-<ul>
-  <li>코드만 보면 문제없어 보인다. 앱이 <code class="language-plaintext highlighter-rouge">limit=30</code>을 보내면 <code class="language-plaintext highlighter-rouge">ORDER BY ... LIMIT</code>으로 최근 30건만 가져온다.
-    <ul>
-      <li>아래 실행계획은 같은 쿼리를 LIMIT 31로 떠서 31건으로 나온다.</li>
+      <li>둘 다 <strong>커플의 대화 기록 전체를 훑는</strong> 쿼리였다.</li>
     </ul>
   </li>
 </ul>
@@ -393,69 +440,29 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 <p><img src="/assets/img/projects/woorin/img_5.png" alt="img.png" /></p>
 
 <ul>
-  <li>실행계획(EXPLAIN ANALYZE)을 아래에서 위로 읽으면 실제 순서가 보인다.
+  <li>채팅방 열기 실행계획 (LIMIT 31로 떴다)
     <ul>
       <li><code class="language-plaintext highlighter-rouge">Index lookup on m ... rows=10004</code> → 이 커플의 메시지를 <strong>전부</strong> 읽는다.</li>
-      <li><code class="language-plaintext highlighter-rouge">Single-row index lookup on p ... loops=10004</code> → 답장 대상, 공유 장소, 추억 등 6개 테이블 조인을 <strong>1만 번씩</strong> 한다.</li>
-      <li><code class="language-plaintext highlighter-rouge">Select #2 (dependent) ... loops=10004</code> → 메시지마다 사진 서브쿼리를 <strong>1만 번</strong> 돈다.</li>
-      <li><code class="language-plaintext highlighter-rouge">Sort: ... limit input to 31 row(s)</code> → 그 다음에야 정렬해서 <strong>31건만</strong> 남긴다. (앱 요청이면 30건)</li>
-    </ul>
-  </li>
-  <li>왜 이렇게 되나?
-    <ul>
-      <li>LEFT JOIN과 SELECT 절의 서브쿼리가 붙어 있으면, MySQL은 조인을 다 끝낸 결과에 정렬과 LIMIT을 건다.</li>
-      <li>즉 “최근 30건만”이라는 조건이 <strong>맨 마지막에</strong> 걸린다.</li>
-      <li>그래서 대화가 쌓일수록 채팅방 열기가 그만큼 느려진다. 둘이 쓸 때처럼 대화가 수백 건이면 금방 끝나서, 몰랐던 이유가 이거다.</li>
+      <li><code class="language-plaintext highlighter-rouge">loops=10004</code> → 6개 테이블 조인과 사진 서브쿼리를 <strong>1만 번씩</strong> 한다.</li>
+      <li><code class="language-plaintext highlighter-rouge">Sort: ... limit input to 31 row(s)</code> → 그 다음에야 31건만 남긴다.</li>
+      <li>조인 때문에 “최근 N건만”이 <strong>맨 마지막에</strong> 걸려서, 대화가 쌓일수록 그만큼 느려진다.</li>
     </ul>
   </li>
 </ul>
-
-<h2 id="개선-1-최근-n건의-id만-먼저-뽑기">개선 1. 최근 N건의 ID만 먼저 뽑기</h2>
 
 <p><img src="/assets/img/projects/woorin/img_6.png" alt="img.png" /></p>
 
 <ul>
-  <li>순서를 바꿨다.
+  <li>개선 1: (커플, 메시지ID) 인덱스로 <strong>최근 N건의 ID만 먼저</strong> 뽑고, 그 N건에만 조인한다.
     <ul>
-      <li>먼저 (커플, 메시지ID) 인덱스만으로 <strong>최근 N건의 ID</strong>를 뽑는다. 이 단계는 인덱스만 보고 N개에서 멈춘다.</li>
-      <li>그 N건에만 메시지 본문, 조인, 사진 서브쿼리를 붙인다.</li>
-    </ul>
-  </li>
-  <li>조인할 대상이 1만 건에서 30건으로 줄어드니, 대화가 아무리 쌓여도 비용이 일정하다.</li>
-</ul>
-
-<p><img src="/assets/img/projects/woorin/img_7.png" alt="img.png" /></p>
-
-<ul>
-  <li>실행계획
-    <ul>
-      <li><code class="language-plaintext highlighter-rouge">Limit: 31 row(s)</code> → <code class="language-plaintext highlighter-rouge">Materialize rows=31</code> → 31건을 먼저 만들고 나서 조인한다.</li>
       <li>쿼리 하나만 실행하면 <strong>72.2ms → 1.28ms</strong>.</li>
+      <li>바꾸기 전과 후 API 응답(최근 30건, 이전 페이지)을 해시로 비교해서 <strong>결과가 같은지</strong> 확인했다.</li>
     </ul>
   </li>
-  <li>결과가 같은가?
+  <li>개선 2: (커플, 읽음 여부, 보낸 사람) 인덱스
     <ul>
-      <li>쿼리를 바꾸면 순서나 빠지는 데이터가 생길 수 있다.</li>
-      <li>바꾸기 전과 후 서버에서 같은 API(최근 30건, 이전 페이지)를 호출해 <strong>응답 JSON을 해시로 비교</strong>했다. 둘 다 같았다.</li>
-    </ul>
-  </li>
-</ul>
-
-<h2 id="개선-2-안-읽은-메시지만-바로-찾는-인덱스">개선 2. 안 읽은 메시지만 바로 찾는 인덱스</h2>
-
-<p><img src="/assets/img/projects/woorin/img_8.png" alt="img.png" /></p>
-
-<ul>
-  <li>읽음 처리와 안 읽은 수 세기는 같은 걸 찾는다.
-    <ul>
-      <li>“이 커플에서(<code class="language-plaintext highlighter-rouge">couple_id =</code>), <strong>안 읽은(<code class="language-plaintext highlighter-rouge">read_yn = 'N'</code>)</strong>, 상대가 보낸(<code class="language-plaintext highlighter-rouge">sender_id !=</code>) 메시지”</li>
-      <li>기존엔 (커플, 시간) 인덱스뿐이라, 커플의 메시지를 전부 꺼내 하나씩 읽음 여부를 확인했다.</li>
-    </ul>
-  </li>
-  <li>안 읽은 수는 푸시를 보낼 때 배지 숫자로 쓴다.
-    <ul>
-      <li>푸시는 응답이 늦어지지 않도록 <code class="language-plaintext highlighter-rouge">@Async</code>로 별도 스레드에서 보낸다.</li>
-      <li>그런데 <strong>DB는 같이 쓴다.</strong> 응답 시간에는 안 보여도, 이 쿼리가 DB를 붙잡고 있어서 결국 전체가 느려진다.</li>
+      <li><code class="language-plaintext highlighter-rouge">=</code> 조건(COUPLE_ID, READ_YN)을 앞에, <code class="language-plaintext highlighter-rouge">!=</code> 조건(SENDER_ID)을 뒤에 둬서 “이 커플의 안 읽은 메시지”까지 인덱스로 바로 좁힌다.</li>
+      <li>읽음 처리 UPDATE 평균 <strong>348ms → 13ms</strong>.</li>
     </ul>
   </li>
 </ul>
@@ -464,94 +471,69 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
     <span class="k">ON</span> <span class="n">TB_MASTER_CHAT_MESSAGE</span> <span class="p">(</span><span class="n">COUPLE_ID</span><span class="p">,</span> <span class="n">READ_YN</span><span class="p">,</span> <span class="n">SENDER_ID</span><span class="p">);</span>
 </code></pre></div></div>
 
-<ul>
-  <li>컬럼 순서를 이렇게 둔 이유
-    <ul>
-      <li><code class="language-plaintext highlighter-rouge">=</code>로 찾는 컬럼(COUPLE_ID, READ_YN)을 앞에, <code class="language-plaintext highlighter-rouge">!=</code>로 거르는 SENDER_ID를 뒤에 뒀다.</li>
-      <li>그러면 “이 커플의 안 읽은 메시지”까지 인덱스로 바로 좁혀진다. 대부분 읽은 상태라 안 읽은 건 몇 건 안 된다.</li>
-      <li>COUNT는 이 인덱스만 보고 끝난다. (실행계획에 <code class="language-plaintext highlighter-rouge">Covering index range scan</code>)</li>
-    </ul>
-  </li>
-  <li>결과: 읽음 처리 UPDATE 평균 <strong>348ms → 13ms</strong>, 안 읽은 수 COUNT는 상위 쿼리 목록에서 사라졌다.</li>
-</ul>
-
-<h2 id="결과">결과</h2>
-
 <p><img src="/assets/img/projects/woorin/img_9.png" alt="img.png" /></p>
 
-<p><img src="/assets/img/projects/woorin/img_10.png" alt="img.png" /></p>
-
 <ul>
-  <li>동시 100명, 같은 서버, 같은 데이터
-    <ul>
-      <li>개선 전: <strong>19.9 TPS, p95 10.64초</strong></li>
-      <li>개선 후: <strong>399.9 TPS, p95 0.53초</strong> (약 20배)</li>
-    </ul>
-  </li>
-  <li>이제 DB 시간 1위는 메시지 INSERT(평균 14ms)다. 남은 건 <strong>정상적인 쓰기 비용</strong>이다.</li>
+  <li>결과: <strong>19.9 TPS → 399.9 TPS (약 20배), p95 10.64초 → 0.53초</strong></li>
+  <li>위의 동시 접속 테스트는 이 개선을 적용한 상태에서 잰 것이다.</li>
 </ul>
 
 <h2 id="측정하며-틀렸던-것">측정하며 틀렸던 것</h2>
 
 <ul>
+  <li>처음엔 “몇 명까지”가 아니라 “대화가 쌓인 상태”를 재고 있었다.
+    <ul>
+      <li>대화를 미리 넣은 순간 사람 수와 데이터 양, 두 변수가 섞였다. 원래 질문에 답하려고 대화가 적은 상태에서 사람만 늘리는 테스트를 따로 했다.</li>
+    </ul>
+  </li>
+  <li>가상 사용자 100명은 사람 100명이 아니다.
+    <ul>
+      <li>k6 가상 사용자는 쉬지 않고 요청을 보낸다. 사람은 메시지 하나 쓰는 데 몇 초가 걸린다. 그래서 사람처럼 3초마다 보내게 바꿨다.</li>
+    </ul>
+  </li>
   <li>데이터가 쌓이는 걸 몰랐다.
     <ul>
-      <li>처음엔 측정을 연달아 돌렸다. 메시지 보내기가 40%라 측정마다 수만 건씩 쌓여서, 뒤에 잰 쪽이 항상 불리했다.</li>
-      <li>→ 측정 전마다 테스트 중 생긴 메시지를 지우도록 바꿨다.</li>
+      <li>측정을 연달아 돌리면 메시지가 쌓여서 뒤에 잰 쪽이 불리하다. → 측정 전마다 지웠다.</li>
     </ul>
   </li>
   <li>서버를 띄우자마자 쟀다.
     <ul>
-      <li>개선 후 첫 측정이 178 TPS로 나왔는데, 워밍업 후 다시 재니 400 TPS였다.</li>
-      <li>Java는 처음 실행될 때 코드를 최적화(JIT)하는 시간이 있어서, 띄운 직후 숫자는 낮게 나온다.</li>
-      <li>→ 짧게 부하를 준 뒤 측정했다. 개선 전도 같은 방식으로 다시 쟀다. (개선 전은 DB가 병목이라 차이가 거의 없었다)</li>
+      <li>개선 후 첫 측정이 178 TPS로 나왔는데, 워밍업 후엔 400 TPS였다. Java는 처음 실행될 때 코드를 최적화(JIT)하는 시간이 있다.</li>
     </ul>
   </li>
   <li>커넥션 풀이 원인일 거라고 짐작했다.
     <ul>
-      <li>처음 느렸을 때 가장 먼저 의심한 건 커넥션 풀(기본 8개)이었다.</li>
-      <li>로컬에서 30개로 늘려 봤더니 <strong>오히려 느려졌다.</strong> (100명, TPS 1,421 → 1,028)</li>
-      <li>연결이 많아지면 DB 안에서 동시에 도는 쿼리가 늘어 서로 경합한다. 풀 크기는 늘릴수록 좋은 값이 아니라, DB가 감당할 수 있는 만큼으로 맞추는 값이다.</li>
-      <li>진짜 원인은 쿼리별 누적 시간을 보고 나서야 찾았다.</li>
+      <li>기본값 8개라 의심했지만, 로컬에서 30개로 늘리니 <strong>오히려 느려졌다.</strong> (TPS 1,421 → 1,028) 연결이 많아지면 DB 안에서 쿼리끼리 경합한다.</li>
+    </ul>
+  </li>
+  <li>같은 조건인데 숫자가 흔들렸다.
+    <ul>
+      <li>1,000명 도착 시간이 측정마다 0.36초, 1.5초, 2.8초로 달랐다. 테스트를 오래 돌린 뒤일수록 느렸다. (CPU steal 0%, IO 대기 8%) 원인은 아직 확정 못 했다.</li>
+      <li>반면 1,500명 포화, 2,000명 붕괴는 매번 같았다. 그래서 “몇 명까지”는 이 두 지점을 기준으로 본다.</li>
     </ul>
   </li>
 </ul>
 
-<h2 id="더-센-부하-이번엔-서버-한-대의-한계">더 센 부하: 이번엔 서버 한 대의 한계</h2>
-
-<p><img src="/assets/img/projects/woorin/img_11.png" alt="img.png" /></p>
+<h2 id="한계를-넘으려면">한계를 넘으려면</h2>
 
 <ul>
-  <li>동시 사용자를 올려 봤다.
+  <li>1,500명에서 CPU가 꽉 찼다. 앞선 쿼리 테스트에서 CPU가 꽉 찼을 때를 보면, 그중 1/3 이상을 같은 서버의 MySQL이 쓰고 있었다. (Java 121% + MySQL 72%)</li>
+  <li>순서대로 하면
     <ul>
-      <li>50명 354 TPS / 100명 400 TPS / 200명 396 TPS. 에러는 0%.</li>
-      <li>약 <strong>400 TPS에서 멈추고</strong>, 응답시간만 늘었다. (200명 p95 1.21초)</li>
-    </ul>
-  </li>
-  <li>어디가 막혔나?
-    <ul>
-      <li>CPU 유휴가 약 5%. <strong>Java 121% + MySQL 72%</strong>로 2코어(200%)를 둘이 나눠 쓰며 꽉 찼다.</li>
-      <li>쿼리는 이미 가볍다. 이제는 특정 쿼리가 아니라 <strong>서버 한 대가 한계</strong>다.</li>
-    </ul>
-  </li>
-  <li>그럼 무엇을 해야 하나? 순서대로 보면
-    <ul>
-      <li>먼저 같은 서버에 있는 <strong>Java와 MySQL을 분리</strong>한다. (Cloud SQL 같은 관리형 DB) 지금 CPU의 1/3 이상을 MySQL이 쓰고 있다.</li>
+      <li>먼저 <strong>Java와 MySQL을 분리</strong>한다. (Cloud SQL 같은 관리형 DB)</li>
       <li>그래도 부족하면 <strong>서버를 여러 대로 늘린다.</strong> 그런데 지금 코드는 그대로 늘릴 수 없다.</li>
     </ul>
   </li>
 </ul>
-
-<h2 id="서버를-늘리려면-바꿔야-하는-것">서버를 늘리려면 바꿔야 하는 것</h2>
 
 <p><img src="/assets/img/projects/woorin/img_12.png" alt="img.png" /></p>
 
 <ul>
   <li>웹소켓 방 목록이 <strong>서버 메모리</strong>에 있다.
     <ul>
-      <li>커플 두 사람이 서로 다른 서버에 붙으면, A 서버의 rooms에는 B 서버에 붙은 상대가 없다. → 실시간 메시지가 상대에게 안 간다.</li>
-      <li>방법 1: 메시지를 저장한 서버가 <strong>Redis Pub/Sub</strong>으로 “커플 N에 메시지”를 발행하고, 모든 서버가 구독해서 자기한테 붙은 사람에게만 보낸다.</li>
-      <li>방법 2: 로드밸런서에서 <strong>같은 커플은 같은 서버로</strong> 보낸다. 간단하지만 서버가 하나 죽으면 그 커플들이 다 끊긴다.</li>
+      <li>커플 두 사람이 서로 다른 서버에 붙으면, A 서버의 rooms에는 상대가 없다. → 실시간 메시지가 안 간다.</li>
+      <li>방법 1: 메시지를 저장한 서버가 <strong>Redis Pub/Sub</strong>으로 발행하고, 모든 서버가 구독해서 자기한테 붙은 사람에게만 보낸다.</li>
+      <li>방법 2: 로드밸런서에서 <strong>같은 커플은 같은 서버로</strong> 보낸다. 간단하지만 서버 하나가 죽으면 그 커플들이 다 끊긴다.</li>
     </ul>
   </li>
 </ul>
@@ -561,14 +543,14 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 <ul>
   <li>데이트 추천 중복 방지가 <strong>JVM 안의 synchronized</strong>다.
     <ul>
-      <li>같은 서버 안의 스레드끼리만 막아준다. 서버가 두 대면 두 요청이 각자 다른 서버에서 동시에 통과한다.</li>
-      <li>만들 때 이미 “단일 인스턴스 전제”라고 주석으로 남겨뒀다. 늘리면 MySQL <code class="language-plaintext highlighter-rouge">GET_LOCK</code> 같은 DB 락이나 Redis 락으로 바꿔야 한다.</li>
+      <li>같은 서버 안의 스레드끼리만 막아준다. 만들 때 “단일 인스턴스 전제”라고 주석으로 남겨뒀다.</li>
+      <li>늘리면 MySQL <code class="language-plaintext highlighter-rouge">GET_LOCK</code> 같은 DB 락이나 Redis 락으로 바꿔야 한다.</li>
     </ul>
   </li>
   <li>그 밖에
     <ul>
-      <li>사진을 서버 디스크에 저장한다. → 서버마다 디스크가 달라지니 공용 저장소(GCS 같은)가 필요하다.</li>
-      <li>푸시 대기열이 메모리(@Async)에 있다. → 서버가 죽으면 보내지 못한 알림이 사라진다. 메시지 큐로 옮기는 걸 고려해야 한다.</li>
+      <li>사진을 서버 디스크에 저장한다. → 공용 저장소(GCS 같은)가 필요하다.</li>
+      <li>푸시 대기열이 메모리(@Async)에 있다. → 서버가 죽으면 보내지 못한 알림이 사라진다.</li>
     </ul>
   </li>
 </ul>
@@ -576,28 +558,27 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 <h2 id="정리">정리</h2>
 
 <ul>
-  <li>둘이 쓸 땐 안 보이던 문제는 <strong>데이터와 사용자가 늘어야</strong> 드러난다.</li>
-  <li>짐작보다 측정이 원인을 가리킨다.
+  <li>2 vCPU 서버 한 대로 <strong>1,500명</strong>까지 버티고, <strong>2,000명</strong>부터 무너진다. 여유 있게는 1,000명 아래다.</li>
+  <li>둘이 쓸 땐 안 보이던 문제는 <strong>사람과 데이터가 늘어야</strong> 드러난다.
     <ul>
-      <li>커넥션 풀을 의심했지만, 쿼리별 누적 시간과 실행계획이 정확히 어디가 문제인지 보여줬다.</li>
+      <li>사람이 늘자 동시성 버그가, 데이터가 쌓이자 느린 쿼리가 보였다.</li>
     </ul>
   </li>
-  <li>숫자는 측정 방법에 따라 쉽게 틀린다. 데이터 초기화, 워밍업, 부하 도구 분리를 지켜야 비교할 수 있다.</li>
-  <li>병목은 사라지지 않고 <strong>다음 자리로 옮겨 간다.</strong> DB → 서버 CPU → 서버 한 대.</li>
+  <li>에러가 안 나도 무너질 수 있다. 실패율이 아니라 <strong>도착 시간과 처리량</strong>을 봐야 한다.</li>
   <li>다음에 할 것
     <ul>
-      <li>Java와 MySQL 분리, 웹소켓 메시지를 Redis Pub/Sub으로 서버 간에 공유하도록 바꾸고, 서버를 두 대로 늘려 다시 재본다.</li>
+      <li>Java와 MySQL을 분리하고 다시 재본다. 그다음 웹소켓을 Redis Pub/Sub으로 바꿔 서버 두 대로 늘려 본다.</li>
     </ul>
   </li>
 </ul>
 
 <h2 id="reference">Reference</h2>
 
-<p><a href="https://grafana.com/docs/k6/latest/">https://grafana.com/docs/k6/latest/</a></p>
+<p><a href="https://grafana.com/docs/k6/latest/javascript-api/k6-ws/">https://grafana.com/docs/k6/latest/javascript-api/k6-ws/</a></p>
+
+<p><a href="https://docs.spring.io/spring-framework/reference/web/websocket/server.html">https://docs.spring.io/spring-framework/reference/web/websocket/server.html</a></p>
 
 <p><a href="https://dev.mysql.com/doc/refman/8.0/en/explain.html#explain-analyze">https://dev.mysql.com/doc/refman/8.0/en/explain.html#explain-analyze</a></p>
-
-<p><a href="https://dev.mysql.com/doc/refman/8.0/en/performance-schema-statement-digests.html">https://dev.mysql.com/doc/refman/8.0/en/performance-schema-statement-digests.html</a></p>
 
     <br />
     <br />
@@ -611,7 +592,7 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 <div class="share">
   <h2>Share this post</h2>
   <div class="share-body">
-    <a href="http://twitter.com/share?text=우린 - 둘이 쓰던 채팅을 100명이 쓴다면 (k6 부하 테스트)&amp;url=http://localhost:4000/project/2026/11/23/Woorin-Chat-Load-Test/"
+    <a href="http://twitter.com/share?text=우린 - 2 vCPU 서버 한 대로 몇 명까지 동시에 채팅할 수 있을까 (k6 부하 테스트)&amp;url=http://localhost:4000/project/2026/11/23/Woorin-Chat-Load-Test/"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="icon-twitter">
       </span>

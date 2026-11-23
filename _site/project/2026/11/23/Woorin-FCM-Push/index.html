@@ -299,7 +299,11 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 <h2 id="1-알림이-두-번씩-온다">1. 알림이 두 번씩 온다</h2>
 
 <ul>
-  <li>우린로그 리마인드 같은 푸시가 <strong>두 번씩</strong> 울렸다.</li>
+  <li>우린로그 리마인드 같은 푸시가 <strong>두 번씩</strong> 울렸다.
+    <ul>
+      <li>리마인드는 10/5에 넣은 기능이다. 오늘 아직 우린로그를 안 올린 커플에게 <strong>06~23시 매시간</strong> 보낸다. 하루 최대 18번이라, 두 번씩 오면 바로 티가 났다.</li>
+    </ul>
+  </li>
   <li>원인은 <strong>같은 폰에서 계정을 바꿔 로그인</strong>한 것이었다.</li>
 </ul>
 
@@ -350,6 +354,8 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
       <li>실패는 <code class="language-plaintext highlighter-rouge">print</code>로만 찍혀서 화면에는 아무 표시가 없었다.</li>
     </ul>
   </li>
+  <li>인증 커밋(9/14 00:19)과 이 수정(00:24)이 <strong>5분</strong> 차이다.</li>
+  <li>그런데 같은 날 01:16에 <strong>사진 업로드도 같은 이유로 401</strong>이 났다. 커밋 메시지에 “FCM 토큰 업로드 때와 같은 패턴의 버그”라고 적었다. 한 번 고치고도 같은 패턴을 다른 곳에서 또 만났다.</li>
   <li><code class="language-plaintext highlighter-rouge">APIClient.send</code>를 쓰도록 바꿨다. 이런 “한 곳만 다르게 짠 요청”은 공통 규칙이 바뀔 때 꼭 빠진다.</li>
 </ul>
 
@@ -403,6 +409,111 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
     </ul>
   </li>
   <li>서버 푸시에는 안드로이드 채널 지정이 없어서, 매니페스트의 기본 채널 id(<code class="language-plaintext highlighter-rouge">default_notification_channel_id</code>)도 같이 바꿔야 했다.</li>
+</ul>
+
+<h2 id="5-푸시가-메시지-전송을-늦췄다">5. 푸시가 메시지 전송을 늦췄다</h2>
+
+<ul>
+  <li>채팅을 보내면 서버는 메시지를 저장하고, 상대에게 푸시를 보낸다.</li>
+  <li>처음엔 이걸 <strong>요청 스레드에서 차례로</strong> 했다. FCM 전송과 안 읽은 수 조회가 끝나야 응답이 나가서, 보내기가 그만큼 느렸다.</li>
+  <li>푸시를 <code class="language-plaintext highlighter-rouge">@Async</code>로 별도 스레드에서 보내도록 바꿨다. (9/17)
+    <ul>
+      <li>그런데 같은 클래스 안에서 <code class="language-plaintext highlighter-rouge">@Async</code> 메서드를 부르면 <strong>적용이 안 된다.</strong> 스프링은 프록시로 비동기를 거는데, 클래스 안에서 자기 메서드를 부르면 프록시를 거치지 않는다.</li>
+      <li>그래서 푸시 보내는 쪽을 별도 빈(<code class="language-plaintext highlighter-rouge">ChatPartnerNotifier</code>)으로 분리했다.</li>
+    </ul>
+  </li>
+  <li><a href="/project/2026/11/23/Woorin-Chat-Load-Test/">부하 테스트 글</a>에서 “응답 시간에는 안 보여도 DB는 같이 쓴다”고 한 그 <code class="language-plaintext highlighter-rouge">@Async</code>가 이것이다.</li>
+</ul>
+
+<h2 id="6-보고-있는-채팅에도-알림이-왔다">6. 보고 있는 채팅에도 알림이 왔다</h2>
+
+<ul>
+  <li>상대가 지금 채팅방을 보고 있으면 메시지는 곧바로 읽음 처리된다. 그런데도 푸시와 알림함 알림이 매번 같이 나갔다.</li>
+  <li>저장 직후 바로 알림을 보내지 않고 <strong>1.5초 기다린 뒤</strong>, 그 메시지가 그새 읽음 처리됐는지 다시 확인한다. 읽었으면 푸시와 알림함 등록을 둘 다 건너뛴다. (9/19)</li>
+  <li>앱 쪽도 맞췄다. 앱이 켜져 있을 때 온 채팅 푸시는 배너와 소리 대신 배지만 갱신한다. (9/13)</li>
+</ul>
+
+<h2 id="커밋으로-본-흐름">커밋으로 본 흐름</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>날짜</th>
+      <th>어디</th>
+      <th>커밋</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>9/13 01:18</td>
+      <td>iOS</td>
+      <td>채팅 푸시(FCM) 등록</td>
+    </tr>
+    <tr>
+      <td>9/13 04:37</td>
+      <td>iOS</td>
+      <td>앱 사용 중엔 배너 대신 배지만</td>
+    </tr>
+    <tr>
+      <td>9/14 00:24</td>
+      <td>iOS</td>
+      <td>인증 도입 5분 뒤, 토큰 등록 401 수정</td>
+    </tr>
+    <tr>
+      <td>9/17 23:25</td>
+      <td>서버</td>
+      <td>채팅 푸시를 <code class="language-plaintext highlighter-rouge">@Async</code>로</td>
+    </tr>
+    <tr>
+      <td>9/19 23:53</td>
+      <td>서버</td>
+      <td>회원별 소리/진동 설정, 모든 푸시에 <code class="language-plaintext highlighter-rouge">aps.sound</code></td>
+    </tr>
+    <tr>
+      <td>9/19 23:57</td>
+      <td>서버</td>
+      <td>보고 있는 채팅은 1.5초 뒤 확인해서 푸시 생략</td>
+    </tr>
+    <tr>
+      <td>9/25 21:07</td>
+      <td>iOS</td>
+      <td>알림 탭하면 <code class="language-plaintext highlighter-rouge">type</code>으로 해당 화면 이동</td>
+    </tr>
+    <tr>
+      <td>9/25 21:08</td>
+      <td>서버</td>
+      <td>푸시 data에 <code class="language-plaintext highlighter-rouge">type</code> 싣기 (9곳 발송 지점)</td>
+    </tr>
+    <tr>
+      <td>10/5 20:36</td>
+      <td>서버</td>
+      <td>우린로그 매시간 리마인드 (06~23시)</td>
+    </tr>
+    <tr>
+      <td>10/7 00:42</td>
+      <td>iOS</td>
+      <td>채팅 읽으면 도착한 채팅 알림 지우기</td>
+    </tr>
+    <tr>
+      <td>10/14 00:29</td>
+      <td>Android</td>
+      <td>FCM 연결 (iOS와 같은 Firebase 프로젝트)</td>
+    </tr>
+    <tr>
+      <td>10/15 00:28</td>
+      <td>Android</td>
+      <td>진동 꺼진 채널 → 새 채널로 교체</td>
+    </tr>
+    <tr>
+      <td>10/18 21:34</td>
+      <td>서버+iOS</td>
+      <td>한 기기 = 한 계정, 로그아웃 시 토큰 삭제</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">type</code>은 처음엔 <strong>알림을 눌렀을 때 화면 이동</strong>용으로 넣었다(9/25). 2주 뒤 <strong>알림 지우기</strong>(10/7)에 그대로 다시 썼다. 처음부터 종류를 실어 보낸 덕분이다.</li>
 </ul>
 
 <h2 id="정리">정리</h2>

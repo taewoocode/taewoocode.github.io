@@ -302,7 +302,7 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
       <li>서울 열린데이터광장 API에서 매일 행사를 받아와 DB에 저장한다.</li>
     </ul>
   </li>
-  <li>스케줄러는 매번 정상 종료했다. 에러 로그도 없었다. 그런데 <strong>저장은 늘 0건</strong>이었다.</li>
+  <li>연동을 붙이고(9/14 22:23) 동기화를 돌려 보니, 에러 로그도 없이 끝나는데 <strong>저장은 늘 0건</strong>이었다.</li>
 </ul>
 
 <h3 id="찾기">찾기</h3>
@@ -354,6 +354,11 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 
 <ul>
   <li>필드마다 JSON 이름을 명시했다.</li>
+  <li>디버그 로그를 넣은 커밋(22:35)과 고친 커밋(22:37)이 <strong>2분</strong> 차이다. 로그 한 줄이 원인을 바로 가리켰다.
+    <ul>
+      <li>반대로 말하면, 로그를 넣기 전까지는 “API 키가 틀렸나”만 의심하며 원인을 볼 방법이 없었다.</li>
+    </ul>
+  </li>
 </ul>
 
 <p><img src="/assets/img/projects/woorin/silent/img_2.png" alt="img.png" /></p>
@@ -364,6 +369,47 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 
 <ul>
   <li>상대가 프로필 사진과 닉네임을 바꿔도, 내 채팅 화면엔 예전 것이 그대로였다.</li>
+</ul>
+
+<h3 id="배경-90분-전에-넣은-인증">배경: 90분 전에 넣은 인증</h3>
+
+<ul>
+  <li>이 버그는 9월 14일 새벽에 몰려서 생기고 고쳐졌다. 커밋 시각을 순서대로 놓으면 이렇다.</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>시각</th>
+      <th>커밋</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>00:19</td>
+      <td>API 인증(토큰) 도입. 유저 API에 <strong>“본인 정보만 조회”</strong> 제한 추가</td>
+    </tr>
+    <tr>
+      <td>01:38</td>
+      <td>프로필 사진/닉네임 수정 기능 + 채팅에서 상대 식별</td>
+    </tr>
+    <tr>
+      <td>01:43</td>
+      <td>가설 1: 상대 정보를 한 번만 불러와서 → 들어올 때마다 다시 불러오기</td>
+    </tr>
+    <tr>
+      <td>01:50</td>
+      <td>가설 2: GET 응답이 <code class="language-plaintext highlighter-rouge">URLSession</code> 디스크 캐시에 남아서 → 캐시 정책 명시</td>
+    </tr>
+    <tr>
+      <td>01:55</td>
+      <td><strong>진짜 원인: 403.</strong> 상대 프로필 전용 API 추가 (서버·앱 같은 분에 커밋)</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>17분 동안 세 번 고쳤다. 원인은 90분 전에 내가 넣은 인증 제한이었다.</li>
 </ul>
 
 <h3 id="첫-번째-가설-한-번만-불러와서">첫 번째 가설: 한 번만 불러와서</h3>
@@ -378,6 +424,18 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
   <li><strong>그래도 안 바뀌었다.</strong></li>
 </ul>
 
+<h3 id="두-번째-가설-예전-응답이-캐시에-남아서">두 번째 가설: 예전 응답이 캐시에 남아서</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">URLSession</code>은 캐시 정책을 따로 정하지 않으면 GET 응답을 <strong>디스크에 캐시</strong>한다.
+    <ul>
+      <li>앱을 다시 빌드해도 이 캐시는 안 지워져서, 상대가 프로필을 바꿔도 예전 응답이 나올 수 있다.</li>
+    </ul>
+  </li>
+  <li>모든 요청이 항상 네트워크로 새로 받아오게 캐시 정책을 명시했다.</li>
+  <li>이것도 실제로 있던 문제다. 하지만 <strong>여전히 안 바뀌었다.</strong></li>
+</ul>
+
 <h3 id="진짜-원인">진짜 원인</h3>
 
 <p><img src="/assets/img/projects/woorin/silent/img_3.png" alt="img.png" /></p>
@@ -390,7 +448,8 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
       <li>상대 id로 부르니 매번 거부됐고, 화면엔 처음 회원가입 때 받은 값이 남아 있었다.</li>
     </ul>
   </li>
-  <li>즉 첫 번째 가설도 틀린 건 아니었지만, 그걸 고쳐도 <strong>불러오는 요청 자체가 실패</strong>하고 있었다.</li>
+  <li>두 가설 모두 틀린 건 아니었지만, 그걸 고쳐도 <strong>불러오는 요청 자체가 실패</strong>하고 있었다.</li>
+  <li>이 제한은 00:19 인증 커밋에서 넣었다. 그 커밋 메시지에 이렇게 적혀 있다. “지금까지는 userId/coupleId만 알면 아무나 남의 데이터를 조회/수정/삭제할 수 있었음”. 막은 건 맞았는데, 그 API를 상대 조회에 쓰던 곳이 있었다.</li>
 </ul>
 
 <h3 id="해결-1">해결</h3>
@@ -433,7 +492,13 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
       <li>사진 몇 장이면 밀려나서, 같은 사진을 줄마다 다시 요청하고, 요청이 몰리면 일부가 실패한다.</li>
     </ul>
   </li>
-  <li>캐시를 50MB / 200MB로 키웠다. (서버 이미지 응답에 <code class="language-plaintext highlighter-rouge">Cache-Control</code> 헤더가 있어야 캐시가 효과를 낸다)</li>
+  <li>캐시를 50MB / 200MB로 키웠다.</li>
+  <li>서버도 같이 고쳤다. 업로드 파일(<code class="language-plaintext highlighter-rouge">/uploads/**</code>)에 <code class="language-plaintext highlighter-rouge">Cache-Control</code>이 <strong>아예 없어서</strong>, 같은 사진을 그릴 때마다 서버에 다시 요청하고 있었다.
+    <ul>
+      <li>파일명이 UUID라 같은 URL의 내용은 절대 안 바뀐다. 그래서 7일 캐시를 걸어도 안전하다.</li>
+      <li>서버 커밋 메시지에도 “프사 일부가 안 보이던 문제 원인 <strong>중 하나</strong>“라고 적었다. 하나뿐이 아니라는 걸 그때도 알고 있었다.</li>
+    </ul>
+  </li>
   <li>빈 원이 줄었지만 <strong>첫 줄은 여전히 가끔 비었다.</strong></li>
 </ul>
 
@@ -452,7 +517,8 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 <p><img src="/assets/img/projects/woorin/silent/img_5.png" alt="img.png" /></p>
 
 <ul>
-  <li>나중엔 채팅 사진이 많아지면서 화면 크기로 줄여 메모리에 캐시하는 <code class="language-plaintext highlighter-rouge">CachedAsyncImage</code>로 한 번 더 바꿨다.</li>
+  <li>9/20 23:28에 캐시(앱·서버)를 고치고, 12분 뒤인 23:40에 재시도를 넣었다.</li>
+  <li>10/7에는 채팅 사진이 많아지면서 사진을 화면 크기로 줄여 풀고 메모리에 캐시하는 <code class="language-plaintext highlighter-rouge">CachedAsyncImage</code>로 한 번 더 바꿨다. 스크롤할 때 깜빡임과 버벅임도 같이 줄었다.</li>
 </ul>
 
 <h2 id="정리">정리</h2>

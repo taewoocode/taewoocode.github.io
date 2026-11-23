@@ -300,6 +300,20 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
   </li>
 </ul>
 
+<h2 id="0-처음엔-재연결-자체가-없었다">0. 처음엔 재연결 자체가 없었다</h2>
+
+<ul>
+  <li>채팅을 만든 다음 날(9/13) 먼저 부딪힌 건 <strong>서버 쪽에서 끊기는</strong> 경우였다.
+    <ul>
+      <li>개발 중이라 서버가 devtools로 자동 재시작되거나, 당시 쓰던 ngrok 터널이 잠깐 끊기면 소켓이 죽었다.</li>
+      <li>재연결 로직이 없어서, 앱을 <strong>완전히 껐다 켜야</strong> 실시간 수신이 돌아왔다.</li>
+      <li>화면에 다시 들어와도 소용없었다. 같은 커플이면 <code class="language-plaintext highlighter-rouge">connect()</code>를 다시 부르지 않게 막아 뒀기 때문이다.</li>
+    </ul>
+  </li>
+  <li>그래서 <code class="language-plaintext highlighter-rouge">receive()</code>가 실패하면 3초 뒤 소켓 스스로 다시 붙게 했다.</li>
+  <li>이건 서버가 연결을 <strong>닫아 줄 때</strong>만 동작한다. 아래 원인 1은 닫아 주지도 않고 사라지는 경우다.</li>
+</ul>
+
 <h2 id="원인-1-끊겼는데-끊긴-줄-모른다">원인 1. 끊겼는데 끊긴 줄 모른다</h2>
 
 <ul>
@@ -310,7 +324,11 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
     </ul>
   </li>
   <li>이른바 반쯤 열린(half-open) 연결이다. 무언가를 <strong>보내 봐야</strong> 끊긴 걸 알 수 있다.</li>
-  <li>그래서 25초마다 ping을 보낸다. 실패하면 3초 뒤에 다시 붙는다.</li>
+  <li>그래서 25초마다 ping을 보낸다. 실패하면 3초 뒤에 다시 붙는다. (9/14)
+    <ul>
+      <li>첫 재연결 로직을 넣은 지 하루 만이다. <code class="language-plaintext highlighter-rouge">receive()</code> 실패만 기다려서는 이 경우를 못 잡았다.</li>
+    </ul>
+  </li>
 </ul>
 
 <p><img src="/assets/img/projects/woorin/resync/img_1.png" alt="img.png" /></p>
@@ -385,6 +403,10 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
   </li>
   <li>원인은 직전에 넣은 <strong>목록 최적화</strong>였다.
     <ul>
+      <li>그 전날 밤(9/25 23:00~9/26 05:30) 채팅 화면의 <strong>키보드 문제</strong>와 씨름했다. 키보드를 열면 보던 메시지가 가려지거나 밀려나는 문제다.</li>
+      <li>그 6시간 반 동안 커밋이 10개 넘게 쌓였다. 수정 → Revert → 재시도 → “마지막으로 확실히 동작하던 상태로 롤백” → 다시 시도.</li>
+      <li>결국 05:30에 메시지 목록을 SwiftUI <code class="language-plaintext highlighter-rouge">ScrollView</code>에서 UIKit <code class="language-plaintext highlighter-rouge">UICollectionView</code>로 <strong>통째로 바꿨다.</strong> 스크롤 위치를 SwiftUI로는 정확히 잴 수 없었기 때문이다. (+337줄 / -135줄)</li>
+      <li>이 전환에 같이 들어간 게 아래 최적화다. 읽음 “1” 회귀는 그로부터 <strong>8시간 뒤</strong>(13:22)에 고쳤다.</li>
       <li>채팅 목록은 diffable data source로 그린다. 스크롤 성능을 위해 “행 구성(rows)이 그대로면 apply를 건너뛰기”를 넣었다.</li>
       <li>그런데 행은 <code class="language-plaintext highlighter-rouge">(메시지 id, 헤더 표시 여부)</code>만 담고 있어서, <strong><code class="language-plaintext highlighter-rouge">isRead</code>만 바뀌면 rows는 그대로</strong>다. 그래서 갱신 자체를 건너뛰었다.</li>
       <li>같은 스냅샷으로 apply를 다시 불러도 소용없다. diffable은 식별자가 같은 항목은 다시 그리지 않는다.</li>
@@ -396,6 +418,95 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 <p><img src="/assets/img/projects/woorin/resync/img_5.png" alt="img.png" /></p>
 
 <p><img src="/assets/img/projects/woorin/resync/img_6.png" alt="img.png" /></p>
+
+<h2 id="반대-방향-버그-안-봤는데-읽음-처리">반대 방향 버그: 안 봤는데 읽음 처리</h2>
+
+<ul>
+  <li>읽음은 “안 사라지는” 문제 전에 “너무 빨리 생기는” 문제도 있었다. (9/13)</li>
+  <li>탭 화면(<code class="language-plaintext highlighter-rouge">TabView</code>)은 채팅 탭을 안 보고 있어도 채팅 화면과 소켓을 살려 둔다.
+    <ul>
+      <li>그런데 메시지가 소켓으로 도착하기만 하면 무조건 읽음 처리를 보내고 있었다. 홈 탭에 있어도 상대 화면에선 “1”이 바로 사라졌다.</li>
+    </ul>
+  </li>
+  <li>앱이 포그라운드이고 채팅 탭이 실제로 보일 때만 읽음 처리하도록 <code class="language-plaintext highlighter-rouge">isViewingChat</code>으로 구분했다.
+    <ul>
+      <li>위 <code class="language-plaintext highlighter-rouge">resync()</code>도 이 값으로 “다시 나타났을 때”를 판단한다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="커밋으로-본-흐름">커밋으로 본 흐름</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>날짜</th>
+      <th>어디</th>
+      <th>커밋</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>9/13 03:44</td>
+      <td>iOS</td>
+      <td>소켓 끊기면 3초 뒤 자동 재연결</td>
+    </tr>
+    <tr>
+      <td>9/13 18:11</td>
+      <td>iOS</td>
+      <td>다른 탭에 있을 때 잘못 읽음 처리되던 버그 수정 (<code class="language-plaintext highlighter-rouge">isViewingChat</code>)</td>
+    </tr>
+    <tr>
+      <td>9/14 21:26</td>
+      <td>iOS</td>
+      <td>25초 ping으로 조용히 끊긴 연결 감지</td>
+    </tr>
+    <tr>
+      <td>9/17 23:24</td>
+      <td>iOS</td>
+      <td>포그라운드 복귀/탭 재진입/재연결 때 REST로 재동기화</td>
+    </tr>
+    <tr>
+      <td>9/19 23:39</td>
+      <td>서버+iOS</td>
+      <td>입력 중(TYPING) 이벤트 중계, 입력 중 표시</td>
+    </tr>
+    <tr>
+      <td>9/26 05:30</td>
+      <td>iOS</td>
+      <td>키보드 문제 끝에 메시지 목록을 <code class="language-plaintext highlighter-rouge">UICollectionView</code>로 전환</td>
+    </tr>
+    <tr>
+      <td>9/26 13:22</td>
+      <td>iOS</td>
+      <td>읽음 “1” 안 사라지던 회귀 수정 (<code class="language-plaintext highlighter-rouge">reconfigureItems</code>)</td>
+    </tr>
+    <tr>
+      <td>10/1 02:20</td>
+      <td>iOS</td>
+      <td>입력 중 표시에 6초 만료, 3초마다 재전송</td>
+    </tr>
+    <tr>
+      <td>10/1 02:38</td>
+      <td>iOS</td>
+      <td>입력 중 표시가 뜨면 맨 아래로 스크롤</td>
+    </tr>
+    <tr>
+      <td>10/12 23:31</td>
+      <td>Android</td>
+      <td>채팅 화면/실시간 통신 포팅</td>
+    </tr>
+    <tr>
+      <td>10/18 22:10</td>
+      <td>서버</td>
+      <td>우린로그 올림/삭제도 커플 웹소켓으로 알림</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>채팅 소켓은 이제 채팅 전용이 아니다. 10/18부터 우린로그 이벤트도 같은 커플 채널로 받는다. <strong>“커플 둘만의 실시간 채널”</strong> 이 된 셈이다.</li>
+</ul>
 
 <h2 id="정리">정리</h2>
 

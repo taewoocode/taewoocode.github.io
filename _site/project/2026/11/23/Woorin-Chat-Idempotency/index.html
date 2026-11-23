@@ -338,6 +338,7 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
   <li>앱은 말풍선을 띄울 때 UUID를 만들어 요청에 싣는다. 다시 보낼 때도 <strong>같은 값</strong>을 쓴다.</li>
   <li>예전 메시지와 사진 메시지는 이 값이 NULL이다.
     <ul>
+      <li>사진은 업로드가 먼저 끝나야 보낼 수 있어서 낙관적 전송 대상에서 뺐다. 텍스트와 이모티콘(로컬 에셋 이름만 보냄)만 낙관적으로 보낸다.</li>
       <li>MySQL UNIQUE는 NULL끼리는 중복으로 보지 않아서, 기존 데이터를 건드리지 않고 인덱스를 걸 수 있었다.</li>
     </ul>
   </li>
@@ -388,6 +389,19 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
   </li>
 </ul>
 
+<h2 id="배포-순서가-상관없었던-이유">배포 순서가 상관없었던 이유</h2>
+
+<ul>
+  <li>이 변경은 서버(<code class="language-plaintext highlighter-rouge">16a11c4</code>)와 iOS(<code class="language-plaintext highlighter-rouge">f96ca5c</code>)를 <strong>같은 분(10/7 00:58)에</strong> 커밋했다. 하지만 <a href="/project/2026/11/23/Woorin-WebSocket-Auth/">웹소켓 인증</a> 때와 달리 배포 순서를 신경 쓸 필요가 없었다.
+    <ul>
+      <li>서버가 먼저 올라가면: 예전 앱은 <code class="language-plaintext highlighter-rouge">clientMessageId</code>를 안 보낸다 → NULL로 저장 → 예전처럼 동작한다.</li>
+      <li>앱이 먼저 올라가면: 예전 서버는 모르는 필드를 무시한다 → 저장은 되고, 짝짓기만 안 된다.</li>
+    </ul>
+  </li>
+  <li>새 컬럼을 NULL 허용으로 두고 UNIQUE가 NULL을 중복으로 안 보는 성질 덕분이다. <strong>옛 클라이언트와 새 서버가 섞여도 깨지지 않게</strong> 만든 것이다.</li>
+  <li>10/12에 안드로이드로 채팅을 옮길 때도 같은 <code class="language-plaintext highlighter-rouge">clientMessageId</code> 방식을 그대로 썼다.</li>
+</ul>
+
 <h2 id="말풍선이-깜빡였다">말풍선이 깜빡였다</h2>
 
 <ul>
@@ -405,6 +419,75 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 </ul>
 
 <p><img src="/assets/img/projects/woorin/idempotency/img_5.png" alt="img.png" /></p>
+
+<h2 id="누르자마자-보이게">누르자마자 보이게</h2>
+
+<ul>
+  <li>데이터는 바로 들어가는데, 눈에는 <strong>한 박자 늦게</strong> 보였다.
+    <ul>
+      <li>목록에 새 행이 붙을 때 페이드인(약 0.3초)이 있고, 그다음 맨 아래로 스크롤하는 애니메이션(약 0.3초)이 또 있다.</li>
+      <li>둘이 겹치면 말풍선이 화면 아래 바깥에 붙었다가 스크롤이 끝나야 보인다.</li>
+    </ul>
+  </li>
+  <li>내가 방금 보낸 메시지는 애니메이션 없이 바로 붙이도록 했다. 상대 메시지는 그대로 페이드인한다. (낙관적 전송을 넣고 37분 뒤에 고쳤다)</li>
+</ul>
+
+<h2 id="커밋으로-본-흐름">커밋으로 본 흐름</h2>
+
+<ul>
+  <li>이 작업은 10/7 새벽 한 시간 남짓에 몰려 있다. 채팅을 “빠르게 느껴지게” 만드는 커밋들이다.</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>시각</th>
+      <th>어디</th>
+      <th>커밋</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>00:42</td>
+      <td>iOS</td>
+      <td>채팅을 읽으면 알림센터/잠금화면의 채팅 푸시도 지우기</td>
+    </tr>
+    <tr>
+      <td>00:50</td>
+      <td>iOS</td>
+      <td>입력창을 별도 뷰로 분리 (타이핑할 때마다 목록 전체 재계산 방지)</td>
+    </tr>
+    <tr>
+      <td>00:58</td>
+      <td>서버</td>
+      <td><code class="language-plaintext highlighter-rouge">clientMessageId</code> 컬럼 + UNIQUE, 재전송 시 기존 메시지 반환 (DDL 59)</td>
+    </tr>
+    <tr>
+      <td>00:58</td>
+      <td>iOS</td>
+      <td>텍스트/이모티콘 낙관적 전송, 실패하면 다시 보내기/삭제</td>
+    </tr>
+    <tr>
+      <td>01:20</td>
+      <td>iOS</td>
+      <td>채팅 사진/프사를 화면 크기로 줄여 메모리 캐시</td>
+    </tr>
+    <tr>
+      <td>01:35</td>
+      <td>iOS</td>
+      <td>내가 보낸 메시지는 페이드인/스크롤 애니메이션 없이 즉시 보이게</td>
+    </tr>
+    <tr>
+      <td>01:49</td>
+      <td>iOS</td>
+      <td>채팅 목록 구조 개선 (읽음 변경 시 높이 재측정 생략, 안 바뀌면 업데이트 생략)</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>그리고 한 달 반 뒤(11/23) 부하 테스트에서, k6가 메시지마다 <code class="language-plaintext highlighter-rouge">clientMessageId</code>를 실어 보내 같은 경로를 검증했다.</li>
+</ul>
 
 <h2 id="정리">정리</h2>
 
