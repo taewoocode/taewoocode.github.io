@@ -26,8 +26,9 @@
 {% if site.busuanzi %}
 <script>
   (function () {
-    /* busuanzi: realtime counters. Every call adds 1 to site_pv and to page_pv of the page named by the Referer,
-       then returns the new numbers through a JSONP callback.
+    /* busuanzi: realtime total view count. Every call adds 1 to site_pv and returns the new number through a JSONP callback.
+       Only the site total is shown. busuanzi tells pages apart by the Referer, and Safari trims cross-site Referers
+       to the origin, so per-post counts (page_pv) are wrong on iPhone and are not displayed.
        The official script runs only once per full load; this blog swaps pages in by push-state,
        so call the same endpoint again on every page change.
        Use block comments only: compress_html joins this script into one line. */
@@ -48,7 +49,6 @@
       }
       window[name] = function (data) {
         fill('[data-bsz-total]', data.site_pv);
-        fill('[data-bsz-views]', data.page_pv);
         cleanup();
       };
       tag.onerror = cleanup;
