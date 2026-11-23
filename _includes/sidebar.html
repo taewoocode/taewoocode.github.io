@@ -21,6 +21,9 @@
         {% endif %}
       </div>
       {{ site.description | truncatewords:50 | markdownify }}
+      {% if site.goatcounter %}
+        <p class="sidebar-visits">누적 방문 <span data-gc-total>-</span></p>
+      {% endif %}
       {% assign author = site.data.authors.first[1] %}
       {% if author.social %}
         <div class="sidebar-social">

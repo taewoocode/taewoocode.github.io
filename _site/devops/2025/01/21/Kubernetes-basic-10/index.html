@@ -217,6 +217,9 @@ in <a href="/category/devops/" data-flip="title">Devops</a>
 
 on <a href="/tag/devops-k8s/" data-flip="title">Kubernetes</a>
 
+      
+      <span class="post-views">· 조회수 <span data-gc-views>-</span></span>
+      
     </p>
 
     
@@ -1372,6 +1375,9 @@ root@cp-k8s:~#
       <p>일을 벌여놔야 주워 담을 수 있습니다.</p>
 
       
+        <p class="sidebar-visits">누적 방문 <span data-gc-total>-</span></p>
+      
+      
       
         <div class="sidebar-social">
           <span class="sr-only">Social:</span>
@@ -1446,10 +1452,42 @@ root@cp-k8s:~#
 <!-- =============== -->
 
 <script>
-  window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-  ga('create', 'UA-92346434-1', 'auto');
-  ga('send', 'pageview');
-  loadJSDeferred('https://www.google-analytics.com/analytics.js');
+  (function () {
+    var base = 'https://taewoocode.goatcounter.com';
+
+    // Pages are swapped in by push-state, so count and fill counters manually on every page.
+    window.goatcounter = { no_onload: true };
+
+    function fill(el, path) {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', base + '/counter/' + encodeURIComponent(path) + '.json');
+      xhr.onload = function () {
+        var count = '0';
+        try { if (xhr.status === 200) count = JSON.parse(xhr.responseText).count; } catch (e) {}
+        el.textContent = count;
+      };
+      xhr.send();
+    }
+
+    function onPage() {
+      if (window.goatcounter.count) window.goatcounter.count({ path: location.pathname });
+      var views = document.querySelectorAll('[data-gc-views]');
+      for (var i = 0; i < views.length; i++) fill(views[i], location.pathname);
+    }
+
+    var script = document.createElement('script');
+    script.async = true;
+    script.src = '//gc.zgo.at/count.js';
+    script.setAttribute('data-goatcounter', base + '/count');
+    script.onload = onPage;
+    document.head.appendChild(script);
+
+    var total = document.querySelector('[data-gc-total]');
+    if (total) fill(total, 'TOTAL');
+
+    var pushState = document.getElementById('_yPushState');
+    if (pushState) pushState.addEventListener('y-push-state-after', onPage);
+  })();
 </script>
 
 

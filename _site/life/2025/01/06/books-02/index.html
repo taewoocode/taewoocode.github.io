@@ -217,6 +217,9 @@ in <a href="/category/life/" data-flip="title">Life</a>
 
 on <a href="/tag/daily-books/" data-flip="title">Books</a>
 
+      
+      <span class="post-views">· 조회수 <span data-gc-views>-</span></span>
+      
     </p>
 
     
@@ -341,6 +344,22 @@ on <a href="/tag/daily-books/" data-flip="title">Books</a>
       
       
         
+        
+          
+
+
+<li class="h4">
+  <a href="/life/2026/11/23/daily-06/" data-flip="title">
+    <span>who is Doug Lea?</span>
+  </a>
+  <small><time datetime="2026-11-23T00:00:00+09:00">
+    23 Nov 2026
+  </time></small>
+</li>
+
+        
+      
+        
           
           
         
@@ -370,22 +389,6 @@ on <a href="/tag/daily-books/" data-flip="title">Books</a>
   </a>
   <small><time datetime="2024-10-12T00:00:00+09:00">
     12 Oct 2024
-  </time></small>
-</li>
-
-        
-      
-        
-        
-          
-
-
-<li class="h4">
-  <a href="/life/2024/09/23/daily-02/" data-flip="title">
-    <span>KPT 회고의 시작</span>
-  </a>
-  <small><time datetime="2024-09-23T00:00:00+09:00">
-    23 Sep 2024
   </time></small>
 </li>
 
@@ -1319,6 +1322,9 @@ on <a href="/tag/daily-books/" data-flip="title">Books</a>
       <p>일을 벌여놔야 주워 담을 수 있습니다.</p>
 
       
+        <p class="sidebar-visits">누적 방문 <span data-gc-total>-</span></p>
+      
+      
       
         <div class="sidebar-social">
           <span class="sr-only">Social:</span>
@@ -1393,10 +1399,42 @@ on <a href="/tag/daily-books/" data-flip="title">Books</a>
 <!-- =============== -->
 
 <script>
-  window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-  ga('create', 'UA-92346434-1', 'auto');
-  ga('send', 'pageview');
-  loadJSDeferred('https://www.google-analytics.com/analytics.js');
+  (function () {
+    var base = 'https://taewoocode.goatcounter.com';
+
+    // Pages are swapped in by push-state, so count and fill counters manually on every page.
+    window.goatcounter = { no_onload: true };
+
+    function fill(el, path) {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', base + '/counter/' + encodeURIComponent(path) + '.json');
+      xhr.onload = function () {
+        var count = '0';
+        try { if (xhr.status === 200) count = JSON.parse(xhr.responseText).count; } catch (e) {}
+        el.textContent = count;
+      };
+      xhr.send();
+    }
+
+    function onPage() {
+      if (window.goatcounter.count) window.goatcounter.count({ path: location.pathname });
+      var views = document.querySelectorAll('[data-gc-views]');
+      for (var i = 0; i < views.length; i++) fill(views[i], location.pathname);
+    }
+
+    var script = document.createElement('script');
+    script.async = true;
+    script.src = '//gc.zgo.at/count.js';
+    script.setAttribute('data-goatcounter', base + '/count');
+    script.onload = onPage;
+    document.head.appendChild(script);
+
+    var total = document.querySelector('[data-gc-total]');
+    if (total) fill(total, 'TOTAL');
+
+    var pushState = document.getElementById('_yPushState');
+    if (pushState) pushState.addEventListener('y-push-state-after', onPage);
+  })();
 </script>
 
 

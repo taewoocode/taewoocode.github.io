@@ -6,9 +6,109 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 18 Jun 2025 17:18:22 +0900</pubDate>
-    <lastBuildDate>Wed, 18 Jun 2025 17:18:22 +0900</lastBuildDate>
+    <pubDate>Mon, 23 Nov 2026 19:56:00 +0900</pubDate>
+    <lastBuildDate>Mon, 23 Nov 2026 19:56:00 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
+    
+      <item>
+        <title>who is Doug Lea?</title>
+        <description>&lt;h2 id=&quot;블로그-이사&quot;&gt;블로그 이사&lt;/h2&gt;
+
+&lt;p&gt;naver에서 다시 해당 블로그로 이사왔습니다~&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Doug_Lea&quot;&gt;https://en.wikipedia.org/wiki/Doug_Lea&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Mon, 23 Nov 2026 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/life/2026/11/23/daily-06/</link>
+        <guid isPermaLink="true">http://localhost:4000/life/2026/11/23/daily-06/</guid>
+        
+        <category>daily</category>
+        
+        
+        <category>life</category>
+        
+      </item>
+    
+      <item>
+        <title>프로그래머스 Lv1 둘만의 암호</title>
+        <description>&lt;h2 id=&quot;문제&quot;&gt;문제&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://school.programmers.co.kr/learn/courses/30/lessons/155652&quot;&gt;https://school.programmers.co.kr/learn/courses/30/lessons/155652&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;두 문자열 s와 skip, 그리고 자연수 index가 주어질 때, 다음 규칙에 따라 문자열을 만들려 합니다. 암호의 규칙은 다음과 같습니다.
+문자열 s의 각 알파벳을 index만큼 뒤의 알파벳으로 바꿔줍니다.
+index만큼의 뒤의 알파벳이 z를 넘어갈 경우 다시 a로 돌아갑니다.
+skip에 있는 알파벳은 제외하고 건너뜁니다.
+예를 들어 s = “aukks”, skip = “wbqd”, index = 5일 때, a에서 5만큼 뒤에 있는 알파벳은 f지만 [b, c, d, e, f]에서 ‘b’와 ‘d’는 skip에 포함되므로 세지 않습니다. 따라서 ‘b’, ‘d’를 제외하고 ‘a’에서 5만큼 뒤에 있는 알파벳은 [c, e, f, g, h] 순서에 의해 ‘h’가 됩니다. 나머지 “ukks” 또한 위 규칙대로 바꾸면 “appy”가 되며 결과는 “happy”가 됩니다.
+두 문자열 s와 skip, 그리고 자연수 index가 매개변수로 주어질 때 위 규칙대로 s를 변환한 결과를 return하도록 solution 함수를 완성해주세요.&lt;/p&gt;
+
+&lt;h2 id=&quot;수도-코드&quot;&gt;수도 코드&lt;/h2&gt;
+
+&lt;div class=&quot;language-markdown highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;1.&lt;/span&gt; skip 문자열을 문자 단위로 unordered_set에 저장 → skip_set
+&lt;span class=&quot;p&quot;&gt;    
+    2.&lt;/span&gt; 결과 문자열 answer 초기화&lt;span class=&quot;sb&quot;&gt;
+
+    3. 문자열 s의 각 문자 c에 대해 반복:
+        a. ch = c (현재 문자에서 시작)
+        b. count = 0 (유효 이동 횟수)
+
+        c. while count &amp;lt; index:
+            - ch = ch + 1 (알파벳 다음 문자로 이동)
+            - 만약 ch &amp;gt; &apos;z&apos; 이면, ch = &apos;a&apos; (알파벳 순환)
+
+            - 만약 ch가 skip_set에 포함되어 있으면:
+                - continue (건너뛰고 count는 증가시키지 않음)
+
+            - count += 1 (유효한 이동으로 인정)
+
+        d. answer에 ch 추가
+
+    4. answer 반환
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;코드&quot;&gt;코드&lt;/h2&gt;
+
+&lt;div class=&quot;language-cpp highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#include&lt;/span&gt;&lt;span class=&quot;cpf&quot;&gt;&amp;lt;bits/stdc++.h&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;namespace&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;solution&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;skip&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;unordered_set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;char&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;skip_set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;skip&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;begin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;skip&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;());&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;answer&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;auto&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;char&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+        &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;ch&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&apos;z&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&apos;a&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;skip_set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)){&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;continue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;answer&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;answer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/cs/algorithm/img_1.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;나의 뇌&lt;/p&gt;
+</description>
+        <pubDate>Tue, 10 Jun 2025 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/cs/2025/06/10/Algorithm-25/</link>
+        <guid isPermaLink="true">http://localhost:4000/cs/2025/06/10/Algorithm-25/</guid>
+        
+        <category>Algorithm</category>
+        
+        
+        <category>cs</category>
+        
+      </item>
     
       <item>
         <title>프로그래머스 Lv1 대충 만든 자판</title>
@@ -40,13 +140,12 @@
 &lt;span class=&quot;p&quot;&gt;        -&lt;/span&gt; 해당 문자가 char_min_press에 있다면
 &lt;span class=&quot;p&quot;&gt;            -&lt;/span&gt; 저장된 누름 횟수를 total에 누적한다.
 &lt;span class=&quot;p&quot;&gt;        -&lt;/span&gt; 없다면:
-&lt;span class=&quot;p&quot;&gt;            -&lt;/span&gt; 해당 문자열은 입력할 수 없으므로 can_type = false로 설정하고, 중단한다.&lt;span class=&quot;sb&quot;&gt;
-
-    - 문자열을 끝까지 확인한 뒤,
-        - can_type이 true면 total을 answer에 추가하고,
-        - false면 -1을 추가한다.
-
-&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;4.&lt;/span&gt; answer를 반환한다.
+&lt;span class=&quot;p&quot;&gt;            -&lt;/span&gt; 해당 문자열은 입력할 수 없으므로 can_type = false로 설정하고, 중단한다.
+&lt;span class=&quot;p&quot;&gt;    -&lt;/span&gt; 문자열을 끝까지 확인한 뒤,
+&lt;span class=&quot;p&quot;&gt;        -&lt;/span&gt; can_type이 true면 total을 answer에 추가하고,
+&lt;span class=&quot;p&quot;&gt;        -&lt;/span&gt; false면 -1을 추가한다.
+&lt;span class=&quot;p&quot;&gt;
+4.&lt;/span&gt; answer를 반환한다.
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h2 id=&quot;코드&quot;&gt;코드&lt;/h2&gt;
@@ -2971,106 +3070,6 @@ max-connection은 (캐밥 케이스(표기법))을 따랐지만,
         <guid isPermaLink="true">http://localhost:4000/framework/2024/12/15/Spring-basic-14/</guid>
         
         <category>spring</category>
-        
-        
-        <category>framework</category>
-        
-      </item>
-    
-      <item>
-        <title>Spring MVC 06 - Dispatcher-Servlet</title>
-        <description>&lt;h2 id=&quot;dispatcher-servlet&quot;&gt;Dispatcher Servlet&lt;/h2&gt;
-
-&lt;p&gt;디스패처 서블릿의 dispatch는 ‘보내다’라는 뜻을 가지고 있다.
-디스패처 서블릿은 HTTP 프로토콜로 들어오는 모든 요청을 가장 먼저 받아 적합한 컨트롤러에 위임해주는 프론트 컨트롤러라고 정의할 수 있다.
-클라이언트로부터 어떠한 요청이 오면 Tomcat과 같은 서블릿 컨테이너가 요청을 받는다. 그리고 이 모든 요청을 프론트 컨트롤러인 디스패치 서블릿이 가장 먼저
-받게 된다. 그러면 디스패처 서블릿은 공통적인 작업을 먼저 처리한 후에 해당 요청을 처리해야 하는 컨트롤러를 찾아서 작업을 위임한다.
-여기서 Front Controller는 서블릿 컨테이너의 제일 앞에서 서버로 들어오는 클라이언트의 모든 요청을 받아서 처리해주는 컨트롤러로써
-MVC 구조에서 함께 사용되는 디자인 패턴이다.&lt;/p&gt;
-
-&lt;h2 id=&quot;dispatcher-servlet의-장점은&quot;&gt;Dispatcher Servlet의 장점은?&lt;/h2&gt;
-
-&lt;p&gt;Spring MVC에서 Dispatcher Servlet이 등장함에 따라서 web.xml의 역할을 상당히 축소시켰다.
-과거에는 모든 서블릿을 URL 매핑을 위해 web.xml에 모두 등록해야 했다.
-dispatcher Servlet의 등장으로 해당 애플리케이션으로 들어오는 모든 요청을 핸들링하고 공통 작업을 처리하면서 상당히 편리하게 이용한다.
-우리는 컨트롤러를 구현만 해두면 디스패처 서블릿이 알아서 적합한 컨트롤러로 위임하게 된다. -&amp;gt; 그냥 컨트롤러에 집중만 하면 된다.&lt;/p&gt;
-
-&lt;h2 id=&quot;dispatcher-servlet의-동작&quot;&gt;Dispatcher Servlet의 동작&lt;/h2&gt;
-
-&lt;p&gt;&lt;img width=&quot;654&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/1e8516bc-7943-4553-87d1-91e44a8db7d5&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;클라이언트의 요청을 디스패처 서블릿이 받는다.&lt;/li&gt;
-  &lt;li&gt;요청 정보를 통해 요청을 위임할 컨트롤러를 찾는다.&lt;/li&gt;
-  &lt;li&gt;요청을 컨트롤러로 위임할 핸들러 어댑터를 찾아서 전달한다.&lt;/li&gt;
-  &lt;li&gt;핸들러 어댑터가 컨트롤러로 요청을 위임한다.&lt;/li&gt;
-  &lt;li&gt;비즈니스 로직 수행 후 컨트롤러가 반환값을 반환한다.&lt;/li&gt;
-  &lt;li&gt;핸들러 어댑터가 반환값을 처리하고 서버의 응답을 클라이언트로 반환한다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;디스패처 서블릿은 요청을 처리할 핸들러(컨트롤러)를 찾고 객체의 메소드를 호출한다. 따라서 가장 먼저 어느 컨트롤러가 요청을 처리할 수 있는지를 식별해야 한다.
-해당 역할을 하는 것이 바로 HandlerMapping이다.&lt;/p&gt;
-
-&lt;p&gt;결론은 디스패처 서블릿을 통해 요청을 처리할 컨트롤러를 찾아서 위임하고, 그 결과를 받아오는 정도로 이해하면 좋다.&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-framework/reference/web/webmvc.html&quot;&gt;https://docs.spring.io/spring-framework/reference/web/webmvc.html&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Sun, 08 Dec 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/framework/2024/12/08/Spring-framework-mvc-06/</link>
-        <guid isPermaLink="true">http://localhost:4000/framework/2024/12/08/Spring-framework-mvc-06/</guid>
-        
-        <category>mvc</category>
-        
-        
-        <category>framework</category>
-        
-      </item>
-    
-      <item>
-        <title>Spring MVC 05 - Query Parameter</title>
-        <description>&lt;h2 id=&quot;query&quot;&gt;Query&lt;/h2&gt;
-
-&lt;p&gt;쿼리는 ‘문의’ 또는 ‘물음표’라는 사전적 의미를 가지고 있다. 쿼리 파라미터는 URL 뒤에 물음표 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;?&lt;/code&gt;와 함께 붙는 키-값(key-value)
-쌍이다. 여래 개의 파라미터를 전달하려면 파라미터 사이에 앰퍼샌드 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;amp;&lt;/code&gt;를 추가해서 하나의 문자열(string)으로 전달한다.
-쿼리 파라미터로는 문자열뿐만 아니라 숫자, 리스트 등 다양한 형태의 데이터를 넣을 수 있다.
-쿼리 파라미터는 다양한 용도가 있는데, 웹 서버의 요청에 대한 추가 정보를 제공한다.&lt;/p&gt;
-
-&lt;h2 id=&quot;그럼-언제가-적절할까&quot;&gt;그럼 언제가 적절할까?&lt;/h2&gt;
-
-&lt;p&gt;Query parameter는 url에서 특정한 조건을 주고싶을 때 사용하는 것이 적절하다.
-같은 API를 호출한다고 해도, 서로 다른 조건을 나열하는 것이 필요한 상황에 사용한다.
-같은 신발 목록 데이터를 호출 하는데, 신상품 순, 사이즈가 250인 데이터만 따로, 260인 데이터만 따로, 낮은 가격순으로 데이터를 호출하는
-API를 매번 새롭게 생성하는 것은 비효율적이다. 따라서 필요한 조건을 요청에 따라 선택적으로 처리할 수 있는 통일된 API를 구성할 때 사용한다.
-쿼리 파라미터는 HTTP [GET], [DELETE] 요청에서만 사용하고, 유일 값을 식별하기 위한 용도가 아닌 옵션을 줄 때 사용한다.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;사이즈가 230인 신발 요청&lt;/strong&gt;&lt;/p&gt;
-
-    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  GET /shoes?size&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;230
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;가격이 낮은 순으로 정렬된 신발 요청&lt;/strong&gt;&lt;/p&gt;
-
-    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  GET /shoes?sort&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;price_asc
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;이처럼 쿼리 파라미터를 사용하면 하나의 API(&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/shoes&lt;/code&gt;)로 다양한 조건의 데이터를 요청할 수 있으니 효율적이다.&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-framework/reference/web/webmvc.html&quot;&gt;https://docs.spring.io/spring-framework/reference/web/webmvc.html&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Fri, 06 Dec 2024 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/framework/2024/12/06/Spring-framework-mvc-05/</link>
-        <guid isPermaLink="true">http://localhost:4000/framework/2024/12/06/Spring-framework-mvc-05/</guid>
-        
-        <category>mvc</category>
         
         
         <category>framework</category>

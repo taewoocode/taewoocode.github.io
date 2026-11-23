@@ -7,90 +7,101 @@ order: 10
 
 ## 소개
 
-안녕하세요 개발자 박태우입니다. 개발자가 되기 전부터 몰입하는 즐거움을 따라 살다가 지금은 개발에 푹 빠져 있습니다.
-하나를 공부해도 깊게 공부하려고 노력하고 새로운 기술을 배우는 것을 도전하고 좋아합니다.
-현재는 테스트 코드, [Spring 진영](https://github.com/taewoocode/spring_study_reop)에 관심이 많습니다.
+안녕하세요, 펀드회계 시스템을 개발하고 운영하는 백엔드 개발자 박태우입니다.
 
-## 관심있는 기술
+- 이메일: [qkrxodn6035@gmail.com](mailto:qkrxodn6035@gmail.com)
+- GitLab: [https://gitlab.com/woorin](https://gitlab.com/woorin)
 
-- SpringBoot
-- SpringAop
-- Spring webFlux
-- Functional Programming
+## 경력
 
-## 프로젝트
+## 삼성자산운용
 
-## aws 스토리지 서비스
+2026.01 ~ 재직 중
 
-- [저장소 링크](https://github.com/taewoocode/Final_Project)
+펀드회계 시스템 개발, 운영 \| Java, Spring, MyBatis, Oracle, Batch
 
-- **Spring Boot 기반 백엔드 서비스 개발**
-    - AWS SDK를 사용하여 S3 버킷과 DynamoDB에 대한 파일 및 데이터의 CRUD 작업을 수행할 수 있는 백엔드 서비스를 구축
-    - 파일 업로드, 다운로드, 수정, 삭제 기능과 같은 기본적인 CRUD 기능을 통해 대용량 파일을 포함한 데이터를 안전하고 효율적으로 관리
-- **데이터 관리 최적화 및 비용 절감 전략**
-    - AWS Lambda와의 통합을 통해 S3 파일 객체 접근 빈도를 분석
-    - 접근 빈도가 높은 파일은 S3의 Hot Zone에 저장하고, 빈도가 낮은 파일은 비용 효율이 높은 Glacier의 Cold Zone에 자동으로 이동시키는 알고리즘을 구현
-    - 이를 통해 스토리지 사용 패턴에 따라 최적의 데이터 분류가 이루어지며, 특히 대규모 파일 데이터 관리 시 비용 절감을 달성
-    - 요청 수 100,000건 기준으로 45.8%의 비용 절감, 전체적으로 약 23.5%의 비용 절감 달성
+**대량보유 현황 조회 성능 개선** (2026.11)
+- 요약: 1분 이상 걸리던 대량보유 현황 화면의 조회 쿼리 개선
+- 성과: 조회 시 읽는 데이터량 95% 감소, 쿼리 실행 65~88초 → 1.9초
+- 역할: 실행계획 분석, 쿼리 수정, 결과 검증 (단독)
 
-## Kubernetes를 활용한 나만의 게시판 만들기
-- [저장소 링크](https://github.com/yiminsoo/ToyProject)
+**ETF 지수사용료 고유계정 관리 시스템 구축** (2026.07 ~ 2026.10)
+- 요약: 고유계정 ETF 지수사용료의 운용지시 화면, 일자별 누적 현황, 마감 배치 개발
+- 성과: 엑셀로 관리하던 지수사용료를 시스템화, 과거 일자 수정 시 이후 누적값을 배치로 재계산
+- 역할: 테이블 설계, 화면, 재계산 및 마감 배치 개발
 
-- **Elastic Kubernetes Service를 통한 수평적 스케일링 및 자동화**
-    - Pod 수를 트래픽에 따라 자동으로 조정하는 수평 확장 기능을 적용
-    - 이를 통해 트래픽이 급증할 때도 애플리케이션의 성능이 유지되도록 보장
-    - Horizontal Pod Autoscaler(HPA)와 EKS Auto Scaling을 조합해 구성하여 동적 스케일링을 구현
-- **Prometheus와 Grafana를 통한 실시간 모니터링 및 시각화**
-    - Prometheus와 Grafana를 사용하여 서버 및 애플리케이션의 상태와 성능을 실시간으로 모니터링하고 시각화
-    - 주요 메트릭에 대한 경고를 설정하여 시스템의 안정성을 보장
+**외부 수신 배치 파일 누락 감지** (2026.08 ~ 2026.10)
+- 요약: 블룸버그 지수, 종가 데이터 수신 배치 4개에 파일 도착 확인 추가
+- 성과: 파일이 안 와도 '성공'으로 끝나던 누락을 수신 시점에 배치 실패로 감지
+- 역할: 원인 분석, 파일 확인 로직 적용, 테스트 시나리오 작성
 
-## 네트워크 분석기
+**펀드 운용지시 삭제 내역 복원 기능 개발** (2026.08 ~ 2026.10)
+- 요약: 펀드 매수, 매도 운용지시의 삭제 내역 조회 및 복원 팝업 개발
+- 성과: 복구 수단이 없던 삭제 운용지시를 화면에서 복원, 처리 완료 건은 복원 차단
+- 역할: 팝업 화면, 조회 및 복원 쿼리, 서비스 개발
 
-- [저장소 링크](https://github.com/taewoocode/NetWork-Analyzor)
+**대체자산 시가평가 적용기간 산정 프로시저 개선** (2026.08)
+- 요약: 시가평가 후 장부가로 되돌리는 대체자산 프로시저의 적용기간 로직 개선
+- 성과: 연휴 전 처리 시 휴일부터 장부가로 돌아가던 평가 오류 해소
+- 역할: 프로시저 분석, 익영업일 기준 수정, 공휴일 구간 6종목 검증
 
-- **MFC 기반 네트워크 분석 도구 개발**
-    - 비전공자들도 쉽게 네트워크 성능을 분석하고 튜닝할 수 있도록 돕는 네트워크 분석기를 MFC 프로그래밍을 통해 설계
-    - MFC의 Document/View 아키텍처를 이용하여 네트워크 데이터를 직관적으로 볼 수 있도록 구성
-    - 시각적 접근성을 높이기 위해 다양한 그래픽 요소를 활용
-    - Message Map을 사용해 메뉴와 도구 등 다양한 이벤트 핸들러를 등록하여, 비전공자도 쉽게 사용할 수 있는 직관적인 UI를 제공
+**ETF 지수사용료 일별 이력 적재 시스템 구축** (2026.05 ~ 2026.06)
+- 요약: 사무수탁사가 매일 보내는 지수사용료 파일의 수신 배치, 조회 화면 개발
+- 성과: 최근 2영업일치만 남던 데이터를 일별 이력으로 쌓아 기간, 펀드별 잔액과 증감 조회
+- 역할: 수신 배치, 조회 화면 개발, 테이블 구성
 
-## 스킬				
+**DART 대량보유보고서 자동 생성** (2026.03 ~ 2026.05)
+- 요약: 금감원에 제출하는 대량보유상황보고서를 종목 선택만으로 생성
+- 성과: 수기 입력 150여 개 항목을 종목 선택 1회로 대체, 6개월간 현업 76회 사용
+- 역할: 단독 개발 (요구사항 분석, 배포, 현업 사용 가이드)
 
-- Programming: Java, Cpp
-- Framework: Spring mvc, Spring Boot, Spring JPA, Spring jdbc, Spring Security, Spring AOP, Spring actuator, JUnit5						
-- Cloud: AWS
-- Deployment: Kubernetes
-- DevOps: Grafana, Prometheus, Terraform
-- Virtualization: Docker, VMwareWorkStation
-- Tools: IntelliJ, DataGrip, VSCode, Github, Slack, Confluence, Jira
+**펀드회계 운영 개선** (2026.05 ~ 2026.11)
+- 요약: 운영 중 접수된 요청을 처리하며 발견한 집계 오류와 반복 수작업 개선
+- 성과: 체결 수수료 약 11배 과다 집계 해소, 89개 펀드 환매 선처리 일괄 처리 전환
+- 역할: 원인 분석, 쿼리 수정, 화면 및 서비스 개발
 
+## 핀케치 / 인턴
 
-## Education
+2025.08 ~ 2025.11
 
-## kakao cloud 
+OMS Science Cell \| C, ProC, Oracle
 
-2023.12.09 ~ 2024.06.12
+**가용자금 산출 정합성 개선** (2025.09)
+- 요약: 운용사 가용자금 산출 로직의 데이터 누락과 배치 순서 오류 수정
+- 성과: 산식에서 빠진 RP 예금 반영, 주식 결제 반영 전에 계산되던 순서 오류 해소
+- 역할: 수신 배치에 RP 예금 필터 추가, 배치 실행 순서 변경
 
-- 서비스를 위한 인프라 환경을 구축 및 실습
-    - K8S클러스터 구성하기 & 서비스 배포하기
-    - AWS를 이용한 인프라 구축하기
-    - ELK Stack: Elasticsearch, Logstash, Kibana를 통한 로그 수집, 분석 및 시각화
-    - Prometheus & Grafana를 활용하여 서버 및 애플리케이션의 상태와 성능을 모니터링
+**펀드별주문내역 화면 데이터 중복 표시 개선** (2025.09)
+- 요약: 전략코드를 쓰는 운용사의 펀드별주문내역 화면 오류 수정
+- 성과: 같은 종목 주문이 전략코드별로 중복 표시되던 오류 해소
+- 역할: 서브쿼리의 누락된 전략코드 조건 분석 및 수정
 
-## mentoring
+## 개인 프로젝트
 
-2023.09 ~ 2024.01
+**우린, 커플 앱 (1인 개발, 미출시)** (2026.09 ~ 2026.10)
+- 요약: 채팅, 캘린더, 지도, 가계부를 갖춘 커플 앱의 서버와 iOS, Android 개발
+- 성과: GitLab CI/CD 자동 배포 구축, 동시 요청 시 추천이 중복 생성되던 문제 해결
+- 역할: 1인 개발 (Spring Boot 서버, Swift iOS, Kotlin Android, GCP)
 
-- 멘토, 멘티 시스템
-    - Java, Spring
-    - 객체지향 설계기반의 개발교육
-    - 과제 기반의 프로그래밍 교육
+## 기술
 
-## GDSC(Google Development School Club)
+- Language: Java, C++(PS)
+- Framework: Spring Boot, Spring MVC, Spring Data JPA, MyBatis, Spring Security, JUnit5
+- DB, Batch: Oracle, MySQL, Spring Batch, Anyframe Batch, FEP 파일 연계
+- Infra, Tools: AWS, GCP, Docker, Kubernetes, GitLab CI/CD, IntelliJ, DataGrip, Jira, Confluence
 
-2023.08 ~ 2023.12
+## 학력
 
-- 학내 동아리 활동
-  - CoreMember
-  - 활동 LeadMember와 세션 진행 및 CS 스터디 운영
+## 순천향대학교 전기공학 학사
 
+2018.03 ~ 2024.02
+
+## 교육
+
+## 카카오 클라우드 스쿨 4기 수료
+
+2023.12 ~ 2024.06
+
+## Google Development School Club (동아리)
+
+2023.06 ~ 2024.12

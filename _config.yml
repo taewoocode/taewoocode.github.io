@@ -45,9 +45,9 @@ google_fonts:        Lato
 # If you do not use a Google Fonts, uncomment the line below
 # no_google_fonts:     true
 
-# Set your Google Analytics id to receive `pageview` events.
-# To remove Google Anaylics from your page, remove the line below.
-google_analytics:    UA-92346434-1
+# Set your GoatCounter code (the `xxx` in xxx.goatcounter.com) to count visits
+# and show view counts. Universal Analytics (UA-) was shut down in July 2024.
+goatcounter:         taewoocode
 
 # Setting a disqus shortname will enable the comment section on pages with `comments: true` in the front matter
 #disqus_shortname:    taewoo
