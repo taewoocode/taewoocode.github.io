@@ -218,6 +218,8 @@ in <a href="/category/project/" data-flip="title">Project</a>
 on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 
       
+      <span class="post-views">· 조회수 <span data-bsz-views>-</span></span>
+      
     </p>
 
     
@@ -391,7 +393,7 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 <p><img src="/assets/img/projects/woorin/silent/img_5.png" alt="img.png" /></p>
 
 <ul>
-  <li>키 파일을 못 읽으면 <code class="language-plaintext highlighter-rouge">FirebaseApp</code> 빈을 만들지 않고(null) 서버는 정상 기동한다. 로컬에서 키 없이 개발할 때 편하라고 이렇게 했다.</li>
+  <li>키 파일을 못 읽으면 <code class="language-plaintext highlighter-rouge">FirebaseApp</code> 빈을 만들지 않고(null) 서버는 정상 기동한다. 키가 없어도 서버가 뜨도록 일부러 이렇게 했다.</li>
 </ul>
 
 <p><img src="/assets/img/projects/woorin/silent/img_6.png" alt="img.png" /></p>
@@ -410,7 +412,7 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 <h3 id="증상-2">증상</h3>
 
 <ul>
-  <li>운영 서버에 배포했더니 채팅 보낸 시각, 일정 시각이 <strong>전부 9시간씩</strong> 어긋나 보였다.</li>
+  <li>운영 서버에 배포했더니 화면에 보이는 시각이 <strong>전부 9시간씩</strong> 어긋나 있었다.</li>
   <li>로컬에서는 멀쩡했다.</li>
 </ul>
 
@@ -439,7 +441,7 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 <p><img src="/assets/img/projects/woorin/silent/app_2.png" alt="img.png" /></p>
 
 <ul>
-  <li>나중에 운영 VM의 시간대를 아예 한국 시간으로 옮겼다. 로그와 스케줄 시각을 한국 시간으로 보는 게 편해서다.</li>
+  <li>나중에 운영 VM의 시간대를 아예 한국 시간으로 옮겼다.</li>
   <li>이때는 세 가지를 <strong>같이</strong> 바꿔야 한다.
     <ul>
       <li>VM 시간대 (<code class="language-plaintext highlighter-rouge">timedatectl set-timezone Asia/Seoul</code>)</li>
@@ -447,9 +449,9 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
       <li><code class="language-plaintext highlighter-rouge">serverTimezone=Asia/Seoul</code>로 바꾼 서버 배포</li>
     </ul>
   </li>
-  <li>하나라도 순서가 어긋나면 그 사이에는 또 9시간이 밀린다. 위 채팅은 그 전환 작업을 하던 날 테스트하며 주고받은 메시지다.</li>
+  <li>하나라도 순서가 어긋나면 그 사이에는 또 9시간이 밀린다. 위 채팅은 전환하던 날 테스트 메시지를 보내 보며 주고받은 것이다.</li>
   <li><code class="language-plaintext highlighter-rouge">DATETIME</code> 컬럼에는 시간대 정보가 없다. 저장된 건 “2026-10-05 13:14:00” 같은 <strong>벽시계 값</strong>뿐이고, 그게 어느 시간대 기준인지는 이 설정이 정한다. 그래서 설정만 바뀌어도 이미 저장된 값의 의미가 바뀐다.</li>
-  <li>이 일 이후로 시각이 의미 있는 코드(예: 리마인드 스케줄러의 cron)에는 <code class="language-plaintext highlighter-rouge">zone = "Asia/Seoul"</code>처럼 시간대를 코드에 적어 둔다.</li>
+  <li>시각이 의미 있는 코드에는 시간대를 코드에 직접 적어 둔다. 예를 들어 리마인드 스케줄러의 cron에는 <code class="language-plaintext highlighter-rouge">zone = "Asia/Seoul"</code>이 붙어 있다.</li>
 </ul>
 
 <h2 id="4-저장은-됐는데-앱에는-실패로-떴다">4. 저장은 됐는데 앱에는 “실패”로 떴다</h2>
@@ -481,6 +483,11 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 </ul>
 
 <h3 id="해결-저장한-행을-다시-읽어서-돌려준다">해결: 저장한 행을 다시 읽어서 돌려준다</h3>
+
+<ul>
+  <li>우린로그는 응답하기 직전에 등록 시각을 서버 시각으로 채워 넣어서 막았다.</li>
+  <li>맛집 수정은 요청 VO 대신 <strong>저장된 행을 다시 읽어서</strong> 돌려주도록 바꿨다.</li>
+</ul>
 
 <p><img src="/assets/img/projects/woorin/silent/img_9.png" alt="img.png" /></p>
 
@@ -1584,6 +1591,8 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
       <p>일을 벌여놔야 주워 담을 수 있습니다.</p>
 
       
+        <p class="sidebar-visits">누적 방문 <span data-bsz-total>-</span></p>
+      
       
       
         <div class="sidebar-social">
@@ -1682,6 +1691,48 @@ on <a href="/tag/project-spring/" data-flip="title">Spring-Project</a>
 </script>
 
 
+
+<script>
+  (function () {
+    /* busuanzi: realtime counters. Every call adds 1 to site_pv and to page_pv of the page named by the Referer,
+       then returns the new numbers through a JSONP callback.
+       Known limit: Safari (and every iPhone browser) trims cross-site Referers to the origin,
+       so there every post reports the page_pv of "/". Per-post counts are accurate only on desktop Chrome/Edge.
+       The official script runs only once per full load; this blog swaps pages in by push-state,
+       so call the same endpoint again on every page change.
+       Use block comments only: compress_html joins this script into one line. */
+    var seq = 0;
+
+    function fill(selector, value) {
+      var els = document.querySelectorAll(selector);
+      for (var i = 0; i < els.length; i++) els[i].textContent = value;
+    }
+
+    function hit() {
+      seq += 1;
+      var name = 'BusuanziCallback_' + seq + '_' + new Date().getTime();
+      var tag = document.createElement('script');
+      function cleanup() {
+        try { delete window[name]; } catch (e) { window[name] = undefined; }
+        if (tag.parentNode) tag.parentNode.removeChild(tag);
+      }
+      window[name] = function (data) {
+        fill('[data-bsz-total]', data.site_pv);
+        fill('[data-bsz-views]', data.page_pv);
+        cleanup();
+      };
+      tag.onerror = cleanup;
+      tag.referrerPolicy = 'no-referrer-when-downgrade';
+      tag.src = 'https://busuanzi.ibruce.info/busuanzi?jsonpCallback=' + name;
+      document.head.appendChild(tag);
+    }
+
+    hit();
+
+    var pushState = document.getElementById('_yPushState');
+    if (pushState) pushState.addEventListener('y-push-state-after', hit);
+  })();
+</script>
 
 
 

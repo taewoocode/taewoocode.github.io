@@ -218,6 +218,8 @@ in <a href="/category/devops/" data-flip="title">Devops</a>
 on <a href="/tag/devops-k8s/" data-flip="title">Kubernetes</a>
 
       
+      <span class="post-views">· 조회수 <span data-bsz-views>-</span></span>
+      
     </p>
 
     
@@ -1388,6 +1390,8 @@ w3-k8s   Ready    &lt;none&gt;          37m   v1.30.1   192.168.1.103   &lt;none
       <p>일을 벌여놔야 주워 담을 수 있습니다.</p>
 
       
+        <p class="sidebar-visits">누적 방문 <span data-bsz-total>-</span></p>
+      
       
       
         <div class="sidebar-social">
@@ -1486,6 +1490,48 @@ w3-k8s   Ready    &lt;none&gt;          37m   v1.30.1   192.168.1.103   &lt;none
 </script>
 
 
+
+<script>
+  (function () {
+    /* busuanzi: realtime counters. Every call adds 1 to site_pv and to page_pv of the page named by the Referer,
+       then returns the new numbers through a JSONP callback.
+       Known limit: Safari (and every iPhone browser) trims cross-site Referers to the origin,
+       so there every post reports the page_pv of "/". Per-post counts are accurate only on desktop Chrome/Edge.
+       The official script runs only once per full load; this blog swaps pages in by push-state,
+       so call the same endpoint again on every page change.
+       Use block comments only: compress_html joins this script into one line. */
+    var seq = 0;
+
+    function fill(selector, value) {
+      var els = document.querySelectorAll(selector);
+      for (var i = 0; i < els.length; i++) els[i].textContent = value;
+    }
+
+    function hit() {
+      seq += 1;
+      var name = 'BusuanziCallback_' + seq + '_' + new Date().getTime();
+      var tag = document.createElement('script');
+      function cleanup() {
+        try { delete window[name]; } catch (e) { window[name] = undefined; }
+        if (tag.parentNode) tag.parentNode.removeChild(tag);
+      }
+      window[name] = function (data) {
+        fill('[data-bsz-total]', data.site_pv);
+        fill('[data-bsz-views]', data.page_pv);
+        cleanup();
+      };
+      tag.onerror = cleanup;
+      tag.referrerPolicy = 'no-referrer-when-downgrade';
+      tag.src = 'https://busuanzi.ibruce.info/busuanzi?jsonpCallback=' + name;
+      document.head.appendChild(tag);
+    }
+
+    hit();
+
+    var pushState = document.getElementById('_yPushState');
+    if (pushState) pushState.addEventListener('y-push-state-after', hit);
+  })();
+</script>
 
 
 

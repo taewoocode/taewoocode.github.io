@@ -118,8 +118,6 @@ logger.info("문화행사 API 응답: total={}, rowCount={}", total, rows == nul
 
 ### 한 번 더: 서버 시간대를 한국으로 옮길 때
 
-![img.png](/assets/img/projects/woorin/silent/app_2.png)
-
 - 나중에 운영 VM의 시간대를 아예 한국 시간으로 옮겼다.
 - 이때는 세 가지를 **같이** 바꿔야 한다.
   - VM 시간대 (`timedatectl set-timezone Asia/Seoul`)

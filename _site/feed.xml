@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 24 Nov 2026 00:26:42 +0900</pubDate>
-    <lastBuildDate>Tue, 24 Nov 2026 00:26:42 +0900</lastBuildDate>
+    <pubDate>Tue, 24 Nov 2026 00:27:32 +0900</pubDate>
+    <lastBuildDate>Tue, 24 Nov 2026 00:27:32 +0900</lastBuildDate>
     <generator>Jekyll v3.10.0</generator>
     
       <item>
@@ -359,7 +359,7 @@
 &lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/silent/img_5.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;키 파일을 못 읽으면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;FirebaseApp&lt;/code&gt; 빈을 만들지 않고(null) 서버는 정상 기동한다. 로컬에서 키 없이 개발할 때 편하라고 이렇게 했다.&lt;/li&gt;
+  &lt;li&gt;키 파일을 못 읽으면 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;FirebaseApp&lt;/code&gt; 빈을 만들지 않고(null) 서버는 정상 기동한다. 키가 없어도 서버가 뜨도록 일부러 이렇게 했다.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/silent/img_6.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
@@ -378,7 +378,7 @@
 &lt;h3 id=&quot;증상-2&quot;&gt;증상&lt;/h3&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;운영 서버에 배포했더니 채팅 보낸 시각, 일정 시각이 &lt;strong&gt;전부 9시간씩&lt;/strong&gt; 어긋나 보였다.&lt;/li&gt;
+  &lt;li&gt;운영 서버에 배포했더니 화면에 보이는 시각이 &lt;strong&gt;전부 9시간씩&lt;/strong&gt; 어긋나 있었다.&lt;/li&gt;
   &lt;li&gt;로컬에서는 멀쩡했다.&lt;/li&gt;
 &lt;/ul&gt;
 
@@ -407,7 +407,7 @@
 &lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/silent/app_2.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;나중에 운영 VM의 시간대를 아예 한국 시간으로 옮겼다. 로그와 스케줄 시각을 한국 시간으로 보는 게 편해서다.&lt;/li&gt;
+  &lt;li&gt;나중에 운영 VM의 시간대를 아예 한국 시간으로 옮겼다.&lt;/li&gt;
   &lt;li&gt;이때는 세 가지를 &lt;strong&gt;같이&lt;/strong&gt; 바꿔야 한다.
     &lt;ul&gt;
       &lt;li&gt;VM 시간대 (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;timedatectl set-timezone Asia/Seoul&lt;/code&gt;)&lt;/li&gt;
@@ -415,9 +415,9 @@
       &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;serverTimezone=Asia/Seoul&lt;/code&gt;로 바꾼 서버 배포&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;하나라도 순서가 어긋나면 그 사이에는 또 9시간이 밀린다. 위 채팅은 그 전환 작업을 하던 날 테스트하며 주고받은 메시지다.&lt;/li&gt;
+  &lt;li&gt;하나라도 순서가 어긋나면 그 사이에는 또 9시간이 밀린다. 위 채팅은 전환하던 날 테스트 메시지를 보내 보며 주고받은 것이다.&lt;/li&gt;
   &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DATETIME&lt;/code&gt; 컬럼에는 시간대 정보가 없다. 저장된 건 “2026-10-05 13:14:00” 같은 &lt;strong&gt;벽시계 값&lt;/strong&gt;뿐이고, 그게 어느 시간대 기준인지는 이 설정이 정한다. 그래서 설정만 바뀌어도 이미 저장된 값의 의미가 바뀐다.&lt;/li&gt;
-  &lt;li&gt;이 일 이후로 시각이 의미 있는 코드(예: 리마인드 스케줄러의 cron)에는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;zone = &quot;Asia/Seoul&quot;&lt;/code&gt;처럼 시간대를 코드에 적어 둔다.&lt;/li&gt;
+  &lt;li&gt;시각이 의미 있는 코드에는 시간대를 코드에 직접 적어 둔다. 예를 들어 리마인드 스케줄러의 cron에는 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;zone = &quot;Asia/Seoul&quot;&lt;/code&gt;이 붙어 있다.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;4-저장은-됐는데-앱에는-실패로-떴다&quot;&gt;4. 저장은 됐는데 앱에는 “실패”로 떴다&lt;/h2&gt;
@@ -449,6 +449,11 @@
 &lt;/ul&gt;
 
 &lt;h3 id=&quot;해결-저장한-행을-다시-읽어서-돌려준다&quot;&gt;해결: 저장한 행을 다시 읽어서 돌려준다&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;우린로그는 응답하기 직전에 등록 시각을 서버 시각으로 채워 넣어서 막았다.&lt;/li&gt;
+  &lt;li&gt;맛집 수정은 요청 VO 대신 &lt;strong&gt;저장된 행을 다시 읽어서&lt;/strong&gt; 돌려주도록 바꿨다.&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/img/projects/woorin/silent/img_9.png&quot; alt=&quot;img.png&quot; /&gt;&lt;/p&gt;
 
@@ -706,7 +711,7 @@
   &lt;li&gt;매시 30분, 06~23시에 돈다. 자정부터 새벽 6시까지는 보내지 않는다.&lt;/li&gt;
   &lt;li&gt;cron에 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;zone = &quot;Asia/Seoul&quot;&lt;/code&gt;을 &lt;strong&gt;명시&lt;/strong&gt;했다.
     &lt;ul&gt;
-      &lt;li&gt;운영 서버의 OS 시간대가 바뀌어도 “한국 시각 6시~23시”가 유지되게 하려는 것이다. 서버 시간대 때문에 시각이 9시간씩 밀렸던 적이 있어서(&lt;a href=&quot;/project/2026/11/23/Woorin-Silent-Failures/&quot;&gt;에러 없이 실패하는 버그들&lt;/a&gt;), 시각이 의미 있는 코드는 시간대를 코드에 적어 둔다.&lt;/li&gt;
+      &lt;li&gt;운영 서버의 OS 시간대가 무엇이든 “한국 시각 6시~23시”가 유지되게 하려는 것이다. 서버 시간대 설정이 어긋나면 시각이 통째로 밀린다. (&lt;a href=&quot;/project/2026/11/23/Woorin-Silent-Failures/&quot;&gt;에러 없이 실패하는 서버 버그들&lt;/a&gt;)&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
   &lt;li&gt;리마인드도 부가 기능이라, 실패해도 예외를 밖으로 던지지 않고 로그만 남긴다. 발송 인원은 운영 로그(INFO)에 남겨서 돌았는지 확인할 수 있게 했다.&lt;/li&gt;
